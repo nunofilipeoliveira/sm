@@ -34,12 +34,14 @@
           <th *ngFor="let presenca of presencas" style="width: 50px; text-align: center;"><a
               href="#/presenca/{{presenca.id}}">{{(presenca.data).toString().slice(6,8)}}/{{(presenca.data).toString().slice(4,6)}}</a>
           </th>
+          <th>Total</th>
 
         </tr>
         <tr>
           <th></th>
           <th *ngFor="let presenca of presencas" style="width: 50px; text-align: center; font-size:smaller">
             {{presenca.hora}} </th>
+            <th style="text-align: right;">{{presencas.length}}</th>
 
         </tr>
 
@@ -55,8 +57,8 @@
               ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
               {{treinos.presenca_1letra}}
             </button>
-
           </td>
+          <td style="text-align: right; width: 50px">{{linha.count_treinos}}</td>
 
         </tr>
       </thead>
@@ -84,6 +86,7 @@
               {{treinos.presenca_1letra}}
             </button>
           </td>
+          <td style="text-align: right; width: 50px">{{linha.count_treinos}}</td>
         </tr>
       </thead>
     </tbody>
