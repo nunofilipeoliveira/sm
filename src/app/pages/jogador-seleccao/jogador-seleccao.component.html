@@ -1,0 +1,33 @@
+<div>
+  <div>
+
+    <div class="d-flex justify-content-center" style="vertical-align:middle;">
+      <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
+        <span class="sr-only"></span>
+      </div>
+    </div>
+
+    <div class="table-responsive col-lg-8">
+      <table class="table project-list-table table-nowrap align-middle">
+        <thead>
+          <tr>
+             <th scope="col">Nome</th>
+            <th scope="col" class="td-total">Escalao</th>
+            <th scope="col" class="td-total">Seleccionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let jogador of jogadores; index as posicao">
+            <td><img src="assets/img/jogadores/{{jogador.id_Jogador}}_avatar.jpg"
+                onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                class="avatar-sm rounded-circle me-2" />{{jogador.nome_Jogador}}</td>
+            <td class="td-total" style="font-size: smaller;">{{jogador.escalao}}</td>
+            <td class="td-total"><button type="button" class="btn btn-info text-white" (click)="seleciona(posicao)">Seleccionar</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+  </div>
+</div>

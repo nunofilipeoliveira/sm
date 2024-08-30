@@ -1,0 +1,54 @@
+<div>
+  <div>
+    <div class="d-flex justify-content-center" style="vertical-align:middle;">
+      <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
+        <span class="sr-only"></span>
+      </div>
+    </div>
+      <div class="table-responsive col-lg-8" *ngIf="!spinner">
+        <table class="table project-list-table table-nowrap align-middle">
+          <thead>
+            <tr>
+              <th scope="col" style="text-transform: none;">Data: {{presencaData?.data}} | {{presencaData?.hora}}</th>
+              <th scope="col" style="width: 15px;"></th>
+              <th scope="col" style="width: 30px;"></th>
+            </tr>
+          </thead>
+
+          <thead>
+            <tr>
+              <th scope="col">Nome</th>
+              <th scope="col" style="width: 15px;">Presenca</th>
+              <th scope="col" style="width: 30px;">Motivo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let jogador of presencaData?.jogadoresPresenca; index as posicao">
+              <td><img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                  class="avatar-sm rounded-circle me-2" />{{jogador.nome_jogador}}</td>
+              <td>{{jogador.estado}}</td>
+              <td>{{jogador.motivo}}</td>
+            </tr>
+          </tbody>
+          <P>
+          <tbody>
+            <tr *ngFor="let staff of presencaData?.staffPresenca; index as posicao">
+              <td><img src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                  class="avatar-sm rounded-circle me-2" />{{staff.nome_staff}}</td>
+              <td>{{staff.estado}}</td>
+              <td>{{staff.motivo}}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="form-group">
+          <button type="button" class="btn btn-info text-white" (click)="alterarFicha()">Alterar Ficha Presença</button>
+        </div>
+      </div>
+  </div>
+</div>
+
+<div *ngIf="!spinner">
+  {{presencaData?.data_criacao}} {{presencaData?.user_criacao}} criou ficha presenças.
+<tr *ngFor="let historicoLinha of historico; index as posicao">{{historicoLinha}}.</tr>
+</div>

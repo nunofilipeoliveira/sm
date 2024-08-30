@@ -1,0 +1,53 @@
+<div>
+  <div>
+
+    <div class="d-flex justify-content-center" style="vertical-align:middle;">
+      <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
+        <span class="sr-only"></span>
+      </div>
+    </div>
+
+      <div class="table-responsive col-lg-8" *ngIf="!spinner">
+        <table class="table project-list-table table-nowrap align-middle">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 5px;">#</th>
+              <th scope="col">Nome</th>
+              <th scope="col" style="width: 10px;">Idade</th>
+              <th scope="col" style="width: 10px;">Ficha atleta</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let jogador of equipaData?.jogadores; index as posicao">
+              <td><span class="badge">{{jogador.numero}}</span></td>
+              <td><img src="assets/img/jogadores/{{jogador.id}}_avatar.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                  class="avatar-sm rounded-circle me-2" />{{jogador.nome}}</td>
+              <td class="td-total">{{jogador.data_nascimento | idade}}</td>
+              <td class="td-total"><button type="button" class="btn btn-info text-white" (click)="doFichaAtleta(jogador.id)">Ver</button></td>
+            </tr>
+          </tbody>
+        </table>
+
+
+        <table class="table project-list-table table-nowrap align-middle">
+          <thead>
+            <tr>
+              <th scope="col" style="width: 5px;">STAFF</th>
+              <th scope="col"></th>
+              <th scope="col" style="width: 10px;"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let stafItem of equipaData.staff; index as posicao">
+              <td><span class="badge">{{stafItem.tipo}}</span></td>
+              <td><img src="assets/img/jogadores/{{stafItem.id}}_avatar_staff.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                  class="avatar-sm rounded-circle me-2" />{{stafItem.nome}}</td>
+              <td class="td-total"><button type="button" class="btn btn-info text-white" (click)="doFichaStaff(stafItem.id, stafItem.id_jogador)">Ver</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+
+  </div>
+</div>

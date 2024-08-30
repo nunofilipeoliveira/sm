@@ -1,0 +1,93 @@
+<div class="d-flex justify-content-center" style="vertical-align:middle;">
+  <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
+    <span class="sr-only"></span>
+  </div>
+</div>
+<p></p>
+<div *ngIf="spinner==false">
+  <table class="align-middle">
+    <tbody>
+      <tr>
+        <mat-button-toggle-group name="filtroData" (change)="onValChange()" [(ngModel)]="filtro">
+          <mat-button-toggle value="todos">Todos</mat-button-toggle>
+          <mat-button-toggle value="mes_atual">Mês Atual</mat-button-toggle>
+          <mat-button-toggle value="semana_atual">Semana Atual</mat-button-toggle>
+          <mat-button-toggle value="datas">Datas específicas</mat-button-toggle>
+        </mat-button-toggle-group>
+      </tr>
+    </tbody>
+  </table>
+  <div class="table-responsive" *ngIf="filtro_datas">
+    <ngb-datepicker #dp [(ngModel)]="filtro_dataInicio" /> <ngb-datepicker #dp [(ngModel)]="filtro_dataFim" />
+    <p> <button type="button" class="btn btn-info text-white" (click)="aplicarFiltro()">Aplicar</button>
+  </div>
+
+
+  <div *ngIf="semRegistos">Sem registos</div>
+
+
+  <table class="table project-list-table align-middle"  *ngIf="!semRegistos">
+    <tbody>
+      <thead>
+        <tr>
+          <th>Nome/Treinos</th>
+          <th *ngFor="let presenca of presencas" style="width: 50px; text-align: center;"><a
+              href="#/presenca/{{presenca.id}}">{{(presenca.data).toString().slice(6,8)}}/{{(presenca.data).toString().slice(4,6)}}</a>
+          </th>
+
+        </tr>
+        <tr>
+          <th></th>
+          <th *ngFor="let presenca of presencas" style="width: 50px; text-align: center; font-size:smaller">
+            {{presenca.hora}} </th>
+
+        </tr>
+
+        <tr *ngFor="let linha of linhasQuadro; index as posicao">
+          <td style="width: 180px;min-width: 180px;max-width: 180px;left: 0px;"><img
+              src="assets/img/jogadores/{{linha.idJogador}}_avatar.jpg"
+              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+              class="avatar-sm rounded-circle me-2" />{{linha.nomeJogador}}</td>
+          <td *ngFor="let treinos of linha.presenca_treino"
+            style="width: 50px; text-align: center;{{treinos.estilo_presenca}}">
+
+            <button type="button" placement="top" style="{{treinos.estilo_presenca}}"
+              ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
+              {{treinos.presenca_1letra}}
+            </button>
+
+          </td>
+
+        </tr>
+      </thead>
+
+    </tbody>
+  </table>
+
+
+
+  <table class="table project-list-table align-middle"  *ngIf="!semRegistos">
+    <tbody>
+      <thead>
+
+
+        <tr *ngFor="let linha of linhasQuadroStaff; index as posicao">
+          <td style="width: 180px;min-width: 180px;max-width: 180px;left: 0px;"><img
+              src="assets/img/jogadores/{{linha.idJogador}}_avatar_staff.jpg"
+              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+              class="avatar-sm rounded-circle me-2" />{{linha.nomeJogador}}</td>
+          <td *ngFor="let treinos of linha.presenca_treino"
+            style="width: 50px; text-align: center;{{treinos.estilo_presenca}}">
+
+            <button type="button" placement="top" style="{{treinos.estilo_presenca}}"
+              ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
+              {{treinos.presenca_1letra}}
+            </button>
+          </td>
+        </tr>
+      </thead>
+    </tbody>
+  </table>
+
+
+</div>

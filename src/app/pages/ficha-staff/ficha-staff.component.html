@@ -1,0 +1,83 @@
+<div class="container mt-4">
+  <div class="row justify-content-center" *ngIf="!spinner">
+    <div class="col-md-4">
+      <div class="profile-card text-center shadow">
+        <div>
+          <img src="assets/img/jogadores/{{this.staff.id}}_staff.jpg"
+            onerror="this.onerror=null; this.src='assets/img/jogadores/default.jpg'"
+            alt="Foto do Jogador">
+        </div>
+        <h3 class="mt-3">{{staff.nome}}</h3>
+
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="info-card shadow">
+        <h5 class="info-title">Ficha Staff</h5>
+        <form>
+          <div class="form-row">
+            <div class="col-md-7">
+              <div class="form-group">
+                <label>Nome completo</label>
+                <input type="text" class="form-control" [(ngModel)]="staff.nome_completo">
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <label>Data Nascimento</label>
+                <input type="text" class="form-control" [(ngModel)]="staff.data_nascimento">
+              </div>
+            </div>
+          </div>
+
+          <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+            <div class="row">
+              <div class="pl-1 ml-auto mr-auto">
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="text" class="form-control" placeholder="" name="email" [(ngModel)]="staff.email">
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Morada</label>
+                  <input type="text" class="form-control" placeholder="" name="morada" [(ngModel)]="staff.morada">
+                </div>
+              </div>
+
+
+              <div class="col-md-4 pl-1">
+                <div class="form-group">
+                  <label>Código Postal</label>
+                  <input type="text" class="form-control" name="codigo_postal" [(ngModel)]="staff.codigo_postal">
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+
+          <!-- Adicionar outras linhas de formulário aqui conforme necessário -->
+          <button
+          type="button"
+          class="btn btn-primary btn-block mt-4"
+          (click)="isCollapsed = !isCollapsed"
+          [attr.aria-expanded]="!isCollapsed"
+          aria-controls="collapseExample"
+        >
+          Mais dados
+        </button>
+          <button type="button" class="btn btn-primary btn-block mt-4" (click)="gravarFichaStaff()">Gravar Dados</button>
+        </form>
+      </div>
+
+
+    </div>
+  </div>
+</div>

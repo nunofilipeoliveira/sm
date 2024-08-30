@@ -1,0 +1,12 @@
+<div class="form-structor">
+  <div class="signup">
+    <h6>Escalão</h6>
+    <select class="form-select" aria-label="Default select example" [(ngModel)]="escalaoEscolhido">
+      <option *ngFor="let escalao of escaloes" value="{{escalao.id_escalao_epoca}}">
+        {{escalao.descritivo_escalao}}
+      </option>
+    </select>
+
+    <button type="buttom" class="submit-btn" (click)="doLogin()">Entrar</button>
+  </div>
+</div>
