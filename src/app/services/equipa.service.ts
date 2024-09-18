@@ -16,6 +16,7 @@ export class EquipaService {
   URLGravarStaff = environment.apiUrl + "/sm/updateStaff/"
   URLJogadoresDisponiveis = environment.apiUrl + "/sm/getJogadoreDisponiveis/"
   URLgetFaltas = environment.apiUrl + "/sm/getFaltas/"
+  URLgetCountPresencas = environment.apiUrl + "/sm/getCountPresencas/"
 
   parmJson: string = ""
   errows: boolean = false;
@@ -53,6 +54,13 @@ export class EquipaService {
   getFaltasByJogador(id: number) {
     const headers = { 'Content-Type': 'application/json' };
     const urltmp = this.URLgetFaltas + id;
+    console.log('EquipaService | utl:', this, urltmp);
+    return this.http.put<any>(urltmp, { headers });
+  }
+
+  getCountPresencasByJogador(id: number) {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLgetCountPresencas + id;
     console.log('EquipaService | utl:', this, urltmp);
     return this.http.put<any>(urltmp, { headers });
   }

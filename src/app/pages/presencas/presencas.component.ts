@@ -57,6 +57,8 @@ export class PresencasComponent implements OnInit {
 
   public linhasQuadroStaff: LinhaQuadro[] = [];
 
+  public count_presenca_por_treino:number[]=[];
+
   spinner: boolean = false;
   public semRegistos: boolean = false;
   public filtro: string = "mes_atual";
@@ -199,16 +201,24 @@ export class PresencasComponent implements OnInit {
     }
 
 
+    for (let i = 0; i < this.presencas.length; i++) {
+      this.count_presenca_por_treino[i]=0;
+    }
+    console.log("inicio", this.count_presenca_por_treino);
+
           //carrega totalizadores
           for (let i = 0; i < this.linhasQuadro.length; i++) {
             let countTreinos = 0
             for (let z = 0; z < this.linhasQuadro[i].presenca_treino.length; z++) {
               if (this.linhasQuadro[i].presenca_treino[z].presenca_1letra == "P") {
                 countTreinos=countTreinos+1;
+                this.count_presenca_por_treino[z]++
               }
             }
             this.linhasQuadro[i].count_treinos = countTreinos;
           }
+
+          console.log("totais de jogadores por treino", this.count_presenca_por_treino);
 
           //carrega totalizadores
           for (let i = 0; i < this.linhasQuadroStaff.length; i++) {

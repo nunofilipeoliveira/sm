@@ -7,6 +7,12 @@
             onerror="this.onerror=null; this.src='assets/img/jogadores/default.jpg'"
             alt="Foto do Jogador">
         </div>
+        <div *ngIf="!isUploadFoto"><a (click)="modoCarregarFicheiro()"><img src="assets/img/jogadores/default.jpg"
+          height="20px" width="20px"></a>
+        </div>
+       <div *ngIf="isUploadFoto">
+        <input type="file" (change)="onFileSelected($event)">
+        </div>
         <h3 class="mt-3">{{staff.nome}}</h3>
 
       </div>
@@ -14,19 +20,25 @@
 
     <div class="col-md-8">
       <div class="info-card shadow">
-        <h5 class="info-title">Ficha Staff</h5>
+        <h5 class="info-title">Ficha Staff <a (click)="modoCarregarFicheiro_avatar()"><img height="30px" width="30px"
+          src="assets/img/jogadores/{{staff.id}}_avatar_staff.jpg"
+          onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+          class="rounded-circle" /></a></h5>
+    <div *ngIf="isUploadFoto_avatar">
+      <input type="file" (change)="onFileSelected($event)">
+    </div>
         <form>
           <div class="form-row">
             <div class="col-md-7">
               <div class="form-group">
                 <label>Nome completo</label>
-                <input type="text" class="form-control" [(ngModel)]="staff.nome_completo">
+                <input type="text" class="form-control" name="nome_completo" [(ngModel)]="staff.nome_completo">
               </div>
             </div>
             <div class="col-md-5">
               <div class="form-group">
                 <label>Data Nascimento</label>
-                <input type="text" class="form-control" [(ngModel)]="staff.data_nascimento">
+                <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="staff.data_nascimento">
               </div>
             </div>
           </div>

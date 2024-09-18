@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -9,19 +10,19 @@ import { environment } from '../../environments/environment';
 export class LoginServiceService {
 
 
- parmJson: string = ""
- urlTmp:string="";
+  parmJson: string = ""
+  urlTmp: string = "";
   errows: boolean = false;
   loginData!: loginData;
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
 
-  login(user: string, pass: string){
+  login(user: string, pass: string) {
     const headers = { 'Content-Type': 'application/json' };
     this.parmJson = "{\"user\":\"" + user + "\",\"pwd\":\"" + pass + "\"}";
-    this.urlTmp= environment.apiUrl+"/sm/login";
+    this.urlTmp = environment.apiUrl + "/sm/login";
 
 
     console.log("URL", this.urlTmp);
@@ -34,62 +35,67 @@ export class LoginServiceService {
 
 
 
-  createUser(parmUser: novouserData, parmPassWord :string){
+  createUser(parmUser: novouserData, parmPassWord: string) {
     const headers = { 'Content-Type': 'application/json' };
 
     console.log("parmUser", parmUser);
     console.log("idsEscalao", parmUser.idsEscalao);
     let tmpEscaloes;
-    tmpEscaloes=parmUser.idsEscalao.split(";");
+    tmpEscaloes = parmUser.idsEscalao.split(";");
     console.log("tmpEscaloes", tmpEscaloes);
     this.parmJson = "{\"nome\":\"" + parmUser.nome + "\",\"user\":\"" + parmUser.user + "\",\"password\":\"" + parmPassWord + "\", \"escalaoEpoca\" :[  ";
 
-    for (let i = 0; i < tmpEscaloes.length-1; i++) {
-     if(i>0){
-      this.parmJson= this.parmJson+","
-     }
-      this.parmJson= this.parmJson+"{\"id_escalao_epoca\":"+ tmpEscaloes[i]+"}";
+    for (let i = 0; i < tmpEscaloes.length - 1; i++) {
+      if (i > 0) {
+        this.parmJson = this.parmJson + ","
+      }
+      this.parmJson = this.parmJson + "{\"id_escalao_epoca\":" + tmpEscaloes[i] + "}";
 
     }
-    this.parmJson=this.parmJson+"]}";
-    this.urlTmp= environment.apiUrl+"/sm/createuser";
+    this.parmJson = this.parmJson + "]}";
+    this.urlTmp = environment.apiUrl + "/sm/createuser";
     console.log("URL", this.urlTmp);
     console.log("json", this.parmJson);
 
-   return this.http.put<any>(this.urlTmp, this.parmJson, { headers });
+    return this.http.put<any>(this.urlTmp, this.parmJson, { headers });
 
 
   }
 
 
 
-  validateCode(parmCode: string){
+  validateCode(parmCode: string) {
     const headers = { 'Content-Type': 'application/json' };
-      this.urlTmp= environment.apiUrl+"/sm/activateuser/"+parmCode;
+    this.urlTmp = environment.apiUrl + "/sm/activateuser/" + parmCode;
     console.log("URL", this.urlTmp);
     return this.http.put<any>(this.urlTmp, { headers });
-     }
+  }
 
 
-  setLogin(parmLogin: loginData){
-    this.loginData=parmLogin;
+  setLogin(parmLogin: loginData) {
+    this.loginData = parmLogin;
     console.log("loginService - setLogin", this.loginData);
   }
 
-  getLoginData():loginData{
+  getLoginData(): loginData {
     console.log("loginService - getLogin", this.loginData);
+    console.log("loginService - a avaliar loginData");
+    if (this.loginData == undefined) {
+      console.log("loginService - loginData==undefined");
+      this.router.navigate(['/']);
+    }
     return this.loginData;
   }
 
-  clear(){
-    this.loginData.id=0;
-    this.loginData.nome="";
-    this.loginData.user="";
-    this.loginData.password="";
+  clear() {
+    this.loginData.id = 0;
+    this.loginData.nome = "";
+    this.loginData.user = "";
+    this.loginData.password = "";
     localStorage.removeItem("UserLogin");
 
 
-    return ;
+    return;
   }
 
 

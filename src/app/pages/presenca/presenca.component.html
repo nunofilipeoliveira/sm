@@ -9,7 +9,7 @@
         <table class="table project-list-table table-nowrap align-middle">
           <thead>
             <tr>
-              <th scope="col" style="text-transform: none;">Data: {{presencaData?.data}} | {{presencaData?.hora}}</th>
+              <th scope="col" style="text-transform: none;">Data: {{presencaData.data | data}} | {{presencaData?.hora}}</th>
               <th scope="col" style="width: 15px;"></th>
               <th scope="col" style="width: 30px;"></th>
             </tr>
@@ -30,13 +30,13 @@
               <td>{{jogador.motivo}}</td>
             </tr>
           </tbody>
-          <P>
+          <P></P>
           <tbody>
             <tr *ngFor="let staff of presencaData?.staffPresenca; index as posicao">
               <td><img src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
                   class="avatar-sm rounded-circle me-2" />{{staff.nome_staff}}</td>
-              <td>{{staff.estado}}</td>
-              <td>{{staff.motivo}}</td>
+              <td >{{staff.estado}}</td>
+              <td >{{staff.motivo}}</td>
             </tr>
           </tbody>
         </table>

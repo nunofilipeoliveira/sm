@@ -1,38 +1,61 @@
 <div class="container mt-4">
+
+  <div class="d-flex justify-content-center" style="vertical-align:middle;">
+    <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+
+
+
+
+
   <div class="row justify-content-center" *ngIf="!spinner">
     <div class="col-md-4">
       <div class="profile-card text-center shadow">
-        <div>
+        <div *ngIf="!tirarFoto">
           <img src="assets/img/jogadores/{{this.jogadorData.id}}.jpg"
-            onerror="this.onerror=null; this.src='assets/img/jogadores/default.jpg'"
-            alt="Foto do Jogador">
+            onerror="this.onerror=null; this.src='assets/img/jogadores/default.jpg'" alt="Foto do Jogador">
+          <div *ngIf="!isUploadFoto"><a (click)="modoCarregarFicheiro()"><img src="assets/img/jogadores/default.jpg"
+                height="20px" width="20px"></a>
+          </div>
+          <div *ngIf="isUploadFoto">
+            <input type="file" (change)="onFileSelected($event)">
+          </div>
         </div>
-        <input type="text" class="form-control" style="font-weight: bold; color:black; font-size: x-large; text-align: center; border: none;" [(ngModel)]="jogadorData.nome">
+        <input type="text" class="form-control"
+          style="font-weight: bold; color:black; font-size: x-large; text-align: center; border: none;"
+          [(ngModel)]="jogadorData.nome">
         <p class="text-muted">Nº Camisola</p>
-        <input type="text" class="form-control number-input"
-        [(ngModel)]="jogadorData.numero">
+        <input type="text" class="form-control number-input" [(ngModel)]="jogadorData.numero">
       </div>
     </div>
 
     <div class="col-md-8">
       <div class="info-card shadow">
-        <h5 class="info-title">Ficha Atleta</h5>
+        <h5 class="info-title">Ficha Atleta <a (click)="modoCarregarFicheiro_avatar()"><img height="30px" width="30px"
+              src="assets/img/jogadores/{{jogadorData.id}}_avatar.jpg"
+              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+              class="rounded-circle" /></a></h5>
+        <div *ngIf="isUploadFoto_avatar">
+          <input type="file" (change)="onFileSelected($event)">
+        </div>
         <form>
           <div class="form-row">
             <div class="col-md-7">
               <div class="form-group">
                 <label>Nome completo</label>
-                <input type="text" class="form-control" [(ngModel)]="jogadorData.nome_completo">
+                <input type="text" class="form-control" name="nome_completo" [(ngModel)]="jogadorData.nome_completo">
               </div>
             </div>
             <div class="col-md-5">
               <div class="form-group">
                 <label>Data Nascimento</label>
-                <input type="text" class="form-control" [(ngModel)]="jogadorData.data_nascimento">
+                <input type="text"  class="form-control" name="data_nascimento"
+                  [(ngModel)]="jogadorData.data_nascimento">
               </div>
             </div>
           </div>
-
           <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
             <div class="row">
               <div class="col-md-4 pr-1">
@@ -50,7 +73,8 @@
               <div class="col-md-4 pl-1">
                 <div class="form-group">
                   <label>Nº Licença</label>
-                  <input type="text" class="form-control" placeholder="" name="licenca" [(ngModel)]="jogadorData.licenca">
+                  <input type="text" class="form-control" placeholder="" name="licenca"
+                    [(ngModel)]="jogadorData.licenca">
                 </div>
               </div>
             </div>
@@ -146,16 +170,10 @@
           </div>
 
           <!-- Adicionar outras linhas de formulário aqui conforme necessário -->
-          <button
-          type="button"
-          class="btn btn-primary btn-block mt-4"
-          (click)="isCollapsed = !isCollapsed"
-          [attr.aria-expanded]="!isCollapsed"
-          aria-controls="collapseExample"
-        >
-          Mais dados
-        </button>
-          <button type="button" class="btn btn-primary btn-block mt-4" (click)="gravarFichaJogador()">Gravar Dados</button>
+          <button type="button" class="btn btn-primary btn-block mt-4" (click)="detalhe()"
+            [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">{{text_botao}}</button>
+          <button type="button" class="btn btn-primary btn-block mt-4" (click)="gravarFichaJogador()">Gravar
+            Dados</button>
         </form>
       </div>
 
@@ -172,7 +190,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let falta of faltas">
-              <td>{{falta.data | date:'dd/MM/yyyy'}}</td>
+              <td>{{falta.data | data}}</td>
               <td>{{falta.hora}}</td>
               <td>{{falta.estado}}</td>
               <td>{{falta.motivo}}</td>
@@ -181,6 +199,46 @@
         </table>
         <div *ngIf="!hasFaltas" class="text-center text-muted">Sem Faltas</div>
       </div>
+
+
+      <div class="faltas-card shadow mt-4">
+        <h5 class="info-title">Presenças</h5>
+        <table class="table table-hover table-wrapper mt-3" style="font-size: smaller;">
+          <thead>
+            <tr>
+              <th>Escalão</th>
+              <th style="text-align: center; font-size: small;">Set</th>
+              <th style="text-align: center; font-size: small;">Out</th>
+              <th style="text-align: center; font-size: small;">Nov</th>
+              <th style="text-align: center; font-size: small;">Dez</th>
+              <th style="text-align: center; font-size: small;">Jan</th>
+              <th style="text-align: center; font-size: small;">Fev</th>
+              <th style="text-align: center; font-size: small;">Mar</th>
+              <th style="text-align: center; font-size: small;">Abr</th>
+              <th style="text-align: center; font-size: small;">Mai</th>
+              <th style="text-align: center; font-size: small;">Jun</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let presenca of count_presencas">
+              <td style="background-color:#babab9; color:white"class="card px-1">{{presenca.escalao}}</td>
+              <td style="text-align: center;font-size: small;" >{{presenca.set}}</td>
+              <td style="text-align: center; font-size: small;">{{presenca.out}}</td>
+              <td style="text-align: center; font-size: small;">{{presenca.nov}}</td>
+              <td style="text-align: center; font-size: small;">{{presenca.dez}}</td>
+              <td style="text-align: center; font-size: small;">{{presenca.jan}}</td>
+              <td style="text-align: center; font-size: small;">{{presenca.fev}}</td>
+              <td style="text-align: center; font-size: small;">{{presenca.mar}}</td>
+              <td style="text-align: center; font-size: small;">{{presenca.abr}}</td>
+              <td style="text-align: center; font-size: small;">{{presenca.mai}}</td>
+              <td style="text-align: center; font-size: small;">{{presenca.jun}}</td>
+            </tr>
+
+
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 </div>

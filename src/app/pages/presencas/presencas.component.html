@@ -42,9 +42,7 @@
           <th *ngFor="let presenca of presencas" style="width: 50px; text-align: center; font-size:smaller">
             {{presenca.hora}} </th>
             <th style="text-align: right;">{{presencas.length}}</th>
-
         </tr>
-
         <tr *ngFor="let linha of linhasQuadro; index as posicao">
           <td style="width: 180px;min-width: 180px;max-width: 180px;left: 0px;"><img
               src="assets/img/jogadores/{{linha.idJogador}}_avatar.jpg"
@@ -52,27 +50,25 @@
               class="avatar-sm rounded-circle me-2" />{{linha.nomeJogador}}</td>
           <td *ngFor="let treinos of linha.presenca_treino"
             style="width: 50px; text-align: center;{{treinos.estilo_presenca}}">
-
             <button type="button" placement="top" style="{{treinos.estilo_presenca}}"
               ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
               {{treinos.presenca_1letra}}
             </button>
           </td>
           <td style="text-align: right; width: 50px">{{linha.count_treinos}}</td>
-
         </tr>
+        <tr>
+          <td style="width: 180px;min-width: 180px;max-width: 180px;left: 0px;">Total</td>
+        <td *ngFor="let countJogadorTreino of count_presenca_por_treino; index as posicao" style="width: 50px; text-align: center;">{{countJogadorTreino}}</td>
+      </tr>
       </thead>
 
     </tbody>
   </table>
 
-
-
   <table class="table project-list-table align-middle"  *ngIf="!semRegistos">
     <tbody>
       <thead>
-
-
         <tr *ngFor="let linha of linhasQuadroStaff; index as posicao">
           <td style="width: 180px;min-width: 180px;max-width: 180px;left: 0px;"><img
               src="assets/img/jogadores/{{linha.idJogador}}_avatar_staff.jpg"

@@ -3,6 +3,12 @@ body {
   background-color: #f8f9fa;
 }
 
+.table-wrapper {
+  display: block;
+  overflow: auto;
+  white-space: nowrap;
+}
+
 .container{
   margin-top: 50px;
 }

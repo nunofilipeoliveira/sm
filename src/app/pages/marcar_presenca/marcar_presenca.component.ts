@@ -98,6 +98,7 @@ export class Marcar_presencaComponent implements OnInit {
         this.collapse_first = true;
         this.collapse_second = false;
         this.presencaJogadores = tmpPresencas2;
+        this.presencaStaff=this.presencaService.getStaffPresenca();
       }
       else {
 
@@ -325,6 +326,7 @@ export class Marcar_presencaComponent implements OnInit {
     this.presencaService.setPresenca(this.presencaJogadores);
     this.presencaService.setData_Presenca(this.dataTreino.year, this.dataTreino.month, this.dataTreino.day);
     this.presencaService.setHora(this.time.hour, this.time.minute);
+    this.presencaService.setStaffPresenca(this.presencaStaff);
     this.router.navigate(['/jogadorSeleccao/' + this.equipaService.getEquipa().id])
   }
 
@@ -435,6 +437,8 @@ export class Marcar_presencaComponent implements OnInit {
 
 
   doGravar() {
+
+    console.log("gravar - presenças_staff", this.presencaStaff);
 
 
     this.spinner=true;

@@ -5,6 +5,7 @@ import { NgbAlertModule, NgbCollapseModule, NgbProgressbarModule } from '@ng-boo
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoginServiceService } from '../../services/login-service.service';
+import { FicheirosService } from '../../services/ficheiros.service';
 
 @Component({
   selector: 'ficha-staff',
@@ -21,10 +22,14 @@ export class FichaStaffComponent implements OnInit {
   public sbmError: boolean = false;
   public faltas: FichaJogadorPresencasData[] = [];
   public hasFaltas: boolean = false;
-  public spinner:boolean=false;
+  public spinner: boolean = false;
   public isCollapsed = true;
+  public isUploadFoto: boolean = false;
+  public isAvatar: boolean = false;
+  public isFotoPrincipal: boolean = false;
+  public isUploadFoto_avatar=false;
 
-  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService) {
+  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private ficheirosService: FicheirosService) {
 
     this.staff = {
       id: 0,
@@ -35,13 +40,13 @@ export class FichaStaffComponent implements OnInit {
       telemovel: "",
       morada: "",
       codigo_postal: "",
-      id_jogador:0,
-      tipo:""
+      id_jogador: 0,
+      tipo: ""
     };
   }
 
   ngOnInit() {
-    this.spinner=true;
+    this.spinner = true;
     this.sbmError = false;
     this.sbmSuccess = false;
     const routeParams = this.route.snapshot.paramMap;
@@ -55,7 +60,7 @@ export class FichaStaffComponent implements OnInit {
           console.log("FichaStaffComponent | loadStaffbyId", data);
           if (data != null) {
             this.staff = data;
-            this.spinner=false;
+            this.spinner = false;
           }
         },
         error: error => {
@@ -66,15 +71,15 @@ export class FichaStaffComponent implements OnInit {
 
   }
 
-  gravarFichaStaff(){
+  gravarFichaStaff() {
 
-    this.spinner=true;
+    this.spinner = true;
     this.equipaService.updateStaff(this.loginservice.getLoginData().id, this.staff).subscribe(
       {
         next: data => {
           console.log("FichaStaffComponent | gravarFichaStaff", data);
           if (data != null) {
-            this.spinner=false;
+            this.spinner = false;
             if (data == false) {
               this.sbmError = true;
               document.location.href = '#top';
@@ -92,6 +97,35 @@ export class FichaStaffComponent implements OnInit {
         }
       });
 
+  }
+
+  modoCarregarFicheiro() {
+    this.isUploadFoto = true;
+    this.isFotoPrincipal = true;
+    this.isAvatar = false;
+  }
+
+  modoCarregarFicheiro_avatar() {
+    this.isUploadFoto_avatar = true;
+    this.isAvatar=true;
+    this.isFotoPrincipal=false;
+  }
+
+  onFileSelected(event: any) {
+    console.log(event.target.files[0])
+    this.isUploadFoto = false;
+    let file: File = event.target.files[0];
+    let formDate = new FormData();
+    formDate.append('foto', file);
+    let nomefoto = "";
+    if (this.isAvatar) {
+      nomefoto = (this.staff.id.toString()) + "_avatar_staff"
+    } else {
+      nomefoto = (this.staff.id.toString() + "_staff");
+    }
+    this.ficheirosService.uploadFoto(nomefoto, formDate).subscribe(resp => {
+      window.location.reload();
+    })
   }
 
 

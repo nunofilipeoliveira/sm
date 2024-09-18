@@ -1,22 +1,38 @@
+
 import { Component, OnInit } from '@angular/core';
 import { PresencaService } from '../../services/presenca.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { DataPipe } from '../fichaJogador/DataPipe';
 
 @Component({
   selector: 'presenca',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DataPipe],
   templateUrl: './presenca.component.html',
   styleUrl: './presenca.component.css'
 })
 export class PresencaComponent implements OnInit {
 
-  presencaData: PresencaData | undefined;
-  public spinner:boolean=false;
-  public historico:string[]=[];
+  presencaData: PresencaData;
+  public spinner: boolean = false;
+  public historico: string[] = [];
 
-  constructor(private route: ActivatedRoute, private presencaService: PresencaService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private presencaService: PresencaService, private router: Router) {
+
+    this.presencaData = {
+      id: 0,
+      data: 0,
+      hora: "",
+      id_escalao: 0,
+      escalao_descricao: "",
+      data_criacao: "",
+      id_utilizador_criacao: 0,
+      user_criacao: "",
+      jogadoresPresenca: [],
+      staffPresenca: []
+    }
+  }
 
   ngOnInit() {
 
@@ -25,7 +41,7 @@ export class PresencaComponent implements OnInit {
     console.log('PresencaComponent | idFichaPresenca:', idFichaPresenca);
 
 
-    this.spinner=true;
+    this.spinner = true;
     this.presencaService.getPresencasByid(idFichaPresenca).subscribe(
       {
         next: data => {
@@ -39,7 +55,7 @@ export class PresencaComponent implements OnInit {
                 this.historico = data;
                 console.log("PresencaComponent | historico", this.historico);
 
-                this.spinner=false;
+                this.spinner = false;
                 if (data != null) {
 
                 } else {
@@ -74,9 +90,8 @@ export class PresencaComponent implements OnInit {
 
   }
 
-  alterarFicha()
-  {
-    this.router.navigate(['/mpresenca/'+this.presencaData?.id])
+  alterarFicha() {
+    this.router.navigate(['/mpresenca/' + this.presencaData?.id])
   }
 
 }
