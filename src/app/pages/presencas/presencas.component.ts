@@ -315,6 +315,10 @@ export class PresencasComponent implements OnInit {
       this.linhasQuadroStaff.pop();
     }
 
+    while (this.count_presenca_por_treino.length){
+      this.count_presenca_por_treino.pop();
+    }
+
 
     this.presencaService.getPresencasByDatas(parmDataInicio, parmDataFim, this.equipaService.getEquipa().id).subscribe(
       {

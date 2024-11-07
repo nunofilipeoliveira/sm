@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-
 @Component({
   selector: 'app-admin-layout',
   templateUrl: './admin-layout.component.html',
@@ -9,6 +8,9 @@ import { Component, OnInit } from '@angular/core';
 export class AdminLayoutComponent implements OnInit {
 
   ngOnInit() { }
+
+
+
 }
 
 

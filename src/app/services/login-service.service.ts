@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
+import { Subject, Observable } from 'rxjs';
 
 
 @Injectable({
@@ -9,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class LoginServiceService {
 
+  private userLoggedIn = new Subject<boolean>();
 
   parmJson: string = ""
   urlTmp: string = "";
@@ -16,7 +18,9 @@ export class LoginServiceService {
   loginData!: loginData;
 
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) {
+      this.userLoggedIn.next(false);
+   }
 
 
   login(user: string, pass: string) {
@@ -32,6 +36,18 @@ export class LoginServiceService {
 
 
   }
+
+
+
+  getHistoricoLogins() {
+    const headers = { 'Content-Type': 'application/json' };
+    this.urlTmp = environment.apiUrl + "/sm/gethistoricoLogins";
+    console.log("URL", this.urlTmp);
+    console.log("json", this.parmJson);
+    return this.http.put<any>(this.urlTmp, this.parmJson, { headers });
+  }
+
+
 
 
 
@@ -99,6 +115,14 @@ export class LoginServiceService {
   }
 
 
+  getUserLoggedIn(): Observable<boolean> {
+    return this.userLoggedIn.asObservable();
+  }
+
+
+  setUserLoggedIn(userLoggedIn: boolean) {
+    this.userLoggedIn.next(userLoggedIn);
+  }
 
 
 

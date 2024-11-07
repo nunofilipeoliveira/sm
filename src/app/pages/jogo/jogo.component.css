@@ -1,0 +1,184 @@
+/* Global Container */
+.game-summary {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Header Section */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.team-section {
+  text-align: center;
+  flex: 1;
+}
+
+.team-logo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.team-name {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-top: 10px;
+}
+
+/* Score Section */
+.score-section {
+  flex: 2;
+  text-align: center;
+  margin: 0 20px;
+}
+
+.score {
+  font-size: 60px;
+  font-weight: bold;
+  color: #ff3333;
+}
+
+.score-separator {
+  margin: 0 10px;
+  font-size: 40px;
+}
+
+/* Game Events */
+.game-events {
+  padding: 20px;
+  background-color: #f9f9f9;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.game-events p {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.event-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.event-time {
+  color: #ff6600;
+  font-weight: bold;
+}
+
+/* Lineup Section */
+.team-lineup {
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.team-lineup h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #333;
+}
+
+.team-lineup ul {
+  list-style: none;
+  padding: 0;
+}
+
+.team-lineup ul li {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background: #fff;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.player-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+/* Game Details (De-emphasized) */
+.game-details {
+  text-align: center;
+  font-size: 14px;
+  color: #888;
+  margin-top: 10px;
+}
+
+/* Staff Section */
+.team-staff {
+  padding: 20px;
+}
+
+.team-staff h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.team-staff ul {
+  list-style: none;
+  padding: 0;
+}
+
+.team-staff ul li {
+  font-size: 14px;
+  padding: 10px;
+  background: #fff;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .score {
+    font-size: 50px;
+  }
+
+  .team-logo {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+@media (max-width: 500px) {
+  .game-header {
+    flex-direction: column;
+  }
+
+  .score {
+    font-size: 40px;
+  }
+
+  .score-section {
+    margin: 10px 0;
+  }
+
+  .team-name {
+    font-size: 16px;
+  }
+}

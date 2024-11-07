@@ -1,0 +1,42 @@
+body{
+  margin-top:20px;
+  background-color:#eee;
+  }
+
+
+.team-logo {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+  margin-left: 4px;
+}
+
+.flag-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.win {
+  background-color: #28a745;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+.draw {
+  background-color: #ffc107;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+.loss {
+  background-color: #dc3545;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 8px;
+}

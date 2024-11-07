@@ -20,19 +20,17 @@
             </th>
           </tr>
           <tr>
+            <th scope="col">Últimos 500 acessos</th>
+          </tr>
+          <tr>
             <th scope="col">Nome</th>
-            <th scope="col" class="td-total">Escalao</th>
-            <th scope="col" class="td-total">Seleccionar</th>
+            <th scope="col" class="td-total">data</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let jogador of jogadores | filtroJogadorPipe:filtro_nome ; index as posicao;">
-            <td><img src="assets/img/jogadores/{{jogador.id_Jogador}}_avatar.jpg"
-                onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-                class="avatar-sm rounded-circle me-2" />{{jogador.nome_Jogador}}</td>
-            <td class="td-total" style="font-size: smaller;">{{jogador.escalao}}</td>
-            <td class="td-total"><button type="button" class="btn btn-info text-white"
-                (click)="seleciona(jogador.id_Jogador)">Seleccionar</button></td>
+          <tr *ngFor="let linhaHistorico of historico | HistoricoLoginPipe:filtro_nome; index as posicao;">
+            <td class="td-total" style="font-size: smaller;">{{linhaHistorico.nome}}</td>
+            <td class="td-total" style="font-size: smaller;">{{linhaHistorico.dataHistorico}}</td>
           </tr>
         </tbody>
       </table>

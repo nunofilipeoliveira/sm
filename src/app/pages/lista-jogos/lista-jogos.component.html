@@ -1,0 +1,34 @@
+<P>
+<div class="container">
+  <table class="table project-list-table table-nowrap align-middle">
+    <thead class="thead-light">
+      <tr class="table-active">
+        <th>Data</th>
+        <th>Equipa</th>
+        <th>Resultado</th>
+        <th>Competição</th>
+        <th>Acção</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let game of games">
+
+        <td>{{ game.date }}</td>
+        <td>
+          ({{ game.local }})
+          <img [src]="game.opponentLogo" class="team-logo" />
+          {{ game.opponent }}
+        </td>
+        <td>
+          <span [ngClass]="{'win': game.result === 'V', 'draw': game.result === 'E', 'loss': game.result === 'D'}">{{game.result }}</span>
+         {{game.score}}</td>
+        <td>
+          <img [src]="game.flag" class="flag-icon" />
+          {{ game.competition }}
+        </td>
+        <td class="td-total"><button type="button" class="btn btn-info text-white" (click)="verJogo(1)">Ver</button></td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
