@@ -31,9 +31,22 @@ export class PresencaService {
     "day": 0
   }
   private hora = { hour: 0, minute: 0 };
+  private idFicha=0;
+  private presenca:PresencaData;
 
   constructor(private http: HttpClient) {
-
+    this.presenca = {
+        id:0,
+        data:0,
+        hora:"",
+        id_escalao:0,
+        escalao_descricao:"",
+        data_criacao:"",
+        id_utilizador_criacao:0,
+        user_criacao:"",
+        jogadoresPresenca: [],
+        staffPresenca: [],
+          };
   }
 
   setData_Presenca(parmAno:number, parmMes:number, parmDia:number){
@@ -62,6 +75,7 @@ export class PresencaService {
     this.data_presenca.day=0;
     this.jogadoresPresenca=[];
     this.staffPresenca=[];
+    this.idFicha=0;
   }
 
   setPresenca(parmJogadoresPresenca: jogadorPresencaData[]) {
@@ -78,6 +92,22 @@ export class PresencaService {
 
   getStaffPresenca(): staffPresencaData[] {
     return this.staffPresenca;
+  }
+
+  setIdFicha(parmIdFicha: number){
+    this.idFicha=parmIdFicha;
+  }
+
+  getIdFicha(): number{
+    return this.idFicha;
+  }
+
+  setPresencaTmp(parmPresenca: PresencaData){
+    this.presenca=parmPresenca;
+  }
+
+  getPresencaTmp(): PresencaData{
+    return this.presenca;
   }
 
   createPresenca(parmPresenca: PresencaData) {

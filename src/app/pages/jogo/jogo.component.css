@@ -1,11 +1,11 @@
-/* Global Container */
+/* Container Global */
 .game-summary {
-  max-width: 600px;
+  max-width: 700px;
   margin: 20px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  padding: 25px;
+  background-color: #f5f6fa;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
   font-family: 'Poppins', sans-serif;
 }
 
@@ -14,8 +14,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .team-section {
@@ -24,119 +23,154 @@
 }
 
 .team-logo {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .team-name {
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 16px;
+  font-weight: 600;
   color: #333;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
-/* Score Section */
+/* Estilo para a secção de pontuação */
 .score-section {
-  flex: 2;
-  text-align: center;
-  margin: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: #ffffff; /* Fundo escuro */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+  color: #fefefe;
 }
 
+/* Equipe e logo */
+.team-section {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.team-logo {
+  width: 80px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.team-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: #000000; /* Tom de amarelo para os nomes */
+  text-shadow: 1px 1px 8px rgba(255, 255, 255, 0.5); /* Efeito de brilho no texto */
+}
+
+/* Pontuação central */
 .score {
-  font-size: 60px;
+  font-size: 70px;
   font-weight: bold;
-  color: #ff3333;
+  color: #495fbf;
+  text-shadow: 0 0 10px rgba(169, 159, 159, 0.8),
+               0 0 20px rgba(255, 0, 0, 0.6); /* Efeito de brilho ao redor */
 }
 
 .score-separator {
-  margin: 0 10px;
-  font-size: 40px;
+  font-size: 60px;
+  color: #495fbf;
+  margin: 0 20px;
 }
 
-/* Game Events */
-.game-events {
-  padding: 20px;
-  background-color: #f9f9f9;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+/* Opcional: efeito de iluminação no fundo */
+.score-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 215, 0, 0.4), transparent);
+  border-radius: 50%;
+  z-index: -1; /* Coloca o brilho por trás */
 }
 
-.game-events p {
-  text-align: center;
-  font-weight: bold;
-  margin-bottom: 10px;
+
+.game-league, .game-date, .game-venue {
+  font-size: 14px;
+  color: #666;
 }
 
-.event-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px;
-  background-color: #fff;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.event-time {
-  color: #ff6600;
-  font-weight: bold;
-}
-
-/* Lineup Section */
+/* Team Lineup */
 .team-lineup {
-  padding: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .team-lineup h2 {
   text-align: center;
-  margin-bottom: 15px;
   font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
   color: #333;
 }
 
 .team-lineup ul {
   list-style: none;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .team-lineup ul li {
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 10px 15px;
   background: #fff;
-  margin-bottom: 10px;
-  border-radius: 10px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.player-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  margin-right: 15px;
+.player-number {
+  font-weight: bold;
+  color: #333;
+  margin-right: 10px;
 }
 
-/* Game Details (De-emphasized) */
-.game-details {
-  text-align: center;
-  font-size: 14px;
-  color: #888;
-  margin-top: 10px;
+.player-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.player-name {
+  flex: 2;
+  font-weight: 500;
+}
+
+.player-goals {
+  font-size: 16px;
+  color: #333;
+  margin-right: 10px;
+  white-space: nowrap; /* Garante que os emojis fiquem em linha */
+}
+.player-cards {
+  font-size: 18px;
 }
 
 /* Staff Section */
 .team-staff {
-  padding: 20px;
+  padding: 15px;
 }
 
 .team-staff h2 {
   text-align: center;
-  margin-bottom: 15px;
   font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 .team-staff ul {
@@ -145,40 +179,200 @@
 }
 
 .team-staff ul li {
-  font-size: 14px;
-  padding: 10px;
+  display: flex;
+  align-items: center;
+  padding: 8px 15px;
   background: #fff;
-  margin-bottom: 10px;
-  border-radius: 10px;
-  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  margin-bottom: 8px;
 }
 
-/* Responsive Design */
+.staff-name {
+  flex: 1;
+  text-align: left;
+  margin-right: 12px;
+  margin-left: 12px;
+}
+
+.staff-cards {
+  font-size: 18px;
+}
+
+.game-items {
+  margin-right: 5px;
+}
+
+
+/* Responsividade */
 @media (max-width: 768px) {
   .score {
-    font-size: 50px;
+    font-size: 36px;
   }
 
   .team-logo {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
+  }
+
+  .player-avatar {
+    width: 30px;
+    height: 30px;
+  }
+
+  .player-number, .player-goals, .player-cards {
+    font-size: 14px;
   }
 }
 
-@media (max-width: 500px) {
-  .game-header {
-    flex-direction: column;
+/* Estilos para a tabela de jogadores */
+.team-lineup table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+.team-lineup th, .team-lineup td {
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+.team-lineup th {
+  background-color: #f2f2f2;
+  font-weight: 600;
+  color: #333;
+}
+
+.player-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.team-lineup td img {
+  display: block;
+  margin: 0 auto;
+}
+
+.player-goals, .player-cards {
+  font-size: 16px;
+}
+
+/* Melhor visualização para dispositivos móveis */
+@media (max-width: 768px) {
+  .player-avatar {
+    width: 30px;
+    height: 30px;
   }
 
-  .score {
-    font-size: 40px;
-  }
-
-  .score-section {
-    margin: 10px 0;
-  }
-
-  .team-name {
-    font-size: 16px;
+  .team-lineup th, .team-lineup td {
+    font-size: 12px;
+    padding: 8px;
   }
 }
+
+body{
+  margin-top:20px;
+  background-color:#eee;
+  }
+
+  .tr{
+    border-color: red;
+    &:hover{
+      background-color: #b52732;
+    }
+  }
+
+
+
+  .badge{
+    font-size:18px;
+    background-color:#b52732;
+  }
+
+  .table-responsive {
+    overflow: auto;
+    padding-bottom: 10px;
+  }
+
+  .project-list-table {
+      border-collapse: separate;
+      border-spacing: 0 12px
+  }
+
+  .project-list-table tr {
+      background-color: #fff
+  }
+
+  .table-nowrap td, .table-nowrap th {
+      white-space: nowrap;
+  }
+
+
+  .table-nowrap td-r {
+      text-align: right;
+}
+
+  .table-borderless>:not(caption)>*>* {
+      border-bottom-width: 0;
+  }
+  .table>:not(caption)>*>* {
+      background-color: var(--bs-table-bg);
+      border-bottom-width: 1px;
+      box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+  }
+
+  .avatar-sm {
+      height: 2rem;
+      width: 2rem;
+  }
+  .rounded-circle {
+      border-radius: 50%!important;
+  }
+  .me-2 {
+      margin-right: 0.5rem!important;
+  }
+  img, svg {
+      vertical-align: middle;
+  }
+
+  a {
+      color: #3b76e1;
+      text-decoration: none;
+  }
+
+  .badge-soft-danger {
+      color: #f56e6e !important;
+      background-color: rgba(245,110,110,.1);
+  }
+  .badge-soft-success {
+      color: #63ad6f !important;
+      background-color: rgba(99,173,111,.1);
+  }
+
+  .badge-soft-primary {
+      color: #3b76e1 !important;
+      background-color: rgba(59,118,225,.1);
+  }
+
+  .badge-soft-info {
+      color: #57c9eb !important;
+      background-color: rgba(87,201,235,.1);
+  }
+
+  .avatar-title {
+      align-items: center;
+      background-color: #3b76e1;
+      color: #fff;
+      display: flex;
+      font-weight: 500;
+      height: 100%;
+      justify-content: center;
+      width: 100%;
+  }
+  .bg-soft-primary {
+      background-color: rgba(59,118,225,.25)!important;
+  }

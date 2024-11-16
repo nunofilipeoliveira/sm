@@ -86,6 +86,8 @@ export class Marcar_presencaComponent implements OnInit {
 
       //verifica se estamos a meio de preencher:
       let tmpPresencas2: jogadorPresencaData[] = this.presencaService.getPresenca()
+      this.idFicha=this.presencaService.getPresencaTmp().id;
+      this.presenca=this.presencaService.getPresencaTmp();
 
       console.log("Marcar_presencaComponent | jogadorPresencaData", tmpPresencas2);
 
@@ -327,6 +329,7 @@ export class Marcar_presencaComponent implements OnInit {
     this.presencaService.setData_Presenca(this.dataTreino.year, this.dataTreino.month, this.dataTreino.day);
     this.presencaService.setHora(this.time.hour, this.time.minute);
     this.presencaService.setStaffPresenca(this.presencaStaff);
+    this.presencaService.setPresencaTmp(this.presenca);
     this.router.navigate(['/jogadorSeleccao/' + this.equipaService.getEquipa().id])
   }
 

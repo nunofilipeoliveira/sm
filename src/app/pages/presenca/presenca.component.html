@@ -9,7 +9,7 @@
         <table class="table project-list-table table-nowrap align-middle">
           <thead>
             <tr>
-              <th scope="col" style="text-transform: none;">Data: {{presencaData.data | data}} | {{presencaData?.hora}}</th>
+              <th scope="col" style="text-transform: none;">Data: {{presencaData.data | data}} | {{presencaData.hora}}</th>
               <th scope="col" style="width: 15px;"></th>
               <th scope="col" style="width: 30px;"></th>
             </tr>
@@ -49,6 +49,6 @@
 </div>
 
 <div *ngIf="!spinner">
-  {{presencaData?.data_criacao}} {{presencaData?.user_criacao}} criou ficha presenças.
+  {{presencaData.data_criacao}} {{presencaData.user_criacao}} criou ficha presenças.
 <tr *ngFor="let historicoLinha of historico; index as posicao">{{historicoLinha}}.</tr>
 </div>
