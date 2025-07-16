@@ -6,7 +6,7 @@ import { EquipaService } from './../../services/equipa.service';
 import { CommonModule } from '@angular/common';
 import { LoginServiceService } from '../../services/login-service.service';
 import { FormsModule } from '@angular/forms';
-import { DataPipe } from './DataPipe';
+import { DataPipe } from './DataPipe'; // Seu DataPipe personalizado
 
 @Component({
   selector: 'user-cmp',
@@ -34,13 +34,15 @@ export class FichaJogadorComponent implements OnInit {
   public isUploadFoto_avatar=false;
   public count_presencas: ContadorPresencaData[] = [];
 
-  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private router: Router, private ficheirosService: FicheirosService) {
+  // Propriedade para a data de nascimento formatada (AAAA-MM-DD)
+  public dataNascimentoDisplay: string = '';
 
+  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private router: Router, private ficheirosService: FicheirosService) {
     this.jogadorData = {
       id: 0,
       nome: "",
       nome_completo: "",
-      data_nascimento: 0,
+      data_nascimento: 0, // É um número no formato AAAAMMDD
       email: "",
       telemovel: "",
       pai_nome: "",
@@ -60,8 +62,6 @@ export class FichaJogadorComponent implements OnInit {
     };
   }
 
-
-
   ngOnInit() {
     this.spinner = true;
     this.sbmError = false;
@@ -70,7 +70,6 @@ export class FichaJogadorComponent implements OnInit {
     const idJogador = Number(routeParams.get('id'));
     console.log('FichaJogadorComoponent | idJogador:', idJogador);
 
-
     this.equipaService.loadJogadorbyId(idJogador).subscribe(
       {
         next: data => {
@@ -78,6 +77,18 @@ export class FichaJogadorComponent implements OnInit {
           if (data != null) {
             this.jogadorData = data;
             console.log("FichaJogadorComponent | loadJogadorbyId 2 ", this.jogadorData);
+
+            // CONVERSÃO DO NÚMERO AAAAMMDD PARA STRING AAAA-MM-DD PARA EXIBIÇÃO NO INPUT
+            if (this.jogadorData.data_nascimento && this.jogadorData.data_nascimento.toString().length === 8) {
+              const dataStr = this.jogadorData.data_nascimento.toString();
+              const ano = dataStr.substring(0, 4);
+              const mes = dataStr.substring(4, 6);
+              const dia = dataStr.substring(6, 8);
+              this.dataNascimentoDisplay = `${ano}-${mes}-${dia}`;
+            } else {
+              this.dataNascimentoDisplay = 'AAAA-MM-DD'; // Limpa se o formato não for AAAAMMDD
+            }
+
             this.equipaService.getFaltasByJogador(idJogador).subscribe(
               {
                 next: data => {
@@ -113,14 +124,6 @@ export class FichaJogadorComponent implements OnInit {
                   this.sbmError = true;
                 }
               });
-
-
-
-
-
-
-
-
           }
         },
         error: error => {
@@ -128,10 +131,6 @@ export class FichaJogadorComponent implements OnInit {
           this.sbmError = true;
         }
       });
-
-
-
-
   }
 
   detalhe() {
@@ -142,7 +141,6 @@ export class FichaJogadorComponent implements OnInit {
       this.isCollapsed = true;
       this.text_botao = "Mais Dados";
     }
-
   }
 
   onFileSelected(event: any) {
@@ -174,16 +172,29 @@ export class FichaJogadorComponent implements OnInit {
     this.isFotoPrincipal=false;
   }
 
-
-
-
   gravarFichaJogador() {
-
     this.spinner = true;
     console.log("avaliar loginData:", this.loginservice.getLoginData());
     if (this.loginservice.getLoginData() == undefined) {
       console.log("loginData==undefined");
       this.router.navigate(['/']);
+    }
+
+    // CONVERSÃO DA STRING AAAA-MM-DD DE VOLTA PARA NÚMERO AAAAMMDD ANTES DE SALVAR
+    console.log("Antes de dataNascimentoDisplay");
+    if (this.dataNascimentoDisplay) {
+      console.log("dataNascimentoDisplay:", this.dataNascimentoDisplay);
+      // Remove os hífens para obter AAAAMMDD
+      const dataNumericaStr = this.dataNascimentoDisplay.replace(/-/g, '');
+      // Verifica se a string resultante tem 8 dígitos e é um número válido
+      if (dataNumericaStr.length === 8 && !isNaN(Number(dataNumericaStr))) {
+        this.jogadorData.data_nascimento = Number(dataNumericaStr);
+      } else {
+        console.warn('Data de nascimento inválida para conversão AAAAMMDD:', this.dataNascimentoDisplay);
+        this.jogadorData.data_nascimento = 0; // Ou algum valor padrão para inválido
+      }
+    } else {
+      this.jogadorData.data_nascimento = 0; // Ou 0 se o campo estiver vazio
     }
 
     this.equipaService.updateJogador(this.loginservice.getLoginData().id, this.jogadorData).subscribe(
@@ -208,11 +219,5 @@ export class FichaJogadorComponent implements OnInit {
           this.sbmError = true;
         }
       });
-
-
-
   }
 }
-
-
-

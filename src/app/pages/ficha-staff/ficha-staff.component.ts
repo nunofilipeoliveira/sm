@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import { LoginServiceService } from '../../services/login-service.service';
 import { FicheirosService } from '../../services/ficheiros.service';
 
+
 @Component({
   selector: 'ficha-staff',
   standalone: true,
@@ -28,6 +29,9 @@ export class FichaStaffComponent implements OnInit {
   public isAvatar: boolean = false;
   public isFotoPrincipal: boolean = false;
   public isUploadFoto_avatar=false;
+
+   // Propriedade para a data de nascimento formatada (AAAA-MM-DD)
+  public dataNascimentoDisplay: string = '';
 
   constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private ficheirosService: FicheirosService) {
 
@@ -60,6 +64,18 @@ export class FichaStaffComponent implements OnInit {
           console.log("FichaStaffComponent | loadStaffbyId", data);
           if (data != null) {
             this.staff = data;
+
+             // CONVERSÃO DO NÚMERO AAAAMMDD PARA STRING AAAA-MM-DD PARA EXIBIÇÃO NO INPUT
+            if (this.staff.data_nascimento && this.staff.data_nascimento.toString().length === 8) {
+              const dataStr = this.staff.data_nascimento.toString();
+              const ano = dataStr.substring(0, 4);
+              const mes = dataStr.substring(4, 6);
+              const dia = dataStr.substring(6, 8);
+              this.dataNascimentoDisplay = `${ano}-${mes}-${dia}`;
+            } else {
+              this.dataNascimentoDisplay = 'AAAA-MM-DD'; // Limpa se o formato não for AAAAMMDD
+            }
+            
             this.spinner = false;
           }
         },
@@ -74,6 +90,25 @@ export class FichaStaffComponent implements OnInit {
   gravarFichaStaff() {
 
     this.spinner = true;
+
+    // CONVERSÃO DA STRING AAAA-MM-DD DE VOLTA PARA NÚMERO AAAAMMDD ANTES DE SALVAR
+    console.log("Antes de dataNascimentoDisplay");
+    if (this.dataNascimentoDisplay) {
+      console.log("dataNascimentoDisplay:", this.dataNascimentoDisplay);
+      // Remove os hífens para obter AAAAMMDD
+      const dataNumericaStr = this.dataNascimentoDisplay.replace(/-/g, '');
+      // Verifica se a string resultante tem 8 dígitos e é um número válido
+      if (dataNumericaStr.length === 8 && !isNaN(Number(dataNumericaStr))) {
+        this.staff.data_nascimento = Number(dataNumericaStr);
+      } else {
+        console.warn('Data de nascimento inválida para conversão AAAAMMDD:', this.dataNascimentoDisplay);
+        this.staff.data_nascimento = 0; // Ou algum valor padrão para inválido
+      }
+    } else {
+      this.staff.data_nascimento = 0; // Ou 0 se o campo estiver vazio
+    }
+
+
     this.equipaService.updateStaff(this.loginservice.getLoginData().id, this.staff).subscribe(
       {
         next: data => {
