@@ -7,6 +7,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog'; // Adicio
 import { Router } from '@angular/router';
 import { LoginServiceService } from '../../services/login-service.service';
 import { EquipaService } from '../../services/equipa.service';
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'login',
@@ -22,27 +24,39 @@ export class LoginComponent implements OnInit{
   erroLogin: boolean = false;
   srvIndisponivel: boolean = false;
   spinner: boolean = false;
+  showSessionExpiredMessage = false;
 
-  constructor(private router: Router, private dialog: MatDialog, private loginws: LoginServiceService, private equipaservice:EquipaService) { }
+  constructor(private router: Router, private dialog: MatDialog, private loginws: LoginServiceService, private equipaservice:EquipaService, private route: ActivatedRoute) { }
 
   ngOnInit(){
-    this.equipaservice.clear();
-    this.loginws.clear(); // Garante que a sessão anterior é limpa ao carregar a página de login
+    //this.equipaservice.clear();
+    //this.loginws.clear(); // Garante que a sessão anterior é limpa ao carregar a página de login
 
-    console.log('URL ->',  environment.apiUrl);
+    console.log('LoginComponent | ngOnInit');
+this.route.queryParams.subscribe(params => {
+  console.log('Parâmetros de consulta:', params);
+  this.showSessionExpiredMessage = params['sessionExpired'] === 'true';
+  console.log('LoginComponent | ngOnInit | sessionExpired:', this.showSessionExpiredMessage);
+});
+
+      // Opcional: Limpa os parâmetros da URL após 5 segundos
+      setTimeout(() => {
+        this.showSessionExpiredMessage = false;
+        console.log('LoginComponent | ngOnInit | Limpa mensagem de sessão expirada:', this.showSessionExpiredMessage);
+      }, 5000);
+   
   }
 
   doLogin() {
     this.spinner = true;
-    console.log('user:', this.loginObj.user);
-    console.log('password:', this.loginObj.password);
+   
 
     this.loginws.login(this.loginObj.user, this.loginObj.password).subscribe(
       {
         next: data => {
-          data.token="TOKEN_TESTE"
+          console.log("LoginComponent | Serviço Login OK!!");
           this.loginwsdata = data;
-          console.log('login:data',  data);
+          
           if (data != null && data.token) { // Verifica se data e data.token existem
             this.spinner = false;
             this.erroLogin = false;
@@ -54,7 +68,7 @@ export class LoginComponent implements OnInit{
             // Armazena os dados de login (incluindo o token, se a interface loginData foi atualizada)
             this.loginws.setLogin(this.loginwsdata);
 
-            localStorage.setItem('loginToken', JSON.stringify(this.loginwsdata));
+            localStorage.setItem('token', JSON.stringify(this.loginwsdata));
 
             // Opcional: Manter UserLogin se ainda for usado para algo específico
             localStorage.setItem('UserLogin', this.loginObj.user);

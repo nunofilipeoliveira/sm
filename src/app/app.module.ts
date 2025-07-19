@@ -27,7 +27,8 @@ import { HashLocationStrategy, LocationStrategy } from "@angular/common";
   imports: [
     BrowserAnimationsModule,
     RouterModule.forRoot(AppRoutes,{
-      useHash: true
+      useHash: true,
+       onSameUrlNavigation: 'reload'
     }),
     SidebarModule,
     NavbarModule,

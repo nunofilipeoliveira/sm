@@ -15,6 +15,7 @@
       <P> </P>
       <div *ngIf="erroLogin" class="erroLogin">Login inválido</div>
       <div *ngIf="srvIndisponivel" class="erroLogin">Site indisponivel</div>
+      <div *ngIf="showSessionExpiredMessage" class="erroLogin">Sessão expirada. Faça novo login</div>
     </div>
 
 

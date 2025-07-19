@@ -174,7 +174,7 @@ export class FichaJogadorComponent implements OnInit {
 
   gravarFichaJogador() {
     this.spinner = true;
-    console.log("avaliar loginData:", this.loginservice.getLoginData());
+    console.log("avaliar loginData");
     if (this.loginservice.getLoginData() == undefined) {
       console.log("loginData==undefined");
       this.router.navigate(['/']);
