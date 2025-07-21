@@ -9,9 +9,17 @@
 	font-family: 'Trebuchet MS', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-   background-image: linear-gradient(to bottom, #273890, #b52732);
+   
    background-repeat: no-repeat;
    background-size: cover;
+
+    &.color-variation-hcmaia{
+    background-image: linear-gradient(to bottom, #273890, #b52732);;
+	}
+
+	 &.color-variation-advalongo{
+    background-image: linear-gradient(to bottom, #008B6C, #003D2F);;
+	}
 
 
 }
@@ -33,8 +41,17 @@
 		background-repeat: no-repeat;
 		background-position: center top;
 		background-size: 350px;
-		background-image: url('assets/img/MaiaFundo.png');
+		
 	}
+
+	 &.image-variation-hcmaia::after {
+    background-image: url('assets/img/MaiaFundo.png');
+  }
+  &.image-variation-advalongo::after {
+    background-image: url('assets/img/ADValongo_fundo.png');
+	background-size: 250px;
+	top: 40px;
+  }
 
 	.signup {
 		position: absolute;

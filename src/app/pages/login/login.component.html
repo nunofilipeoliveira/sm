@@ -1,5 +1,5 @@
-<div class="parent">
-  <div class="form-structor">
+<div class="parent" [class.color-variation-hcmaia]="variation === 1" [class.color-variation-advalongo]="variation === 2">
+  <div class="form-structor" [class.image-variation-hcmaia]="variation === 1" [class.image-variation-advalongo]="variation === 2" >
     <div class="signup">
       <div class="form-holder">
         <input type="text" [(ngModel)]="loginObj.user" name="user" class="input" placeholder="User" required />

@@ -25,12 +25,16 @@ export class LoginComponent implements OnInit{
   srvIndisponivel: boolean = false;
   spinner: boolean = false;
   showSessionExpiredMessage = false;
+  variation: number = 0; // 0=padrão, 1=var1, 2=var2
 
   constructor(private router: Router, private dialog: MatDialog, private loginws: LoginServiceService, private equipaservice:EquipaService, private route: ActivatedRoute) { }
 
   ngOnInit(){
     //this.equipaservice.clear();
     //this.loginws.clear(); // Garante que a sessão anterior é limpa ao carregar a página de login
+
+    this.variation = environment.tenant_id
+    console.log('LoginComponent | ngOnInit | variation:', this.variation);  
 
     console.log('LoginComponent | ngOnInit');
 this.route.queryParams.subscribe(params => {
@@ -46,6 +50,8 @@ this.route.queryParams.subscribe(params => {
       }, 5000);
    
   }
+
+  
 
   doLogin() {
     this.spinner = true;

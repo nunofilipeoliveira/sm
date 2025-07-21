@@ -13,6 +13,7 @@ export class LoginServiceService {
 
   private userLoggedIn = new Subject<boolean>();
 
+
   parmJson: string = ""
   urlTmp: string = "";
   errows: boolean = false;
@@ -25,16 +26,18 @@ export class LoginServiceService {
       }); // Inicializa com o estado de autenticação atual
    }
 
+
+
   login(user: string, pass: string): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
-    this.parmJson = "{\"user\":\"" + user + "\",\"pwd\":\"" + pass + "\"}";
+    const body = { user: user, pwd: pass, tenant_id:environment.tenant_id };
     this.urlTmp = environment.apiUrl + "/sm/login";
 
     console.log("URL", this.urlTmp);
-    //console.log("json", this.parmJson);
+    //console.log("json", body);
 
     // Assumindo que o backend retorna um objeto com o token (ex: { ..., token: 'seu_token_jwt' })
-    return this.http.put<any>(this.urlTmp, this.parmJson, { headers });
+    return this.http.put<any>(this.urlTmp, body, { headers });
   }
 
   // Novo método para armazenar o token

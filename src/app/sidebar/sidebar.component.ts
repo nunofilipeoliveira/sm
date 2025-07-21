@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginServiceService } from '../services/login-service.service';
+import { environment } from '../../environments/environment';
 
 export interface RouteInfo {
   path: string;
@@ -30,6 +31,9 @@ export const ROUTES: RouteInfo[] = [
 
 export class SidebarComponent implements OnInit {
   public menuItems: any[] = [];
+  public logoPath: string = ''; // Adicione esta propriedade
+  public titleText: string = 'HC Maia'; // Nova propriedade para controlar o texto
+
   constructor(private loginws: LoginServiceService) { }
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
@@ -41,6 +45,16 @@ export class SidebarComponent implements OnInit {
       this.menuItems.push(jogosMenu)
     }
 
-
+    // Defina o caminho da imagem aqui, pode ser condicional ou vir de um serviço
+    if (environment.tenant_id === 1) {
+      this.logoPath = 'assets/img/hcMaia_logo.png'; // Caminho para o logo do HC Maia
+      this.titleText = 'HC Maia'; // Texto do título para HC Maia
+    } else if (environment.tenant_id === 2) {
+      this.logoPath = 'assets/img/ADValongo_logo.png'; // Caminho para o logo do AD Valongo
+      this.titleText = 'AD Valongo'; // Texto do título para AD Valongo
+    } else {
+      this.logoPath = 'assets/img/default_logo.png'; // Logo padrão se necessário
+    }
+   
   }
 }
