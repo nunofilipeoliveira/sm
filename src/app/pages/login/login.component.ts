@@ -79,9 +79,11 @@ this.route.queryParams.subscribe(params => {
             // Armazena os dados de login (incluindo o token, se a interface loginData foi atualizada)
             this.loginws.setLogin(this.loginwsdata);
 
+            localStorage.removeItem('token');
             localStorage.setItem('token', JSON.stringify(this.loginwsdata));
 
             // Opcional: Manter UserLogin se ainda for usado para algo específico
+            localStorage.removeItem('UserLogin');
             localStorage.setItem('UserLogin', this.loginObj.user);
 
             this.redirect(this.loginwsdata);

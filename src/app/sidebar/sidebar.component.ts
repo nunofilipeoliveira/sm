@@ -44,7 +44,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
 
-    
+
     if (this.loginws.getLoginData().user == "Nuno") {
       this.menuItems.push(this.historicologinsMenu)
       this.menuItems.push(this.jogosMenu)
@@ -61,8 +61,30 @@ export class SidebarComponent implements OnInit {
     } else {
       this.logoPath = 'assets/img/default_logo.png'; // Logo padrão se necessário
     }
-   
+
   }
 
-  
+  ngDoCheck() {
+    const user = this.loginws.getLoginData().user;
+
+    // Verifica se o utilizador é "Nuno"
+    if (user === "Nuno") {
+      // Cria um array com os títulos dos menus que Nuno deve ter
+      const requiredMenus = [this.historicologinsMenu.title, this.jogosMenu.title, this.adminMenu.title];
+
+      // Cria um array com os títulos dos menus atualmente disponíveis
+      const currentMenuTitles = this.menuItems.map(item => item.title);
+
+      // Verifica se todos os menus requeridos estão presentes
+      const allMenusPresent = requiredMenus.every(menu => currentMenuTitles.includes(menu));
+
+      // Se algum menu estiver faltando, adiciona-o
+      if (!allMenusPresent) {
+        this.menuItems = [...this.menuItems, this.historicologinsMenu, this.jogosMenu, this.adminMenu];
+      }
+    }
+  }
+
+
+
 }

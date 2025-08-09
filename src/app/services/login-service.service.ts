@@ -43,6 +43,7 @@ export class LoginServiceService {
 
   // Novo método para armazenar o token
   setAuthToken(token: string): void {
+    localStorage.removeItem(this.AUTH_TOKEN_KEY);
     localStorage.setItem(this.AUTH_TOKEN_KEY, token);
   }
 

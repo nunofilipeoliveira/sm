@@ -48,13 +48,15 @@ export class GestaoEquipaComponent implements OnInit {
       this.equipaService.getEquipabyIDLight(idEquipa.toString()).subscribe((data: EquipaData) => {
         this.equipa = data;
         console.log('GestaoEquipaComponent | Equipa (ID > 0):', this.equipa);
+         this.loading = false;
       });
     } else {
       this.equipa = this.equipaService.getEquipa();
       console.log('GestaoEquipaComponent | Equipa (ID <= 0):', this.equipa);
+       this.loading = false;
     }
     console.log('GestaoEquipaComponent | Equipa:', this.equipa);
-    this.loading = false;
+    
   }
 
   abrirModalJogadores() {
@@ -102,6 +104,7 @@ export class GestaoEquipaComponent implements OnInit {
       this.equipaService.removeJogadorEquipa(jogador).subscribe({
         next: () => {
           this.equipa.jogadores = this.equipa.jogadores.filter((j: any) => j.id !== id);
+         
         },
         error: (error) => {
           console.error('Erro ao remover:', error);
