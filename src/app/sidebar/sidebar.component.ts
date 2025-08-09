@@ -35,17 +35,20 @@ export class SidebarComponent implements OnInit {
   public logoPath: string = ''; // Adicione esta propriedade
   public titleText: string = 'HC Maia'; // Nova propriedade para controlar o texto
 
+  historicologinsMenu: RouteInfo = { path: '/historicologins', title: 'Historico_Logins', icon: 'nc-bullet-list-67', class: '' };
+  jogosMenu: RouteInfo = { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' };
+  adminMenu: RouteInfo = { path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' };
+
+
   constructor(private loginws: LoginServiceService) { }
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
 
-    let historicologinsMenu: RouteInfo = { path: '/historicologins', title: 'Historico_Logins', icon: 'nc-bullet-list-67', class: '' };
-    let jogosMenu: RouteInfo = { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' };
-    let adminMenu: RouteInfo = { path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' };
+    
     if (this.loginws.getLoginData().user == "Nuno") {
-      this.menuItems.push(historicologinsMenu)
-      this.menuItems.push(jogosMenu)
-      this.menuItems.push(adminMenu)
+      this.menuItems.push(this.historicologinsMenu)
+      this.menuItems.push(this.jogosMenu)
+      this.menuItems.push(this.adminMenu)
     }
 
     // Defina o caminho da imagem aqui, pode ser condicional ou vir de um serviço
@@ -60,4 +63,6 @@ export class SidebarComponent implements OnInit {
     }
    
   }
+
+  
 }

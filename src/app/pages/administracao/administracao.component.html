@@ -76,12 +76,13 @@
                                         <td class="td-total">
                                             <button (click)="apagarEquipa(equipa.id)"
                                                 class="btn btn-danger btn-sm me-2">
-                                                <i class="nc-icon nc-simple-remove"></i> Apagar
+                                                <i class="nc-icon nc-simple-remove"></i> <span
+                                                    class="d-none d-md-inline"> Apagar Equipa</span>
                                             </button>
 
                                             <button (click)="gestaoEquipa(equipa.id)" class="btn btn-info btn-sm"> <i
-                                                    class="nc-icon nc-settings-gear-65"></i> Gestão
-                                                Equipa</button>
+                                                    class="nc-icon nc-settings-gear-65"></i> <span
+                                                    class="d-none d-md-inline"> Gestão Equipa</span></button>
 
                                         </td>
                                     </tr>
@@ -100,18 +101,19 @@
                                 <tr>
                                     <td>
                                         <select class="form-select" [(ngModel)]="escalaoSelecionadaId"
-                                            aria-label="Selecionar Escalão"  (change)="onEscalaoChange()">
+                                            aria-label="Selecionar Escalão" (change)="onEscalaoChange()">
                                             <option *ngFor="let escalao of escaloes" [ngValue]="escalao.id">
                                                 {{ escalao.escalaoDescritivo }}
                                             </option>
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control-lg" [(ngModel)]="textoDescritivoEscalaoSelecionado">
+                                        <input type="text" class="form-control-lg"
+                                            [(ngModel)]="textoDescritivoEscalaoSelecionado">
                                     </td>
                                     <td> <button class="btn btn-info" (click)="adicionar()"
-                                        [disabled]="loadingAplicarEpoca">
-                                        <span><b>adicionar</b></span>
+                                            [disabled]="loadingAplicarEpoca">
+                                            <span><b>adicionar</b></span>
                                         </button>
                                     </td>
                                 </tr>

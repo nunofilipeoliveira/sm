@@ -36,10 +36,10 @@
                       class="avatar-sm rounded-circle me-2" />{{jogador.nome}}</td>
                   <td class="td-total">
                     <button (click)="apagarJogador(jogador.id)" class="btn btn-danger btn-sm me-2">
-                      <i class="nc-icon nc-simple-remove"></i> Apagar
+                      <i class="nc-icon nc-simple-remove"></i> <span class="d-none d-md-inline"> Apagar Jogador</span>
                     </button>
                     <button (click)="verFichaJogador(jogador.id)" class="btn btn-info btn-sm me-2">
-                      <i class="nc-icon nc-zoom-split"></i> Ficha
+                      <i class="nc-icon nc-zoom-split"></i> <span class="d-none d-md-inline">  Ver Ficha</span>
                     </button>
                   </td>
                 </tr>
@@ -65,11 +65,11 @@
                       onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
                       class="avatar-sm rounded-circle me-2" />{{member.nome}}</td>
                   <td class="td-total">
-                    <button (click)="apagarStaff(member.id)" class="btn btn-danger btn-sm">
-                      <i class="nc-icon nc-simple-remove"></i> Apagar
+                    <button (click)="apagarStaff(member.id)" class="btn btn-danger btn-sm me-2">
+                      <i class="nc-icon nc-simple-remove"></i> <span class="d-none d-md-inline"> Apagar Staff</span>
                     </button>
-                    <button (click)="verFichaStaff(member.id)" class="btn btn-info btn-sm mr-2">
-                      <i class="nc-icon nc-zoom-split"></i> Ficha
+                    <button (click)="verFichaStaff(member.id)" class="btn btn-info btn-sm me-2">
+                      <i class="nc-icon nc-zoom-split"></i> <span class="d-none d-md-inline"> Ver Ficha</span>
                     </button>
                   </td>
                 </tr>

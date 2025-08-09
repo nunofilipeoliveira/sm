@@ -34,6 +34,7 @@ export class GestaoEquipaComponent implements OnInit {
 
   ngOnInit() {
 
+    this.loading = true;
     const routeParams = this.route.snapshot.paramMap;
     this.idEquipa = Number(routeParams.get('idEquipa'));
     console.log('GestaoEquipaComponent | ID da equipa:', this.idEquipa);
