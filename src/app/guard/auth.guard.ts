@@ -38,7 +38,7 @@ export class AuthGuard implements CanActivate {
               } else {
                 console.warn('🚨 AuthGuard: Não foi possível estender a sessão');
                 // Se não for possível estender a sessão, redireciona para login
-                this.loginService.clear();
+                
                 this.router.navigate(['/'], {
                   queryParams: { sessionExpired: 'true' },
                   replaceUrl: true

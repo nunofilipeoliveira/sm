@@ -9,6 +9,6 @@
 export const environment = {
   production: false,
   apiUrl:'http://localhost:8080',
-  tenant_id: 2 // Adicionando tenant_id como parte do ambiente
+  tenant_id: 1 // Adicionando tenant_id como parte do ambiente
 
 };

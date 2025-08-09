@@ -1,0 +1,171 @@
+
+
+
+
+
+<div class="container mt-4">
+
+  <div class="d-flex justify-content-center" style="vertical-align:middle;">
+    <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
+      <span class="sr-only"></span>
+    </div>
+    <ngb-alert type="danger" *ngIf="sbmError"  >{{mensagemErro}}</ngb-alert>
+  </div>
+
+
+
+
+
+  <div class="row justify-content-center" *ngIf="!spinner">
+
+
+    <div class="col-md-8">
+      <div class="info-card shadow">
+        <h5 class="info-title">Ficha Atleta</h5>
+ 
+        <form>
+          <div class="form-row">
+            <div class="col-md-7">
+              <div class="form-group">
+                <label>Nome usal</label>
+                <input type="text" class="form-control" name="nome_completo" [(ngModel)]="jogadorData.nome">
+              </div>
+            </div>
+            <div class="col-md-7">
+              <div class="form-group">
+                <label>Nome completo</label>
+                <input type="text" class="form-control" name="nome_completo" [(ngModel)]="jogadorData.nome_completo">
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="form-group">
+                <label>Data Nascimento</label>
+                <input type="text" class="form-control" name="data_nascimento"
+      [(ngModel)]="dataNascimentoDisplay" (input)="handleInput($event)">
+              </div>
+            </div>
+          </div>
+          <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  <label>Cartão Cidadão</label>
+                  <input type="text" class="form-control" placeholder="" name="cc" [(ngModel)]="jogadorData.cc">
+                </div>
+              </div>
+              <div class="col-md-4 px-1">
+                <div class="form-group">
+                  <label>Contribuinte</label>
+                  <input type="text" class="form-control" placeholder="" name="nif" [(ngModel)]="jogadorData.nif">
+                </div>
+              </div>
+              <div class="col-md-4 pl-1">
+                <div class="form-group">
+                  <label>Nº Licença</label>
+                  <input type="text" class="form-control" placeholder="" name="licenca"
+                    [(ngModel)]="jogadorData.licenca">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="pl-1 ml-auto mr-auto">
+                <div class="form-group">
+                  <label>Email</label>
+                  <input type="text" class="form-control" placeholder="" name="email" [(ngModel)]="jogadorData.email">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-group">
+                  <label>Pai</label>
+                  <input type="text" class="form-control" placeholder="" name="pai_nome"
+                    [(ngModel)]="jogadorData.pai_nome">
+                </div>
+              </div>
+              <div class="col-md-6 pl-1">
+                <div class="form-group">
+                  <label>Mãe</label>
+                  <input type="text" class="form-control" placeholder="" name="mae_nome"
+                    [(ngModel)]="jogadorData.mae_nome">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-group">
+                  <label>Telefone (Pai)</label>
+                  <input type="text" class="form-control" placeholder="" name="pai_telemovel"
+                    [(ngModel)]="jogadorData.pai_telemovel">
+                </div>
+              </div>
+              <div class="col-md-6 pl-1">
+                <div class="form-group">
+                  <label>Telefone (Mãe)</label>
+                  <input type="text" class="form-control" placeholder="" name="mae_telemovel"
+                    [(ngModel)]="jogadorData.mae_telemovel">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 pr-1">
+                <div class="form-group">
+                  <label>email (Pai)</label>
+                  <input type="text" class="form-control" placeholder="" name="pai_email"
+                    [(ngModel)]="jogadorData.pai_email">
+                </div>
+              </div>
+              <div class="col-md-6 pl-1">
+                <div class="form-group">
+                  <label>email (Mãe)</label>
+                  <input type="text" class="form-control" placeholder="" name="mae_email"
+                    [(ngModel)]="jogadorData.mae_email">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Morada</label>
+                  <input type="text" class="form-control" placeholder="" name="morada" [(ngModel)]="jogadorData.morada">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-4 pr-1">
+                <div class="form-group">
+                  <label>Cidade</label>
+                  <input type="text" class="form-control" placeholder="" name="cidade" [(ngModel)]="jogadorData.cidade">
+                </div>
+              </div>
+
+              <div class="col-md-4 pl-1">
+                <div class="form-group">
+                  <label>Código Postal</label>
+                  <input type="text" class="form-control" name="codigo_postal" [(ngModel)]="jogadorData.codigo_postal">
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Observações</label>
+                  <textarea class="form-control textarea" name="observacoes"
+                    [(ngModel)]="jogadorData.observacoes"></textarea>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <button type="button" class="btn btn-warning text-white mt-4" (click)="cancelar()">Cancelar</button>
+          <button type="button" class="btn btn-primary btn-block mt-4" (click)="gravarFichaJogador()">Gravar
+            Dados</button>
+        </form>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>

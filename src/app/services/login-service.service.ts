@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Subject, Observable } from 'rxjs';
 import { of } from 'rxjs'
 import { map, catchError } from 'rxjs/operators';
+import { EquipaService } from './equipa.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,7 @@ export class LoginServiceService {
   loginData!: loginData; // Pode ser inicializado como null ou com valores padrão
   private AUTH_TOKEN_KEY = 'AuthToken'; // Chave para armazenar o token no localStorage
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private equipaService: EquipaService) {
       this.isAuthenticated().subscribe((isAuth: boolean) => {
         this.userLoggedIn.next(isAuth);
       }); // Inicializa com o estado de autenticação atual
@@ -164,6 +165,7 @@ export class LoginServiceService {
     localStorage.removeItem("descritivo_escalao");
     localStorage.removeItem('token'); // Limpa o token do localStorage
     this.loginData = {} as loginData; // Limpa os dados em memória
+    this.equipaService.clear(); // Limpa os dados da equipa
     this.userLoggedIn.next(false); // Notifica que o utilizador fez logout
     this.router.navigate(['/']); // Redireciona para a página de login
     

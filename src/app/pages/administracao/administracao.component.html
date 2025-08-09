@@ -1,0 +1,131 @@
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4">Painel de Administração</h2>
+
+            <!-- Card 1: Época Presente -->
+            <div class="card shadow mb-4">
+                <div class="card-header">
+                    <h4 class="card-title">Época Atual</h4>
+                </div>
+                <div class="card-body text-center">
+                    <div *ngIf="loadingEpoca" class="spinner-border text-danger" role="status">
+                        <span class="sr-only"></span>
+                    </div>
+                    <div *ngIf="!loadingEpoca && epocaAtual">
+                        <p class="display-4 text-primary">{{ epocaAtual.epocaDescritivo }}</p>
+                        <p class="text-muted">A época desportiva atual em vigor.</p>
+                    </div>
+                    <div *ngIf="!loadingEpoca && !epocaAtual">
+                        <p class="text-danger">Não foi possível carregar a época atual.</p>
+                    </div>
+
+                    <!-- Nova seção para selecionar e aplicar época -->
+                    <div class="mt-4">
+                        <h5 class="card-title">Selecionar Outra Época</h5>
+                        <div *ngIf="loadingTodasEpocas" class="spinner-border text-secondary spinner-border-sm"
+                            role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                        <div *ngIf="!loadingTodasEpocas && todasEpocas.length > 0">
+                            <select class="form-select" [(ngModel)]="epocaSelecionadaId" aria-label="Selecionar Época">
+                                <option *ngFor="let epoca of todasEpocas" [ngValue]="epoca.id">
+                                    {{ epoca.epocaDescritivo }}
+                                </option>
+                            </select>
+                            <button class="btn btn-primary" (click)="aplicarEpoca()" [disabled]="loadingAplicarEpoca">
+                                <span *ngIf="loadingAplicarEpoca" class="spinner-border spinner-border-sm" role="status"
+                                    aria-hidden="true"></span>
+                                <span *ngIf="!loadingAplicarEpoca">Aplicar Época</span>
+                            </button>
+                        </div>
+                        <div *ngIf="!loadingTodasEpocas && todasEpocas.length === 0">
+                            <p class="text-muted">Nenhuma outra época disponível.</p>
+                        </div>
+                    </div>
+
+                    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                        {{ errorMessage }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Lista de Equipas da Época -->
+            <div class="card shadow">
+                <div class="card-header">
+                    <h4 class="card-title">Equipas da Época</h4>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="loadingEquipas" class="d-flex justify-content-center">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                    <div *ngIf="!loadingEquipas && listaEquipas.length > 0">
+                        <div class="table-responsive">
+                            <table class="table project-list-table table-nowrap align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Escalão</th>
+                                        <th class="td-total">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let equipa of listaEquipas">
+                                        <td>{{ equipa.escalao }}</td>
+                                        <td class="td-total">
+                                            <button (click)="apagarEquipa(equipa.id)"
+                                                class="btn btn-danger btn-sm me-2">
+                                                <i class="nc-icon nc-simple-remove"></i> Apagar
+                                            </button>
+
+                                            <button (click)="gestaoEquipa(equipa.id)" class="btn btn-info btn-sm"> <i
+                                                    class="nc-icon nc-settings-gear-65"></i> Gestão
+                                                Equipa</button>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="text-center">
+                        <button *ngIf="!modoInsercaoEquipa" class="btn btn-primary" (click)="novaequipa()"
+                            [disabled]="loadingAplicarEpoca">
+                            <span *ngIf="!loadingEquipas"><b>+</b></span>
+                        </button>
+                        <div *ngIf="modoInsercaoEquipa">
+                            <table>
+                                <tr>
+                                    <td>
+                                        <select class="form-select" [(ngModel)]="escalaoSelecionadaId"
+                                            aria-label="Selecionar Escalão"  (change)="onEscalaoChange()">
+                                            <option *ngFor="let escalao of escaloes" [ngValue]="escalao.id">
+                                                {{ escalao.escalaoDescritivo }}
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control-lg" [(ngModel)]="textoDescritivoEscalaoSelecionado">
+                                    </td>
+                                    <td> <button class="btn btn-info" (click)="adicionar()"
+                                        [disabled]="loadingAplicarEpoca">
+                                        <span><b>adicionar</b></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div *ngIf="!loadingEquipas && listaEquipas.length === 0">
+                        <p class="text-center text-muted">Nenhuma equipa encontrada para a época atual.</p>
+                    </div>
+                    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                        {{ errorMessage }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

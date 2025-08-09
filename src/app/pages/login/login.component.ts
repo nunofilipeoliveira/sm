@@ -30,11 +30,16 @@ export class LoginComponent implements OnInit{
   constructor(private router: Router, private dialog: MatDialog, private loginws: LoginServiceService, private equipaservice:EquipaService, private route: ActivatedRoute) { }
 
   ngOnInit(){
-    //this.equipaservice.clear();
-    //this.loginws.clear(); // Garante que a sessão anterior é limpa ao carregar a página de login
 
     this.variation = environment.tenant_id
     console.log('LoginComponent | ngOnInit | variation:', this.variation);  
+    
+
+    //Apaga elementos da equipa da sessão anterior
+    this.equipaservice.clear();
+    this.loginws.clear(); // Garante que a sessão anterior é limpa ao carregar a página
+
+    
 
     console.log('LoginComponent | ngOnInit');
 this.route.queryParams.subscribe(params => {

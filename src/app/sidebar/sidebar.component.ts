@@ -12,7 +12,8 @@ export interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
   { path: '/equipa', title: 'Equipa', icon: 'nc-badge', class: '' },
   { path: '/mpresenca', title: 'Marcar Presença', icon: 'nc-tap-01', class: '' },
-  { path: '/presencas', title: 'Presenças', icon: 'nc-minimal-right', class: '' },
+  { path: '/presencas', title: 'Presenças', icon: 'nc-paper', class: '' },
+  //{ path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' }, // Nova entrada para administração
   //{ path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' },
   { path: '/', title: 'Sair', icon: 'nc-key-25', class: 'active-pro' },
   //{ path: '/notifications', title: 'Experiência -2-',   icon:'nc-minimal-right',    class: '' },
@@ -38,11 +39,13 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
 
-    let adminMenu: RouteInfo = { path: '/historicologins', title: 'Historico_Logins', icon: 'nc-bullet-list-67', class: '' };
+    let historicologinsMenu: RouteInfo = { path: '/historicologins', title: 'Historico_Logins', icon: 'nc-bullet-list-67', class: '' };
     let jogosMenu: RouteInfo = { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' };
+    let adminMenu: RouteInfo = { path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' };
     if (this.loginws.getLoginData().user == "Nuno") {
-      this.menuItems.push(adminMenu)
+      this.menuItems.push(historicologinsMenu)
       this.menuItems.push(jogosMenu)
+      this.menuItems.push(adminMenu)
     }
 
     // Defina o caminho da imagem aqui, pode ser condicional ou vir de um serviço

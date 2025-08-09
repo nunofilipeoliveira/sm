@@ -1,0 +1,86 @@
+<div class="content">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h4 class="card-title">Gestão de Equipa</h4>
+
+        </div>
+
+
+        <div class="card-body">
+          <div class="d-flex justify-content-center" style="vertical-align:middle;">
+            <div class="spinner-border text-danger" *ngIf="loading" role="status">
+              <span class="sr-only"></span>
+            </div>
+          </div>
+
+
+
+
+          <!-- Jogadores -->
+          <div class="table-responsive col-lg-6" *ngIf="!loading">
+            <table class="table project-list-table table-nowrap align-middle">
+              <thead>
+                <tr>
+
+                  <th scope="col">Nome</th>
+                  <th scope="col" style="width: 10px;">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let jogador of equipa.jogadores">
+
+                  <td><img src="assets/img/jogadores/{{jogador.id}}_avatar.jpg"
+                      onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                      class="avatar-sm rounded-circle me-2" />{{jogador.nome}}</td>
+                  <td class="td-total">
+                    <button (click)="apagarJogador(jogador.id)" class="btn btn-danger btn-sm me-2">
+                      <i class="nc-icon nc-simple-remove"></i> Apagar
+                    </button>
+                    <button (click)="verFichaJogador(jogador.id)" class="btn btn-info btn-sm me-2">
+                      <i class="nc-icon nc-zoom-split"></i> Ficha
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-primary" (click)="abrirModalJogadores()">
+              <i class="fas fa-plus-circle"></i> Adicionar Jogador
+            </button>
+
+            <!-- Staff -->
+            <table class="table project-list-table table-nowrap align-middle mt-4">
+              <thead>
+                <tr>
+                  <th scope="col" style="width: 5px;">STAFF</th>
+                  <th scope="col"></th>
+                  <th scope="col" style="width: 10px;">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let member of equipa.staff">
+                  <td><span class="badge">{{member.tipo || '-'}}</span></td>
+                  <td><img src="assets/img/jogadores/{{member.id}}_avatar_staff.jpg"
+                      onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                      class="avatar-sm rounded-circle me-2" />{{member.nome}}</td>
+                  <td class="td-total">
+                    <button (click)="apagarStaff(member.id)" class="btn btn-danger btn-sm">
+                      <i class="nc-icon nc-simple-remove"></i> Apagar
+                    </button>
+                    <button (click)="verFichaStaff(member.id)" class="btn btn-info btn-sm mr-2">
+                      <i class="nc-icon nc-zoom-split"></i> Ficha
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn btn-primary" (click)="abrirModalStaff()">
+              <i class="fas fa-plus-circle"></i> Adicionar Staff
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

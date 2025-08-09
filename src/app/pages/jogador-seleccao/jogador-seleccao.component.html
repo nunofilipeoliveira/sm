@@ -13,7 +13,7 @@
         <thead>
           <tr>
             <th>Filtro</th>
-            <th width="100%">
+            <th colspan="2" width="100%">
               <div class="form-group">
                 <input type="text" class="form-control" name="nome_completo" [(ngModel)]="filtro_nome">
               </div>
@@ -36,6 +36,9 @@
           </tr>
         </tbody>
       </table>
+      <button type="button" class="btn btn-warning text-white"
+                (click)="cancelarSelecao()"  >Cancelar</button>
+      <button type="button" class="btn btn-info text-white" (click)="novoJogador()" *ngIf="origem_gestao_equipa">Addicionar Novo Jogador</button>
     </div>
 
 

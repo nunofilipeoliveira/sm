@@ -1,0 +1,53 @@
+<div>
+  <div>
+    <div class="d-flex justify-content-center" style="vertical-align:middle;">
+      <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
+        <span class="sr-only"></span>
+      </div>
+    </div>
+
+    <div class="table-responsive col-lg-8">
+      <table class="table project-list-table table-nowrap align-middle">
+        <thead>
+          <tr>
+            <th>Filtro</th>
+            <th colspan="2" width="100%">
+              <div class="form-group">
+                <input type="text" class="form-control" name="nome_completo" [(ngModel)]="filtro_nome">
+              </div>
+            </th>
+          </tr>
+          <tr>
+            <th scope="col">Nome</th>
+            <th scope="col" class="td-total">Tipo</th>
+            <th scope="col" class="td-total">Seleccionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let staff of staffs | filtroStaffPipe:filtro_nome ; index as posicao">
+            <td>
+              <img src="assets/img/jogadores/{{staff.id_Jogador}}_avatar_staff.jpg"
+                onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                class="avatar-sm rounded-circle me-2" />{{staff.nome_Jogador}} 
+            </td>
+            <td  class="td-total">
+              <select style="font-size: medium" class="badge" [(ngModel)]="staff.escalao" name="tipo_{{staff.id_Jogador}}">
+                <option [value]="null" disabled selected>Selecione um tipo</option>
+                <option value="Treinador">Treinador</option>
+                <option value="T-adjunto">T-adjunto</option>
+                <option value="Seccionista">Seccionista</option>
+              </select>
+            </td>
+            <td class="td-total">
+              <button type="button" class="btn btn-info text-white"
+                (click)="seleciona(staff.id_Jogador, staff.escalao)">Seleccionar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <button type="button" class="btn btn-warning text-white" (click)="cancelarSelecao()">Cancelar</button>
+      <button type="button" class="btn btn-info text-white" (click)="novoStaff()">Addicionar Novo Staff</button>
+    </div>
+  </div>
+</div>

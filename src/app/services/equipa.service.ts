@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,21 @@ export class EquipaService {
   URLJogadoresDisponiveis = environment.apiUrl + "/sm/getJogadoreDisponiveis/"
   URLgetFaltas = environment.apiUrl + "/sm/getFaltas/"
   URLgetCountPresencas = environment.apiUrl + "/sm/getCountPresencas/"
+  URLremoveJogadorEquipa = environment.apiUrl + "/sm/equipa/removeJogadorEquipa/"
+  URLremoveStaffEquipa = environment.apiUrl + "/sm/equipa/removeStaffEquipa/"
+  URLAddJogadorEquipa = environment.apiUrl + "/sm/equipa/addJogadorEquipa/"
+  URLAddStaffEquipa = environment.apiUrl + "/sm/equipa/addStaffEquipa/"
+  URLGetAllStaff = environment.apiUrl + "/sm/getAllStaff/"
+  URLGetAllStaffDisponivel = environment.apiUrl + "/sm/getAllStaffDisponivel/"  
+  URLAddStaff = environment.apiUrl + "/sm/addStaff/"
+  URLAddJogador = environment.apiUrl + "/sm/addJogador/"
+  URLGetEpocaAtual = environment.apiUrl + "/sm/getEpocaAtual/";
+  URLGetEquipasPorEpoca = environment.apiUrl + "/sm/getAllEquipasEpocaAtual/";
+  URLGetAllEpocas = environment.apiUrl + "/sm/getAllEpocas/";
+  URLSetEpocaAtual = environment.apiUrl + "/sm/setEpocaAtual/";
+  URLGetAllEscaloes = environment.apiUrl + "/sm/getEscaloes";
+  URLcreateEscalaoEpoca = environment.apiUrl + "/sm/createEscalaoEpoca/";
+  URLdeleteEscalaoEpoca = environment.apiUrl + "/sm/deleteEscalaoEpoca/";
 
   parmJson: string = ""
   errows: boolean = false;
@@ -121,8 +138,8 @@ export class EquipaService {
   }
 
 
-  setEquipa(parmEquipa: EquipaData) {
-    this.equipa = parmEquipa;
+  setEquipa(parmEquipa: EquipaData | null) {
+    this.equipa = parmEquipa as EquipaData;
     console.log("equipaService - setEquipa", this.equipa);
   }
 
@@ -136,6 +153,7 @@ export class EquipaService {
     this.equipa.id = 0;
     this.equipa.escalao = "";
     localStorage.removeItem("idequipa_escalao");
+    this.setEquipa(null);
     return;
   }
 
@@ -169,5 +187,149 @@ export class EquipaService {
   }
 
 
+ removeJogadorEquipa(jogador: jogadorData): Observable<any> {
+  const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLremoveJogadorEquipa + this.getEquipa().id;
+    console.log('EquipaService | utl:', urltmp);
+
+    this.body_json = JSON.stringify(jogador);
+    console.log("addJogadorEquipa | Json:", this.body_json);
+
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+}
+
+
+  addJogadorEquipa(jogador: jogadorData): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLAddJogadorEquipa + this.getEquipa().id;
+    console.log('EquipaService | utl:', urltmp);
+
+    this.body_json = JSON.stringify(jogador);
+    console.log("addJogadorEquipa | Json:", this.body_json);
+
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+
+    
+  }
+
+
+    addStaffEquipa(staff: staffData): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLAddStaffEquipa + this.getEquipa().id;
+    console.log('EquipaService | utl:', urltmp);
+
+    this.body_json = JSON.stringify(staff);
+    console.log("addStaffEquipa | Json:", this.body_json);
+
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+
+    
+  }
+
+
+   removeStaffEquipa(staff: staffData): Observable<any> {
+  const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLremoveStaffEquipa + environment.tenant_id;
+    console.log('EquipaService | utl:', urltmp);
+
+    this.body_json = JSON.stringify(staff);
+    console.log("removeStaffEquipa | Json:", this.body_json);
+
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+}
+
+
+   getAllStaff(): Observable<any> {
+  const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLGetAllStaff + environment.tenant_id;
+    console.log('EquipaService | utl:', urltmp);
+    this.body_json = "{}"; // Assuming no additional parameters are needed
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+}
+
+   getAllStaffDisponivel(parm: number): Observable<any> {
+  const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLGetAllStaffDisponivel + environment.tenant_id+ '/' + parm;
+    console.log('EquipaService | utl:', urltmp);
+    this.body_json = "{}"; // Assuming no additional parameters are needed
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+}
+
+   addStaff(staff: staffData, idUtilizador: number): Observable<any> {
+  const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLAddStaff + environment.tenant_id + '/' + idUtilizador;
+    console.log('EquipaService | utl:', urltmp);
+
+    this.body_json = JSON.stringify(staff);
+    console.log("removeStaffEquipa | Json:", this.body_json);
+
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+}
+
+addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
+  const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLAddJogador + environment.tenant_id + '/' + idUtilizador;
+    console.log('EquipaService | utl:', urltmp);
+
+    this.body_json = JSON.stringify(jogador);
+    console.log("addJogador | Json:", this.body_json);
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+  } 
+
+  getEpocaAtual(): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLGetEpocaAtual + environment.tenant_id;
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+  }
+
+    getAllEpocas(): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLGetAllEpocas + environment.tenant_id;
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+  }
+
+
+  setEpocaAtual(epocaId: number): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLSetEpocaAtual + epocaId + '/'  + environment.tenant_id;
+    console.log('EquipaService | setEpocaAtual | url:', urltmp);
+    // O corpo da requisição pode variar dependendo do seu backend.
+    // Pode ser um PUT com um corpo vazio, ou um POST com o ID no corpo.
+    return this.http.put<any>(urltmp, {}, { headers }); 
+  }
+  
+  getEquipasPorEpoca(): Observable<any> {
+      const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLGetEquipasPorEpoca + environment.tenant_id;
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+  }
+
+  getAllEscaloes(): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLGetAllEscaloes 
+    return this.http.put<any>(urltmp, this.body_json, { headers });
+  }
+
+    createEscalaoEpoca(epocadata: escalao_epoca): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLcreateEscalaoEpoca  + environment.tenant_id;
+    this.body_json = JSON.stringify(epocadata);
+    console.log('EquipaService | createEscalaoEpoca | url:', urltmp);
+    console.log('EquipaService | createEscalaoEpoca | body:', this.body_json);
+    // O corpo da requisição pode variar dependendo do seu backend.
+    // Pode ser um PUT com um corpo vazio, ou um POST com o ID no corpo.
+    return this.http.put<any>(urltmp, this.body_json, { headers }); 
+  }
+
+    deleteEscalaoEpoca(epocadata: escalao_epoca): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLdeleteEscalaoEpoca  + environment.tenant_id;
+    this.body_json = JSON.stringify(epocadata);
+    console.log('EquipaService | createEscalaoEpoca | url:', urltmp);
+    console.log('EquipaService | createEscalaoEpoca | body:', this.body_json);
+    // O corpo da requisição pode variar dependendo do seu backend.
+    // Pode ser um PUT com um corpo vazio, ou um POST com o ID no corpo.
+    return this.http.put<any>(urltmp, this.body_json, { headers }); 
+  }
 
 }
