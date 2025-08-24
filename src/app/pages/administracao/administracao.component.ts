@@ -316,7 +316,7 @@ export class AdministracaoComponent implements OnInit {
     const url = new URL(fullUrl);
     const baseUrl = `${url.protocol}//${url.host}`;
     
-    return baseUrl;
+    return baseUrl+'/'+environment.root;
   }
 
 

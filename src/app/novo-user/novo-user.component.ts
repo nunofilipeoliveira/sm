@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LoginServiceService } from '../services/login-service.service';
 import { ActivatedRoute, Route, Params } from '@angular/router';
+import { environment } from '../../environments/environment';
+
 
 @Component({
   selector: 'novo-user',
@@ -27,7 +29,7 @@ export class NovoUserComponent implements OnInit {
     idsescalao: "",
     nome: ""
   }
-  public baseUrl: string = this.getBaseUrl();
+  public baseUrl: string = this.getBaseUrl()+"/"+ environment.root;
 
 
   constructor(private loginService: LoginServiceService, private activatedRoute :ActivatedRoute) { }
