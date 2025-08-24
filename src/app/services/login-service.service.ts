@@ -8,6 +8,7 @@ import { map, catchError } from 'rxjs/operators';
 import { EquipaService } from './equipa.service';
 import { UtilizadorData } from '../pages/gestaoutilizador/UtilizadorData';
 import { UtilizadorParaAtivarData } from '../pages/gestaoutilizador/UtilizadorParaAtivarData';
+import e from 'express';
 
 @Injectable({
   providedIn: 'root'
@@ -103,11 +104,12 @@ export class LoginServiceService {
   createUser(parmUser: novouserData, parmPassWord: string) {
     const headers = { 'Content-Type': 'application/json' };
 
-    console.log("parmUser", parmUser);
-    console.log("idsEscalao", parmUser.idsEscalao);
+    console.log("LoginWS | parmUser", parmUser);
+    console.log("LoginWS | user", parmUser.user);
+    console.log("LoginWS | idsEscalao", parmUser.idsescalao);
     let tmpEscaloes;
-    tmpEscaloes = parmUser.idsEscalao.split(";");
-    console.log("tmpEscaloes", tmpEscaloes);
+    tmpEscaloes = parmUser.idsescalao.split(";");
+    console.log("LoginWS | tmpEscaloes", tmpEscaloes);
     this.parmJson = "{\"nome\":\"" + parmUser.nome + "\",\"user\":\"" + parmUser.user + "\",\"password\":\"" + parmPassWord + "\", \"escalaoEpoca\" :[  ";
 
     for (let i = 0; i < tmpEscaloes.length - 1; i++) {
@@ -118,7 +120,7 @@ export class LoginServiceService {
 
     }
     this.parmJson = this.parmJson + "]}";
-    this.urlTmp = environment.apiUrl + "/sm/createuser";
+    this.urlTmp = environment.apiUrl + "/sm/createuser/"+environment.tenant_id;
     console.log("URL", this.urlTmp);
     console.log("json", this.parmJson);
 
@@ -294,6 +296,28 @@ export class LoginServiceService {
    return this.http.put<any>(url, { headers });
  }
 
+ enableUser(userId: number): Observable<any> {
+   const headers = { 'Content-Type': 'application/json' };
+   const url = `${environment.apiUrl}/sm/enableUser/${userId}`;
+   console.log('LoginService: Habilitando usuário:', userId);
+   console.log(' URL:', url);
+   return this.http.put<any>(url, { headers });
+ }
+
+disableUser(userId: number): Observable<any> {
+   const headers = { 'Content-Type': 'application/json' };
+   const url = `${environment.apiUrl}/sm/disableUser/${userId}`;
+   console.log('LoginService: Desabilitando usuário:', userId);
+   console.log(' URL:', url);
+   return this.http.put<any>(url, { headers });
+}
+
+resetPWD(userId: number): Observable<any> {
+   const headers = { 'Content-Type': 'application/json' };
+   const url = `${environment.apiUrl}/sm/resetPWD/${userId}`;
+   console.log('LoginService: Resetando senha do usuário:', userId);
+   console.log(' URL:', url);
+   return this.http.put<any>(url, { headers });
+}
 
 }
-  

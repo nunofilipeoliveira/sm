@@ -251,7 +251,16 @@ export class GestaoutilizadorComponent implements OnInit {
     if (confirm(`Tem certeza que deseja desativar o utilizador ${this.utilizador.nome}?`)) {
       // Chamar serviço para desativar
       // Ex: this.loginws.desativarUser(this.utilizador.id).subscribe(...)
-      this.utilizador.estado = '0'; // Simulação
+      this.loginws.disableUser(this.utilizador.id).subscribe({
+        next: (response) => {
+          console.log(`Utilizador ${this.utilizador.nome} desativado com sucesso:`, response);
+          this.utilizador.estado = '0'; // Simulação
+        },
+        error: (err) => {
+          console.error('Erro ao desativar utilizador:', err);
+          // Tratar erro
+        }
+      });
       console.log(`Utilizador ${this.utilizador.nome} desativado.`);
     }
   }
@@ -260,16 +269,40 @@ export class GestaoutilizadorComponent implements OnInit {
     if (confirm(`Tem certeza que deseja ativar o utilizador ${this.utilizador.nome}?`)) {
       // Chamar serviço para ativar
       // Ex: this.loginws.ativarUser(this.utilizador.id).subscribe(...)
-      this.utilizador.estado = '1'; // Simulação
-      console.log(`Utilizador ${this.utilizador.nome} ativado.`);
+      this.loginws.enableUser(this.utilizador.id).subscribe({
+        next: (response) => {
+          console.log(`Utilizador ${this.utilizador.nome} ativado com sucesso:`, response);
+          this.utilizador.estado = '1'; // Simulação
+        },
+        error: (err) => {
+          console.error('Erro ao ativar utilizador:', err);
+          // Tratar erro
+        }
+      });
     }
   }
+
+resetPWD(): void {
+    if (confirm(`Tem certeza que deseja resetar a senha do utilizador ${this.utilizador.nome}?`)) {
+      this.loginws.resetPWD(this.utilizador.id).subscribe({
+        next: (response) => {
+          console.log(`Senha do utilizador ${this.utilizador.nome} resetada com sucesso:`, response);
+        },
+        error: (err) => {
+          console.error('Erro ao resetar senha do utilizador:', err);
+          // Tratar erro
+        }
+      });
+    }
+  }
+
   voltar(): void {
     this.router.navigate(['/administracao']);
   }
 
 
   removerEspacos(value: string): string {
+    this.userJaExiste = false;
   return value.replace(/\s/g, '');
 }
 

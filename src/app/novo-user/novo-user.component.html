@@ -22,7 +22,7 @@
 
         <div class="spinner-container" *ngIf="spinner">
           <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Carregando...</span>
+           
           </div>
         </div>
 
@@ -38,7 +38,7 @@
     <div *ngIf="success" class="activation-success">
       <h5 class="card-title text-success">{{mensagem}}</h5>
       <p class="text-center">Sua conta foi ativada com sucesso!</p>
-      <a href="https://www.sm.com.pt/hcmaia" class="btn btn-outline-primary mt-3">Ir para o Login</a>
+      <a href={{baseUrl}} class="btn btn-outline-primary mt-3">Ir para o Login</a>
     </div>
   </div>
 </div>

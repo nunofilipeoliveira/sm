@@ -24,9 +24,10 @@ export class NovoUserComponent implements OnInit {
     user: "",
     estado: "",
     code: "",
-    idsEscalao: "",
+    idsescalao: "",
     nome: ""
   }
+  public baseUrl: string = this.getBaseUrl();
 
 
   constructor(private loginService: LoginServiceService, private activatedRoute :ActivatedRoute) { }
@@ -65,6 +66,17 @@ export class NovoUserComponent implements OnInit {
 
   }
 
+      // Método para obter o endereço base da aplicação
+  private getBaseUrl(): string {
+    // Obter o URL completo atual
+    const fullUrl = window.location.href;
+    
+    // Extrair apenas a parte base (protocolo + host + porta se existir)
+    const url = new URL(fullUrl);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    
+    return baseUrl;
+  }
 
   valida() {
 
