@@ -4,6 +4,8 @@ import { EquipaService } from '../../services/equipa.service';
 import { LoginServiceService } from '../../services/login-service.service';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // Importar FormsModule para ngModel
+import { environment } from '../../../environments/environment';
+import { UtilizadorParaAtivarData } from '../gestaoutilizador/UtilizadorParaAtivarData';
 
 interface EpocaData {
   id: number;
@@ -18,6 +20,17 @@ interface EscalaoData {
 interface EscalaoEpocaData {
   id_escalao_epoca: number;
   descritivo_escalao: string;
+}
+
+// Adicione esta interface se não existir em outro lugar
+interface UtilizadorData {
+  id: number;
+  nome: string;
+  user: string;
+  perfil: string;
+  email: string;
+  estado: string;
+  // Adicione outros campos conforme necessário
 }
 
 
@@ -44,6 +57,16 @@ export class AdministracaoComponent implements OnInit {
   textoDescritivoEscalaoSelecionado: string = ""; // Para exibir o texto descritivo do escalão selecionado
   loadingTodasEpocas = true;
   loadingAplicarEpoca = false; // Para o spinner do botão aplicar
+  loadingUtilizadores: boolean = false;
+  listaUtilizadores: UtilizadorData[] = [];
+  utilizadoresWait: UtilizadorParaAtivarData[] = [];
+
+  // Novas propriedades para o modal de reenvio de email
+  mostrarModalReenviarEmail: boolean = false;
+  mostrarModalLink: boolean = false;
+  linkAtivacao: string =  '/#/activeuser?code=';
+  emailParaReenviar: string = '';
+  utilizadorSelecionadoParaEmail: UtilizadorParaAtivarData | null = null; // Para guardar o objeto completo do utilizador
 
   constructor(
     private equipaService: EquipaService,
@@ -51,10 +74,14 @@ export class AdministracaoComponent implements OnInit {
     private router: Router
   ) { }
 
+
+
+  
   ngOnInit(): void {
     this.carregarEpocaAtual();
     this.carregarListaEquipas();
     this.carregarTodasEpocas(); // Carregar todas as épocas ao iniciar
+    this.carregarListaUtilizadores();
   }
 
   carregarEpocaAtual(): void {
@@ -87,6 +114,54 @@ export class AdministracaoComponent implements OnInit {
       }
     });
   }
+
+
+  carregarListaUtilizadores(): void {
+    this.loadingUtilizadores = true;
+    this.loginService.getAllUser().subscribe({
+      next: (data: UtilizadorData[]) => {
+        this.listaUtilizadores = data;
+
+
+
+        this.loginService.getAllUserWait().subscribe({
+          next: (data: UtilizadorParaAtivarData[]) => {
+            this.utilizadoresWait = data;
+            this.loadingUtilizadores = false;
+
+
+          },
+          error: (err) => {
+            console.error('Erro ao carregar lista de utilizadores (wait):', err);
+            this.errorMessage = 'Não foi possível carregar a lista de utilizadores.';
+            this.loadingUtilizadores = false;
+          }
+        });
+
+
+      },
+      error: (err) => {
+        console.error('Erro ao carregar lista de utilizadores:', err);
+        this.errorMessage = 'Não foi possível carregar a lista de utilizadores.';
+        this.loadingUtilizadores = false;
+      }
+    });
+  }
+
+  copiarLink(): void {
+    if (this.linkAtivacao) {
+      navigator.clipboard.writeText(this.linkAtivacao)
+        .then(() => {
+          alert('Link copiado para a área de transferência!');
+        })
+        .catch(err => {
+          console.error('Erro ao copiar o link: ', err);
+          alert('Não foi possível copiar o link. Por favor, copie manualmente.');
+        });
+    }
+  }
+
+
 
   carregarTodasEpocas(): void {
     this.loadingTodasEpocas = true;
@@ -143,6 +218,12 @@ export class AdministracaoComponent implements OnInit {
     this.router.navigate(['/gestao-equipa/' + idEquipa]);
   }
 
+  gestaoUtilizador(id: number): void {
+    console.log('Gestão do utilizador:', id);
+    this.router.navigate(['/gestao-utilizador/' + id]);
+  }
+
+
   apagarEquipa(idEquipa: number): void {
     if (confirm('Tem a certeza que deseja apagar esta equipa?')) {
       let tmpEscalao: escalao_epoca = {
@@ -178,6 +259,12 @@ export class AdministracaoComponent implements OnInit {
 
   }
 
+
+  novoUtilizador(): void {
+    this.router.navigate(['/gestao-utilizador/0']);
+  }
+
+
   onEscalaoChange(): void {
     const escalaoSelecionado = this.escaloes.find(e => e.id === this.escalaoSelecionadaId);
     this.textoDescritivoEscalaoSelecionado = escalaoSelecionado ? escalaoSelecionado.escalaoDescritivo : '';
@@ -203,5 +290,73 @@ export class AdministracaoComponent implements OnInit {
       }
     });
 
+  }
+
+  // Método para abrir o modal de reenvio de email
+  abrirModalReenviarEmail(utilizador: UtilizadorParaAtivarData): void {
+    this.utilizadorSelecionadoParaEmail = utilizador;
+    this.emailParaReenviar = utilizador.email;
+    this.mostrarModalReenviarEmail = true;
+  }
+
+  // Método para fechar o modal de reenvio de email
+  fecharModalReenviarEmail(): void {
+    this.mostrarModalReenviarEmail = false;
+    this.emailParaReenviar = '';
+    this.utilizadorSelecionadoParaEmail = null;
+  }
+
+
+    // Método para obter o endereço base da aplicação
+  private getBaseUrl(): string {
+    // Obter o URL completo atual
+    const fullUrl = window.location.href;
+    
+    // Extrair apenas a parte base (protocolo + host + porta se existir)
+    const url = new URL(fullUrl);
+    const baseUrl = `${url.protocol}//${url.host}`;
+    
+    return baseUrl;
+  }
+
+
+  // Método para abrir o modal de link
+  abrirModalLink(utilizador: UtilizadorParaAtivarData): void {
+    this.utilizadorSelecionadoParaEmail = utilizador;
+    // Construir o link de ativação utilizando o endereço base da aplicação
+    const baseUrl = this.getBaseUrl();
+    this.linkAtivacao = `${baseUrl}/#/ativeuser?code=${utilizador.code}`;
+    this.mostrarModalLink = true;
+  }
+
+  // Método para fechar o modal de link
+  fecharModalLink(): void {
+    this.mostrarModalLink = false;
+    this.linkAtivacao = '';
+    this.utilizadorSelecionadoParaEmail = null;
+  }
+
+
+
+  // Método para confirmar o reenvio do email (aqui você chamaria o serviço)
+  confirmarReenvioEmail(): void {
+    if (this.utilizadorSelecionadoParaEmail) {
+      console.log('Reenviar email para:', this.utilizadorSelecionadoParaEmail.email);
+      // Chame seu serviço de login para reenviar o email
+      // Exemplo:
+      this.utilizadorSelecionadoParaEmail.email=this.emailParaReenviar;
+      this.loginService.reenviarEmailAtivacao(this.utilizadorSelecionadoParaEmail ).subscribe({
+        next: (response) => {
+          console.log('Email de ativação reenviado com sucesso:', response);
+          alert('Email de ativação reenviado com sucesso!');
+          this.fecharModalReenviarEmail();
+        },
+        error: (error) => {
+          console.error('Erro ao reenviar email de ativação:', error);
+          alert('Erro ao reenviar email de ativação. Por favor, tente novamente.');
+          this.fecharModalReenviarEmail();
+        }
+      });
+    }
   }
 }

@@ -6,6 +6,8 @@ import { Subject, Observable } from 'rxjs';
 import { of } from 'rxjs'
 import { map, catchError } from 'rxjs/operators';
 import { EquipaService } from './equipa.service';
+import { UtilizadorData } from '../pages/gestaoutilizador/UtilizadorData';
+import { UtilizadorParaAtivarData } from '../pages/gestaoutilizador/UtilizadorParaAtivarData';
 
 @Injectable({
   providedIn: 'root'
@@ -22,16 +24,16 @@ export class LoginServiceService {
   private AUTH_TOKEN_KEY = 'AuthToken'; // Chave para armazenar o token no localStorage
 
   constructor(private http: HttpClient, private router: Router, private equipaService: EquipaService) {
-      this.isAuthenticated().subscribe((isAuth: boolean) => {
-        this.userLoggedIn.next(isAuth);
-      }); // Inicializa com o estado de autenticação atual
-   }
+    this.isAuthenticated().subscribe((isAuth: boolean) => {
+      this.userLoggedIn.next(isAuth);
+    }); // Inicializa com o estado de autenticação atual
+  }
 
 
 
   login(user: string, pass: string): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
-    const body = { user: user, pwd: pass, tenant_id:environment.tenant_id };
+    const body = { user: user, pwd: pass, tenant_id: environment.tenant_id };
     this.urlTmp = environment.apiUrl + "/sm/login";
 
     console.log("URL", this.urlTmp);
@@ -59,7 +61,7 @@ export class LoginServiceService {
     console.info('🚨 LoginService: Verificando autenticação, token:', token);
     this.urlTmp = environment.apiUrl + "/sm/isAuthenticated";
 
-        
+
     if (!token) {
       console.warn('🚨 LoginService: Nenhum token encontrado. Usuário não autenticado.');
       return new Observable<boolean>(observer => {
@@ -72,7 +74,7 @@ export class LoginServiceService {
     return this.http.put<boolean>(`${this.urlTmp}`, { token: token });
   }
 
- 
+
 
 
 
@@ -141,13 +143,13 @@ export class LoginServiceService {
     // Se loginData não estiver definido, tenta carregar do localStorage (se necessário)
     // ou redireciona para login se não houver sessão ativa.
     if (!this.loginData && this.isAuthenticated()) {
-        const loginTokenString = localStorage.getItem('token');
-        if (loginTokenString) {
-          this.loginData = JSON.parse(loginTokenString) as loginData;
-        } else {
-           this.router.navigate(['/']);
-        }
-    
+      const loginTokenString = localStorage.getItem('token');
+      if (loginTokenString) {
+        this.loginData = JSON.parse(loginTokenString) as loginData;
+      } else {
+        this.router.navigate(['/']);
+      }
+
       return {} as loginData; // Retorna um objeto vazio para evitar erros de tipo
     } else if (!this.isAuthenticated()) {
       console.log("loginService - Não autenticado, redirecionando para login.");
@@ -169,7 +171,7 @@ export class LoginServiceService {
     this.equipaService.clear(); // Limpa os dados da equipa
     this.userLoggedIn.next(false); // Notifica que o utilizador fez logout
     this.router.navigate(['/']); // Redireciona para a página de login
-    
+
   }
 
   getUserLoggedIn(): Observable<boolean> {
@@ -181,7 +183,7 @@ export class LoginServiceService {
   }
 
 
-extendSession(): Observable<string> {
+  extendSession(): Observable<string> {
     const token = this.getAuthToken(); // Obtém o token atual
     const headers = { 'Content-Type': 'application/json' };
     const body = { token }; // Corpo da requisição com o token
@@ -190,24 +192,108 @@ extendSession(): Observable<string> {
     console.log("json", body);
     // Faz a requisição PUT para estender a sessão
     return this.http.put<any>(this.urlTmp, body, { headers }).pipe( // Use 'any' para o tipo de retorno
-        map(response => {
-            console.log("Resposta recebida:", response);
-            const newToken = response.token; // Acessa a propriedade 'token' do objeto JSON
-            if (newToken) {
-                this.setAuthToken(newToken); // Armazena o novo token
-                console.log("Novo token armazenado:", newToken);
-                this.loginData.token = newToken; // Atualiza o token em loginData
-                return newToken; // Retorna o novo token
-            } else {
-                console.warn("Nenhum novo token recebido.");
-                return ''; // Retorna uma string vazia se não houver novo token
-            }
-        }),
-        catchError(error => {
-            console.error("Erro ao estender a sessão:", error);
-            return of(''); // Retorna uma string vazia em caso de erro
-        })
+      map(response => {
+        console.log("Resposta recebida:", response);
+        const newToken = response.token; // Acessa a propriedade 'token' do objeto JSON
+        if (newToken) {
+          this.setAuthToken(newToken); // Armazena o novo token
+          console.log("Novo token armazenado:", newToken);
+          this.loginData.token = newToken; // Atualiza o token em loginData
+          return newToken; // Retorna o novo token
+        } else {
+          console.warn("Nenhum novo token recebido.");
+          return ''; // Retorna uma string vazia se não houver novo token
+        }
+      }),
+      catchError(error => {
+        console.error("Erro ao estender a sessão:", error);
+        return of(''); // Retorna uma string vazia em caso de erro
+      })
     );
-}
+  }
+
+
+  getAllUser() {
+    const headers = { 'Content-Type': 'application/json' };
+    this.urlTmp = environment.apiUrl + "/sm/getAllUser/" + + environment.tenant_id;
+    console.log("URL", this.urlTmp);
+    return this.http.put<any>(this.urlTmp, { headers });
+  }
+
+  getUser(parmIdUser: number) {
+    const headers = { 'Content-Type': 'application/json' };
+    this.urlTmp = environment.apiUrl + "/sm/getUser/" + parmIdUser + '/' + environment.tenant_id;
+    console.log("URL", this.urlTmp);
+    return this.http.put<any>(this.urlTmp, { headers });
+  }
+
+
+  getEscaloesByUser(parmIdUser: number) {
+    const headers = { 'Content-Type': 'application/json' };
+    this.urlTmp = environment.apiUrl + "/sm/getEscaloesByUser/" + parmIdUser;
+    console.log("URL", this.urlTmp);
+    return this.http.put<any>(this.urlTmp, { headers });
+  }
+
+  // NOVO MÉTODO: Atualiza o usuário e seus escalões
+  updateUserWithEscaloes(userId: number, escalaoIds: number[]): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const body = {
+
+      escalaoIds: escalaoIds,
+
+    };
+    // ATENÇÃO: Você precisará criar este endpoint no seu backend para receber e processar esses dados.
+    const url = `${environment.apiUrl}/sm/updateUserWithEscaloes/${userId}`;
+    console.log('LoginService: Enviando atualização de usuário e escalões:', body);
+    return this.http.put<any>(url, body, { headers });
+  }
+
+
+  //ATUALIZAR DADOS DO UTILIZADOR
+  updateUser(userId: number, userData: UtilizadorData): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const url = `${environment.apiUrl}/sm/updateUser/${userId}`;
+    console.log('LoginService: Enviando atualização de usuário:', userData);
+    return this.http.put<any>(url, userData, { headers });
+  }
+
+  createUserToAtivate(userData: UtilizadorParaAtivarData): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const url = `${environment.apiUrl}/sm/createUtilizador/${environment.tenant_id}`;
+    console.log('LoginService: Enviando criação de usuário para ativação:', userData);
+    console.log('URL:', url);
+    return this.http.put<any>(url, userData, { headers });
+  }
+
+
+  getAllUserWait() {
+    const headers = { 'Content-Type': 'application/json' };
+    this.urlTmp = environment.apiUrl + "/sm/getAllUserWait/" + + environment.tenant_id;
+    console.log("URL", this.urlTmp);
+    return this.http.put<any>(this.urlTmp, { headers });
+  }
+
+  // Método para reenviar email de ativação (exemplo)
+  reenviarEmailAtivacao(userData: UtilizadorParaAtivarData): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    // Adapte esta URL e o corpo da requisição para o seu endpoint de backend real
+    const url = `${environment.apiUrl}/sm/reenviarEmailAtivacao/`  + environment.tenant_id;
+    console.log('LoginService: Reenviando email de ativação para:', userData);
+    console.log(' URL:', url);
+ 
+    // Retorne um Observable, simulando uma chamada HTTP
+  return this.http.put<any>(url, userData, { headers });
+  }
+
+ getUserbyUserName(userName: String): Observable<any> {
+   const headers = { 'Content-Type': 'application/json' };
+   const url = `${environment.apiUrl}/sm/getUserByUserName/${userName}`+'/'+environment.tenant_id;
+   console.log('LoginService: Buscando usuário por nome:', userName);
+   console.log(' URL:', url);
+   return this.http.put<any>(url, { headers });
+ }
+
 
 }
+  

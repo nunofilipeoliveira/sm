@@ -1,104 +1,181 @@
-
-.parent {
-	position: relative;
-	min-height: 100vh;
-  background-color: #f3f3f3;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-family: 'Trebuchet MS', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-   background-image: linear-gradient(to bottom, #273890, #b52732);
-   background-repeat: no-repeat;
-   background-size: cover;
-
-
+/* Fundo azul claro para toda a página */
+.activation-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0f7fa; /* Azul claro */
+  font-family: 'Arial', sans-serif; /* Fonte mais comum e limpa */
+  padding: 20px;
 }
 
-.form-structor {
-	background-color: #ffffff;
-	border-radius: 15px;
-	height: 550px;
-	width: 350px;
+/* Card principal de ativação */
+.activation-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 450px; /* Largura máxima para o card */
+  text-align: center;
   position: relative;
-	overflow: hidden;
-  align-self: center;
-
-	&::after {
-		content: '';
-		opacity: .80;
-		position: absolute;
-		top: 30px;right:0;bottom:0;left:0;
-		background-repeat: no-repeat;
-		background-position: center top;
-		background-size: 200px;
-		
-	}
-
-	.signup {
-		position: absolute;
-		top: 65%;
-		left: 50%;
-		-webkit-transform: translate(-50%, -50%);
-		width: 65%;
-		z-index: 5;
-		-webkit-transition: all .3s ease;
-
-
-		&.slide-up {
-			top: 5%;
-			-webkit-transform: translate(-50%, 0%);
-			-webkit-transition: all .3s ease;
-		}
-
-		&.slide-up,
-		&.slide-up .submit-btn {
-			opacity: 0;
-			visibility: hidden;
-		}
-
-    .erroLogin {
-      height: 30px;
-      line-height: 30px;
-      width: 100%;
-      font-size: 15px;
-      color:red;
-      align-self: center;
-    }
-
-		.form-holder {
-			overflow: hidden;
-			margin-top: 20px;
-			opacity: 1;
-			visibility: visible;
-			-webkit-transition: all .3s ease;
-
-		}
-
-		.submit-btn {
-			background-color: #273890;
-			color: rgba(256,256,256,0.7);
-			border:0;
-			border-radius: 15px;
-			display: block;
-			margin: 15px auto;
-			padding: 15px 45px;
-			width: 100%;
-			font-size: 15px;
-			cursor: pointer;
-			opacity: 1;
-			visibility: visible;
-			-webkit-transition: all .3s ease;
-
-			&:hover {
-				transition: all .3s ease;
-				background-color:#b52732;
-			}
-
-
-		}
-	}
-
+  overflow: hidden;
 }
 
+/* Título do card */
+.card-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #263238; /* Cor escura para o título */
+  margin-bottom: 25px;
+}
+
+.card-title2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #263238; /* Cor escura para o título */
+  margin-bottom: 25px;
+}
+
+
+/* Informações do usuário */
+.user-info {
+  font-size: 16px;
+  color: #546e7a;
+  margin-bottom: 10px;
+}
+
+.user-name {
+  font-weight: 600;
+  color: #007bff; /* Azul para o nome */
+}
+
+.user-username {
+  font-weight: 600;
+  color: #dc3545; /* Vermelho para o username */
+  font-size: 20px;
+  background-color: #f8d7da;
+  padding: 5px 10px;
+  border-radius: 5px;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+/* Grupos de formulário */
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  color: #455a64;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #cfd8dc;
+  border-radius: 8px;
+  font-size: 16px;
+  color: #37474f;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Botão principal */
+.btn-primary {
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 25px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.btn-block {
+  display: block;
+}
+
+/* Spinner de carregamento */
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3em;
+  color: #007bff;
+}
+
+/* Mensagens de alerta */
+.alert {
+  padding: 12px 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 15px;
+  text-align: left;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-color: #f5c6cb;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border-color: #c3e6cb;
+}
+
+/* Seção de sucesso */
+.activation-success {
+  margin-top: 20px;
+}
+
+.activation-success .card-title {
+  color: #28a745; /* Verde para sucesso */
+}
+
+.btn-outline-primary {
+  background-color: transparent;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+/* Estilos para o link inválido */
+.activation-form .text-danger {
+  color: #dc3545;
+}

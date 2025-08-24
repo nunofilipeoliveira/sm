@@ -1,0 +1,191 @@
+<div class="main-content">
+    <div class="container-fluid">
+        <!-- Cabeçalho da página -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Gestão de Utilizador</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conteúdo principal: Detalhes do Utilizador -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div *ngIf="utilizador.id !== 0; else noUserSelected">
+                            <form>
+                                <div class="form-group">
+                                    <label for="nome">Nome</label>
+                                    <input type="text" class="form-control" id="nome" [(ngModel)]="utilizador.nome"
+                                        name="nome" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="user">User</label>
+                                    <input type="text" class="form-control" id="user" [(ngModel)]="utilizador.user"
+                                        name="user" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" [(ngModel)]="utilizador.email"
+                                        name="email" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="perfil">Perfil</label>
+                                    <select class="form-control" id="modalPerfil" [(ngModel)]="utilizador.perfil"
+                                        name="modalPerfil" readonly>
+                                        <option value="ADMIN">Administrador</option>
+                                        <option value="UTILIZADOR">Utilizador</option>
+
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="estado">Estado</label>
+                                    <input type="text" class="form-control" id="estado"
+                                        [value]="utilizador.estado === '1' ? 'Ativo' : 'Inativo'" name="estado"
+                                        readonly>
+                                </div>
+
+                                <div *ngIf="escaloesApresentacao && escaloesApresentacao.length > 0">
+                                    <div class="table-responsive">
+                                        <table class="table project-list-table table-nowrap align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Escalão</th>
+                                                    <th>Selecção</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let escalao of escaloesApresentacao">
+                                                    <td>{{ escalao.escalaoDescritivo }}</td>
+                                                    <td>
+                                                        <input type="checkbox" [(ngModel)]="escalao.check"
+                                                            name="escalaoCheck{{escalao.id}}" disabled>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+
+                                <!-- Botões de Ação -->
+                                <div class="mt-4">
+                                    <button class="btn btn-info btn-sm mr-1" (click)="abrirEditarUtilizador()">
+                                        <i class="nc-icon nc-ruler-pencil"></i> Editar
+                                    </button>
+                                    <button *ngIf="utilizador.estado === '1'" class="btn btn-warning btn-sm mr-1"
+                                        (click)="desativarUtilizador()">
+                                        <i class="nc-icon nc-simple-remove"></i> Desativar
+                                    </button>
+                                    <button *ngIf="utilizador.estado === '0'" class="btn btn-success btn-sm mr-1"
+                                        (click)="ativarUtilizador()">
+                                        <i class="nc-icon nc-check-2"></i> Ativar
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm mr-1" (click)="voltar()">
+                                        <i class="nc-icon nc-arrow-left"></i> Voltar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <ng-template #noUserSelected>
+                            <p class="text-center text-muted">Nenhum utilizador selecionado.</p>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para editar utilizador (manter o mesmo do seu código original) -->
+        <div class="modal-backdrop fade" [class.show]="mostrarModal" *ngIf="mostrarModal"></div>
+
+        <div class="modal fade" [class.show]="mostrarModal" [style.display]="mostrarModal ? 'block' : 'none'"
+            tabindex="-1" role="dialog" *ngIf="mostrarModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ modalTitulo }}</h5>
+
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="modalNome">Nome *</label>
+                                <input type="text" class="form-control" id="modalNome" [(ngModel)]="novoUtilizador.nome"
+                                    name="modalNome" required>
+                                <small class="text-danger" *ngIf="!novoUtilizador.nome && (novoUtilizador.nome === '')">
+                                    Nome é obrigatório
+                                </small>
+                            </div>
+
+                            <div *ngIf="modoNovoUtilizador" class="form-group">
+                                <label for="modalNome">User *</label>
+                                <input type="text" class="form-control" id="modalNome" [(ngModel)]="novoUtilizador.user"
+                                    (ngModelChange)="novoUtilizador.user = removerEspacos($event)" name="modalNome"
+                                    required>
+                                <small class="text-danger" *ngIf="!novoUtilizador.user && (novoUtilizador.user === '')">
+                                    User é obrigatório
+                                </small>
+                                <small class="text-danger" *ngIf="userJaExiste">
+                                    User já existe
+                                </small>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="modalEmail">Email *</label>
+                                <input type="email" class="form-control" id="modalEmail"
+                                    [(ngModel)]="novoUtilizador.email" name="modalEmail" required>
+                                <small class="text-danger"
+                                    *ngIf="!novoUtilizador.email && (novoUtilizador.email === '')">
+                                    Email é obrigatório
+                                </small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="modalPerfil">Perfil</label>
+                                <select class="form-control" id="modalPerfil" [(ngModel)]="novoUtilizador.perfil"
+                                    name="modalPerfil" required>
+                                    <option value="ADMIN">Administrador</option>
+                                    <option value="UTILIZADOR">Utilizador</option>
+
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="modalEscaloes">Escalões</label>
+                                <div id="modalEscaloes" class="form-control" [(ngModel)]="escaloesApresentacao"
+                                    name="modalEscaloes">
+
+                                    <tr *ngFor="let escalao of escaloesApresentacao">
+                                        <td>{{ escalao.escalaoDescritivo }}</td>
+                                        <td>
+                                            <input type="checkbox" [(ngModel)]="escalao.check"
+                                                name="escalaoCheck{{escalao.id}}">
+                                        </td>
+                                    </tr>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" (click)="cancelarModal()">Cancelar</button>
+                        <button *ngIf="!modoNovoUtilizador" type="button" class="btn btn-primary"
+                            (click)="salvarUtilizador()" [disabled]="!novoUtilizador.nome ">Guardar</button>
+                        <button *ngIf="modoNovoUtilizador" type="button" class="btn btn-primary"
+                            (click)="criarUtilizador()"
+                            [disabled]="!novoUtilizador.nome || !novoUtilizador.user || !novoUtilizador.email">Criar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

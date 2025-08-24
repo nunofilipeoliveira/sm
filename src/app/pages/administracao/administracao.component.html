@@ -92,8 +92,8 @@
 
                     </div>
                     <div class="text-center">
-                        <button *ngIf="!loadingEquipas && listaEquipas.length > 0" class="btn btn-primary" (click)="novaequipa()"
-                            [disabled]="loadingAplicarEpoca">
+                        <button *ngIf="!loadingEquipas && listaEquipas.length > 0" class="btn btn-primary"
+                            (click)="novaequipa()" [disabled]="loadingAplicarEpoca">
                             <span *ngIf="!loadingEquipas && listaEquipas.length > 0"><b>+</b></span>
                         </button>
                         <div *ngIf="modoInsercaoEquipa">
@@ -127,6 +127,153 @@
                         {{ errorMessage }}
                     </div>
                 </div>
+            </div>
+
+            <!-- Card 2: Lista de utilizadores -->
+            <div class="card shadow">
+                <div class="card-header">
+                    <h4 class="card-title">Utilizadores</h4>
+                </div>
+                <div class="card-body">
+                    <div *ngIf="loadingUtilizadores" class="d-flex justify-content-center">
+                        <div class="spinner-border text-danger" role="status">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                    <div *ngIf="!loadingUtilizadores && listaUtilizadores.length > 0">
+                        <div class="table-responsive">
+                            <table class="table project-list-table table-nowrap align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Nome</th>
+                                        <th class="d-none d-md-table-cell">Perfil</th>
+                                        <th>Estado</th>
+                                        <th class="td-total">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let utilizador of listaUtilizadores">
+                                        <td>{{ utilizador.user }}</td>
+                                        <td>{{ utilizador.nome }}</td>
+                                        <td class="d-none d-md-table-cell">{{ utilizador.perfil }}</td>
+                                        <td>
+                                             <span *ngIf="utilizador.estado == '1'" class="badge-soft-success">ATIVO</span>
+                                             <span *ngIf="utilizador.estado == '0'" class="badge-soft-danger">INATIVO</span>
+
+
+                                          
+                                        </td>
+
+                                        <td class="td-total">
+
+
+                                            <button (click)="gestaoUtilizador(utilizador.id)"
+                                                class="btn btn-info btn-sm">
+                                                <i class="nc-icon nc-settings-gear-65"></i> <span
+                                                    class="d-none d-md-inline"> Gestão utilizador</span></button>
+
+                                        </td>
+                                    </tr>
+                                    <tr *ngFor="let utilizadorWait of utilizadoresWait">
+                                        <td>{{ utilizadorWait.user }}</td>
+                                        <td>{{ utilizadorWait.nome }}</td>
+                                        <td class="d-none d-md-table-cell">{{ utilizadorWait.perfil }}</td>
+                                        <td>
+                                             <span  class="badge-soft-info">AGUARDA ATIVAÇÃO</span>
+                                        </td>
+
+                                        <td class="td-total">
+
+
+                                             <button (click)="abrirModalLink(utilizadorWait)"
+                                                class="btn btn-info btn-sm me-2">
+                                                <i class="nc-icon nc-tag-content"></i> <span
+                                                    class="d-none d-md-inline"> Link Ativação</span></button>
+
+                                            <button (click)="abrirModalReenviarEmail(utilizadorWait)"
+                                                class="btn btn-info btn-sm">
+                                                <i class="nc-icon nc-send"></i> <span
+                                                    class="d-none d-md-inline"> Reenviar email</span></button>
+
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center">
+                            <button *ngIf="!loadingUtilizadores && listaUtilizadores.length > 0" class="btn btn-primary"
+                                (click)="novoUtilizador()" [disabled]="loadingAplicarEpoca">
+                                <span *ngIf="!loadingUtilizadores && listaUtilizadores.length > 0"><b>+</b></span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <div *ngIf="!loadingUtilizadores && listaUtilizadores.length === 0">
+                        <p class="text-center text-muted">nenhum utilizador encontrado</p>
+                    </div>
+                    <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                        {{ errorMessage }}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para Reenviar Email -->
+<div class="modal-backdrop fade" [class.show]="mostrarModalReenviarEmail" *ngIf="mostrarModalReenviarEmail"></div>
+
+<div class="modal fade" [class.show]="mostrarModalReenviarEmail" [style.display]="mostrarModalReenviarEmail ? 'block' : 'none'"
+    tabindex="-1" role="dialog" *ngIf="mostrarModalReenviarEmail">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Reenviar Email de Ativação</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="emailUtilizador">Email do Utilizador</label>
+                        <input type="email" class="form-control" id="emailUtilizador" [(ngModel)]="emailParaReenviar" name="emailUtilizador">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="fecharModalReenviarEmail()">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="confirmarReenvioEmail()">Reenviar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Modal link -->
+<div class="modal-backdrop fade" [class.show]="mostrarModalLink" *ngIf="mostrarModalLink"></div>
+
+<div class="modal fade" [class.show]="mostrarModalLink" [style.display]="mostrarModalLink ? 'block' : 'none'"
+    tabindex="-1" role="dialog" *ngIf="mostrarModalLink">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Link de Ativação</h5>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="link">Link</label>
+                        <input type="text" class="form-control" id="link" [(ngModel)]="linkAtivacao" name="link" readonly>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="copiarLink()">Copiar Link</button>
+                <button type="button" class="btn btn-secondary" (click)="fecharModalLink()">Sair</button>
             </div>
         </div>
     </div>

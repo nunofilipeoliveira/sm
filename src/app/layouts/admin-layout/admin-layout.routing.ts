@@ -15,6 +15,7 @@ import { StaffSeleccaoComponent } from '../../pages/staff-seleccao/staff-selecca
 import { NovoStaffComponent } from '../../pages/novo-staff/novo-staff.component';
 import { NovoJogadorComponent } from '../../pages/novo-jogador/novo-jogador.component';
 import { AdministracaoComponent } from '../../pages/administracao/administracao.component';
+import { GestaoutilizadorComponent } from '../../pages/gestaoutilizador/gestaoutilizador.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'equipa', component: EquipaComponent, canActivate: [AuthGuard] },
@@ -36,5 +37,6 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'staffSeleccao/:id/:nomeStaff', component: StaffSeleccaoComponent, canActivate: [AuthGuard] },
   { path: 'jogadorSeleccao/:id/:nomeJogador', component: JogadorSeleccaoComponent, canActivate: [AuthGuard] },
   { path: 'administracao', component: AdministracaoComponent, canActivate: [AuthGuard] }, // Nova rota para administração
+  { path: 'gestao-utilizador/:idUtilizador', component: GestaoutilizadorComponent, canActivate: [AuthGuard] },
 
 ];
