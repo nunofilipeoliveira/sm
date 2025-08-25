@@ -33,6 +33,13 @@ export class FichaJogadorComponent implements OnInit {
   public isFotoPrincipal:boolean=false;
   public isUploadFoto_avatar=false;
   public count_presencas: ContadorPresencaData[] = [];
+  load_presencas:boolean=false;
+  total_faltas: number = 0;
+  total_presencas: number = 0;
+
+  // Nova propriedade para controlar a visibilidade da tabela de faltas
+  public showFaltas: boolean = false; // Inicialmente oculta
+  public showPresencas: boolean = false; // Inicialmente oculta
 
   // Propriedade para a data de nascimento formatada (AAAA-MM-DD)
   public dataNascimentoDisplay: string = '';
@@ -63,6 +70,7 @@ export class FichaJogadorComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.load_presencas = true;
     this.spinner = true;
     this.sbmError = false;
     this.sbmSuccess = false;
@@ -96,6 +104,7 @@ export class FichaJogadorComponent implements OnInit {
                   if (data != null) {
                     this.spinner = false;
                     this.faltas = data;
+                    this.total_faltas=this.faltas.length
                     if (this.faltas.length == 0) {
                       this.hasFaltas = false;
                     } else {
@@ -110,11 +119,17 @@ export class FichaJogadorComponent implements OnInit {
                         if (data != null) {
                           this.spinner = false;
                           this.count_presencas = data;
+                          for(let i=0;i<this.count_presencas.length;i++){
+                            this.total_presencas += this.count_presencas[i].set + this.count_presencas[i].out + this.count_presencas[i].nov + this.count_presencas[i].dez + this.count_presencas[i].jan + this.count_presencas[i].fev + this.count_presencas[i].mar + this.count_presencas[i].abr + this.count_presencas[i].mai + this.count_presencas[i].jun + this.count_presencas[i].jul;
+                          }
+                          this.load_presencas = false;
+                          
                         }
                       },
                       error: error => {
                         console.log("FichaJogadorComponent | Serviço getCountPresencasByJogador Erro!!");
                         this.sbmError = true;
+                        this.load_presencas = false;
                       }
                     });
 
@@ -219,5 +234,14 @@ export class FichaJogadorComponent implements OnInit {
           this.sbmError = true;
         }
       });
+  }
+
+  // Novo método para alternar a visibilidade das faltas
+  toggleFaltasVisibility() {
+    this.showFaltas = !this.showFaltas;
+  }
+
+  togglePresencasVisibility() {
+    this.showPresencas = !this.showPresencas;
   }
 }

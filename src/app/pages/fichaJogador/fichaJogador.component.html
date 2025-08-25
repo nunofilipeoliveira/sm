@@ -51,8 +51,7 @@
             <div class="col-md-5">
               <div class="form-group">
                 <label>Data Nascimento</label>
-                <input type="text" class="form-control" name="data_nascimento"
-      [(ngModel)]="dataNascimentoDisplay">
+                <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="dataNascimentoDisplay">
               </div>
             </div>
           </div>
@@ -178,65 +177,106 @@
       </div>
 
       <div class="faltas-card shadow mt-4">
-        <h5 class="info-title">Faltas</h5>
-        <table class="table table-hover mt-3" *ngIf="hasFaltas">
-          <thead>
-            <tr>
-              <th>Data</th>
-              <th>Hora</th>
-              <th>Tipo Falta</th>
-              <th>Motivo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let falta of faltas">
-              <td>{{falta.data | data}}</td>
-              <td>{{falta.hora}}</td>
-              <td>{{falta.estado}}</td>
-              <td>{{falta.motivo}}</td>
-            </tr>
-          </tbody>
-        </table>
-        <div *ngIf="!hasFaltas" class="text-center text-muted">Sem Faltas</div>
+        <h5 class="info-title d-flex justify-content-between align-items-center">
+          <span>{{total_faltas}} Faltas</span>
+          <!-- Botão com ícone para alternar a visibilidade da tabela de faltas -->
+          <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="toggleFaltasVisibility()">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path *ngIf="!showFaltas"
+                d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+              <path *ngIf="showFaltas"
+                d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+        </h5>
+        <!-- A tabela de faltas só será renderizada se 'showFaltas' for verdadeiro -->
+        <div *ngIf="showFaltas">
+          <table class="table table-hover mt-3" *ngIf="hasFaltas">
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Tipo Falta</th>
+                <th>Motivo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let falta of faltas">
+                <td>{{falta.data | data}}</td>
+                <td>{{falta.hora}}</td>
+                <td>{{falta.estado}}</td>
+                <td>{{falta.motivo}}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="!hasFaltas" class="text-center text-muted">Sem Faltas</div>
+        </div>
       </div>
 
 
+
+
+
       <div class="faltas-card shadow mt-4">
-        <h5 class="info-title">Presenças</h5>
-        <table class="table table-hover table-wrapper mt-3" style="font-size: smaller;">
-          <thead>
-            <tr>
-              <th>Escalão</th>
-              <th style="text-align: center; font-size: small;">Set</th>
-              <th style="text-align: center; font-size: small;">Out</th>
-              <th style="text-align: center; font-size: small;">Nov</th>
-              <th style="text-align: center; font-size: small;">Dez</th>
-              <th style="text-align: center; font-size: small;">Jan</th>
-              <th style="text-align: center; font-size: small;">Fev</th>
-              <th style="text-align: center; font-size: small;">Mar</th>
-              <th style="text-align: center; font-size: small;">Abr</th>
-              <th style="text-align: center; font-size: small;">Mai</th>
-              <th style="text-align: center; font-size: small;">Jun</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let presenca of count_presencas">
-              <td style="background-color:#babab9; color:white"class="card px-1">{{presenca.escalao}}</td>
-              <td style="text-align: center;font-size: small;" >{{presenca.set}}</td>
-              <td style="text-align: center; font-size: small;">{{presenca.out}}</td>
-              <td style="text-align: center; font-size: small;">{{presenca.nov}}</td>
-              <td style="text-align: center; font-size: small;">{{presenca.dez}}</td>
-              <td style="text-align: center; font-size: small;">{{presenca.jan}}</td>
-              <td style="text-align: center; font-size: small;">{{presenca.fev}}</td>
-              <td style="text-align: center; font-size: small;">{{presenca.mar}}</td>
-              <td style="text-align: center; font-size: small;">{{presenca.abr}}</td>
-              <td style="text-align: center; font-size: small;">{{presenca.mai}}</td>
-              <td style="text-align: center; font-size: small;">{{presenca.jun}}</td>
-            </tr>
+        <h5 class="info-title d-flex justify-content-between align-items-center">
+          <span>{{total_presencas}} Presenças</span>
+          <!-- Botão com ícone SVG inline para alternar a visibilidade -->
+          <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="togglePresencasVisibility()">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path *ngIf="!showPresencas"
+                d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+              <path *ngIf="showPresencas"
+                d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+        </h5>
+
+        <div *ngIf="showPresencas">
+          <div *ngIf="load_presencas" class="spinner-border text-info spinner-border-sm" role="status">
+            <span class="sr-only"></span>
+          </div>
+          <table *ngIf="!load_presencas" class="table table-hover table-wrapper mt-3" style="font-size: smaller;">
+            <thead>
+              <tr>
+                <th>Escalão</th>
+                <th style="text-align: center; font-size: small;">Set</th>
+                <th style="text-align: center; font-size: small;">Out</th>
+                <th style="text-align: center; font-size: small;">Nov</th>
+                <th style="text-align: center; font-size: small;">Dez</th>
+                <th style="text-align: center; font-size: small;">Jan</th>
+                <th style="text-align: center; font-size: small;">Fev</th>
+                <th style="text-align: center; font-size: small;">Mar</th>
+                <th style="text-align: center; font-size: small;">Abr</th>
+                <th style="text-align: center; font-size: small;">Mai</th>
+                <th style="text-align: center; font-size: small;">Jun</th>
+                <th style="text-align: center; font-size: small;">Jul</th>
+                <th style="text-align: center; font-size: medium;">TOTAL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let presenca of count_presencas">
+                <td style="background-color:#babab9; color:white" class="card px-1">{{presenca.escalao}}</td>
+                <td style="text-align: center;font-size: small;">{{presenca.set}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.out}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.nov}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.dez}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.jan}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.fev}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.mar}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.abr}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.mai}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.jun}}</td>
+                <td style="text-align: center; font-size: small;">{{presenca.jul}}</td>
+                <td style="text-align: center; font-size: medium;">{{presenca.set + presenca.out + presenca.nov +
+                  presenca.dez + presenca.jan + presenca.fev + presenca.mar + presenca.abr + presenca.mai + presenca.jun
+                  +
+                  presenca.jul}}</td>
+              </tr>
 
 
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </div>

@@ -88,8 +88,20 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     } else {
       this.presencaService.getTotalTrainings(this.equipaData.id).subscribe((total: number) => {
         this.numberOfTrainings = total;
+        this.loading_numberOfTrainings = false
+      });
+
+      this.presencaService.getAverageAthletesPerTraining(this.equipaData.id).subscribe((avg: number) => {
+        this.avgAthletesPerTraining = avg;
+        this.loading_avgAthletesPerTraining = false;
+      });
+
+      this.presencaService.getAbsencePercentage(this.equipaData.id).subscribe((percent: number) => {
+        this.absencePercentage = percent;
+        this.loading_absencePercentage = false;
       });
       this.loadDashboardData();
+
     }
 
 
