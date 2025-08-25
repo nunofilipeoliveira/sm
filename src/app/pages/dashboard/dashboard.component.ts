@@ -27,6 +27,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   trainingsChart: Chart<'bar', number[]> | undefined; // Ajuste a tipagem
   attendanceChart: Chart<'doughnut', number[]> | undefined; // Ajuste a tipagem
 
+  loading_numberOfTrainings: boolean = false;
+  loading_avgAthletesPerTraining: boolean = false;
+  loading_absencePercentage: boolean = false;
+
   constructor(
     private equipaService: EquipaService,
     private presencaService: PresencaService
@@ -36,6 +40,10 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
+    this.loading_numberOfTrainings = true;
+    this.loading_avgAthletesPerTraining = true;
+    this.loading_absencePercentage = true;
 
     this.equipaData = this.equipaService.getEquipa();
 
@@ -54,14 +62,17 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
             if (data != null) {
               this.presencaService.getTotalTrainings(this.equipaData.id).subscribe((total: number) => {
                 this.numberOfTrainings = total;
+                this.loading_numberOfTrainings = false
               });
 
               this.presencaService.getAverageAthletesPerTraining(this.equipaData.id).subscribe((avg: number) => {
                 this.avgAthletesPerTraining = avg;
+                this.loading_avgAthletesPerTraining = false;
               });
 
               this.presencaService.getAbsencePercentage(this.equipaData.id).subscribe((percent: number) => {
                 this.absencePercentage = percent;
+                this.loading_absencePercentage = false;
               });
 
               this.loadDashboardData();
