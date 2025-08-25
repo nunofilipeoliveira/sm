@@ -18,6 +18,6 @@ export const AppRoutes: Routes = [
   }]},
   {
     path: '**',
-    redirectTo: 'equipa'
+    redirectTo: 'dashboard'
   }
 ]

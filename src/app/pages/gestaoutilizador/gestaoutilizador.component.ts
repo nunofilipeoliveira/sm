@@ -287,6 +287,7 @@ resetPWD(): void {
       this.loginws.resetPWD(this.utilizador.id).subscribe({
         next: (response) => {
           console.log(`Senha do utilizador ${this.utilizador.nome} resetada com sucesso:`, response);
+          this.router.navigate(['/administracao']);
         },
         error: (err) => {
           console.error('Erro ao resetar senha do utilizador:', err);

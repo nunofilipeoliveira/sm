@@ -1,0 +1,45 @@
+<!-- MultipleFiles/dashboard.component.html (Novo Arquivo) -->
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="text-center mb-4">Dashboard de Treinos</h2>
+    </div>
+  </div>
+
+  <!-- Seção de Métricas Principais (Cards) -->
+  <div class="row">
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <!-- Exemplo de card para Número de Treinos -->
+      <div class="card shadow">
+        <div class="card-body text-center">
+          <h5 class="card-title">Número de Treinos</h5>
+          <p class="display-4 text-primary">{{numberOfTrainings}}</p> <!-- Substituir por dado dinâmico -->
+          <p class="text-muted">Treinos realizados na época atual</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+      <!-- Exemplo de card para Média de Atletas -->
+      <div class="card shadow">
+        <div class="card-body text-center">
+          <h5 class="card-title">Média de Atletas por Treino</h5>
+          <p class="display-4 text-info">{{avgAthletesPerTraining}}</p> <!-- Substituir por dado dinâmico -->
+          <p class="text-muted">Média de atletas presentes por treino</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
+      <!-- Exemplo de card para % de Faltas -->
+      <div class="card shadow">
+        <div class="card-body text-center">
+          <h5 class="card-title">Percentagem de Faltas</h5>
+          <p class="display-4 text-danger">{{absencePercentage}}%</p> <!-- Substituir por dado dinâmico -->
+          <p class="text-muted">Média de faltas em relação ao total de presenças</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  
+</div>

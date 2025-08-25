@@ -2,7 +2,7 @@ import { PresencaComponent } from './../pages/presenca/presenca.component';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { bindCallback } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,11 @@ export class PresencaService {
   URLGetPresencabyID = environment.apiUrl + "/sm/getPresencaById/";
   URLGetHistoricobyID = environment.apiUrl + "/sm/getHistoricoById/";
   URLisPresencabyEquipaDataHora = environment.apiUrl + "/sm/isPresencabyEquipaDataHora/";
+  URL_TOTAL_TRAININGS = environment.apiUrl + "/sm/dashboard/getTotalTrainings";
+  URL_AVG_ATHLETES = environment.apiUrl + "/sm/dashboard/getAverageAthletes";
+  URL_ABSENCE_PERCENTAGE = environment.apiUrl + "/sm/dashboard/getAbsencePercentage";
+  URL_TRAININGS_PER_MONTH = environment.apiUrl + "/sm/dashboard/trainingsPerMonth";
+  URL_ATTENDANCE_DISTRIBUTION = environment.apiUrl + "/sm/dashboard/attendanceDistribution";
 
 
   parmJson: string = ""
@@ -31,51 +36,51 @@ export class PresencaService {
     "day": 0
   }
   private hora = { hour: 0, minute: 0 };
-  private idFicha=0;
-  private presenca:PresencaData;
+  private idFicha = 0;
+  private presenca: PresencaData;
 
   constructor(private http: HttpClient) {
     this.presenca = {
-        id:0,
-        data:0,
-        hora:"",
-        id_escalao:0,
-        escalao_descricao:"",
-        data_criacao:"",
-        id_utilizador_criacao:0,
-        user_criacao:"",
-        jogadoresPresenca: [],
-        staffPresenca: [],
-          };
+      id: 0,
+      data: 0,
+      hora: "",
+      id_escalao: 0,
+      escalao_descricao: "",
+      data_criacao: "",
+      id_utilizador_criacao: 0,
+      user_criacao: "",
+      jogadoresPresenca: [],
+      staffPresenca: [],
+    };
   }
 
-  setData_Presenca(parmAno:number, parmMes:number, parmDia:number){
-    this.data_presenca.day=parmDia;
-    this.data_presenca.month=parmMes;
-    this.data_presenca.year=parmAno;
+  setData_Presenca(parmAno: number, parmMes: number, parmDia: number) {
+    this.data_presenca.day = parmDia;
+    this.data_presenca.month = parmMes;
+    this.data_presenca.year = parmAno;
   }
 
-  getData_Presenta(){
+  getData_Presenta() {
     return this.data_presenca;
   }
 
-  setHora(parmHora :number, parmMinute :number){
-    this.hora.hour=parmHora;
-    this.hora.minute=parmMinute;
+  setHora(parmHora: number, parmMinute: number) {
+    this.hora.hour = parmHora;
+    this.hora.minute = parmMinute;
   }
-  gethora(){
+  gethora() {
     return this.hora;
   }
 
-  clear(){
-    this.hora.hour=0;
-    this.hora.minute=0;
-    this.data_presenca.year=0;
-    this.data_presenca.month=0;
-    this.data_presenca.day=0;
-    this.jogadoresPresenca=[];
-    this.staffPresenca=[];
-    this.idFicha=0;
+  clear() {
+    this.hora.hour = 0;
+    this.hora.minute = 0;
+    this.data_presenca.year = 0;
+    this.data_presenca.month = 0;
+    this.data_presenca.day = 0;
+    this.jogadoresPresenca = [];
+    this.staffPresenca = [];
+    this.idFicha = 0;
   }
 
   setPresenca(parmJogadoresPresenca: jogadorPresencaData[]) {
@@ -94,19 +99,19 @@ export class PresencaService {
     return this.staffPresenca;
   }
 
-  setIdFicha(parmIdFicha: number){
-    this.idFicha=parmIdFicha;
+  setIdFicha(parmIdFicha: number) {
+    this.idFicha = parmIdFicha;
   }
 
-  getIdFicha(): number{
+  getIdFicha(): number {
     return this.idFicha;
   }
 
-  setPresencaTmp(parmPresenca: PresencaData){
-    this.presenca=parmPresenca;
+  setPresencaTmp(parmPresenca: PresencaData) {
+    this.presenca = parmPresenca;
   }
 
-  getPresencaTmp(): PresencaData{
+  getPresencaTmp(): PresencaData {
     return this.presenca;
   }
 
@@ -138,7 +143,7 @@ export class PresencaService {
 
 
     this.body_json = this.body_json + '  ],'
-    + '"staffPresenca" : [ {'
+      + '"staffPresenca" : [ {'
     for (let i = 0; i < parmPresenca.staffPresenca.length; i++) {
 
       this.body_json = this.body_json + '"id_staff": ' + parmPresenca.staffPresenca[i].id_staff + ','
@@ -195,7 +200,7 @@ export class PresencaService {
 
 
     this.body_json = this.body_json + '  ],'
-    + '"staffPresenca" : [ {'
+      + '"staffPresenca" : [ {'
     for (let i = 0; i < parmPresenca.staffPresenca.length; i++) {
 
       this.body_json = this.body_json + '"id_staff": ' + parmPresenca.staffPresenca[i].id_staff + ','
@@ -259,7 +264,26 @@ export class PresencaService {
   }
 
 
-
+  getTotalTrainings(parmEquipaID:number): Observable<number> {
+    // Adapte o endpoint e o tipo de requisição conforme seu backend
+    return this.http.get<number>(this.URL_TOTAL_TRAININGS + '/' + parmEquipaID);
+  }
+  getAverageAthletesPerTraining(parmEquipaID:number): Observable<number> {
+    // Adapte o endpoint e o tipo de requisição conforme seu backend
+    return this.http.get<number>(this.URL_AVG_ATHLETES + '/' + parmEquipaID);
+  }
+  getAbsencePercentage(parmEquipaID:number): Observable<number> {
+    // Adapte o endpoint e o tipo de requisição conforme seu backend
+    return this.http.get<number>(this.URL_ABSENCE_PERCENTAGE + '/' + parmEquipaID);
+  }
+  getTrainingsPerMonth(): Observable<{ month: string, count: number }[]> {
+    // Adapte o endpoint e o tipo de requisição conforme seu backend
+    return this.http.get<{ month: string, count: number }[]>(this.URL_TRAININGS_PER_MONTH);
+  }
+  getAttendanceDistribution(): Observable<{ present: number, excusedAbsence: number, unexcusedAbsence: number, notCalled: number }> {
+    // Adapte o endpoint e o tipo de requisição conforme seu backend
+    return this.http.get<{ present: number, excusedAbsence: number, unexcusedAbsence: number, notCalled: number }>(this.URL_ATTENDANCE_DISTRIBUTION);
+  }
 
 
 

@@ -44,7 +44,7 @@ export class PoppupEscalaoComponent implements OnInit {
     }
 
     this.dialog.closeAll();
-    this.router.navigate(['/equipa']);
+    this.router.navigate(['/dashboard']);
   }
 }
 

@@ -16,8 +16,10 @@ import { NovoStaffComponent } from '../../pages/novo-staff/novo-staff.component'
 import { NovoJogadorComponent } from '../../pages/novo-jogador/novo-jogador.component';
 import { AdministracaoComponent } from '../../pages/administracao/administracao.component';
 import { GestaoutilizadorComponent } from '../../pages/gestaoutilizador/gestaoutilizador.component';
+import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 
 export const AdminLayoutRoutes: Routes = [
+  { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }, // Nova rota para o dashboard
   { path: 'equipa', component: EquipaComponent, canActivate: [AuthGuard] },
   { path: 'fichaJogador/:id', component: FichaJogadorComponent, canActivate: [AuthGuard] },
   { path: 'fichaStaff/:id', component: FichaStaffComponent, canActivate: [AuthGuard] },

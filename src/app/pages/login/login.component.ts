@@ -117,7 +117,7 @@ this.route.queryParams.subscribe(params => {
     } else if (longids.escalaoEpoca && longids.escalaoEpoca.length === 1) {
       localStorage.setItem('descritivo_escalao', longids.escalaoEpoca[0].descritivo_escalao);
       localStorage.setItem('idequipa_escalao', longids.escalaoEpoca[0].id_escalao_epoca.toString());
-      this.router.navigate(['equipa']);
+      this.router.navigate(['dashboard']);
     } else {
       console.warn("Nenhum escalão encontrado para redirecionamento.");
       this.erroLogin = true; // Ou outra mensagem de erro
