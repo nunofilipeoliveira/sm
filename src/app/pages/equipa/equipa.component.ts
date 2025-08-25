@@ -4,6 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import moment, { Moment } from 'moment';
 import { IdadePipe } from './idadePipe';
+import { EpocaData } from '../administracao/EpocaData';
 
 
 
@@ -24,6 +25,9 @@ export class EquipaComponent implements OnInit {
   idEquipa: string | null;
   hoje: number = 0;
   equipaData!: EquipaData;
+  idadeEscalao: string = "";
+  epocaAtual: EpocaData = { id: 0, epocaDescritivo: '', anoInicio: 0 };
+  modoApresentarIdadeEscalao  = false;
 
   spinner: boolean = false;
   constructor(private router: Router, private equipaService: EquipaService) {
@@ -53,7 +57,23 @@ export class EquipaComponent implements OnInit {
 
     console.log("LoginComponent | equipa1", this.equipaData);
 
+    this.equipaService.getEscalaoByEquipa(parseInt(this.idEquipa!)).subscribe((retorno: string) => {
+      this.idadeEscalao = retorno;
+      this.idadeEscalao = this.idadeEscalao.replace('Sub-', '');
 
+      if (!isNaN(Number(this.idadeEscalao))) {
+
+        this.equipaService.getEpocaAtual().subscribe((data: EpocaData) => {
+          this.epocaAtual = data;
+          this.modoApresentarIdadeEscalao = true;
+        });
+
+
+      }
+
+
+
+    });
 
     if (this.equipaData == undefined || this.equipaData.id == 0) {
       console.log("LoginComponent | equipa3", this.equipaData);

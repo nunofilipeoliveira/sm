@@ -34,6 +34,7 @@ export class EquipaService {
   URLGetAllEscaloes = environment.apiUrl + "/sm/getEscaloes";
   URLcreateEscalaoEpoca = environment.apiUrl + "/sm/createEscalaoEpoca/";
   URLdeleteEscalaoEpoca = environment.apiUrl + "/sm/deleteEscalaoEpoca/";
+  URLGetEscalaoByEquipa = environment.apiUrl + "/sm/getEscalaoByEquipa/";
 
   parmJson: string = ""
   errows: boolean = false;
@@ -330,6 +331,13 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
     // O corpo da requisição pode variar dependendo do seu backend.
     // Pode ser um PUT com um corpo vazio, ou um POST com o ID no corpo.
     return this.http.put<any>(urltmp, this.body_json, { headers }); 
+  }
+
+  getEscalaoByEquipa(idEquipa: number): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLGetEscalaoByEquipa  + idEquipa;
+    console.log('EquipaService | getEscalaoByEquipa | url:', urltmp);
+    return this.http.put<any>(urltmp, this.body_json, { headers });
   }
 
 }

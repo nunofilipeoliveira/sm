@@ -13,7 +13,8 @@
             <tr>
               <th scope="col" style="width: 5px;">#</th>
               <th scope="col">Nome</th>
-              <th scope="col" style="width: 10px;">Idade</th>
+              <th *ngIf="epocaAtual.anoInicio === 0" scope="col" style="width: 10px;">Idade</th>
+              <th *ngIf="epocaAtual.anoInicio >0" scope="col" style="width: 10px;">Id.Escalao</th>
               <th scope="col" style="width: 10px;">Ficha atleta</th>
             </tr>
           </thead>
@@ -22,7 +23,7 @@
               <td><span class="badge">{{jogador.numero}}</span></td>
               <td><img src="assets/img/jogadores/{{jogador.id}}_avatar.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
                   class="avatar-sm rounded-circle me-2" />{{jogador.nome}}</td>
-              <td class="td-total">{{jogador.data_nascimento | idade}}</td>
+              <td class="td-total">{{jogador.data_nascimento | idade : epocaAtual.anoInicio : idadeEscalao}}</td>
               <td class="td-total"><button type="button" class="btn btn-info text-white" (click)="doFichaAtleta(jogador.id)">Ver</button></td>
             </tr>
           </tbody>

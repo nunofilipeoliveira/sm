@@ -6,11 +6,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms'; // Importar FormsModule para ngModel
 import { environment } from '../../../environments/environment';
 import { UtilizadorParaAtivarData } from '../gestaoutilizador/UtilizadorParaAtivarData';
-
-interface EpocaData {
-  id: number;
-  epocaDescritivo: string;
-}
+import { EpocaData } from './EpocaData';
 
 interface EscalaoData {
   id: number;
