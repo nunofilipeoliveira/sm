@@ -70,8 +70,10 @@
   .sidebar .active-pro {
     position: absolute;
     width: 100%;
-    bottom: 10px;
+    bottom: 10%;
   }
+
+  
 }
 
 .card.card-upgrade .card-category {
