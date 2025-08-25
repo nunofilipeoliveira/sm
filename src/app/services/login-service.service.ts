@@ -176,6 +176,18 @@ export class LoginServiceService {
 
   }
 
+    clearEquipa() {
+    console.log("loginService - clearEquipa");
+    // Limpa o token e os dados de login
+    localStorage.removeItem("idequipa_escalao");
+    localStorage.removeItem("descritivo_escalao");
+    this.equipaService.clear(); // Limpa os dados da equipa
+
+  }
+
+
+
+
   getUserLoggedIn(): Observable<boolean> {
     return this.userLoggedIn.asObservable();
   }

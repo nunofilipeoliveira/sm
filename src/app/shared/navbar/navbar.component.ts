@@ -3,6 +3,10 @@ import { Component, OnInit, Renderer2, ViewChild, ElementRef } from '@angular/co
 import { ROUTES } from '../../sidebar/sidebar.component';
 import { Router } from '@angular/router';
 import { Location} from '@angular/common';
+import { PoppupEscalaoComponent } from '../../pages/poppup-escalao/poppup-escalao.component';
+import { MatDialog } from '@angular/material/dialog';
+import { LoginServiceService } from '../../services/login-service.service';
+import { EquipaService } from '../../services/equipa.service';
 
 
 @Component({
@@ -20,13 +24,15 @@ export class NavbarComponent implements OnInit{
     public isCollapsed = true;
 
 
-    constructor(location:Location, private renderer : Renderer2, private element : ElementRef, private router: Router) {
+    constructor(location:Location, private renderer : Renderer2, private element : ElementRef, private router: Router, private dialog: MatDialog, private loginws: LoginServiceService, private equipaWS: EquipaService) {
         this.location = location;
         this.nativeElement = element.nativeElement;
         this.sidebarVisible = false;
     }
 
-
+   ngOnChanges() {
+       this.escalao_descritivo = localStorage.getItem("descritivo_escalao");
+   }
 
     ngOnInit(){
         this.listTitles = ROUTES.filter(listTitle => listTitle);
@@ -94,6 +100,23 @@ export class NavbarComponent implements OnInit{
           navbar.classList.remove('bg-white');
         }
 
+      }
+
+      showPopEscaloes() {
+        console.log("Mostrar Pop Escalões");
+
+        const longids = this.loginws.getLoginData();
+
+        this.loginws.clearEquipa();
+        console.log('NavbarComponent | showPopEscaloes | clearEquipa');
+        this.equipaWS.clear();
+        console.log('NavbarComponent | showPopEscaloes | clearEquipa | after clear');
+
+        this.dialog.open(PoppupEscalaoComponent, {
+                width: '250px',
+                height: '200px',
+                data:longids.escalaoEpoca
+              });
       }
 
 }

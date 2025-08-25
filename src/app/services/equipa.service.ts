@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable } from 'rxjs';
+import { empty, Observable } from 'rxjs';
+import e from 'express';
 
 
 @Injectable({
@@ -154,7 +155,7 @@ export class EquipaService {
     this.equipa.id = 0;
     this.equipa.escalao = "";
     localStorage.removeItem("idequipa_escalao");
-    this.setEquipa(null);
+    this.setEquipa(empty() as unknown as EquipaData );
     return;
   }
 

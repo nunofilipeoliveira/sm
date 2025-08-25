@@ -36,8 +36,8 @@ export class LoginComponent implements OnInit{
     
 
     //Apaga elementos da equipa da sessão anterior
-    this.equipaservice.clear();
-    this.loginws.clear(); // Garante que a sessão anterior é limpa ao carregar a página
+   // this.equipaservice.clear();
+    //this.loginws.clear(); // Garante que a sessão anterior é limpa ao carregar a página
 
     
 
