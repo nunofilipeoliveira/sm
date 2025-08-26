@@ -101,7 +101,7 @@ export class GestaoEquipaComponent implements OnInit {
         alert('Jogador não encontrado na equipa.');
         return;
       }
-      this.equipaService.removeJogadorEquipa(jogador).subscribe({
+      this.equipaService.removeJogadorEquipa(jogador, this.idEquipa).subscribe({
         next: () => {
           this.equipa.jogadores = this.equipa.jogadores.filter((j: any) => j.id !== id);
          
@@ -121,7 +121,7 @@ export class GestaoEquipaComponent implements OnInit {
         alert('Staff não encontrado na equipa.');
         return;
       }
-      this.equipaService.removeStaffEquipa(staff).subscribe({
+      this.equipaService.removeStaffEquipa(staff, this.idEquipa).subscribe({
         next: () => {
           this.equipa.staff = this.equipa.staff.filter((j: any) => j.id !== id);
         },

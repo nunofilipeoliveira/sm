@@ -116,18 +116,17 @@ export class StaffSeleccaoComponent implements OnInit {
       };
 
       this.spinner = true;
-      this.equipaService.addStaffEquipa(tmpStaff).subscribe({
+      this.equipaService.addStaffEquipa(tmpStaff, this.idEscalao).subscribe({
         next: (response) => {
           console.log('Staff adicionado com sucesso:', response);
-          // Atualiza a lista localmente após adicionar
-          this.equipaService.getEquipa().staff.push(tmpStaff);
-          this.router.navigate(['/gestao-equipa']);
+  
+          this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
           this.spinner = false;
         },
         error: (error) => {
           console.error('Erro ao adicionar staff à equipa:', error);
           alert('Ocorreu um erro ao adicionar o staff à equipa');
-          this.router.navigate(['/gestao-equipa']);
+          this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
           this.spinner = false;
         }
       });
@@ -142,7 +141,7 @@ export class StaffSeleccaoComponent implements OnInit {
   cancelarSelecao() {
     console.log("StaffSeleccaoComponent | Cancelar seleção");
     if (this.origem_gestao_equipa) {
-      this.router.navigate(['/gestao-equipa']);
+      this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
     } else {
       this.router.navigate(['/mpresenca']);
     }

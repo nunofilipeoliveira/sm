@@ -189,9 +189,9 @@ export class EquipaService {
   }
 
 
- removeJogadorEquipa(jogador: jogadorData): Observable<any> {
+ removeJogadorEquipa(jogador: jogadorData, equipaID:number): Observable<any> {
   const headers = { 'Content-Type': 'application/json' };
-    const urltmp = this.URLremoveJogadorEquipa + this.getEquipa().id;
+    const urltmp = this.URLremoveJogadorEquipa + equipaID;
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(jogador);
@@ -201,9 +201,9 @@ export class EquipaService {
 }
 
 
-  addJogadorEquipa(jogador: jogadorData): Observable<any> {
+  addJogadorEquipa(jogador: jogadorData, equipaID:number): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
-    const urltmp = this.URLAddJogadorEquipa + this.getEquipa().id;
+    const urltmp = this.URLAddJogadorEquipa + equipaID;
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(jogador);
@@ -215,9 +215,9 @@ export class EquipaService {
   }
 
 
-    addStaffEquipa(staff: staffData): Observable<any> {
+    addStaffEquipa(staff: staffData, equipaID:number): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
-    const urltmp = this.URLAddStaffEquipa + this.getEquipa().id;
+    const urltmp = this.URLAddStaffEquipa + equipaID;
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(staff);
@@ -229,9 +229,9 @@ export class EquipaService {
   }
 
 
-   removeStaffEquipa(staff: staffData): Observable<any> {
+   removeStaffEquipa(staff: staffData, equipaID:number): Observable<any> {
   const headers = { 'Content-Type': 'application/json' };
-    const urltmp = this.URLremoveStaffEquipa + environment.tenant_id;
+    const urltmp = this.URLremoveStaffEquipa + equipaID;
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(staff);

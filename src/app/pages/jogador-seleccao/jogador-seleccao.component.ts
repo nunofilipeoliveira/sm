@@ -111,19 +111,19 @@ export class JogadorSeleccaoComponent implements OnInit {
 
       // Inicia o spinner para indicar que uma operação está em andamento
       this.spinner = true;
-      this.equipaService.addJogadorEquipa(tmpJogador).subscribe({
+      this.equipaService.addJogadorEquipa(tmpJogador, this.idEscalao).subscribe({
         next: (response) => {
           // O serviço retornou sucesso
           console.log('Jogador adicionado com sucesso:', response);
-          this.equipaService.getEquipa().jogadores.push(tmpJogador);
-          this.router.navigate(['/gestao-equipa']);
+
+          this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
           this.spinner = false; // Desativa o spinner
         },
         error: (error) => {
           // O serviço retornou um erro
           console.error('Erro ao adicionar jogador à equipa:', error);
           alert('Ocorreu um erro ao adicionar o jogador à equipa');
-          this.router.navigate(['/gestao-equipa']);
+          this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
           this.spinner = false; // Desativa o spinner
         }
       });
@@ -150,7 +150,7 @@ export class JogadorSeleccaoComponent implements OnInit {
   cancelarSelecao() {
     console.log("JogadorSeleccaoComponent | Cancelar seleção");
     if (this.origem_gestao_equipa) {
-      this.router.navigate(['/gestao-equipa']);
+      this.router.navigate(['/gestao-equipa'+ '/' + this.idEscalao]);
     } else {
       this.router.navigate(['/mpresenca']);
     }
