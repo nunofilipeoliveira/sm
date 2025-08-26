@@ -92,9 +92,9 @@
 
                     </div>
                     <div class="text-center">
-                        <button *ngIf="!loadingEquipas && listaEquipas.length > 0" class="btn btn-primary"
+                        <button *ngIf="!loadingEquipas " class="btn btn-primary"
                             (click)="novaequipa()" [disabled]="loadingAplicarEpoca">
-                            <span *ngIf="!loadingEquipas && listaEquipas.length > 0"><b>+</b></span>
+                            <span *ngIf="!loadingEquipas "><b>+</b></span>
                         </button>
                         <div *ngIf="modoInsercaoEquipa">
                             <table>
