@@ -12,7 +12,7 @@ import { UtilizadorParaAtivarData } from './UtilizadorParaAtivarData';
 // Adicione esta interface se não existir em outro lugar
 interface EscalaoData {
   id: number;
-  escalaoDescritivo: string;
+  escalao: string;
 }
 
 interface EscalaoDataApresentacao {
@@ -85,7 +85,7 @@ export class GestaoutilizadorComponent implements OnInit {
       this.novoUtilizador.perfil = 'UTILIZADOR';
 
       //carrega escaloes da epoca
-      this.equipaService.getAllEscaloes().subscribe({
+      this.equipaService.getEquipasPorEpoca().subscribe({
         next: (escaloes: EscalaoData[]) => {
           console.log('Escalões da época atual carregados:', escaloes);
           this.escaloesEpocaAtual = escaloes;
@@ -95,13 +95,13 @@ export class GestaoutilizadorComponent implements OnInit {
             if (this.escaloesUtilizador.find(e => e.id === this.escaloesEpocaAtual[i].id)) {
               this.escaloesApresentacao.push({
                 id: this.escaloesEpocaAtual[i].id,
-                escalaoDescritivo: this.escaloesEpocaAtual[i].escalaoDescritivo,
+                escalaoDescritivo: this.escaloesEpocaAtual[i].escalao,
                 check: true
               });
             } else {
               this.escaloesApresentacao.push({
                 id: this.escaloesEpocaAtual[i].id,
-                escalaoDescritivo: this.escaloesEpocaAtual[i].escalaoDescritivo,
+                escalaoDescritivo: this.escaloesEpocaAtual[i].escalao,
                 check: false
               });
             }
@@ -137,7 +137,7 @@ export class GestaoutilizadorComponent implements OnInit {
             this.escaloesUtilizador = escaloes;
 
             //carrega escaloes da epoca
-            this.equipaService.getAllEscaloes().subscribe({
+            this.equipaService.getEquipasPorEpoca().subscribe({
               next: (escaloes: EscalaoData[]) => {
                 console.log('Escalões da época atual carregados:', escaloes);
                 this.escaloesEpocaAtual = escaloes;
@@ -147,13 +147,13 @@ export class GestaoutilizadorComponent implements OnInit {
                   if (this.escaloesUtilizador.find(e => e.id === this.escaloesEpocaAtual[i].id)) {
                     this.escaloesApresentacao.push({
                       id: this.escaloesEpocaAtual[i].id,
-                      escalaoDescritivo: this.escaloesEpocaAtual[i].escalaoDescritivo,
+                      escalaoDescritivo: this.escaloesEpocaAtual[i].escalao,
                       check: true
                     });
                   } else {
                     this.escaloesApresentacao.push({
                       id: this.escaloesEpocaAtual[i].id,
-                      escalaoDescritivo: this.escaloesEpocaAtual[i].escalaoDescritivo,
+                      escalaoDescritivo: this.escaloesEpocaAtual[i].escalao,
                       check: false
                     });
                   }
