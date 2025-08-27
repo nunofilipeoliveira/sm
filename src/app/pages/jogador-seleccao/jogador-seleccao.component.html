@@ -21,7 +21,7 @@
           </tr>
           <tr>
             <th scope="col">Nome</th>
-            <th scope="col" class="td-total">Escalao</th>
+            <th *ngIf="!origem_gestao_equipa" scope="col" class="td-total">Escalao</th>
             <th scope="col" class="td-total">Seleccionar</th>
           </tr>
         </thead>
@@ -30,7 +30,7 @@
             <td><img src="assets/img/jogadores/{{jogador.id_Jogador}}_avatar.jpg"
                 onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
                 class="avatar-sm rounded-circle me-2" />{{jogador.nome_Jogador}}</td>
-            <td class="td-total" style="font-size: smaller;">{{jogador.escalao}}</td>
+            <td *ngIf="!origem_gestao_equipa" class="td-total" style="font-size: smaller;">{{jogador.escalao}}</td>
             <td class="td-total"><button type="button" class="btn btn-info text-white"
                 (click)="seleciona(jogador.id_Jogador)">Seleccionar</button></td>
           </tr>
