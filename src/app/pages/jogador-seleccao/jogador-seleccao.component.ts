@@ -51,9 +51,12 @@ export class JogadorSeleccaoComponent implements OnInit {
       this.origem_gestao_equipa = false;
     }
 
+let modoObterJogadores ='0';
+if(this.origem_gestao_equipa==true){
+  modoObterJogadores = '1';
+}
 
-
-    this.equipaService.getJogadoresDisponiveis(this.idEscalao).subscribe(
+    this.equipaService.getJogadoresDisponiveis(this.idEscalao, modoObterJogadores).subscribe(
       {
         next: data => {
           this.jogadores = data;

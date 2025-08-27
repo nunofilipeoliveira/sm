@@ -62,9 +62,9 @@ export class EquipaService {
 
 
 
-  getJogadoresDisponiveis(id: number) {
+  getJogadoresDisponiveis(id: number, allJogadores : String ) {
     const headers = { 'Content-Type': 'application/json' };
-    const urltmp = this.URLJogadoresDisponiveis + id;
+    const urltmp = this.URLJogadoresDisponiveis + id + '/' + allJogadores + '/' + environment.tenant_id;
     console.log('EquipaService | utl:', this, urltmp);
     return this.http.put<any>(urltmp, { headers });
   }
