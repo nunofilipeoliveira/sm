@@ -8,7 +8,7 @@ export class IdadePipe implements PipeTransform {
 
     if (dataInicioEpoca == 0) {
 
-      let dtNascimento: Date = new Date(parseInt(dataNascimento.toString().substring(0, 4)), parseInt(dataNascimento.toString().substring(4, 6)) - 1, parseInt(dataNascimento.toString().substring(6, 8)));
+      let dtNascimento: Date = new Date(parseInt(dataNascimento.toString().substring(0, 4)), parseInt(dataNascimento.toString().substring(4, 6)), parseInt(dataNascimento.toString().substring(6, 8)));
       let timeDiff = Math.abs(Date.now() - dtNascimento.getTime());
       let age = Math.floor((timeDiff / (1000 * 3600 * 24)) / 365.25);
 
@@ -31,7 +31,7 @@ export class IdadePipe implements PipeTransform {
     }
     else {
 
-      let dtNascimento: Date = new Date(parseInt(dataNascimento.toString().substring(0, 4)), parseInt(dataNascimento.toString().substring(4, 6)) - 1, parseInt(dataNascimento.toString().substring(6, 8)));
+      let dtNascimento: Date = new Date(parseInt(dataNascimento.toString().substring(0, 4)), parseInt(dataNascimento.toString().substring(4, 6)), parseInt(dataNascimento.toString().substring(6, 8)));
       let dtReferencia: Date = new Date(dataInicioEpoca, 12, 31); //31 de Dezembro do ano da epoca
 
       let idade = dtReferencia.getFullYear() - dtNascimento.getFullYear();
