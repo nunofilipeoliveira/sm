@@ -3,6 +3,12 @@ body {
   background-color: #f8f9fa;
 }
 
+.table-wrapper {
+  display: block;
+  overflow: auto;
+  white-space: nowrap;
+}
+
 .container{
   margin-top: 50px;
 }
@@ -97,4 +103,141 @@ body {
   .profile-card {
     margin-top: 50px;
   }
+}
+
+/* Campos somente leitura */
+input.readonly[readonly] {
+  background-color: #e9ecef;
+  cursor: not-allowed;
+  color: #495057;
+}
+
+/* Botões */
+.btn {
+  font-weight: 600;
+  border-radius: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.btn-info {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  color: #fff;
+}
+
+.btn-info:hover,
+.btn-info:focus {
+  background-color: #138496;
+  border-color: #117a8b;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: #fff;
+}
+
+.btn-success:hover,
+.btn-success:focus {
+  background-color: #218838;
+  border-color: #1e7e34;
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-link {
+  background-color: transparent;
+  border: none;
+  color: #17a2b8;
+  padding: 0;
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.btn-link:hover,
+.btn-link:focus {
+  color: #138496;
+  text-decoration: none;
+  outline: none;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus {
+  background-color: #5a6268;
+  border-color: #545b62;
+  color: #fff;
+  text-decoration: none;
+}
+
+.mr-1 {
+  margin-right: 0.25rem !important;
+}
+
+.ml-2 {
+  margin-left: 0.5rem !important;
+}
+
+/* Ícones nc-icon */
+.nc-icon {
+  font-size: 1rem;
+  margin-right: 0.3rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* Spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 0.3em;
+}
+
+/* Alertas */
+ngb-alert {
+  margin-bottom: 1rem;
+}
+
+/* Responsividade */
+@media (max-width: 767.98px) {
+  .profile-card img {
+    width: 120px;
+    height: 120px;
+  }
+  .card-header {
+    font-size: 1.1rem;
+  }
+}
+
+/* Ajustes para inputs file */
+.form-control-file {
+  display: block;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+/* Ajuste para o botão de colapsar */
+button[aria-expanded="true"] i.nc-icon {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
 }

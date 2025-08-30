@@ -12,16 +12,12 @@
 
   <div class="row justify-content-center" *ngIf="!spinner">
     <div class="col-md-4">
-      <div class="profile-card text-center shadow">
+      <div class="card profile-card text-center shadow">
         <div *ngIf="!tirarFoto">
           <img src="assets/img/jogadores/{{this.jogadorData.id}}.jpg"
             onerror="this.onerror=null; this.src='assets/img/jogadores/default.jpg'" alt="Foto do Jogador">
-          <div *ngIf="!isUploadFoto"><a (click)="modoCarregarFicheiro()"><img src="assets/img/jogadores/default.jpg"
-                height="20px" width="20px"></a>
-          </div>
-          <div *ngIf="isUploadFoto">
-            <input type="file" (change)="onFileSelected($event)">
-          </div>
+
+
         </div>
         <input type="text" class="form-control"
           style="font-weight: bold; color:black; font-size: x-large; text-align: center; border: none;"
@@ -33,25 +29,36 @@
 
     <div class="col-md-8">
       <div class="info-card shadow">
-        <h5 class="info-title">Ficha Atleta <a (click)="modoCarregarFicheiro_avatar()"><img height="30px" width="30px"
+        <h5 class="info-title d-flex justify-content-between align-items-center"><span><img height="30px" width="30px"
               src="assets/img/jogadores/{{jogadorData.id}}_avatar.jpg"
               onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-              class="rounded-circle" /></a></h5>
-        <div *ngIf="isUploadFoto_avatar">
-          <input type="file" (change)="onFileSelected($event)">
-        </div>
-        <form>
+              class="rounded-circle" /> {{jogadorData.nome}} | Informações Pessoais
+          </span>
+
+          <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="toggleInfoVisibility()">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+              <path *ngIf="!showFaltas"
+                d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+              <path *ngIf="showFaltas"
+                d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+            </svg>
+          </button>
+        </h5>
+
+        <form #staffForm="ngForm" *ngIf="showInfo">
           <div class="form-row">
             <div class="col-md-7">
               <div class="form-group">
                 <label>Nome completo</label>
-                <input type="text" class="form-control" name="nome_completo" [(ngModel)]="jogadorData.nome_completo">
+                <input type="text" class="form-control" name="nome_completo" [(ngModel)]="jogadorData.nome_completo"
+                  [readonly]="!isEditing" [class.readonly]="!isEditing">
               </div>
             </div>
             <div class="col-md-5">
               <div class="form-group">
                 <label>Data Nascimento</label>
-                <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="dataNascimentoDisplay">
+                <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="dataNascimentoDisplay"
+                  [readonly]="!isEditing" [class.readonly]="!isEditing">
               </div>
             </div>
           </div>
@@ -60,20 +67,22 @@
               <div class="col-md-4 pr-1">
                 <div class="form-group">
                   <label>Cartão Cidadão</label>
-                  <input type="text" class="form-control" placeholder="" name="cc" [(ngModel)]="jogadorData.cc">
+                  <input type="text" class="form-control" placeholder="" name="cc" [(ngModel)]="jogadorData.cc"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
               <div class="col-md-4 px-1">
                 <div class="form-group">
                   <label>Contribuinte</label>
-                  <input type="text" class="form-control" placeholder="" name="nif" [(ngModel)]="jogadorData.nif">
+                  <input type="text" class="form-control" placeholder="" name="nif" [(ngModel)]="jogadorData.nif"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
               <div class="col-md-4 pl-1">
                 <div class="form-group">
                   <label>Nº Licença</label>
                   <input type="text" class="form-control" placeholder="" name="licenca"
-                    [(ngModel)]="jogadorData.licenca">
+                    [(ngModel)]="jogadorData.licenca" [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
             </div>
@@ -81,7 +90,8 @@
               <div class="pl-1 ml-auto mr-auto">
                 <div class="form-group">
                   <label>Email</label>
-                  <input type="text" class="form-control" placeholder="" name="email" [(ngModel)]="jogadorData.email">
+                  <input type="text" class="form-control" placeholder="" name="email" [(ngModel)]="jogadorData.email"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
             </div>
@@ -90,14 +100,14 @@
                 <div class="form-group">
                   <label>Pai</label>
                   <input type="text" class="form-control" placeholder="" name="pai_nome"
-                    [(ngModel)]="jogadorData.pai_nome">
+                    [(ngModel)]="jogadorData.pai_nome" [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
               <div class="col-md-6 pl-1">
                 <div class="form-group">
                   <label>Mãe</label>
                   <input type="text" class="form-control" placeholder="" name="mae_nome"
-                    [(ngModel)]="jogadorData.mae_nome">
+                    [(ngModel)]="jogadorData.mae_nome" [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
             </div>
@@ -106,14 +116,14 @@
                 <div class="form-group">
                   <label>Telefone (Pai)</label>
                   <input type="text" class="form-control" placeholder="" name="pai_telemovel"
-                    [(ngModel)]="jogadorData.pai_telemovel">
+                    [(ngModel)]="jogadorData.pai_telemovel" [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
               <div class="col-md-6 pl-1">
                 <div class="form-group">
                   <label>Telefone (Mãe)</label>
                   <input type="text" class="form-control" placeholder="" name="mae_telemovel"
-                    [(ngModel)]="jogadorData.mae_telemovel">
+                    [(ngModel)]="jogadorData.mae_telemovel" [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
             </div>
@@ -122,14 +132,14 @@
                 <div class="form-group">
                   <label>email (Pai)</label>
                   <input type="text" class="form-control" placeholder="" name="pai_email"
-                    [(ngModel)]="jogadorData.pai_email">
+                    [(ngModel)]="jogadorData.pai_email" [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
               <div class="col-md-6 pl-1">
                 <div class="form-group">
                   <label>email (Mãe)</label>
                   <input type="text" class="form-control" placeholder="" name="mae_email"
-                    [(ngModel)]="jogadorData.mae_email">
+                    [(ngModel)]="jogadorData.mae_email" [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
             </div>
@@ -137,7 +147,8 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Morada</label>
-                  <input type="text" class="form-control" placeholder="" name="morada" [(ngModel)]="jogadorData.morada">
+                  <input type="text" class="form-control" placeholder="" name="morada" [(ngModel)]="jogadorData.morada"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
             </div>
@@ -145,14 +156,16 @@
               <div class="col-md-4 pr-1">
                 <div class="form-group">
                   <label>Cidade</label>
-                  <input type="text" class="form-control" placeholder="" name="cidade" [(ngModel)]="jogadorData.cidade">
+                  <input type="text" class="form-control" placeholder="" name="cidade" [(ngModel)]="jogadorData.cidade"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
 
               <div class="col-md-4 pl-1">
                 <div class="form-group">
                   <label>Código Postal</label>
-                  <input type="text" class="form-control" name="codigo_postal" [(ngModel)]="jogadorData.codigo_postal">
+                  <input type="text" class="form-control" name="codigo_postal" [(ngModel)]="jogadorData.codigo_postal"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing">
                 </div>
               </div>
             </div>
@@ -160,19 +173,45 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <label>Observações</label>
-                  <textarea class="form-control textarea" name="observacoes"
-                    [(ngModel)]="jogadorData.observacoes"></textarea>
+                  <textarea class="form-control textarea" name="observacoes" [(ngModel)]="jogadorData.observacoes"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing"></textarea>
                 </div>
               </div>
             </div>
 
           </div>
 
-          <!-- Adicionar outras linhas de formulário aqui conforme necessário -->
-          <button type="button" class="btn btn-primary btn-block mt-4" (click)="detalhe()"
-            [attr.aria-expanded]="!isCollapsed" aria-controls="collapseExample">{{text_botao}}</button>
-          <button type="button" class="btn btn-primary btn-block mt-4" (click)="gravarFichaJogador()">Gravar
-            Dados</button>
+          <!-- Botões -->
+          <div class="mt-4">
+            <button *ngIf="!isEditing" type="button" class="btn btn-info btn-sm mr-1" (click)="startEditing()">
+              <i class="nc-icon nc-ruler-pencil"></i> Editar
+            </button>
+
+            <button *ngIf="isEditing" type="button" class="btn btn-success btn-sm mr-1" (click)="gravarFichaJogador()"
+              [disabled]="staffForm.invalid">
+              <i class="nc-icon nc-check-2"></i> Gravar
+            </button>
+
+            <button *ngIf="isEditing" type="button" class="btn btn-secondary btn-sm" (click)="cancelEditing()">
+              <i class="nc-icon nc-simple-remove"></i> Cancelar
+            </button>
+
+            <button *ngIf="isEditing" type="button" class="btn btn-info btn-sm" (click)="modoCarregarFicheiro()">
+              <i class="nc-icon nc-image<"></i> Alterar Foto Perfil
+            </button>
+
+            <button *ngIf="isEditing" type="button" class="btn btn-info btn-sm" (click)="modoCarregarFicheiro_avatar()">
+              <i class="nc-icon nc-camera-20"></i> Alterar Foto Avatar
+            </button>
+          </div>
+
+          <div *ngIf="isUploadFoto">
+            <input type="file" (change)="onFileSelected($event)" class="form-control-file mb-2">
+          </div>
+          <div *ngIf="isUploadFoto_avatar">
+            <input type="file" (change)="onFileSelected($event)" class="form-control-file mb-2">
+          </div>
+
         </form>
       </div>
 

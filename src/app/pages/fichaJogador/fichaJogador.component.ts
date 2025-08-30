@@ -25,21 +25,27 @@ export class FichaJogadorComponent implements OnInit {
   public faltas: FichaJogadorPresencasData[] = [];
   public hasFaltas: boolean = false;
   public spinner: boolean = false;
-  public isCollapsed = true;
+  public isCollapsed = false;
   public tirarFoto = false;
   public text_botao = "Mais dados";
   public isUploadFoto: boolean = false;
-  public isAvatar:boolean=false;
-  public isFotoPrincipal:boolean=false;
-  public isUploadFoto_avatar=false;
+  public isAvatar: boolean = false;
+  public isFotoPrincipal: boolean = false;
+  public isUploadFoto_avatar = false;
   public count_presencas: ContadorPresencaData[] = [];
-  load_presencas:boolean=false;
+  load_presencas: boolean = false;
   total_faltas: number = 0;
   total_presencas: number = 0;
+
+  isEditing = false;
+  private jogadorDataBackup: any = {};
+  fotoUrl: string = '';
+  avatarUrl: string = '';
 
   // Nova propriedade para controlar a visibilidade da tabela de faltas
   public showFaltas: boolean = false; // Inicialmente oculta
   public showPresencas: boolean = false; // Inicialmente oculta
+  public showInfo: boolean = false; // Inicialmente visível
 
   // Propriedade para a data de nascimento formatada (AAAA-MM-DD)
   public dataNascimentoDisplay: string = '';
@@ -77,6 +83,7 @@ export class FichaJogadorComponent implements OnInit {
     const routeParams = this.route.snapshot.paramMap;
     const idJogador = Number(routeParams.get('id'));
     console.log('FichaJogadorComoponent | idJogador:', idJogador);
+    this.loadJogadorImages(idJogador);
 
     this.equipaService.loadJogadorbyId(idJogador).subscribe(
       {
@@ -104,7 +111,7 @@ export class FichaJogadorComponent implements OnInit {
                   if (data != null) {
                     this.spinner = false;
                     this.faltas = data;
-                    this.total_faltas=this.faltas.length
+                    this.total_faltas = this.faltas.length
                     if (this.faltas.length == 0) {
                       this.hasFaltas = false;
                     } else {
@@ -119,11 +126,11 @@ export class FichaJogadorComponent implements OnInit {
                         if (data != null) {
                           this.spinner = false;
                           this.count_presencas = data;
-                          for(let i=0;i<this.count_presencas.length;i++){
+                          for (let i = 0; i < this.count_presencas.length; i++) {
                             this.total_presencas += this.count_presencas[i].set + this.count_presencas[i].out + this.count_presencas[i].nov + this.count_presencas[i].dez + this.count_presencas[i].jan + this.count_presencas[i].fev + this.count_presencas[i].mar + this.count_presencas[i].abr + this.count_presencas[i].mai + this.count_presencas[i].jun + this.count_presencas[i].jul;
                           }
                           this.load_presencas = false;
-                          
+
                         }
                       },
                       error: error => {
@@ -148,6 +155,24 @@ export class FichaJogadorComponent implements OnInit {
       });
   }
 
+  loadJogadorImages(idJogador: number) {
+    const timestamp = new Date().getTime();
+    this.fotoUrl = `assets/img/jogadores/${idJogador}.jpg?v=${timestamp}`;
+    this.avatarUrl = `assets/img/jogadores/${idJogador}_avatar.jpg?v=${timestamp}`;
+  }
+
+
+  startEditing() {
+    this.isEditing = true;
+    this.jogadorDataBackup = JSON.parse(JSON.stringify(this.jogadorData));
+  }
+  cancelEditing() {
+    this.isEditing = false;
+    this.jogadorData = JSON.parse(JSON.stringify(this.jogadorDataBackup));
+    this.isUploadFoto_avatar = false;
+    this.isUploadFoto = false;
+  }
+
   detalhe() {
     if (this.isCollapsed == true) {
       this.isCollapsed = false;
@@ -158,33 +183,56 @@ export class FichaJogadorComponent implements OnInit {
     }
   }
 
+  modoCarregarFicheiro() {
+    this.isUploadFoto = !this.isUploadFoto;
+    this.isFotoPrincipal = true;
+    this.isAvatar = false;
+  }
+
+  modoCarregarFicheiro_avatar() {
+    this.isUploadFoto_avatar = !this.isUploadFoto_avatar;
+    this.isAvatar = true;
+    this.isFotoPrincipal = false;
+  }
+
   onFileSelected(event: any) {
-    console.log(event.target.files[0])
+    console.log("onFileSelected | File selected:", event);
+    console.log("onFileSelected | Selected file:", event.target.files[0]);
     this.isUploadFoto = false;
     let file: File = event.target.files[0];
     let formDate = new FormData();
     formDate.append('foto', file);
-    let nomefoto="";
-    if(this.isAvatar){
-      nomefoto=(this.jogadorData.id.toString())+"_avatar"
-    }else{
-      nomefoto=(this.jogadorData.id.toString());
+    let nomefoto = "";
+    if (this.isAvatar) {
+      nomefoto = (this.jogadorData.id.toString()) + "_avatar"
+    } else {
+      nomefoto = (this.jogadorData.id.toString());
     }
-    this.ficheirosService.uploadFoto(nomefoto, formDate).subscribe(resp => {
-      window.location.reload();
+    console.log("onFileSelected | Nome foto:", nomefoto);
+    this.spinner = true;
+    this.ficheirosService.uploadFoto({ parmIDFoto: nomefoto, foto: formDate }).subscribe(resp => {
+      console.log("onFileSelected | Upload response:", resp);
+      const timestamp = new Date().getTime();
+      if (this.isAvatar) {
+
+        this.avatarUrl = `assets/img/jogadores/${this.jogadorData.id}_avatar.jpg?v=${timestamp}`;
+        console.log("onFileSelected | Updated avatarUrl:", this.avatarUrl);
+      } else {
+        this.fotoUrl = `assets/img/jogadores/${this.jogadorData.id}.jpg?v=${timestamp}`;
+        console.log("onFileSelected | Updated fotoUrl:", this.fotoUrl);
+
+      }
+      this.spinner = false;
+
+
     })
-  }
 
-  modoCarregarFicheiro() {
-    this.isUploadFoto = true;
-    this.isFotoPrincipal=true;
-    this.isAvatar=false;
-  }
+    this.isUploadFoto = false;
+    this.isUploadFoto_avatar = false;
+    this.isAvatar = false;
+    this.isFotoPrincipal = false;
+    this.isEditing = false;
 
-  modoCarregarFicheiro_avatar() {
-    this.isUploadFoto_avatar = true;
-    this.isAvatar=true;
-    this.isFotoPrincipal=false;
   }
 
   gravarFichaJogador() {
@@ -218,13 +266,13 @@ export class FichaJogadorComponent implements OnInit {
           console.log("FichaJogadorComponent | gravarFichaJogador", data);
           if (data != null) {
             this.spinner = false;
+            this.isEditing = false;
             if (data == false) {
               this.sbmError = true;
-              document.location.href = '#top';
             }
             if (data == true) {
               this.sbmSuccess = true;
-              document.location.href = '#top';
+
             }
           } else {
           }
@@ -239,6 +287,10 @@ export class FichaJogadorComponent implements OnInit {
   // Novo método para alternar a visibilidade das faltas
   toggleFaltasVisibility() {
     this.showFaltas = !this.showFaltas;
+  }
+
+  toggleInfoVisibility() {
+    this.showInfo = !this.showInfo;
   }
 
   togglePresencasVisibility() {

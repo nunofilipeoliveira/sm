@@ -143,7 +143,7 @@ export class NovoStaffComponent implements OnInit {
     } else {
       nomefoto = (this.staff.id.toString() + "_staff");
     }
-    this.ficheirosService.uploadFoto(nomefoto, formDate).subscribe(resp => {
+    this.ficheirosService.uploadFoto({ parmIDFoto: nomefoto, foto: formDate }).subscribe(resp => {
       window.location.reload();
     })
   }

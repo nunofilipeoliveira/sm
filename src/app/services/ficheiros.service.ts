@@ -11,19 +11,21 @@ export class FicheirosService {
 
 
 
-  uploadFoto(parmIDFoto: string, foto: any) {
+  uploadFoto({ parmIDFoto, foto }: { parmIDFoto: string; foto: any; }) {
 
-    let urlTmp = environment.apiUrl + "/sm/uploadfoto/"+parmIDFoto;
+    let urlTmp = environment.apiUrl + "/sm/uploadfoto/"+parmIDFoto+"/"+environment.tenant_id;
    // const headers = { 'Content-Type': 'multipart/form-data' };
 
     console.log("uploadfoto | ID:", parmIDFoto);
     console.log("uploadfoto | foto:", foto);
 
 
-    return this.http.post<any>(urlTmp, foto, {
-      observe: "response",
-      withCredentials: true,
+    let response = this.http.post<any>(urlTmp, foto, {
+      observe: "response"
     });
+
+    console.log("uploadfoto | response:", response);
+    return response;
 
   }
 
