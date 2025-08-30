@@ -14,7 +14,7 @@
     <div class="col-md-4">
       <div class="card profile-card text-center shadow">
         <div *ngIf="!tirarFoto">
-          <img src="assets/img/jogadores/{{this.jogadorData.id}}.jpg"
+          <img [src]="fotoUrl"
             onerror="this.onerror=null; this.src='assets/img/jogadores/default.jpg'" alt="Foto do Jogador">
 
 
@@ -30,9 +30,9 @@
     <div class="col-md-8">
       <div class="info-card shadow">
         <h5 class="info-title d-flex justify-content-between align-items-center"><span><img height="30px" width="30px"
-              src="assets/img/jogadores/{{jogadorData.id}}_avatar.jpg"
+              [src]="avatarUrl" 
               onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-              class="rounded-circle" /> {{jogadorData.nome}} | Informações Pessoais
+              class="rounded-circle" /> Informações Pessoais
           </span>
 
           <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="toggleInfoVisibility()">

@@ -220,10 +220,7 @@ ngb-alert {
 
 /* Responsividade */
 @media (max-width: 767.98px) {
-  .profile-card img {
-    width: 120px;
-    height: 120px;
-  }
+
   .card-header {
     font-size: 1.1rem;
   }

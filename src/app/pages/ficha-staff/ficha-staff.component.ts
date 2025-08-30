@@ -176,6 +176,13 @@ export class FichaStaffComponent implements OnInit {
     console.log("onFileSelected | Selected file:", event.target.files[0]);
     this.isUploadFoto = false;
     let file: File = event.target.files[0];
+
+    if (file.size > 10 * 1024 * 1024) { // 10MB
+      alert('Ficheiro demasiado grande. Máximo 10MB.');
+      return;
+    }
+
+
     let formDate = new FormData();
     formDate.append('foto', file);
     let nomefoto = "";
@@ -203,11 +210,11 @@ export class FichaStaffComponent implements OnInit {
 
     })
 
-          this.isUploadFoto = false;
+    this.isUploadFoto = false;
     this.isUploadFoto_avatar = false;
     this.isAvatar = false;
     this.isFotoPrincipal = false;
-    this.isEditing=false;
+    this.isEditing = false;
 
   }
 
