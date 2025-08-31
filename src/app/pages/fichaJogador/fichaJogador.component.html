@@ -21,9 +21,9 @@
         </div>
         <input type="text" class="form-control"
           style="font-weight: bold; color:black; font-size: x-large; text-align: center; border: none;"
-          [(ngModel)]="jogadorData.nome">
+          [(ngModel)]="jogadorData.nome" readonly="true">
         <p class="text-muted">Nº Camisola</p>
-        <input type="text" class="form-control number-input" [(ngModel)]="jogadorData.numero">
+        <input type="text" class="form-control number-input" [(ngModel)]="jogadorData.numero" readonly="true">
       </div>
     </div>
 
@@ -32,7 +32,7 @@
         <h5 class="info-title d-flex justify-content-between align-items-center"><span><img height="30px" width="30px"
               [src]="avatarUrl" 
               onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-              class="rounded-circle" /> Informações Pessoais
+              class="rounded-circle" /> Inf. Pessoais
           </span>
 
           <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="toggleInfoVisibility()">
@@ -51,6 +51,21 @@
               <div class="form-group">
                 <label>Nome completo</label>
                 <input type="text" class="form-control" name="nome_completo" [(ngModel)]="jogadorData.nome_completo"
+                  [readonly]="!isEditing" [class.readonly]="!isEditing">
+              </div>
+            </div>
+              <div class="col-md-5 pr-1">
+              <div class="form-group">
+                <label>Nome curto</label>
+                <input type="text" class="form-control" name="nome" [(ngModel)]="jogadorData.nome"
+                  [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  
+              </div>
+            </div>
+            <div class="col-md-2 pl-1">
+              <div class="form-group">
+                <label>Nº Camisola</label>
+                <input type="text" class="form-control" name="numero" [(ngModel)]="jogadorData.numero"
                   [readonly]="!isEditing" [class.readonly]="!isEditing">
               </div>
             </div>
