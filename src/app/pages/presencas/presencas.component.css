@@ -22,7 +22,7 @@ body{
 
   .project-list-table {
       border-collapse: separate;
-      border-spacing: 0 12px
+      border-spacing: 0 9px
   }
 
   .project-list-table tr {
@@ -93,3 +93,31 @@ body{
   .bg-soft-primary {
       background-color: rgba(59,118,225,.25)!important;
   }
+.presencas-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+
+/* Fixar a primeira coluna */
+.project-list-table th:first-child,
+.project-list-table td:first-child {
+  position: sticky;
+  left: 0;
+  background-color: white; /* ou a cor do fundo do seu cartão */
+  z-index: 10;
+  /* Opcional: adicionar borda para destacar */
+  border-right: 1px solid #ddd;
+}
+
+/* Para o cabeçalho da primeira coluna ficar acima das células */
+.project-list-table thead th:first-child {
+  z-index: 20;
+}
