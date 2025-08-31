@@ -54,9 +54,9 @@
         <th style="text-align: right;">{{presencas.length}}</th>
       </tr>
 
-      <div *ngIf="flagFiltroNomes">
+      <ng-container *ngIf="flagFiltroNomes">
         <tr *ngFor="let filtro of filtroNomes; index as i; trackBy: trackByIndex">
-          <td style="position: relative; padding-right: 30px;width: 180px; min-width: 180px; max-width: 180px; left: 0px;">
+          <td style=" padding-right: 30px;width: 180px; min-width: 180px; max-width: 180px;">
             <input *ngIf="flagFiltroNomes" type="text" placeholder="Filtrar por nome" [(ngModel)]="filtroNomes[i]"
               (input)="filtrarTabela()"  />
             <a *ngIf="flagFiltroNomes" class="form-label" (click)="addFiltro()"
@@ -67,7 +67,7 @@
           
           
         </tr>
-      </div>
+      </ng-container>
 
       <!-- Linhas de dados -->
       <tr *ngFor="let linha of presencasFiltradas; index as posicao">

@@ -106,18 +106,26 @@ body{
 }
 
 
-/* Fixar a primeira coluna */
+/* Fixar a primeira coluna em toda a tabela */
 .project-list-table th:first-child,
 .project-list-table td:first-child {
   position: sticky;
   left: 0;
   background-color: white; /* ou a cor do fundo do seu cartão */
   z-index: 10;
-  /* Opcional: adicionar borda para destacar */
   border-right: 1px solid #ddd;
 }
 
-/* Para o cabeçalho da primeira coluna ficar acima das células */
+/* Para o cabeçalho da primeira coluna ficar acima */
 .project-list-table thead th:first-child {
   z-index: 20;
+}
+
+/* Para as linhas de filtro (que estão no tbody) ficarem acima das outras linhas */
+.project-list-table tbody tr td:first-child {
+  z-index: 15;
+  background-color: white; /* mesma cor do fundo */
+  position: sticky;
+  left: 0;
+  border-right: 1px solid #ddd;
 }
