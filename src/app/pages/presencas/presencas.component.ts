@@ -5,6 +5,7 @@ import { PresencaService } from '../../services/presenca.service';
 import { NgbTooltipModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { EquipaService } from '../../services/equipa.service';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import moment, { Moment } from 'moment'
 
 
@@ -29,6 +30,11 @@ export interface LinhaQuadro {
   idJogador: number;
   presenca_treino: TreinosDados[];
   count_treinos: number;
+  count_presenca: number;
+  count_falta_injustificada:number;
+  count_falta_justificada:number;
+  count_falta_lesao:number;
+  
 }
 
 export interface TreinosDados {
@@ -44,7 +50,7 @@ export interface TreinosDados {
 @Component({
   selector: 'presencas',
   standalone: true,
-  imports: [FormsModule, CommonModule, NgbTooltipModule, MatButtonToggleModule, NgbDatepickerModule],
+  imports: [FormsModule, CommonModule, NgbTooltipModule, MatButtonToggleModule, NgbDatepickerModule, MatSlideToggleModule],
   templateUrl: './presencas.component.html',
   styleUrl: './presencas.component.css'
 })
@@ -83,6 +89,7 @@ export class PresencasComponent implements OnInit {
     "day": 0
   }
 
+  modoResumo : boolean = true;
 
 
 
@@ -97,7 +104,7 @@ export class PresencasComponent implements OnInit {
 
           const jogadortmp = this.linhasQuadro.filter(altetaQuadro => altetaQuadro.nomeJogador == this.presencas[i].jogadoresPresenca[z].nome_jogador);
           if (jogadortmp.length == 0) {
-            const linhaAlteta: LinhaQuadro = { nomeJogador: this.presencas[i].jogadoresPresenca[z].nome_jogador, idJogador: this.presencas[i].jogadoresPresenca[z].id_jogador, presenca_treino: [], count_treinos: 0 }
+            const linhaAlteta: LinhaQuadro = { nomeJogador: this.presencas[i].jogadoresPresenca[z].nome_jogador, idJogador: this.presencas[i].jogadoresPresenca[z].id_jogador, presenca_treino: [], count_treinos: 0 , count_presenca:0, count_falta_injustificada:0, count_falta_justificada:0, count_falta_lesao:0}
             this.linhasQuadro.push(linhaAlteta);
           }
         }
@@ -109,7 +116,7 @@ export class PresencasComponent implements OnInit {
 
           const jogadortmp = this.linhasQuadroStaff.filter(staffQuadro => staffQuadro.nomeJogador == this.presencas[i].staffPresenca[z].nome_staff);
           if (jogadortmp.length == 0) {
-            const linhaAlteta: LinhaQuadro = { nomeJogador: this.presencas[i].staffPresenca[z].nome_staff, idJogador: this.presencas[i].staffPresenca[z].id_staff, presenca_treino: [], count_treinos: 0 }
+            const linhaAlteta: LinhaQuadro = { nomeJogador: this.presencas[i].staffPresenca[z].nome_staff, idJogador: this.presencas[i].staffPresenca[z].id_staff, presenca_treino: [], count_treinos: 0, count_presenca:0, count_falta_injustificada:0, count_falta_justificada:0, count_falta_lesao:0 }
             this.linhasQuadroStaff.push(linhaAlteta);
           }
         }
@@ -140,10 +147,12 @@ export class PresencasComponent implements OnInit {
             case "Presente":
               this.linhasQuadro[i].presenca_treino[z].presenca_1letra = "P"
               this.linhasQuadro[i].presenca_treino[z].estilo_presenca = "background-color: lightgreen;"
+              this.linhasQuadro[i].count_presenca++;
               break;
             case "Ausente (Avisou)":
               this.linhasQuadro[i].presenca_treino[z].presenca_1letra = "A"
               this.linhasQuadro[i].presenca_treino[z].estilo_presenca = "background-color: palegoldenrod"
+              this.linhasQuadro[i].count_falta_justificada++;
               break;
             case "Não convocado":
               this.linhasQuadro[i].presenca_treino[z].presenca_1letra = "N"
@@ -152,6 +161,7 @@ export class PresencasComponent implements OnInit {
             case "Ausente (Não Avisou)":
               this.linhasQuadro[i].presenca_treino[z].presenca_1letra = "F"
               this.linhasQuadro[i].presenca_treino[z].estilo_presenca = "background-color: gold;"
+              this.linhasQuadro[i].count_falta_injustificada++;
               break;
           }
           this.linhasQuadro[i].presenca_treino[z].presenca = jogadortmp[0].estado;
@@ -189,10 +199,14 @@ export class PresencasComponent implements OnInit {
               case "Presente":
                 this.linhasQuadroStaff[i].presenca_treino[z].presenca_1letra = "P"
                 this.linhasQuadroStaff[i].presenca_treino[z].estilo_presenca = "background-color: lightgreen;"
+                this.linhasQuadroStaff[i].count_presenca++;
+                this.linhasQuadro
                 break;
               case "Ausente (Avisou)":
                 this.linhasQuadroStaff[i].presenca_treino[z].presenca_1letra = "A"
                 this.linhasQuadroStaff[i].presenca_treino[z].estilo_presenca = "background-color: palegoldenrod"
+                this.linhasQuadroStaff[i].count_falta_justificada++;
+                this
                 break;
               case "Não convocado":
                 this.linhasQuadroStaff[i].presenca_treino[z].presenca_1letra = "N"
@@ -201,6 +215,7 @@ export class PresencasComponent implements OnInit {
               case "Ausente (Não Avisou)":
                 this.linhasQuadroStaff[i].presenca_treino[z].presenca_1letra = "F"
                 this.linhasQuadroStaff[i].presenca_treino[z].estilo_presenca = "background-color: gold;"
+                this.linhasQuadroStaff[i].count_falta_injustificada++;
                 break;
             }
             this.linhasQuadroStaff[i].presenca_treino[z].presenca = jogadortmp[0].estado;
@@ -319,6 +334,11 @@ export class PresencasComponent implements OnInit {
   aplicarFiltro() {
     this.loadFromBDPresencas("datas");
     this.filtro_datas = false;
+  }
+
+  changed_modoResumo(){
+    this.modoResumo = !this.modoResumo;
+    console.log("changed_modoResumo", this.modoResumo);
   }
 
   loadFromBDPresencas(parmFiltro: string) {

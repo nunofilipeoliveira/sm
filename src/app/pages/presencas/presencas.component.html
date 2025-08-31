@@ -5,6 +5,16 @@
 </div>
 <p></p>
 <div *ngIf="spinner==false">
+
+
+
+
+ <mat-slide-toggle
+          [ngModel]="modoResumo"
+           (change)="changed_modoResumo()">
+          Modo Resumo
+      </mat-slide-toggle>
+<p> </p>
   <table class="align-middle">
     <tbody>
       <tr>
@@ -26,76 +36,90 @@
 
   <div *ngIf="semRegistos">Sem registos</div>
 
-<div *ngIf="!semRegistos" class="table-responsive">
+  <div *ngIf="!semRegistos" class="table-responsive">
 
-  <table class=" project-list-table" *ngIf="!semRegistos">
-    <thead>
-      <tr>
-        <th>Nome/Treinos <a class="form-label" (click)="toggleFiltroNomes()">🔎</a></th>
-        <th *ngFor="let presenca of presencas" style="width: 5px; text-align: center;">
-          <a href="#/presenca/{{presenca.id}}">
-            {{(presenca.data).toString().slice(6,8)}}/{{(presenca.data).toString().slice(4,6)}}
-          </a>
-        </th>
-        <th style="text-align: right;">Total</th>
-      </tr>
-    </thead>
+    <table class=" project-list-table" *ngIf="!semRegistos">
+      <thead>
+        <tr>
+          <th>Nome <a class="form-label" (click)="toggleFiltroNomes()">🔎</a></th>
+          <ng-container *ngIf="!modoResumo">
+            <th *ngFor="let presenca of presencas" style="width: 5px; text-align: center;">
+              <a href="#/presenca/{{presenca.id}}">
+                {{(presenca.data).toString().slice(6,8)}}/{{(presenca.data).toString().slice(4,6)}}
+              </a>
+            </th>
+            <th style="text-align: right;">Total</th>
+          </ng-container>
+           <ng-container *ngIf="modoResumo">
+            <th style="width: 60px; text-align: center;" ngbTooltip="Presença">P</th>
+            <th style="width: 60px; text-align: center;" ngbTooltip="Falta Justificada">FJ</th>
+            <th style="width: 60px; text-align: center;" ngbTooltip="Falta Injustificada">FI</th>
+            <th style="width: 60px; text-align: center;" ngbTooltip="Taxa Presença">TP</th>
+          </ng-container>
 
-    <tbody>
-      <!-- Linha(s) de filtro -->
-
-
-      <!-- Linha com horas -->
-      <tr>
-        <th></th>
-        <th *ngFor="let presenca of presencas" style="width: 5px; text-align: center; font-size: smaller;">
-          {{presenca.hora}}
-        </th>
-        <th style="text-align: right;">{{presencas.length}}</th>
-      </tr>
-
-      <ng-container *ngIf="flagFiltroNomes">
-        <tr *ngFor="let filtro of filtroNomes; index as i; trackBy: trackByIndex">
-          <td style=" padding-right: 30px;width: 180px; min-width: 180px; max-width: 180px;">
-            <input *ngIf="flagFiltroNomes" type="text" placeholder="Filtrar por nome" [(ngModel)]="filtroNomes[i]"
-              (input)="filtrarTabela()"  />
-            <a *ngIf="flagFiltroNomes" class="form-label" (click)="addFiltro()"
-              style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); cursor: pointer; font-weight: bold; font-size: 20px; user-select: none;">
-              +
-            </a>
-          </td>
-          
-          
         </tr>
-      </ng-container>
+      </thead>
 
-      <!-- Linhas de dados -->
-      <tr *ngFor="let linha of presencasFiltradas; index as posicao">
-        <td style="width: 180px; min-width: 180px; max-width: 180px; left: 0px;">
-          <img src="assets/img/jogadores/{{linha.idJogador}}_avatar.jpg"
-            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-            class="avatar-sm rounded-circle me-2" />
-          {{linha.nomeJogador}}
-        </td>
-        <td *ngFor="let treinos of linha.presenca_treino"
-          style="width: 5px; text-align: center; {{treinos.estilo_presenca}}">
-          <button type="button" placement="top" style="{{treinos.estilo_presenca}}"
-            ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
-            {{treinos.presenca_1letra}}
-          </button>
-        </td>
-        <td style="text-align: right; width: 5px;">{{linha.count_treinos}}</td>
-      </tr>
+      <tbody>
+        <!-- Linha(s) de filtro -->
 
-      <!-- Linha de totais -->
-      <tr>
-        <td style="width: 180px; min-width: 180px; max-width: 180px; left: 0px;">Total</td>
-        <td *ngFor="let countJogadorTreino of count_presenca_por_treino; index as posicao"
-          style="width: 5px; text-align: center;">
-          {{countJogadorTreino}}
-        </td>
-      </tr>
-      <tr><td style="background-color: darkgray;" [attr.colspan]="presencas.length + 2"></td></tr>
+
+        <!-- Linha com horas -->
+        <ng-container *ngIf="!modoResumo">
+          <tr>
+            <th></th>
+            <th *ngFor="let presenca of presencas" style="width: 5px; text-align: center; font-size: smaller;">
+              {{presenca.hora}}
+            </th>
+            <th style="text-align: right;">{{presencas.length}}</th>
+          </tr>
+        </ng-container>
+
+        <ng-container *ngIf="flagFiltroNomes">
+          <tr *ngFor="let filtro of filtroNomes; index as i; trackBy: trackByIndex">
+            <td style=" padding-right: 30px;width: 180px; min-width: 180px; max-width: 180px;">
+              <input *ngIf="flagFiltroNomes" type="text" placeholder="Filtrar por nome" [(ngModel)]="filtroNomes[i]"
+                (input)="filtrarTabela()" />
+              <a *ngIf="flagFiltroNomes" class="form-label" (click)="addFiltro()"
+                style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); cursor: pointer; font-weight: bold; font-size: 20px; user-select: none;">
+                +
+              </a>
+            </td>
+
+
+          </tr>
+        </ng-container>
+
+        <ng-container *ngIf="!modoResumo">
+        <!-- Linhas de dados -->
+        <tr *ngFor="let linha of presencasFiltradas; index as posicao">
+          <td style="width: 180px; min-width: 180px; max-width: 180px; left: 0px;">
+            <img src="assets/img/jogadores/{{linha.idJogador}}_avatar.jpg"
+              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+              class="avatar-sm rounded-circle me-2" />
+            {{linha.nomeJogador}}
+          </td>
+          <td *ngFor="let treinos of linha.presenca_treino"
+            style="width: 5px; text-align: center; {{treinos.estilo_presenca}}">
+            <button type="button" placement="top" style="{{treinos.estilo_presenca}}"
+              ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
+              {{treinos.presenca_1letra}}
+            </button>
+          </td>
+          <td style="text-align: right; width: 5px;">{{linha.count_treinos}}</td>
+        </tr>
+
+        <!-- Linha de totais -->
+        <tr>
+          <td style="width: 180px; min-width: 180px; max-width: 180px; left: 0px;">Total</td>
+          <td *ngFor="let countJogadorTreino of count_presenca_por_treino; index as posicao"
+            style="width: 5px; text-align: center;">
+            {{countJogadorTreino}}
+          </td>
+        </tr>
+        <tr>
+          <td style="background-color: darkgray;" [attr.colspan]="presencas.length + 2"></td>
+        </tr>
 
         <tr *ngFor="let linha of presencasStaffFiltradas  ; index as posicao">
           <td style="width: 180px;min-width: 180px;max-width: 180px;left: 0px;"><img
@@ -112,9 +136,46 @@
           </td>
           <td style="text-align: right; width: 5px">{{linha.count_treinos}}</td>
         </tr>
-    
-    </tbody>
-  </table>
-</div>
+
+        </ng-container>
+
+
+
+        <ng-container *ngIf="modoResumo">
+        <!-- Linhas de dados -->
+        <tr *ngFor="let linha of presencasFiltradas; index as posicao">
+          <td style="width: 180px; min-width: 180px; max-width: 180px; left: 0px;">
+            <img src="assets/img/jogadores/{{linha.idJogador}}_avatar.jpg"
+              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+              class="avatar-sm rounded-circle me-2" />
+            {{linha.nomeJogador}}
+          </td>
+          <td style="width: 60px; text-align: center;">{{linha.count_presenca}}</td>
+          <td style="width: 60px; text-align: center;">{{linha.count_falta_justificada}}</td>
+          <td style="width: 60px; text-align: center;">{{linha.count_falta_injustificada}}</td>
+          <td style="width: 60px; text-align: center;">{{ (linha.count_presenca / (linha.count_falta_justificada + linha.count_falta_injustificada + linha.count_presenca) * 100) | number:'1.0-2' }}%</td>
+        </tr>
+
+        
+        <tr>
+          <td style="background-color: darkgray;" colspan="5"></td>
+        </tr>
+
+        <tr *ngFor="let linha of presencasStaffFiltradas  ; index as posicao">
+          <td style="width: 180px;min-width: 180px;max-width: 180px;left: 0px;"><img
+              src="assets/img/jogadores/{{linha.idJogador}}_avatar_staff.jpg"
+              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+              class="avatar-sm rounded-circle me-2" />{{linha.nomeJogador}}</td>
+          <td style="width: 60px; text-align: center;">{{linha.count_presenca}}</td>
+          <td style="width: 60px; text-align: center;">{{linha.count_falta_justificada}}</td>
+          <td style="width: 60px; text-align: center;">{{linha.count_falta_injustificada}}</td>
+          <td style="width: 60px; text-align: center;">{{ (linha.count_presenca / (linha.count_falta_justificada + linha.count_falta_injustificada+linha.count_presenca) * 100) | number:'1.0-2' }}%</td>
+        </tr>
+
+        </ng-container>
+
+      </tbody>
+    </table>
+  </div>
 
 </div>
