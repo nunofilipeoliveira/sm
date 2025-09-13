@@ -54,6 +54,7 @@
             <th style="width: 60px; text-align: center;" ngbTooltip="Presença">P</th>
             <th style="width: 60px; text-align: center;" ngbTooltip="Falta Justificada">FJ</th>
             <th style="width: 60px; text-align: center;" ngbTooltip="Falta Injustificada">FI</th>
+            <th style="width: 60px; text-align: center;" ngbTooltip="Falta Lesão">FL</th>
             <th style="width: 60px; text-align: center;" ngbTooltip="Taxa Presença">TP</th>
           </ng-container>
 
@@ -153,6 +154,7 @@
           <td style="width: 60px; text-align: center;">{{linha.count_presenca}}</td>
           <td style="width: 60px; text-align: center;">{{linha.count_falta_justificada}}</td>
           <td style="width: 60px; text-align: center;">{{linha.count_falta_injustificada}}</td>
+          <td style="width: 60px; text-align: center;">{{linha.count_falta_lesao}}</td>
           <td style="width: 60px; text-align: center;">{{ (linha.count_presenca / (linha.count_falta_justificada + linha.count_falta_injustificada + linha.count_presenca) * 100) | number:'1.0-2' }}%</td>
         </tr>
 
@@ -169,6 +171,7 @@
           <td style="width: 60px; text-align: center;">{{linha.count_presenca}}</td>
           <td style="width: 60px; text-align: center;">{{linha.count_falta_justificada}}</td>
           <td style="width: 60px; text-align: center;">{{linha.count_falta_injustificada}}</td>
+            <td style="width: 60px; text-align: center;">0</td>
           <td style="width: 60px; text-align: center;">{{ (linha.count_presenca / (linha.count_falta_justificada + linha.count_falta_injustificada+linha.count_presenca) * 100) | number:'1.0-2' }}%</td>
         </tr>
 

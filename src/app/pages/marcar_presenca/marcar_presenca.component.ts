@@ -30,7 +30,7 @@ export class NgbdDropdownBasic { }
 export class Marcar_presencaComponent implements OnInit {
 
 
-  public dataTreino={
+  public dataTreino = {
     "year": 0,
     "month": 0,
     "day": 0
@@ -56,7 +56,7 @@ export class Marcar_presencaComponent implements OnInit {
   public sbmError: boolean = false;
   public abrirMarcacao = true;
   public sbmvalidacao = false;
-  public sbmErroDia=false;
+  public sbmErroDia = false;
 
   constructor(private router: Router, private dialog: MatDialog, private equipaService: EquipaService, private presencaService: PresencaService, private loginws: LoginServiceService, private route: ActivatedRoute) {
 
@@ -66,7 +66,7 @@ export class Marcar_presencaComponent implements OnInit {
       escalao: "",
       password: "",
       jogadores: [],
-      staff:[]
+      staff: []
     }
   }
 
@@ -86,8 +86,8 @@ export class Marcar_presencaComponent implements OnInit {
 
       //verifica se estamos a meio de preencher:
       let tmpPresencas2: jogadorPresencaData[] = this.presencaService.getPresenca()
-      this.idFicha=this.presencaService.getPresencaTmp().id;
-      this.presenca=this.presencaService.getPresencaTmp();
+      this.idFicha = this.presencaService.getPresencaTmp().id;
+      this.presenca = this.presencaService.getPresencaTmp();
 
       console.log("Marcar_presencaComponent | jogadorPresencaData", tmpPresencas2);
 
@@ -100,14 +100,14 @@ export class Marcar_presencaComponent implements OnInit {
         this.collapse_first = true;
         this.collapse_second = false;
         this.presencaJogadores = tmpPresencas2;
-        this.presencaStaff=this.presencaService.getStaffPresenca();
+        this.presencaStaff = this.presencaService.getStaffPresenca();
       }
       else {
 
 
         //SE id=0, vai carregar a equipa
         console.log("Marcar_presencaComponent | equipadata.id", this.equipaData)
-        if (this.equipaData == undefined ||this.equipaData.jogadores.length==0) {
+        if (this.equipaData == undefined || this.equipaData.jogadores.length == 0) {
           console.log("Marcar_presencaComponent | equipa3", this.equipaData);
 
           this.equipaService.getEquipabyID(localStorage.getItem("idequipa_escalao")).subscribe(
@@ -219,6 +219,9 @@ export class Marcar_presencaComponent implements OnInit {
                 if (tmpPresencaJogador.estado == 'Ausente (Não Avisou)') {
                   tmpPresencaJogador.estilo_estado = "background-color: gold;";
                 }
+                if (tmpPresencaJogador.estado == 'Lesão') {
+                  tmpPresencaJogador.estilo_estado = "background-color: BlueViolet;";
+                }
                 if (tmpPresencaJogador.estado == '') {
                   tmpPresencaJogador.estilo_estado = "";
                 }
@@ -247,6 +250,9 @@ export class Marcar_presencaComponent implements OnInit {
                 }
                 if (tmpStaffJogador.estado == 'Ausente (Não Avisou)') {
                   tmpStaffJogador.estilo_estado = "background-color: gold;";
+                }
+                if (tmpStaffJogador.estado == 'Lesão') {
+                  tmpStaffJogador.estilo_estado = "background-color: BlueViolet;";
                 }
                 if (tmpStaffJogador.estado == '') {
                   tmpStaffJogador.estilo_estado = "";
@@ -353,6 +359,11 @@ export class Marcar_presencaComponent implements OnInit {
       this.presencaJogadores[posicao]["estilo_estado"] = "background-color: gold;";
       this.presencaJogadores[posicao]["motivo"] = "";
     }
+    if (value == 'Lesão') {
+      this.openDialog(posicao);
+      this.presencaJogadores[posicao]["estilo_estado"] = "background-color: BlueViolet;";
+      
+    }
 
     if (value == '') {
       this.presencaJogadores[posicao]["estilo_estado"] = "";
@@ -382,6 +393,11 @@ export class Marcar_presencaComponent implements OnInit {
       this.presencaStaff[posicao]["estilo_estado"] = "background-color: gold;";
       this.presencaStaff[posicao]["motivo"] = "";
     }
+    if (value == 'Lesão') {
+      this.openDialog_staff(posicao);
+      this.presencaStaff[posicao]["estilo_estado"] = "background-color: BlueViolet;";
+   
+    }
 
     if (value == '') {
       this.presencaStaff[posicao]["estilo_estado"] = "";
@@ -394,24 +410,24 @@ export class Marcar_presencaComponent implements OnInit {
   doSelecionaData() {
     console.log('Data Treino:', this.dataTreino);
 
-    let tmpData:number = (this.dataTreino["year"] * 10000 + this.dataTreino["month"] * 100 + this.dataTreino["day"])
-    let tmpHora:string = this.leftPad(this.time.hour.toString(), 2) + ':' + this.leftPad(this.time.minute.toString(), 2);
+    let tmpData: number = (this.dataTreino["year"] * 10000 + this.dataTreino["month"] * 100 + this.dataTreino["day"])
+    let tmpHora: string = this.leftPad(this.time.hour.toString(), 2) + ':' + this.leftPad(this.time.minute.toString(), 2);
 
-    this.presencaService.isPresencaByEquipaDataHora(this.equipaService.getEquipa().id, tmpData,tmpHora).subscribe(
+    this.presencaService.isPresencaByEquipaDataHora(this.equipaService.getEquipa().id, tmpData, tmpHora).subscribe(
       {
         next: data => {
           if (data == true) {
             console.log("Existe um treino na mesma data");
             this.collapse_first = false;
             this.collapse_second = true;
-            this.sbmErroDia=true;
+            this.sbmErroDia = true;
             document.location.href = '#top';
 
-          }else{
-            this.sbmErroDia=false;
+          } else {
+            this.sbmErroDia = false;
           }
 
-           if (data != null) {
+          if (data != null) {
 
           } else {
 
@@ -444,7 +460,7 @@ export class Marcar_presencaComponent implements OnInit {
     console.log("gravar - presenças_staff", this.presencaStaff);
 
 
-    this.spinner=true;
+    this.spinner = true;
     console.log("Gravar e validar", this.presencaJogadores);
     let flagAtletaSemMarcacao = false;
     let count_marcacoes = 0;
@@ -454,7 +470,7 @@ export class Marcar_presencaComponent implements OnInit {
         this.sbmvalidacao = true
         this.collapse_first = true;
         this.collapse_second = false;
-        this.spinner=false;
+        this.spinner = false;
         document.location.href = '#top';
       }
     }
@@ -465,7 +481,7 @@ export class Marcar_presencaComponent implements OnInit {
         this.sbmvalidacao = true
         this.collapse_first = true;
         this.collapse_second = false;
-        this.spinner=false;
+        this.spinner = false;
         document.location.href = '#top';
       }
     }
@@ -514,7 +530,7 @@ export class Marcar_presencaComponent implements OnInit {
             next: data => {
               console.log("Marcar_presencaComponent | Pedido para criar Presenca", this.equipaData);
               if (data != null) {
-                this.spinner=false;
+                this.spinner = false;
                 if (data == false) {
                   this.sbmError = true;
                 }
@@ -539,7 +555,7 @@ export class Marcar_presencaComponent implements OnInit {
             next: data => {
               console.log("Marcar_presencaComponent | Pedido para update Presenca", this.equipaData);
               if (data != null) {
-                this.spinner=false;
+                this.spinner = false;
                 if (data == false) {
                   this.sbmError = true;
                 }
@@ -558,7 +574,7 @@ export class Marcar_presencaComponent implements OnInit {
 
     }
 
-     this.presencaService.clear();
+    this.presencaService.clear();
   }
 
   leftPad(parmnumber: string, targetLength: number) {

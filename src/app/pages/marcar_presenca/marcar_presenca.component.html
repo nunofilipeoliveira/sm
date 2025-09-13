@@ -1,7 +1,9 @@
-<ngb-alert type="success" *ngIf="sbmSuccess" (closed)="sair()" >Folha de presenças registada com sucesso</ngb-alert>
-<ngb-alert type="danger" *ngIf="sbmError" (closed)="sair()" >Erro a gravar folha de presenças</ngb-alert>
-<ngb-alert id="top" type="danger" *ngIf="sbmErroDia" >Já existe uma Folha de Presenças registada no mesmo dia e Hora</ngb-alert>
-<ngb-alert id="top" type="warning" *ngIf="sbmvalidacao" (closed)="desligarWarn()">Existem presenças por marcar</ngb-alert>
+<ngb-alert type="success" *ngIf="sbmSuccess" (closed)="sair()">Folha de presenças registada com sucesso</ngb-alert>
+<ngb-alert type="danger" *ngIf="sbmError" (closed)="sair()">Erro a gravar folha de presenças</ngb-alert>
+<ngb-alert id="top" type="danger" *ngIf="sbmErroDia">Já existe uma Folha de Presenças registada no mesmo dia e
+  Hora</ngb-alert>
+<ngb-alert id="top" type="warning" *ngIf="sbmvalidacao" (closed)="desligarWarn()">Existem presenças por
+  marcar</ngb-alert>
 
 
 <div class="d-flex justify-content-center" style="vertical-align:middle;">
@@ -10,7 +12,7 @@
   </div>
 </div>
 
-<div ngbAccordion #accordion="ngbAccordion" *ngIf="abrirMarcacao" >
+<div ngbAccordion #accordion="ngbAccordion" *ngIf="abrirMarcacao">
   <div ngbAccordionItem="first" [collapsed]="collapse_first">
     <h2 ngbAccordionHeader>
       <button ngbAccordionButton>Data do treino</button>
@@ -22,12 +24,12 @@
             <table class="table">
               <thead>
                 <tr>
-                  <th scope="col" style="width: 5px;" >Data</th>
-                  <th><ngb-datepicker #dp [(ngModel)]="dataTreino"  />
+                  <th scope="col" style="width: 5px;">Data</th>
+                  <th><ngb-datepicker #dp [(ngModel)]="dataTreino" />
                   </th>
                 <tr>
-                  <th scope="col" style="width: 8px;" >Hora</th>
-                  <th><ngb-timepicker [(ngModel)]="time"/></th>
+                  <th scope="col" style="width: 8px;">Hora</th>
+                  <th><ngb-timepicker [(ngModel)]="time" /></th>
                 </tr>
               </thead>
             </table>
@@ -48,8 +50,10 @@
             <table align="left" class="table project-list-table table-nowrap align-middle">
               <tbody>
                 <tr *ngFor="let jogador of this.presencaJogadores; index as posicao">
-                   <td style="{{jogador.estilo_estado}}"><img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
-                    onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="" class="avatar-sm rounded-circle me-2" />{{jogador.nome_jogador}}</td>
+                  <td style="{{jogador.estilo_estado}}"><img
+                      src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
+                      onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                      class="avatar-sm rounded-circle me-2" />{{jogador.nome_jogador}}</td>
                   <td style="{{jogador.estilo_estado}}">
 
                     <div ngbDropdown class="d-inline-block">
@@ -64,6 +68,7 @@
                           (Avisou)</button>
                         <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Ausente (Não Avisou)')">Ausente (Não
                           Avisou)</button>
+                        <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Lesão')">Lesão</button>
                       </div>
                     </div>
 
@@ -76,8 +81,10 @@
             <table align="left" class="table project-list-table table-nowrap align-middle">
               <tbody>
                 <tr *ngFor="let staff of this.presencaStaff; index as posicao">
-                   <td style="{{staff.estilo_estado}}"><img src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg"
-                    onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="" class="avatar-sm rounded-circle me-2" />{{staff.nome_staff}}</td>
+                  <td style="{{staff.estilo_estado}}"><img
+                      src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg"
+                      onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                      class="avatar-sm rounded-circle me-2" />{{staff.nome_staff}}</td>
                   <td style="{{staff.estilo_estado}}">
 
                     <div ngbDropdown class="d-inline-block">
@@ -90,8 +97,10 @@
                           convocado</button>
                         <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Avisou)')">Ausente
                           (Avisou)</button>
-                        <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Não Avisou)')">Ausente (Não
+                        <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Não Avisou)')">Ausente
+                          (Não
                           Avisou)</button>
+
                       </div>
                     </div>
 
@@ -102,7 +111,8 @@
 
           </div>
 
-          <button type="button" class="btn btn-default" (click)="seleccionarJogador()">Adicionar outro Jogador</button><button type="button" class="btn btn-info text-white" (click)="doGravar()">Gravar</button>
+          <button type="button" class="btn btn-default" (click)="seleccionarJogador()">Adicionar outro
+            Jogador</button><button type="button" class="btn btn-info text-white" (click)="doGravar()">Gravar</button>
         </ng-template>
       </div>
     </div>

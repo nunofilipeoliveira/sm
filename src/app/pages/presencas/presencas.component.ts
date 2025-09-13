@@ -31,10 +31,10 @@ export interface LinhaQuadro {
   presenca_treino: TreinosDados[];
   count_treinos: number;
   count_presenca: number;
-  count_falta_injustificada:number;
-  count_falta_justificada:number;
-  count_falta_lesao:number;
-  
+  count_falta_injustificada: number;
+  count_falta_justificada: number;
+  count_falta_lesao: number;
+
 }
 
 export interface TreinosDados {
@@ -89,7 +89,7 @@ export class PresencasComponent implements OnInit {
     "day": 0
   }
 
-  modoResumo : boolean = true;
+  modoResumo: boolean = true;
 
 
 
@@ -104,7 +104,7 @@ export class PresencasComponent implements OnInit {
 
           const jogadortmp = this.linhasQuadro.filter(altetaQuadro => altetaQuadro.nomeJogador == this.presencas[i].jogadoresPresenca[z].nome_jogador);
           if (jogadortmp.length == 0) {
-            const linhaAlteta: LinhaQuadro = { nomeJogador: this.presencas[i].jogadoresPresenca[z].nome_jogador, idJogador: this.presencas[i].jogadoresPresenca[z].id_jogador, presenca_treino: [], count_treinos: 0 , count_presenca:0, count_falta_injustificada:0, count_falta_justificada:0, count_falta_lesao:0}
+            const linhaAlteta: LinhaQuadro = { nomeJogador: this.presencas[i].jogadoresPresenca[z].nome_jogador, idJogador: this.presencas[i].jogadoresPresenca[z].id_jogador, presenca_treino: [], count_treinos: 0, count_presenca: 0, count_falta_injustificada: 0, count_falta_justificada: 0, count_falta_lesao: 0 }
             this.linhasQuadro.push(linhaAlteta);
           }
         }
@@ -116,7 +116,7 @@ export class PresencasComponent implements OnInit {
 
           const jogadortmp = this.linhasQuadroStaff.filter(staffQuadro => staffQuadro.nomeJogador == this.presencas[i].staffPresenca[z].nome_staff);
           if (jogadortmp.length == 0) {
-            const linhaAlteta: LinhaQuadro = { nomeJogador: this.presencas[i].staffPresenca[z].nome_staff, idJogador: this.presencas[i].staffPresenca[z].id_staff, presenca_treino: [], count_treinos: 0, count_presenca:0, count_falta_injustificada:0, count_falta_justificada:0, count_falta_lesao:0 }
+            const linhaAlteta: LinhaQuadro = { nomeJogador: this.presencas[i].staffPresenca[z].nome_staff, idJogador: this.presencas[i].staffPresenca[z].id_staff, presenca_treino: [], count_treinos: 0, count_presenca: 0, count_falta_injustificada: 0, count_falta_justificada: 0, count_falta_lesao: 0 }
             this.linhasQuadroStaff.push(linhaAlteta);
           }
         }
@@ -162,6 +162,11 @@ export class PresencasComponent implements OnInit {
               this.linhasQuadro[i].presenca_treino[z].presenca_1letra = "F"
               this.linhasQuadro[i].presenca_treino[z].estilo_presenca = "background-color: gold;"
               this.linhasQuadro[i].count_falta_injustificada++;
+              break;
+            case "Lesão":
+              this.linhasQuadro[i].presenca_treino[z].presenca_1letra = "L"
+              this.linhasQuadro[i].presenca_treino[z].estilo_presenca = "background-color: BlueViolet;"
+              this.linhasQuadro[i].count_falta_lesao++;
               break;
           }
           this.linhasQuadro[i].presenca_treino[z].presenca = jogadortmp[0].estado;
@@ -276,12 +281,12 @@ export class PresencasComponent implements OnInit {
     console.log("toggleFiltroNomes", this.flagFiltroNomes);
     if (this.flagFiltroNomes == false) {
       this.filtroNomes = [];
-       this.presencasFiltradas = this.linhasQuadro;
-       this.presencasStaffFiltradas = this.linhasQuadroStaff;
+      this.presencasFiltradas = this.linhasQuadro;
+      this.presencasStaffFiltradas = this.linhasQuadroStaff;
     }
     if (this.flagFiltroNomes == true && this.filtroNomes.length == 0) {
       this.filtroNomes.push("");
-      
+
     }
 
   }
@@ -336,7 +341,7 @@ export class PresencasComponent implements OnInit {
     this.filtro_datas = false;
   }
 
-  changed_modoResumo(){
+  changed_modoResumo() {
     this.modoResumo = !this.modoResumo;
     console.log("changed_modoResumo", this.modoResumo);
   }
