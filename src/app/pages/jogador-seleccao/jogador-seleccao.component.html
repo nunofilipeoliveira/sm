@@ -19,6 +19,12 @@
               </div>
             </th>
           </tr>
+          <tr *ngIf="origem_gestao_equipa">
+            <td>
+              <button type="button" class="btn btn-info text-white" (click)="novoJogador()"
+                *ngIf="origem_gestao_equipa">Addicionar Novo Jogador</button>
+            </td>
+          </tr>
           <tr>
             <th scope="col">Nome</th>
             <th *ngIf="!origem_gestao_equipa" scope="col" class="td-total">Escalao</th>
@@ -36,9 +42,9 @@
           </tr>
         </tbody>
       </table>
-      <button type="button" class="btn btn-warning text-white"
-                (click)="cancelarSelecao()"  >Cancelar</button>
-      <button type="button" class="btn btn-info text-white" (click)="novoJogador()" *ngIf="origem_gestao_equipa">Addicionar Novo Jogador</button>
+      <button type="button" class="btn btn-warning text-white" (click)="cancelarSelecao()">Cancelar</button>
+      <button type="button" class="btn btn-info text-white" (click)="novoJogador()"
+        *ngIf="origem_gestao_equipa">Addicionar Novo Jogador</button>
     </div>
 
 
