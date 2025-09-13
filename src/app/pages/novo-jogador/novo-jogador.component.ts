@@ -117,19 +117,23 @@ export class NovoJogadorComponent implements OnInit {
           next: data => {
             console.log("FichaJogadorComponent | gravarFichaJogador", data);
             if (data != null) {
+              let resultado: boolean = data;
               this.spinner = false;
-              if (data == false) {
+              if (resultado == false) {
                 this.sbmError = true;
                 this.mensagemErro = 'Erro ao gravar a ficha do jogador. Por favor, tente novamente.';
-                document.location.href = '#top';
+                console.warn("FichaJogadorComponent | gravarFichaJogador | resultado == false");
 
               }
-              if (data == true) {
+              if (resultado == true) {
                 this.sbmSuccess = true;
-                document.location.href = '#top';
+                console.log("FichaJogadorComponent | gravarFichaJogador | resultado == true");
                 this.router.navigate(['/' + this.origem + '/' + this.idEquipa + '/' + this.jogadorData.nome]);
+              }else{
+                console.warn("FichaJogadorComponent | gravarFichaJogador | resultado <> true");
               }
             } else {
+              console.warn("FichaJogadorComponent | gravarFichaJogador | data == null");
             }
           },
           error: error => {
