@@ -62,12 +62,12 @@ export class GestaoEquipaComponent implements OnInit {
   abrirModalJogadores() {
 
 
-    this.router.navigate(['/jogadorSeleccao/' + this.equipa.id * -1]);
+    this.router.navigate(['/jogadorSeleccao/' + this.idEquipa * -1]);
   }
 
   abrirModalStaff() {
 
-    this.router.navigate(['/staffSeleccao/' + this.equipa.id * -1]);
+    this.router.navigate(['/staffSeleccao/' + this.idEquipa * -1]);
   }
 
   fecharModalJogadores() {
