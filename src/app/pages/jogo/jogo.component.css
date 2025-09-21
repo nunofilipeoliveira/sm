@@ -1,19 +1,24 @@
-/* Container Global */
+/* Global container */
 .game-summary {
-  max-width: 700px;
-  margin: 20px auto;
-  padding: 25px;
-  background-color: #f5f6fa;
-  border-radius: 12px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  max-width: 800px;
+  margin: 30px auto;
+  padding: 30px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   font-family: 'Poppins', sans-serif;
+  color: #222;
 }
 
-/* Header Section */
-.game-header {
+/* Scoreboard */
+.score-section {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #ced3da, #ced3da);
+  padding: 20px 30px;
+  border-radius: 16px;
+  color: #fff;
   margin-bottom: 25px;
 }
 
@@ -23,100 +28,53 @@
 }
 
 .team-logo {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-}
-
-.team-name {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin-top: 8px;
-}
-
-/* Estilo para a secção de pontuação */
-.score-section {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background-color: #ffffff; /* Fundo escuro */
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-  color: #fefefe;
-}
-
-/* Equipe e logo */
-.team-section {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  text-align: center;
-}
-
-.team-logo {
   width: 80px;
-  height: auto;
-  margin-bottom: 10px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+  border: 3px solid #fff;
 }
 
 .team-name {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
-  color: #000000; /* Tom de amarelo para os nomes */
-  text-shadow: 1px 1px 8px rgba(255, 255, 255, 0.5); /* Efeito de brilho no texto */
 }
 
-/* Pontuação central */
 .score {
-  font-size: 70px;
+  font-size: 72px;
   font-weight: bold;
-  color: #495fbf;
-  text-shadow: 0 0 10px rgba(169, 159, 159, 0.8),
-               0 0 20px rgba(255, 0, 0, 0.6); /* Efeito de brilho ao redor */
 }
 
 .score-separator {
-  font-size: 60px;
-  color: #495fbf;
-  margin: 0 20px;
+  margin: 0 12px;
 }
 
-/* Opcional: efeito de iluminação no fundo */
-.score-section::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.4), transparent);
-  border-radius: 50%;
-  z-index: -1; /* Coloca o brilho por trás */
-}
-
-
-.game-league, .game-date, .game-venue {
-  font-size: 14px;
-  color: #666;
-}
-
-/* Team Lineup */
-.team-lineup {
-  margin-bottom: 25px;
-}
-
-.team-lineup h2 {
+/* Game header */
+.game-header {
   text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  color: #333;
+  margin-bottom: 30px;
 }
 
-.team-lineup ul {
+.game-header p {
+  font-size: 15px;
+  margin: 5px 0;
+  color: #555;
+}
+
+/* Players & Staff cards */
+.team-staff {
+  margin-bottom: 30px;
+}
+
+.team-staff h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 18px;
+  text-align: center;
+  color: #3b76e1;
+}
+
+.team-staff ul {
   list-style: none;
   padding: 0;
   display: flex;
@@ -124,255 +82,80 @@
   gap: 12px;
 }
 
-.team-lineup ul li {
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.player-number {
-  font-weight: bold;
-  color: #333;
-  margin-right: 10px;
-}
-
-.player-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  margin-right: 12px;
-}
-
-.player-name {
-  flex: 2;
-  font-weight: 500;
-}
-
-.player-goals {
-  font-size: 16px;
-  color: #333;
-  margin-right: 10px;
-  white-space: nowrap; /* Garante que os emojis fiquem em linha */
-}
-.player-cards {
-  font-size: 18px;
-}
-
-/* Staff Section */
-.team-staff {
-  padding: 15px;
-}
-
-.team-staff h2 {
-  text-align: center;
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 12px;
-}
-
-.team-staff ul {
-  list-style: none;
-  padding: 0;
-}
-
 .team-staff ul li {
   display: flex;
   align-items: center;
-  padding: 8px 15px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 12px 18px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.team-staff ul li:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+.badge {
+  display: inline-block;
+  min-width: 35px;
+  height: 35px;
+  background: #b52732;
+  color: #fff;
+  font-weight: 600;
   font-size: 14px;
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.player-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 
 .staff-name {
   flex: 1;
-  text-align: left;
-  margin-right: 12px;
-  margin-left: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
 }
 
-.staff-cards {
-  font-size: 18px;
+/* Cards */
+.card-red {
+  width: 18px;
+  height: 24px;
+  background: #e63946;
+  border-radius: 4px;
+  display: inline-block;
 }
 
-.game-items {
-  margin-right: 5px;
+.card-yellow {
+  width: 18px;
+  height: 24px;
+  background: #f1c40f;
+  border-radius: 4px;
+  display: inline-block;
 }
 
-
-/* Responsividade */
+/* Responsive */
 @media (max-width: 768px) {
   .score {
-    font-size: 36px;
+    font-size: 48px;
   }
 
   .team-logo {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
   }
 
-  .player-avatar {
-    width: 30px;
-    height: 30px;
-  }
-
-  .player-number, .player-goals, .player-cards {
-    font-size: 14px;
-  }
-}
-
-/* Estilos para a tabela de jogadores */
-.team-lineup table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-.team-lineup th, .team-lineup td {
-  padding: 10px;
-  text-align: center;
-  font-size: 14px;
-  border-bottom: 1px solid #ddd;
-}
-
-.team-lineup th {
-  background-color: #f2f2f2;
-  font-weight: 600;
-  color: #333;
-}
-
-.player-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-}
-
-.team-lineup td img {
-  display: block;
-  margin: 0 auto;
-}
-
-.player-goals, .player-cards {
-  font-size: 16px;
-}
-
-/* Melhor visualização para dispositivos móveis */
-@media (max-width: 768px) {
-  .player-avatar {
-    width: 30px;
-    height: 30px;
-  }
-
-  .team-lineup th, .team-lineup td {
+  .badge {
+    min-width: 28px;
+    height: 28px;
     font-size: 12px;
-    padding: 8px;
   }
 }
-
-body{
-  margin-top:20px;
-  background-color:#eee;
-  }
-
-  .tr{
-    border-color: red;
-    &:hover{
-      background-color: #b52732;
-    }
-  }
-
-
-
-  .badge{
-    font-size:18px;
-    background-color:#b52732;
-  }
-
-  .table-responsive {
-    overflow: auto;
-    padding-bottom: 10px;
-  }
-
-  .project-list-table {
-      border-collapse: separate;
-      border-spacing: 0 12px
-  }
-
-  .project-list-table tr {
-      background-color: #fff
-  }
-
-  .table-nowrap td, .table-nowrap th {
-      white-space: nowrap;
-  }
-
-
-  .table-nowrap td-r {
-      text-align: right;
-}
-
-  .table-borderless>:not(caption)>*>* {
-      border-bottom-width: 0;
-  }
-  .table>:not(caption)>*>* {
-      background-color: var(--bs-table-bg);
-      border-bottom-width: 1px;
-      box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
-  }
-
-  .avatar-sm {
-      height: 2rem;
-      width: 2rem;
-  }
-  .rounded-circle {
-      border-radius: 50%!important;
-  }
-  .me-2 {
-      margin-right: 0.5rem!important;
-  }
-  img, svg {
-      vertical-align: middle;
-  }
-
-  a {
-      color: #3b76e1;
-      text-decoration: none;
-  }
-
-  .badge-soft-danger {
-      color: #f56e6e !important;
-      background-color: rgba(245,110,110,.1);
-  }
-  .badge-soft-success {
-      color: #63ad6f !important;
-      background-color: rgba(99,173,111,.1);
-  }
-
-  .badge-soft-primary {
-      color: #3b76e1 !important;
-      background-color: rgba(59,118,225,.1);
-  }
-
-  .badge-soft-info {
-      color: #57c9eb !important;
-      background-color: rgba(87,201,235,.1);
-  }
-
-  .avatar-title {
-      align-items: center;
-      background-color: #3b76e1;
-      color: #fff;
-      display: flex;
-      font-weight: 500;
-      height: 100%;
-      justify-content: center;
-      width: 100%;
-  }
-  .bg-soft-primary {
-      background-color: rgba(59,118,225,.25)!important;
-  }
