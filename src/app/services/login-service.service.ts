@@ -72,7 +72,12 @@ export class LoginServiceService {
     }
     // Chama o backend para validar o token
     console.info('🚨 LoginService: Token encontrado, validando...');
-    return this.http.put<boolean>(`${this.urlTmp}`, { token: token });
+    return this.http.put<boolean>(`${this.urlTmp}`, { token }).pipe(
+      catchError(err => {
+        console.error('Erro de autenticação', err);
+        return of(false);
+      })
+    );
   }
 
 
@@ -120,7 +125,7 @@ export class LoginServiceService {
 
     }
     this.parmJson = this.parmJson + "]}";
-    this.urlTmp = environment.apiUrl + "/sm/createuser/"+environment.tenant_id;
+    this.urlTmp = environment.apiUrl + "/sm/createuser/" + environment.tenant_id;
     console.log("URL", this.urlTmp);
     console.log("json", this.parmJson);
 
@@ -176,7 +181,7 @@ export class LoginServiceService {
 
   }
 
-    clearEquipa() {
+  clearEquipa() {
     console.log("loginService - clearEquipa");
     // Limpa o token e os dados de login
     localStorage.removeItem("idequipa_escalao");
@@ -292,44 +297,44 @@ export class LoginServiceService {
   reenviarEmailAtivacao(userData: UtilizadorParaAtivarData): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
     // Adapte esta URL e o corpo da requisição para o seu endpoint de backend real
-    const url = `${environment.apiUrl}/sm/reenviarEmailAtivacao/`  + environment.tenant_id;
+    const url = `${environment.apiUrl}/sm/reenviarEmailAtivacao/` + environment.tenant_id;
     console.log('LoginService: Reenviando email de ativação para:', userData);
     console.log(' URL:', url);
- 
+
     // Retorne um Observable, simulando uma chamada HTTP
-  return this.http.put<any>(url, userData, { headers });
+    return this.http.put<any>(url, userData, { headers });
   }
 
- getUserbyUserName(userName: String): Observable<any> {
-   const headers = { 'Content-Type': 'application/json' };
-   const url = `${environment.apiUrl}/sm/getUserByUserName/${userName}`+'/'+environment.tenant_id;
-   console.log('LoginService: Buscando usuário por nome:', userName);
-   console.log(' URL:', url);
-   return this.http.put<any>(url, { headers });
- }
+  getUserbyUserName(userName: String): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const url = `${environment.apiUrl}/sm/getUserByUserName/${userName}` + '/' + environment.tenant_id;
+    console.log('LoginService: Buscando usuário por nome:', userName);
+    console.log(' URL:', url);
+    return this.http.put<any>(url, { headers });
+  }
 
- enableUser(userId: number): Observable<any> {
-   const headers = { 'Content-Type': 'application/json' };
-   const url = `${environment.apiUrl}/sm/enableUser/${userId}`;
-   console.log('LoginService: Habilitando usuário:', userId);
-   console.log(' URL:', url);
-   return this.http.put<any>(url, { headers });
- }
+  enableUser(userId: number): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const url = `${environment.apiUrl}/sm/enableUser/${userId}`;
+    console.log('LoginService: Habilitando usuário:', userId);
+    console.log(' URL:', url);
+    return this.http.put<any>(url, { headers });
+  }
 
-disableUser(userId: number): Observable<any> {
-   const headers = { 'Content-Type': 'application/json' };
-   const url = `${environment.apiUrl}/sm/disableUser/${userId}`;
-   console.log('LoginService: Desabilitando usuário:', userId);
-   console.log(' URL:', url);
-   return this.http.put<any>(url, { headers });
-}
+  disableUser(userId: number): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const url = `${environment.apiUrl}/sm/disableUser/${userId}`;
+    console.log('LoginService: Desabilitando usuário:', userId);
+    console.log(' URL:', url);
+    return this.http.put<any>(url, { headers });
+  }
 
-resetPWD(userId: number): Observable<any> {
-   const headers = { 'Content-Type': 'application/json' };
-   const url = `${environment.apiUrl}/sm/resetPWD/${userId}`;
-   console.log('LoginService: Resetando senha do usuário:', userId);
-   console.log(' URL:', url);
-   return this.http.put<any>(url, { headers });
-}
+  resetPWD(userId: number): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const url = `${environment.apiUrl}/sm/resetPWD/${userId}`;
+    console.log('LoginService: Resetando senha do usuário:', userId);
+    console.log(' URL:', url);
+    return this.http.put<any>(url, { headers });
+  }
 
 }

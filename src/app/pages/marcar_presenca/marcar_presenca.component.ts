@@ -141,6 +141,8 @@ export class Marcar_presencaComponent implements OnInit {
           tmpPresencaJogador.id_jogador = this.equipaData!.jogadores[i].id;
           tmpPresencaJogador.nome_jogador = this.equipaData!.jogadores[i].nome;
           tmpPresencaJogador.motivo = "";
+          tmpPresencaJogador.estado = "Presente";
+          tmpPresencaJogador.estilo_estado = "background-color: lightgreen;";
 
           this.presencaJogadores.push(tmpPresencaJogador);
 
@@ -152,6 +154,8 @@ export class Marcar_presencaComponent implements OnInit {
           tmpPresencaStaff.id_staff = this.equipaData!.staff[i].id;
           tmpPresencaStaff.nome_staff = this.equipaData!.staff[i].nome;
           tmpPresencaStaff.motivo = "";
+          tmpPresencaStaff.estado = "Presente";
+          tmpPresencaStaff.estilo_estado = "background-color: lightgreen;";
 
           this.presencaStaff.push(tmpPresencaStaff);
 
@@ -362,7 +366,7 @@ export class Marcar_presencaComponent implements OnInit {
     if (value == 'Lesão') {
       this.openDialog(posicao);
       this.presencaJogadores[posicao]["estilo_estado"] = "background-color: BlueViolet;";
-      
+
     }
 
     if (value == '') {
@@ -396,7 +400,7 @@ export class Marcar_presencaComponent implements OnInit {
     if (value == 'Lesão') {
       this.openDialog_staff(posicao);
       this.presencaStaff[posicao]["estilo_estado"] = "background-color: BlueViolet;";
-   
+
     }
 
     if (value == '') {

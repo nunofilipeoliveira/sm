@@ -35,6 +35,7 @@ export class SidebarComponent implements OnInit {
   public menuItems: any[] = [];
   public logoPath: string = ''; // Adicione esta propriedade
   public titleText: string = 'HC Maia'; // Nova propriedade para controlar o texto
+  private tmpUser: string = '';
 
   historicologinsMenu: RouteInfo = { path: '/historicologins', title: 'Historico_Logins', icon: 'nc-bullet-list-67', class: '' };
   jogosMenu: RouteInfo = { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' };
@@ -46,9 +47,11 @@ export class SidebarComponent implements OnInit {
   constructor(private loginws: LoginServiceService) { }
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
+    this.tmpUser = this.loginws.getLoginData().user;
+    console.log('Utilizador atual no sidebar:', this.tmpUser);
 
 
-    if (this.loginws.getLoginData().user == "Nuno") {
+    if (this.tmpUser == "Nuno") {
       this.menuItems.push(this.historicologinsMenu)
       this.menuItems.push(this.jogosMenu)
       this.menuItems.push(this.adminMenu)
@@ -69,10 +72,13 @@ export class SidebarComponent implements OnInit {
   }
 
   ngDoCheck() {
+
+    console.log('SideBar | Verificação do menu para o utilizador: ', this.loginws.getLoginData().user);
     const user = this.loginws.getLoginData().user;
+    console.log('SideBar | Utilizador atual no ngDoCheck:', user);
 
     // Verifica se o utilizador é "Nuno"
-    if (user === "Nuno") {
+    if (user == "Nuno") {
       // Cria um array com os títulos dos menus que Nuno deve ter
       const requiredMenus = [this.historicologinsMenu.title, this.jogosMenu.title, this.adminMenu.title, this.gestaoClubesMenu.title];
 
@@ -84,9 +90,10 @@ export class SidebarComponent implements OnInit {
 
       // Se algum menu estiver faltando, adiciona-o
       if (!allMenusPresent) {
-        this.menuItems = [...this.menuItems, this.historicologinsMenu, this.jogosMenu, this.adminMenu];
+        this.menuItems = [...this.menuItems, this.historicologinsMenu, this.jogosMenu, this.adminMenu, this.gestaoClubesMenu];
       }
     }
+    console.log('SideBar | Menu Items atuais:', this.menuItems);
   }
 
 

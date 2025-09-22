@@ -51,10 +51,10 @@ export class JogadorSeleccaoComponent implements OnInit {
       this.origem_gestao_equipa = false;
     }
 
-let modoObterJogadores ='0';
-if(this.origem_gestao_equipa==true){
-  modoObterJogadores = '1';
-}
+    let modoObterJogadores = '0';
+    if (this.origem_gestao_equipa == true) {
+      modoObterJogadores = '1';
+    }
 
     this.equipaService.getJogadoresDisponiveis(this.idEscalao, modoObterJogadores).subscribe(
       {
@@ -142,9 +142,13 @@ if(this.origem_gestao_equipa==true){
         estilo_estado: "background-color: lightgreen;"
 
       }
+
       let listaJogadoresPresenca: jogadorPresencaData[] = this.presencaService.getPresenca();
-      listaJogadoresPresenca.push(tmpPresencaJogador);
-      this.presencaService.setPresenca(listaJogadoresPresenca);
+      const jaExiste = listaJogadoresPresenca.some(j => j.id_jogador === tmpPresencaJogador.id_jogador);
+      if (!jaExiste) {
+        listaJogadoresPresenca.push(tmpPresencaJogador);
+        this.presencaService.setPresenca(listaJogadoresPresenca);
+      }
 
       this.router.navigate(['/mpresenca'])
     }
@@ -153,7 +157,7 @@ if(this.origem_gestao_equipa==true){
   cancelarSelecao() {
     console.log("JogadorSeleccaoComponent | Cancelar seleção");
     if (this.origem_gestao_equipa) {
-      this.router.navigate(['/gestao-equipa'+ '/' + this.idEscalao]);
+      this.router.navigate(['/gestao-equipa' + '/' + this.idEscalao]);
     } else {
       this.router.navigate(['/mpresenca']);
     }
