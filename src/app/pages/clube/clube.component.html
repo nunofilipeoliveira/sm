@@ -1,0 +1,85 @@
+<div class="container mt-12">
+    <div class="row justify-content-center">
+        <img [src]="logoUrl" onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
+            alt="Logo do Clube" class="avatar-lg rounded-circle me-1 mx-auto d-block" />
+
+      
+        <div class="col-md-8">
+            <div class="info-card shadow">
+                <form #staffForm="ngForm">
+                    <div class="form-row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Nome</label>
+                                <input type="text" class="form-control" name="nome" [(ngModel)]="clube.nome"
+                                    [readonly]="!isEditing" [class.readonly]="!isEditing">
+                            </div>
+                        </div>
+                        <div class="col-md-12 pr-1">
+                            <div class="form-group">
+                                <label>Pavilhão</label>
+                                <input type="text" class="form-control" name="pavilhao" [(ngModel)]="clube.pav_nome"
+                                    [readonly]="!isEditing" [class.readonly]="!isEditing">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 pr-1">
+                            <div class="form-group">
+                                <label>Endereço</label>
+                                <input type="text" class="form-control" name="endereco" [(ngModel)]="clube.pav_endereco"
+                                    [readonly]="!isEditing" [class.readonly]="!isEditing">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-12 pr-1">
+                            <div class="form-group">
+                                <label>Link Mapa</label>
+                                <input type="text" class="form-control" name="link" [(ngModel)]="clube.pav_link"
+                                    [readonly]="!isEditing" [class.readonly]="!isEditing">
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <div class="mt-4">
+                        <button *ngIf="!isEditing && !isNovoClube" type="button" class="btn btn-info btn-sm mr-1"
+                            (click)="startEditing()">
+                            <i class="nc-icon nc-ruler-pencil"></i> Editar
+                        </button>
+                        <button *ngIf="isNovoClube" type="button" class="btn btn-info btn-sm mr-1"
+                            (click)="gravar()">
+                            <i class="nc-icon nc-ruler-pencil"></i> Inserir
+                        </button>
+                        <button *ngIf="!isEditing || isNovoClube" type="button" class="btn btn-secondary btn-sm" (click)="fechar()">
+                            <i class="nc-icon nc-simple-remove"></i> Fechar
+                        </button>
+
+                        <button *ngIf="isEditing && !isNovoClube" type="button" class="btn btn-success btn-sm mr-1" (click)="gravar()"
+                            [disabled]="staffForm.invalid">
+                            <i class="nc-icon nc-check-2"></i> Gravar
+                        </button>
+
+                        <button *ngIf="isEditing && !isNovoClube" type="button" class="btn btn-secondary btn-sm" (click)="cancelar()">
+                            <i class="nc-icon nc-simple-remove"></i> Cancelar
+                        </button>
+
+
+
+                        <button *ngIf="isEditing && !isNovoClube" type="button" class="btn btn-info btn-sm"
+                            (click)="carregar_logotipo()">
+                            <i class="nc-icon nc-camera-20"></i> Carregar Logotipo
+                        </button>
+                    </div>
+                      <div *ngIf="isUploadLogo">
+            <input type="file" (change)="onFileSelected($event)" class="form-control-file mb-2">
+        </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

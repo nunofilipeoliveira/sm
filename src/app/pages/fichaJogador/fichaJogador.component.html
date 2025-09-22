@@ -14,8 +14,8 @@
     <div class="col-md-4">
       <div class="card profile-card text-center shadow">
         <div *ngIf="!tirarFoto">
-          <img [src]="fotoUrl"
-            onerror="this.onerror=null; this.src='assets/img/jogadores/default.jpg'" alt="Foto do Jogador">
+          <img [src]="fotoUrl" onerror="this.onerror=null; this.src='assets/img/jogadores/default.jpg'"
+            alt="Foto do Jogador">
 
 
         </div>
@@ -30,8 +30,7 @@
     <div class="col-md-8">
       <div class="info-card shadow">
         <h5 class="info-title d-flex justify-content-between align-items-center"><span><img height="30px" width="30px"
-              [src]="avatarUrl" 
-              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+              [src]="avatarUrl" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
               class="rounded-circle" /> Inf. Pessoais
           </span>
 
@@ -54,12 +53,12 @@
                   [readonly]="!isEditing" [class.readonly]="!isEditing">
               </div>
             </div>
-              <div class="col-md-5 pr-1">
+            <div class="col-md-5 pr-1">
               <div class="form-group">
                 <label>Nome curto</label>
                 <input type="text" class="form-control" name="nome" [(ngModel)]="jogadorData.nome"
                   [readonly]="!isEditing" [class.readonly]="!isEditing">
-                  
+
               </div>
             </div>
             <div class="col-md-2 pl-1">

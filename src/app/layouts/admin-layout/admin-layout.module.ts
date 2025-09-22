@@ -10,6 +10,7 @@ import { FichaJogadorComponent } from '../../pages/fichaJogador/fichaJogador.com
 import { GestaoEquipaComponent } from '../../pages/gestao-equipa/gestao-equipa.component'; // Adicione esta linha
 import { AdministracaoComponent } from '../../pages/administracao/administracao.component';
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -21,6 +22,7 @@ import { AdministracaoComponent } from '../../pages/administracao/administracao.
     FichaJogadorComponent,
     GestaoEquipaComponent, // Adicione esta linha
     AdministracaoComponent, // Adicione esta linha
+    
     CommonModule
   ],
   declarations: [ ]

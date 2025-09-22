@@ -30,4 +30,23 @@ export class FicheirosService {
   }
 
 
+    uploadLogoClube({ parmIdLogo, foto }: { parmIdLogo: string; foto: any; }) {
+
+    let urlTmp = environment.apiUrl + "/sm/uploadLogo/"+parmIdLogo+"/"+environment.tenant_id;
+   // const headers = { 'Content-Type': 'multipart/form-data' };
+
+    console.log("uploadLogo | ID:", parmIdLogo);
+    console.log("uploadLogo | foto:", foto);
+
+
+    let response = this.http.post<any>(urlTmp, foto, {
+      observe: "response"
+    });
+
+    console.log("uploadfoto | response:", response);
+    return response;
+
+  }
+
+
 }

@@ -1,0 +1,114 @@
+<!-- src/app/pages/gestao-clubes/gestao-clubes.component.html -->
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-12">
+      <h2 class="text-center mb-4">Gestão de Clubes</h2>
+
+      <div class="card shadow mb-4">
+        <div class="card-header">
+          <h4 class="card-title">Lista de Clubes</h4>
+        </div>
+        <div class="card-body">
+          <div *ngIf="loading" class="d-flex justify-content-center">
+            <div class="spinner-border text-danger" role="status">
+              <span class="sr-only"></span>
+            </div>
+          </div>
+          <div *ngIf="!loading && clubes.length > 0">
+            <div class="table-responsive">
+              <table class="table project-list-table table-nowrap align-middle">
+                <thead>
+                  <tr>
+                    <th>Logo</th>
+                    <th>Nome</th>
+                  
+                    <th class="td-total">Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let clube of clubes">
+                    <td>
+                      <img src="assets/img/clubes/clube_{{clube.id}}.png" onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
+                           alt="Logo do Clube" class="avatar-sm rounded-circle me-2" />
+                    </td>
+                    <td>{{ clube.nome }}</td>
+                  
+                    <td class="td-total">
+                      <button (click)="verDetalhesClube(clube)" class="btn btn-info btn-sm">
+                        <i class="nc-icon nc-zoom-split"></i> <span class="d-none d-md-inline"> Ver Detalhes</span>
+                      </button>
+                      <!-- Adicione outros botões de ação aqui, se necessário -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div *ngIf="!loading && clubes.length === 0">
+            <p class="text-center text-muted">{{ errorMessage || 'Nenhum clube cadastrado.' }}</p>
+          </div>
+          <div class="text-center mt-3">
+            <button class="btn btn-primary" (click)="adicionarNovoClube()">
+              <b>+</b> Adicionar Novo Clube
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Template Inline para o Modal de Detalhes do Clube -->
+<ng-template #NgbModalContent let-clube="clube" let-activeModal="activeModal">
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      <i class="nc-icon nc-bank me-2"></i> Detalhes do Clube: {{ clube.nome }}
+    </h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.close()"></button>
+  </div>
+  <div class="modal-body">
+    <div class="row justify-content-center">
+      <div class="col-md-12">
+        <div class="card shadow mb-4">
+          <div class="card-body text-center">
+            <!-- Logo Maior -->
+            <div class="mb-4">
+                <img src="assets/img/clubes/clube_{{clube.id}}.png" onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
+                   alt="Logo do Clube" 
+                   class="avatar-lg rounded-circle mx-auto d-block" />
+            </div>
+            
+            <!-- Detalhes do Clube -->
+            <h5 class="card-title mb-3">{{ clube.nome }}</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <dl class="row mb-0">
+                  <dt class="col-sm-4 text-muted">Nome:</dt>
+                  <dd class="col-sm-8">{{ clube.nome }}</dd>
+                  <dt class="col-sm-4 text-muted">Localização:</dt>
+                  <dd class="col-sm-8"></dd>
+                  <!-- Adicione mais campos aqui, ex: -->
+                  <!-- <dt class="col-sm-4 text-muted">Contato:</dt>
+                  <dd class="col-sm-8">{{ clube.contato }}</dd> -->
+                </dl>
+              </div>
+              <div class="col-md-6">
+                <!-- Espaço para mais detalhes ou imagem adicional, se necessário -->
+                <p class="text-muted">Outros detalhes do clube podem ser adicionados aqui.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="activeModal.close()">
+      <i class="nc-icon nc-simple-remove me-1"></i> Fechar
+    </button>
+    <!-- Opcional: Botão para editar -->
+    <!-- <button type="button" class="btn btn-primary" (click)="activeModal.close(); editarClube(clube.id)">
+      <i class="nc-icon nc-check-2 me-1"></i> Editar
+    </button> -->
+  </div>
+</ng-template>

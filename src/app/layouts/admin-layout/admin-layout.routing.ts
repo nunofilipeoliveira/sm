@@ -17,6 +17,7 @@ import { NovoJogadorComponent } from '../../pages/novo-jogador/novo-jogador.comp
 import { AdministracaoComponent } from '../../pages/administracao/administracao.component';
 import { GestaoutilizadorComponent } from '../../pages/gestaoutilizador/gestaoutilizador.component';
 import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
+import { GestaoClubesComponent } from '../../pages/gestao-clubes/gestao-clubes.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }, // Nova rota para o dashboard
@@ -40,5 +41,6 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'jogadorSeleccao/:id/:nomeJogador', component: JogadorSeleccaoComponent, canActivate: [AuthGuard] },
   { path: 'administracao', component: AdministracaoComponent, canActivate: [AuthGuard] }, // Nova rota para administração
   { path: 'gestao-utilizador/:idUtilizador', component: GestaoutilizadorComponent, canActivate: [AuthGuard] },
+  { path: 'gestao-clubes', component: GestaoClubesComponent, canActivate: [AuthGuard] },
 
 ];
