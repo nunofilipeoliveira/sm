@@ -309,7 +309,7 @@ resetPWD(): void {
 
   criarUtilizador(): void {
     let utilizadorParaCriar: UtilizadorParaAtivarData = {
-    
+
       nome: this.novoUtilizador.nome,
       user: this.novoUtilizador.user,
       email: this.novoUtilizador.email,
@@ -321,15 +321,29 @@ resetPWD(): void {
 
 
     //verifica se o user já existe
-    
+
     let tmpUser:UtilizadorData;
     this.loginws.getUserbyUserName(this.novoUtilizador.user).subscribe({
       next: (user) => {
         console.log('Utilizador encontrado:', user);
         tmpUser = user;
         // Se o utilizador já existe, pode-se optar por atualizar ou mostrar uma mensagem
+        if(tmpUser && tmpUser.id && tmpUser.id >0){
         this.userJaExiste = true;
         console.log('User já existe', this.userJaExiste);
+        }else{
+          // Se não existe, pode-se prosseguir com a criação
+        this.loginws.createUserToAtivate(utilizadorParaCriar).subscribe({
+          next: (response) => {
+            console.log('Utilizador criado com sucesso:', response);
+            this.router.navigate(['/administracao']);
+          },
+          error: (err) => {
+            console.error('Erro ao criar utilizador:', err);
+            // Tratar erro
+          }
+        });
+        }
       },
       error: (err) => {
         console.error('Erro ao verificar utilizador:', err);
