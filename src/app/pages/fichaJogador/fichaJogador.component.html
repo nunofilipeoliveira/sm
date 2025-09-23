@@ -249,6 +249,7 @@
               <tr>
                 <th>Data</th>
                 <th>Hora</th>
+                <th>Escalão</th>
                 <th>Tipo Falta</th>
                 <th>Motivo</th>
               </tr>
@@ -257,6 +258,7 @@
               <tr *ngFor="let falta of faltas">
                 <td>{{falta.data | data}}</td>
                 <td>{{falta.hora}}</td>
+                <td>{{falta.nome_escalao}}</td>
                 <td>{{falta.estado}}</td>
                 <td>{{falta.motivo}}</td>
               </tr>
