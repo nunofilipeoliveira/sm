@@ -141,8 +141,7 @@ export class Marcar_presencaComponent implements OnInit {
           tmpPresencaJogador.id_jogador = this.equipaData!.jogadores[i].id;
           tmpPresencaJogador.nome_jogador = this.equipaData!.jogadores[i].nome;
           tmpPresencaJogador.motivo = "";
-          tmpPresencaJogador.estado = "Presente";
-          tmpPresencaJogador.estilo_estado = "background-color: lightgreen;";
+
 
           this.presencaJogadores.push(tmpPresencaJogador);
 
@@ -154,8 +153,7 @@ export class Marcar_presencaComponent implements OnInit {
           tmpPresencaStaff.id_staff = this.equipaData!.staff[i].id;
           tmpPresencaStaff.nome_staff = this.equipaData!.staff[i].nome;
           tmpPresencaStaff.motivo = "";
-          tmpPresencaStaff.estado = "Presente";
-          tmpPresencaStaff.estilo_estado = "background-color: lightgreen;";
+
 
           this.presencaStaff.push(tmpPresencaStaff);
 
@@ -287,6 +285,20 @@ export class Marcar_presencaComponent implements OnInit {
     }
 
 
+  }
+
+  allPresente() {
+    for (let i = 0; i < this.presencaJogadores.length; i++) {
+      this.presencaJogadores[i].estado = "Presente";
+      this.presencaJogadores[i].motivo = "";
+      this.presencaJogadores[i].estilo_estado = "background-color: lightgreen;";
+    }
+
+    for (let i = 0; i < this.presencaStaff.length; i++) {
+      this.presencaStaff[i].estado = "Presente";
+      this.presencaStaff[i].motivo = "";
+      this.presencaStaff[i].estilo_estado = "background-color: lightgreen;";
+    }
   }
 
 
