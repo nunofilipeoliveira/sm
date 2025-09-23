@@ -105,6 +105,10 @@ this.route.queryParams.subscribe(params => {
           this.loginObj.password = ''
         }
       });
+
+      console.log("LoginComponent | doLogin | Fim");
+      console.log("LoginComponent | doLogin | loginObj:", this.loginws.getLoginData());
+
   }
 
   redirect(longids: loginData) {

@@ -5,6 +5,7 @@ interface loginData {
   password: string;
   escalaoEpoca: escalao_epoca[];
   token?: string; // Adicionar esta linha para incluir o token
+  perfil: string;
 }
 
 interface escalao_epoca {
