@@ -140,6 +140,7 @@ export class JogadorSeleccaoComponent implements OnInit {
         estado: "Presente",
         motivo: "",
         estilo_estado: "background-color: lightgreen;"
+        , apagar: true
 
       }
 

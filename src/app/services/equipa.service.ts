@@ -146,8 +146,8 @@ export class EquipaService {
   }
 
   getEquipa(): EquipaData {
-    console.log("equipaService - getEquipa", this.equipa);
-    return this.equipa;
+   
+     return this.equipa;
   }
 
   clear() {

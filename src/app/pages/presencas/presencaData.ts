@@ -18,6 +18,7 @@ interface jogadorPresencaData {
   estado: string;
   motivo: string;
   estilo_estado: string;
+  apagar: boolean;
 }
 
 interface staffPresencaData {

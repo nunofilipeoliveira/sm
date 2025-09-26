@@ -10,7 +10,7 @@ export interface RouteInfo {
 }
 
 export const ROUTES: RouteInfo[] = [
-   { path: '/dashboard', title: 'Dashboard', icon: 'nc-chart-pie-36', class: '' },
+  { path: '/dashboard', title: 'Dashboard', icon: 'nc-chart-pie-36', class: '' },
   { path: '/equipa', title: 'Equipa', icon: 'nc-badge', class: '' },
   { path: '/mpresenca', title: 'Marcar Presença', icon: 'nc-tap-01', class: '' },
   { path: '/presencas', title: 'Presenças', icon: 'nc-paper', class: '' },
@@ -49,6 +49,7 @@ export class SidebarComponent implements OnInit {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.tmpUser = this.loginws.getLoginData().user;
     console.log('Utilizador atual no sidebar:', this.tmpUser);
+    console.log('Perfil do utilizador:', this.loginws.getLoginData().perfil);
 
 
     if (this.tmpUser == "Nuno") {
@@ -57,7 +58,7 @@ export class SidebarComponent implements OnInit {
       this.menuItems.push(this.gestaoClubesMenu)
     }
 
-    if(this.loginws.getLoginData().perfil == "ADMIN"){
+    if (this.loginws.getLoginData().perfil == "ADMIN") {
       this.menuItems.push(this.adminMenu)
     }
 
@@ -83,7 +84,7 @@ export class SidebarComponent implements OnInit {
     // Verifica se o utilizador é "Nuno"
     if (user == "Nuno") {
       // Cria um array com os títulos dos menus que Nuno deve ter
-      const requiredMenus = [this.historicologinsMenu.title, this.jogosMenu.title,  this.gestaoClubesMenu.title];
+      const requiredMenus = [this.historicologinsMenu.title, this.jogosMenu.title, this.gestaoClubesMenu.title];
 
       // Cria um array com os títulos dos menus atualmente disponíveis
       const currentMenuTitles = this.menuItems.map(item => item.title);
@@ -98,9 +99,11 @@ export class SidebarComponent implements OnInit {
     }
 
 
-      if(this.loginws.getLoginData().perfil == "ADMIN"){
+
+
+    if (this.loginws.getLoginData().perfil == "ADMIN") {
       // Cria um array com os títulos dos menus que Nuno deve ter
-      const requiredMenus = [ this.gestaoClubesMenu.title];
+      const requiredMenus = [this.adminMenu.title];
 
       // Cria um array com os títulos dos menus atualmente disponíveis
       const currentMenuTitles = this.menuItems.map(item => item.title);
@@ -110,7 +113,7 @@ export class SidebarComponent implements OnInit {
 
       // Se algum menu estiver faltando, adiciona-o
       if (!allMenusPresent) {
-        this.menuItems.push(this.gestaoClubesMenu);
+        this.menuItems.push(this.adminMenu);
       }
     }
 

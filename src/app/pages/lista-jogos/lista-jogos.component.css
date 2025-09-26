@@ -1,20 +1,19 @@
-body{
-  margin-top:20px;
-  background-color:#eee;
-  }
+/* lista-jogos.component.css - Versão atualizada com maior especificidade */
 
+/* Seus estilos existentes... */
+body {
+  margin-top: 20px;
+  background-color: #eee;
+}
 
 .team-logo {
   width: 24px;
   height: 24px;
-  margin-right: 8px;
-  margin-left: 4px;
 }
 
 .flag-icon {
   width: 24px;
   height: 24px;
-  margin-right: 8px;
 }
 
 .win {
@@ -39,4 +38,25 @@ body{
   padding: 5px;
   border-radius: 3px;
   margin-right: 8px;
+}
+
+/* Estilo para jogos REGISTADO - Com seletor mais específico para a tabela */
+.project-list-table tbody tr.jogo-registado {
+  background-color: #f8f9fa !important; /* Cinza muito claro */
+  color: #b2b3b4 !important; /* Texto escuro para legibilidade */
+}
+
+/* Para células individuais (td), caso o tr não propague bem */
+.project-list-table tbody tr.jogo-registado td {
+  background-color: #f8f9fa !important;
+  color: #b2b3b4 !important;
+}
+
+/* Hover mantendo o tom claro */
+.project-list-table tbody tr.jogo-registado:hover {
+  background-color: #f8f9fa !important; /* Ligeiramente mais escuro no hover */
+}
+
+.project-list-table tbody tr.jogo-registado:hover td {
+  background-color: #f8f9fa !important;
 }

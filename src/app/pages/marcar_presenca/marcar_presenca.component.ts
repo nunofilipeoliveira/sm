@@ -388,8 +388,11 @@ export class Marcar_presencaComponent implements OnInit {
 
   }
 
+  retirarJogador(indice_jogador: number, posicao: any) {
+    console.log("Retirar Jogador", indice_jogador);
+    this.presencaJogadores.splice(posicao, 1);
 
-
+  }
 
   ngDropDwonClick_staff(posicao: any, value: any) {
     this.presencaStaff[posicao]["estado"] = value;

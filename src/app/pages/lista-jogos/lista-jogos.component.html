@@ -6,29 +6,48 @@
         <th>Data</th>
         <th>Equipa</th>
         <th>Resultado</th>
-        <th>Competição</th>
+        <th style="width: 90px;"></th>
+        <th class="d-none d-md-table-cell">Competição</th>
         <th>Acção</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let game of games">
+      <tr *ngFor="let jogo of jogos" [class.jogo-registado]="jogo.estado === 'REGISTADO'">
 
-        <td>{{ game.date }}</td>
-        <td>
-          ({{ game.local }})
-          <img [src]="game.opponentLogo" class="team-logo" />
-          {{ game.opponent }}
+        <td style="width: 150px;">{{ jogo.data }}</td>
+        <td style="width: 300px;">
+          ({{ jogo.tipo_local}})
+          <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
+            onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" class="team-logo" />
+          {{ jogo.equipa_adv_nome }}
         </td>
         <td>
-          <span [ngClass]="{'win': game.result === 'V', 'draw': game.result === 'E', 'loss': game.result === 'D'}">{{game.result }}</span>
-         {{game.score}}</td>
-        <td>
-          <img [src]="game.flag" class="flag-icon" />
-          {{ game.competition }}
+          <span *ngIf="jogo.estado === 'CONCLUIDO'"
+            [ngClass]="{'loss': jogo.golos_equipa_adv > jogo.golos_equipa, 'win': jogo.golos_equipa_adv < jogo.golos_equipa, 'draw': jogo.golos_equipa_adv === jogo.golos_equipa}">{{jogo.golos_equipa}}
+            - {{jogo.golos_equipa_adv}}</span>
         </td>
-        <td><button type="button" class="btn btn-info text-white" style="margin-right: 5px;">Convocatória</button><button type="button" class="btn btn-info text-white" (click)="verJogo(1)">Jogo</button></td>
+        <td>
+          <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png" class="flag-icon" />
+        </td>
+        <td class="d-none d-md-table-cell">
+          {{ jogo.competicao_nome }}
+        </td>
+        <td>
+
+          <button *ngIf="jogo.estado === 'REGISTADO'" (click)="verJogo(1)" class="btn btn-warning btn-sm">
+            <i class="nc-icon nc-bullet-list-67"></i> <span class="d-none d-md-inline"> Convocatória</span></button>
+
+
+          <button *ngIf="jogo.estado === 'CONCLUIDO'" (click)="verJogo(1)" class="btn btn-info btn-sm">
+            <i class="nc-icon nc-zoom-split"></i> <span class="d-none d-md-inline"> Ver Jogo</span></button>
+        </td>
 
       </tr>
     </tbody>
   </table>
+
+                          <button  class="btn btn-primary"
+                            (click)="adicionarJjogo()" >
+                            <span ><b>+</b></span>
+                        </button>
 </div>

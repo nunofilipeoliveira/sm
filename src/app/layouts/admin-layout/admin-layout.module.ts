@@ -9,6 +9,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FichaJogadorComponent } from '../../pages/fichaJogador/fichaJogador.component';
 import { GestaoEquipaComponent } from '../../pages/gestao-equipa/gestao-equipa.component'; // Adicione esta linha
 import { AdministracaoComponent } from '../../pages/administracao/administracao.component';
+import { ListaJogosComponent } from '../../pages/lista-jogos/lista-jogos.component';
 
 
 @NgModule({
@@ -22,8 +23,7 @@ import { AdministracaoComponent } from '../../pages/administracao/administracao.
     FichaJogadorComponent,
     GestaoEquipaComponent, // Adicione esta linha
     AdministracaoComponent, // Adicione esta linha
-    
-    CommonModule
+    ListaJogosComponent
   ],
   declarations: [ ]
 })
