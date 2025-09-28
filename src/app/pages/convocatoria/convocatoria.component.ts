@@ -61,6 +61,7 @@ export class ConvocatoriaComponent implements OnInit {
       this.errorMessage = 'ID do jogo não fornecido.';
       this.loading = false;
     }
+    
   }
 
   carregarConvocatoria(): void {
@@ -146,6 +147,7 @@ export class ConvocatoriaComponent implements OnInit {
         this.jogo = data;
         // Você pode querer carregar a convocatória existente aqui, se houver
         // Ex: this.jogoService.getConvocatoriaByJogo(id).subscribe(...)
+        this.calcularHoraConcentracao();
       },
       error: (err) => {
         console.error('Erro ao carregar detalhes do jogo:', err);
@@ -291,7 +293,7 @@ export class ConvocatoriaComponent implements OnInit {
   // **Novo método: Gera imagem PNG com avatares e baixa/compartilha**
   async gerarImagemComFotos(): Promise<void> {
 
-    this.calcularHoraConcentracao()
+    
     if (!this.jogo || this.atletasDisponiveis.length === 0) {
       alert('Não há convocatória para gerar imagem ou detalhes do jogo incompletos.');
       return;
