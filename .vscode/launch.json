@@ -4,6 +4,14 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
   "configurations": [
+  {
+      "type": "chrome",                // ou "pwa-msedge" se usar Edge
+      "request": "launch",
+      "name": "Debug Angular",
+      "url": "http://localhost",  // endereço do ng serve
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true
+    },
     {
       "type": "node",
       "request": "launch",

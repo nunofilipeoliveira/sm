@@ -1,53 +1,221 @@
 <P>
 <div class="container">
-  <table class="table project-list-table table-nowrap align-middle">
+  <div *ngIf="loading" class="d-flex justify-content-center my-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+
+  <! -- Mensagem para nenhum jogo encontrado -->
+  <div *ngIf="!loading && jogos.length === 0" class="alert alert-info text-center" role="alert">
+    Nenhum jogo encontrado. Clique em "Adicionar Novo Jogo" para começar a adicionar jogos.
+  </div>
+
+  <table class="table project-list-table table-nowrap align-middle" *ngIf="!loading && jogos.length > 0">
     <thead class="thead-light">
       <tr class="table-active">
         <th>Data</th>
         <th>Equipa</th>
         <th>Resultado</th>
-        <th style="width: 90px;"></th>
+        <th></th>
         <th class="d-none d-md-table-cell">Competição</th>
         <th>Acção</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let jogo of jogos" [class.jogo-registado]="jogo.estado === 'REGISTADO'">
-
-        <td style="width: 150px;">{{ jogo.data }}</td>
+        <td>{{ jogo.data | date:'dd/MM' }}</td>
         <td style="width: 300px;">
-          ({{ jogo.tipo_local}})
+          ({{ jogo.tipo_local }})
           <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
             onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" class="team-logo" />
           {{ jogo.equipa_adv_nome }}
         </td>
-        <td>
+        <td style="width: 12%;text-align: center;">
           <span *ngIf="jogo.estado === 'CONCLUIDO'"
             [ngClass]="{'loss': jogo.golos_equipa_adv > jogo.golos_equipa, 'win': jogo.golos_equipa_adv < jogo.golos_equipa, 'draw': jogo.golos_equipa_adv === jogo.golos_equipa}">{{jogo.golos_equipa}}
             - {{jogo.golos_equipa_adv}}</span>
         </td>
-        <td>
+        <td style="width: 12%;text-align: end;">
           <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png" class="flag-icon" />
         </td>
         <td class="d-none d-md-table-cell">
           {{ jogo.competicao_nome }}
         </td>
         <td>
-
-          <button *ngIf="jogo.estado === 'REGISTADO'" (click)="verJogo(1)" class="btn btn-warning btn-sm">
+          <button *ngIf="jogo.estado === 'REGISTADO'" (click)="verConvocatoria(jogo.id)" class="btn btn-warning btn-sm me-2">
             <i class="nc-icon nc-bullet-list-67"></i> <span class="d-none d-md-inline"> Convocatória</span></button>
-
-
-          <button *ngIf="jogo.estado === 'CONCLUIDO'" (click)="verJogo(1)" class="btn btn-info btn-sm">
+          <button *ngIf="jogo.estado === 'CONCLUIDO'" (click)="verJogo(jogo.id)" class="btn btn-info btn-sm me-2">
             <i class="nc-icon nc-zoom-split"></i> <span class="d-none d-md-inline"> Ver Jogo</span></button>
+          <button *ngIf="isAdmin" (click)="editarJogo(jogo, content)" class="btn btn-primary btn-sm me-2">
+            <i class="nc-icon nc-ruler-pencil"></i> <span class="d-none d-md-inline"> Editar</span></button>
+          <button *ngIf="isAdmin" (click)="apagarJogo(jogo)" class="btn btn-danger btn-sm me-2">
+            <i class="nc-icon nc-simple-remove"></i> <span class="d-none d-md-inline"> Apagar</span></button>
         </td>
-
       </tr>
     </tbody>
   </table>
 
-                          <button  class="btn btn-primary"
-                            (click)="adicionarJjogo()" >
-                            <span ><b>+</b></span>
-                        </button>
+  <div class="text-center mt-3">
+    <button class="btn btn-primary" (click)="adicionarJjogo(content)">
+      <b>+</b> Adicionar Novo Jogo
+    </button>
+  </div>
 </div>
+
+<!-- Modal para Adicionar Novo Jogo (Transformado Visualmente - Estilo Ficha Atleta) -->
+<ng-template #content let-modal>
+  <div class="modal-header bg-light border-bottom">
+    <h4 *ngIf="!isModoEditar" class="modal-title mb-0" id="modal-basic-title">
+      <i class="nc-icon nc-trophy text-primary me-2"></i>Adicionar Novo Jogo
+    </h4>
+    <h4 *ngIf="isModoEditar" class="modal-title mb-0" id="modal-basic-title">
+      <i class="nc-icon nc-trophy text-primary me-2"></i>Editar Jogo
+    </h4>
+  </div>
+
+
+  <!-- Seção 1: Equipa Clube -->
+  <div class="modal-body p-4">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-success text-white">
+        <h6 class="mb-0"><i class="nc-icon nc-single-02 me-2"></i>Equipa Clube</h6>
+      </div>
+      <div class="card-body">
+        <form>
+          <!-- Tipo Equipa Adv -->
+          <div class="col-md-6 mb-3">
+            <div class="form-check mt-2"> <!-- form-check para estrutura Bootstrap -->
+              <section class="example-section">
+                <mat-checkbox [(ngModel)]="isEquipaB_local">Equipa B</mat-checkbox>
+              </section>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Seção 2: Adversário e Competição (Em Grid, Similar a Seções de Atleta) -->
+  <div class="modal-body p-4">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-success text-white">
+        <h6 class="mb-0"><i class="nc-icon nc-single-02 me-2"></i>Adversário e Competição</h6>
+      </div>
+      <div class="card-body">
+        <form>
+          <div class="row">
+            <!-- Equipa Adversária -->
+            <div class="col-md-6 mb-3">
+              <label for="equipaAdversaria" class="form-label fw-bold">
+                <i class="nc-icon nc_users-1 me-1 text-success"></i>Equipa Adversária <span class="text-danger">*</span>
+              </label>
+              <select class="form-select form-select" id="equipaAdversaria" [(ngModel)]="novoJogo.equipa_adv_id"
+                name="equipaAdversaria" (change)="onEquipaAdversariaChange(novoJogo.equipa_adv_id)" required>
+                <option [ngValue]="0" disabled selected>Selecione uma equipa</option>
+                <option *ngFor="let clube of clubes" [ngValue]="clube.id">
+                  {{ clube.nome }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Tipo Equipa Adv -->
+            <div class="col-md-6 mb-3">
+              <div class="form-check mt-2"> <!-- form-check para estrutura Bootstrap -->
+                <section class="example-section">
+                  <mat-checkbox [(ngModel)]="isEquipaB_adv">Equipa B</mat-checkbox>
+                </section>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Competição -->
+            <div class="col-md-12 mb-3">
+              <label for="competicao" class="form-label fw-bold">
+                <i class="nc-icon nc-trophy me-1 text-success"></i>Competição <span class="text-danger">*</span>
+              </label>
+              <select class="form-select form-select" id="competicao" [(ngModel)]="novoJogo.competicao_id"
+                name="competicao" (change)="onCompeticaoChange(novoJogo.competicao_id)" required>
+                <option [ngValue]="0" disabled selected>Selecione uma competição</option>
+                <option *ngFor="let comp of competicoes" [ngValue]="comp.id">{{ comp.nome }}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="modal-body p-4">
+    <!-- Seção 1: Detalhes Básicos do Jogo (Em Grid de 2 Colunas, como em Ficha Atleta) -->
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-primary text-white">
+        <h6 class="mb-0"><i class="nc-icon nc-calendar-60 me-2"></i>Detalhes do Jogo</h6>
+      </div>
+      <div class="card-body">
+        <form>
+          <div class="row">
+            <!-- Coluna Esquerda -->
+            <div class="col-md-6 mb-3">
+              <label for="dataJogo" class="form-label fw-bold">
+                <i class="nc-icon nc-calendar-60 text-primary me-1"></i>Data do Jogo <span class="text-danger">*</span>
+              </label>
+              <input type="date" class="form-control form-control" id="dataJogo" [(ngModel)]="novoJogo.data"
+                name="dataJogo" required [class.is-invalid]="novoJogo.data === null">
+              <div class="invalid-feedback">Data é obrigatória.</div>
+            </div>
+
+            <!-- Coluna Direita -->
+            <div class="col-md-6 mb-3">
+              <label for="horaJogo" class="form-label fw-bold">
+                <i class="nc-icon nc-time-alarm me-1 text-primary"></i>Hora do Jogo <span class="text-danger">*</span>
+              </label>
+              <input type="time" class="form-control form-control" id="horaJogo" [(ngModel)]="novoJogo.hora"
+                name="horaJogo" required [class.is-invalid]="novoJogo.hora === ''">
+              <div class="invalid-feedback">Hora é obrigatória.</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Tipo Local -->
+            <div class="col-md-6 mb-3">
+              <label for="tipoLocal" class="form-label fw-bold">
+                <i class="nc-icon nc-home-50 me-1 text-primary"></i>Tipo de Local
+              </label>
+              <select class="form-select form-select" id="tipoLocal" [(ngModel)]="novoJogo.tipo_local" name="tipoLocal" (change)="onTipoLocal()">
+                <option value="Casa">Casa</option>
+                <option value="Fora">Fora</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row">
+            <!-- Local -->
+            <div class="col-md-12 mb-3">
+              <label for="localJogo" class="form-label fw-bold">
+                <i class="nc-icon nc-pin-3 me-1 text-primary"></i>Local do Jogo <span class="text-danger">*</span>
+              </label>
+              <input type="text" class="form-control form-control" id="localJogo" [(ngModel)]="novoJogo.local"
+                name="localJogo" placeholder="Ex: Pavilhão Municipal de Bragança" required>
+            </div>
+          </div>
+
+
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="modal-footer bg-light border-top">
+
+    <button type="button" class="btn btn-primary btn" (click)="modal.close('save')">
+      <i class="nc-icon nc-check-2 me-2"></i>Salvar Jogo
+    </button>
+    <button type="button" class="btn btn-secondary btn" (click)="modal.dismiss('cancel')">
+      <i class="nc-icon nc-simple-remove me-2"></i>Cancelar
+    </button>
+  </div>
+</ng-template>

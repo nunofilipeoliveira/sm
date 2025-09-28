@@ -28,5 +28,12 @@ export class ClubeService {
       return this.http.put<any>(urltmp, clube, { headers });
     } 
 
+    getClube(clubeId: number) {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/getClube/" + clubeId;
+      console.log('ClubeService | url:', this, urltmp);
+      return this.http.put<ClubeData>(urltmp, { headers });
+    }
+
 
 }

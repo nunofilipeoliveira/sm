@@ -1,0 +1,218 @@
+/* Estilos Gerais */
+.container {
+  margin-top: 30px;
+}
+
+.header-section {
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.header-section p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Logotipos */
+.logo-equipa, .logo-jogo {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo-jogo {
+  height: 50px;
+  width: 50px;
+}
+
+.logo-jogo2 {
+  height: 30px;
+  width: 30px;
+}
+
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  padding: 15px;
+  font-weight: 450;
+  border-bottom: none;
+}
+
+.card-body {
+  padding: 25px;
+  font-size: 15px;
+}
+
+/* Tabela de Atletas */
+.table {
+  margin-bottom: 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  border: none;
+  font-weight: 400;
+  color: #495057;
+  padding: 20px 15px;
+}
+
+.table td {
+  padding: 15px;
+  vertical-align: middle;
+  border-color: #e9ecef;
+  transition: all 0.2s ease;
+}
+
+/* Linhas da Tabela - Efeitos de Seleção e Hover */
+.atleta-row {
+  cursor: pointer;
+  color: #6c757d; /* Cor clara inicial para não selecionados */
+  font-weight: 300;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.atleta-row:hover {
+  background-color: #f8f9fa !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.atleta-row.selected {
+  background-color: #e3f2fd; /* Azul claro para selecionado */
+  color: #212529; /* Cor carregada para texto geral */
+  font-weight: 400;
+}
+
+.atleta-row.selected .atleta-nome {
+  color: #1976d2; /* Azul mais forte para o nome */
+  font-weight: 400;
+}
+
+.atleta-row.selected i {
+  color: #28a745 !important; /* Verde para o ícone de check */
+}
+
+/* Avatar */
+.avatar-md {
+  height: 40px;
+  width: 40px;
+  border: 2px solid #e9ecef;
+  transition: border-color 0.3s ease;
+}
+
+.atleta-row:hover .avatar-md {
+  border-color: #007bff;
+}
+
+.atleta-row.selected .avatar-md {
+  border-color: #1976d2;
+}
+
+/* Nome do Atleta */
+.atleta-nome {
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+/* Spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Botões */
+.btn-lg {
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Badge */
+.badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* Ícones */
+.nc-icon {
+  font-size: 1.2rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .logo-equipa, .logo-jogo {
+    height: 40px;
+    width: 40px;
+  }
+
+  .header-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .table td {
+    padding: 10px 8px;
+  }
+
+  .btn-lg {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .header-section .d-flex.justify-content-between {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .header-section p {
+    font-size: 1rem;
+  }
+}
+
+
+.flag-icon {
+  width: 24px;
+  height: 24px;
+}
+
+  .table-nowrap td, .table-nowrap th {
+      white-space: nowrap;
+  }

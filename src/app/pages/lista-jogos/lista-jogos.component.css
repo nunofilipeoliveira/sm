@@ -1,10 +1,12 @@
 /* lista-jogos.component.css - Versão atualizada com maior especificidade */
 
 /* Seus estilos existentes... */
-body {
+tbody {
   margin-top: 20px;
   background-color: #eee;
+  font-size: 14px;
 }
+
 
 .team-logo {
   width: 24px;
@@ -60,3 +62,4 @@ body {
 .project-list-table tbody tr.jogo-registado:hover td {
   background-color: #f8f9fa !important;
 }
+

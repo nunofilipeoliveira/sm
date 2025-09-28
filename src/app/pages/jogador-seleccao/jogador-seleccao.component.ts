@@ -5,6 +5,7 @@ import { EquipaService } from '../../services/equipa.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FiltroJogadorPipe } from './filtroJogador.pipe';
+import { cp } from 'fs';
 
 
 
@@ -24,6 +25,7 @@ export class JogadorSeleccaoComponent implements OnInit {
   public filtro_nome: string = "";
   public filtro_visivel: boolean = false;
   public origem_gestao_equipa: boolean = false;
+  idjogo: number = 0;
 
   constructor(private route: ActivatedRoute, private equipaService: EquipaService, private presencaService: PresencaService, private router: Router) { }
 
@@ -33,6 +35,9 @@ export class JogadorSeleccaoComponent implements OnInit {
     this.spinner = true;
     const routeParams = this.route.snapshot.paramMap;
     this.idEscalao = Number(routeParams.get('id'));
+    this.idjogo = Number(routeParams.get('idjogo'));
+    console.log('JogadorSeleccaoComponent | idjogo:', this.idjogo);
+
     console.log('JogadorSeleccaoComponent | idEscalao:', this.idEscalao);
     if (this.idEscalao < 0) {
       console.log("JogadorSeleccaoComponent | Modo seleção jogador genérico");
@@ -79,13 +84,11 @@ export class JogadorSeleccaoComponent implements OnInit {
   seleciona(indice_jogador: number) {
 
     console.log("JogadorSeleccaoComponent | Seleciona");
-
     console.log("JogadorSeleccaoComponent | Seleciona | jogadores:", this.jogadores);
     console.log("JogadorSeleccaoComponent | Seleciona | indice:", indice_jogador);
 
     if (this.origem_gestao_equipa) {
       console.log("Modo seleção jogador genérico");
-
       let posicao = this.jogadores.findIndex(x => x.id_Jogador == indice_jogador);
       let tmpJogador: jogadorData = {
         id: this.jogadores[posicao].id_Jogador,
@@ -114,22 +117,54 @@ export class JogadorSeleccaoComponent implements OnInit {
 
       // Inicia o spinner para indicar que uma operação está em andamento
       this.spinner = true;
-      this.equipaService.addJogadorEquipa(tmpJogador, this.idEscalao).subscribe({
-        next: (response) => {
-          // O serviço retornou sucesso
-          console.log('Jogador adicionado com sucesso:', response);
 
-          this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
-          this.spinner = false; // Desativa o spinner
-        },
-        error: (error) => {
-          // O serviço retornou um erro
-          console.error('Erro ao adicionar jogador à equipa:', error);
-          alert('Ocorreu um erro ao adicionar o jogador à equipa');
-          this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
-          this.spinner = false; // Desativa o spinner
+      //verifica se está numa seleção de jogador para um jogo
+      if (this.idjogo && this.idjogo > 0) {
+        //está na seleção de jogador para um jogo
+        console.log("JogadorSeleccaoComponent | Seleciona | Está na seleção de jogador para um jogo");
+
+        const storedData = localStorage.getItem('convocatoria_jogo');
+        let convocatoria: ConvocatoriaData[] = [];
+        if (storedData) {
+          convocatoria = JSON.parse(storedData);
+          console.log('JogadorSeleccaoComponent | List loaded from session:', convocatoria);
         }
-      });
+        console.log('JogadorSeleccaoComponent | Current convocatoria before adding:', convocatoria);
+        //adiciona o jogador
+        console.log('JogadorSeleccaoComponent | Adding player to convocatoria:', tmpJogador);
+        convocatoria.push({ id_jogador: tmpJogador.id, nome_jogador: tmpJogador.nome, selecionado: true });
+        console.log('JogadorSeleccaoComponent | Updated convocatoria:', convocatoria);
+        //guardar na sessão
+        const data = JSON.stringify(convocatoria);
+        localStorage.setItem("convocatoria_jogo", data);
+        console.log('JogadorSeleccaoComponent | Data saved to session:', data);
+
+
+
+
+        this.router.navigate(['/convocatoria/' + this.idjogo]);
+        this.spinner = false;
+      } else {
+
+
+
+        this.equipaService.addJogadorEquipa(tmpJogador, this.idEscalao).subscribe({
+          next: (response) => {
+            // O serviço retornou sucesso
+            console.log('Jogador adicionado com sucesso:', response);
+
+            this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
+            this.spinner = false; // Desativa o spinner
+          },
+          error: (error) => {
+            // O serviço retornou um erro
+            console.error('Erro ao adicionar jogador à equipa:', error);
+            alert('Ocorreu um erro ao adicionar o jogador à equipa');
+            this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
+            this.spinner = false; // Desativa o spinner
+          }
+        });
+      }
 
     } else {
 
