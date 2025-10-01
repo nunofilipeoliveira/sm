@@ -77,5 +77,13 @@ export class JogoService {
       return this.http.put<ConvocatoriaDataWS>(urltmp, { headers });
   }
 
+  atualizarJogo(jogo: JogoData): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/atualizarJogo";
+      console.log('JogoService | url:', this, urltmp);
+      console.log('JogoService | jogo:', jogo);
+      return this.http.put<any>(urltmp, jogo, { headers });
+  }
+
 
 }

@@ -165,7 +165,7 @@ export class PresencaService {
 
     console.log("PresencaService | createPresenca | url: ", this.URLPresenca)
     console.log("PresencaService | createPresenca | body: ", this.body_json)
-    return this.http.put<any>(this.URLPresenca, this.body_json, { headers });
+    return this.http.put<any>(this.URLPresenca + '/' + environment.tenant_id, this.body_json, { headers });
 
 
   }

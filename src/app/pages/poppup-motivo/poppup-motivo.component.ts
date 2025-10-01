@@ -41,5 +41,9 @@ export class PoppupMotivoComponent {
     this.dialog.close(this.motivoTexto);
   }
 
+  keepFocus(el: HTMLTextAreaElement) {
+  setTimeout(() => el.focus(), 0);
+}
+
 
 }

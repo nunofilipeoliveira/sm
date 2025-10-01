@@ -142,6 +142,11 @@
   display: inline-block;
 }
 
+.flag-icon {
+  width: 24px;
+  height: 24px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .score {
@@ -158,4 +163,620 @@
     height: 28px;
     font-size: 12px;
   }
+}
+
+.registo-container {
+  max-width: 300px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.jogador-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 15px;
+  background: #fafafa;
+}
+
+.header-jogador {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.input-numero {
+  width: 60px;
+  padding: 4px 8px;
+}
+
+.label-numero {
+  font-weight: 600;
+}
+
+.nome-jogador {
+  font-weight: 700;
+  flex-grow: 1;
+}
+
+.grupo-eventos {
+  margin-bottom: 12px;
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.controles label {
+  min-width: auto;
+  font-weight: 400;
+}
+
+.controles button {
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0;
+  border-radius: 4px;
+  border: 1.5px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.btn-outline-success {
+  color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-outline-success:hover:not(:disabled) {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-outline-danger:hover:not(:disabled) {
+  background-color: #dc3545;
+  color: white;
+}
+
+.contador {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.btn-lg {
+  font-size: 1.25rem;
+  padding: 10px 20px;
+}
+
+.item-registo {
+  margin-bottom: 15px;
+}
+
+.titulo-registo {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.jogador-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 18px;
+  background: #fafafa;
+}
+
+.header-jogador {
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.nome-jogador {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.linha-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+.linha-info label {
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.input-numero {
+  width: 70px;
+  text-align: center;
+}
+
+.separador {
+  border: none;
+  border-top: 2px dashed #ccc;
+  margin: 12px 0;
+}
+
+.grupo-eventos h4 {
+  margin-bottom: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+  border-left: 4px solid #3b76e1;
+  padding-left: 6px;
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.controles label {
+  min-width: 90px;
+  font-weight: 500;
+}
+/* Estilos Gerais */
+.container {
+  margin-top: 30px;
+}
+
+.header-section {
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header-section h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.header-section p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+/* Logotipos */
+.logo-equipa, .logo-jogo {
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.logo-jogo {
+  height: 50px;
+  width: 50px;
+}
+
+.logo-jogo2 {
+  height: 30px;
+  width: 30px;
+}
+
+
+/* Cards */
+.card {
+  border: none;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  padding: 15px;
+  font-weight: 450;
+  border-bottom: none;
+}
+
+.card-body {
+  padding: 25px;
+  font-size: 15px;
+}
+
+/* Tabela de Atletas */
+.table {
+  margin-bottom: 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  border: none;
+  font-weight: 400;
+  color: #495057;
+  padding: 20px 15px;
+}
+
+.table td {
+  padding: 15px;
+  vertical-align: middle;
+  border-color: #e9ecef;
+  transition: all 0.2s ease;
+}
+
+/* Linhas da Tabela - Efeitos de Seleção e Hover */
+.atleta-row {
+  cursor: pointer;
+  color: #6c757d; /* Cor clara inicial para não selecionados */
+  font-weight: 300;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.atleta-row:hover {
+  background-color: #f8f9fa !important;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.atleta-row.selected {
+  background-color: #e3f2fd; /* Azul claro para selecionado */
+  color: #212529; /* Cor carregada para texto geral */
+  font-weight: 400;
+}
+
+.atleta-row.selected .atleta-nome {
+  color: #1976d2; /* Azul mais forte para o nome */
+  font-weight: 400;
+}
+
+.atleta-row.selected i {
+  color: #28a745 !important; /* Verde para o ícone de check */
+}
+
+/* Avatar */
+.avatar-md {
+  height: 40px;
+  width: 40px;
+  border: 2px solid #e9ecef;
+  transition: border-color 0.3s ease;
+}
+
+.atleta-row:hover .avatar-md {
+  border-color: #007bff;
+}
+
+.atleta-row.selected .avatar-md {
+  border-color: #1976d2;
+}
+
+/* Nome do Atleta */
+.atleta-nome {
+  font-size: 1.1rem;
+  transition: color 0.3s ease;
+}
+
+/* Spinner */
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Botões */
+.btn-lg {
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Badge */
+.badge {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* Ícones */
+.nc-icon {
+  font-size: 1.2rem;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .logo-equipa, .logo-jogo {
+    height: 40px;
+    width: 40px;
+  }
+
+  .header-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .table td {
+    padding: 10px 8px;
+  }
+
+  .btn-lg {
+    padding: 10px 20px;
+    font-size: 1rem;
+  }
+
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .header-section .d-flex.justify-content-between {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .header-section p {
+    font-size: 1rem;
+  }
+}
+
+
+.flag-icon {
+  width: 24px;
+  height: 24px;
+}
+
+  .table-nowrap td, .table-nowrap th {
+      white-space: nowrap;
+  }
+
+
+  /* ... (seus estilos existentes) ... */
+
+/* Estilos para a nova seção de registro de jogo */
+.registo-container {
+  max-width: 600px; /* Aumente a largura para melhor visualização */
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.titulo-registo {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.jogador-item {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.jogador-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background-color: #f8f8f8;
+  cursor: pointer;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+.jogador-header:hover {
+  background-color: #f0f0f0;
+}
+
+.jogador-header .player-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.jogador-header .nome-jogador {
+  flex-grow: 1;
+  font-size: 1.1rem;
+}
+
+.jogador-header .nc-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+}
+
+.jogador-details {
+  padding: 15px;
+  background-color: #ffffff;
+}
+
+.linha-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.linha-info label {
+  min-width: 100px; /* Ajuste conforme necessário */
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+.linha-info input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.input-numero {
+  width: 70px;
+  padding: 5px 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.separador {
+  border: none;
+  border-top: 1px dashed #e0e0e0;
+  margin: 15px 0;
+}
+
+.grupo-eventos h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #555;
+  border-left: 3px solid #3b76e1;
+  padding-left: 8px;
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 8px; /* Espaçamento entre os controles */
+}
+
+.controles label {
+  min-width: 80px; /* Ajuste para alinhar os labels */
+  font-weight: 400;
+  margin-right: 5px;
+}
+
+.controles button {
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%; /* Botões redondos */
+  border: 1px solid;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+}
+.btn-outline-danger:hover:not(:disabled) {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-outline-success {
+  color: #28a745;
+  border-color: #28a745;
+}
+.btn-outline-success:hover:not(:disabled) {
+  background-color: #28a745;
+  color: white;
+}
+
+.contador {
+  min-width: 25px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.1rem;
+  user-select: none;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.btn-lg {
+  font-size: 1.25rem;
+  padding: 10px 20px;
+}
+
+.linha-controle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px; /* Espaço entre linhas */
+}
+
+.linha-controle label {
+  min-width: 100px; /* Ajuste para alinhar labels */
+  font-weight: 500;
+  margin-right: 10px;
+}
+
+
+.emoji-circle {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid red;  /* só contorno */
+  border-radius: 50%;     /* círculo */
+  padding: 0.2em;         /* espaço para dar forma arredondada */
+  line-height: 1;         /* evita esticar verticalmente */
+  font-size: 1em;         /* mantém o tamanho do emoji normal */
+}
+
+/* ... (restante dos seus estilos) ... */
+.legenda-golos {
+  font-size: 0.8rem;
+  color: #555;
+  margin: 10px 0 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center; /* centraliza horizontalmente */
+  user-select: none; /* evita seleção acidental */
+}
+
+.legenda-golos span {
+  background-color: #f0f0f0;
+  padding: 4px 8px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
 }

@@ -17,4 +17,28 @@ interface JogoData {
     arbitro_1: number;
     arbitro_2: number;
     estado: string;
+    jogadores: JogadorJogo[];
+}
+
+interface JogadorJogo {
+    id_jogador: number;
+    nome: string;
+    capitao: boolean;
+    numero: number;
+    amarelo: number;
+    azul: number;
+    vermelho: number;
+    golos_p: number;
+    golos_ld: number;
+    golos_pp: number;
+    golos_up: number;
+    golos_normal: number;
+    golos_s_p: number;
+    golos_s_ld: number;
+    golos_s_up: number;
+    golos_s_pp: number;
+    golos_s_normal: number;
+    isGR: boolean;
+    // Adicione a propriedade expanded aqui para que seja parte da interface original
+    expanded?: boolean; // Adicione esta linha
 }

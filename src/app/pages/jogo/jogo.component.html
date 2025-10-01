@@ -1,81 +1,250 @@
 <div class="game-summary">
-  <!-- Scoreboard -->
-  <div class="score-section">
-    <div class="team-section">
-      <img src="assets/img/equipas/cab.png" class="team-logo" alt="CA Bragança">
-      <p class="team-name">CA Bragança</p>
+  <div *ngIf="loading" class="loading-indicator">
+    <p></p>
+  </div>
+  <div *ngIf="!loading">
+    <!-- Scoreboard -->
+    <div *ngIf="jogo.tipo_local=='C'" class="score-section">
+      <div class="team-section">
+        <img src="assets/img/clubes/clube_{{ meuClubeid }}.png"
+          onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" alt="Nossa Equipa"
+          class="team-logo" />
+        <p class="team-name">{{nomeClube}} <span *ngIf="jogo.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></p>
+      </div>
+
+      <div class="score">
+        <span class="score-home">{{jogo.golos_equipa}}</span>
+        <span class="score-separator">-</span>
+        <span class="score-away">{{jogo.golos_equipa_adv}}</span>
+      </div>
+
+      <div class="team-section">
+        <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
+          onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" alt="Adversário"
+          class="team-logo" />
+        <p class="team-name">{{ jogo.equipa_adv_nome }} <span
+            *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span></p>
+      </div>
     </div>
 
-    <div class="score">
-      <span class="score-home">2</span>
-      <span class="score-separator">-</span>
-      <span class="score-away">3</span>
+
+    <div *ngIf="jogo.tipo_local=='F'" class="score-section">
+
+      <div class="team-section">
+        <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
+          onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" alt="Adversário"
+          class="team-logo" />
+        <p class="team-name">{{ jogo.equipa_adv_nome }} <span
+            *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span></p>
+      </div>
+
+      <div class="score">
+        <span class="score-home">{{jogo.golos_equipa_adv}}</span>
+        <span class="score-separator">-</span>
+        <span class="score-away">{{jogo.golos_equipa}}</span>
+      </div>
+
+      <div class="team-section">
+        <img src="assets/img/clubes/clube_{{ meuClubeid }}.png"
+          onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" alt="Nossa Equipa"
+          class="team-logo" />
+        <p class="team-name">{{nomeClube}} <span *ngIf="jogo.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></p>
+      </div>
+
+
     </div>
 
-    <div class="team-section">
-      <img src="assets/img/equipas/hcmaia.png" class="team-logo" alt="HC Maia">
-      <p class="team-name">HC Maia</p>
+
+    <!-- Game Info -->
+    <div class="game-header">
+      <p class="game-league"><img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
+          onerror="this.onerror=null; this.src='assets/img/competicoes/default_competicao.png'" class="flag-icon" />
+        {{jogo.competicao_nome}}</p>
+      <p class="game-date">📅 {{jogo.data | date: 'fullDate'}} - {{jogo.hora}}</p>
+      <p class="game-venue">📍 {{jogo.local}}</p>
     </div>
-  </div>
 
-  <!-- Game Info -->
-  <div class="game-header">
-    <p class="game-league">🏆 Distrital 24/25 - Série A</p>
-    <p class="game-date">📅 Domingo, 6 Outubro 2024 - 15h30</p>
-    <p class="game-venue">📍 Pavilhão Bragança</p>
-  </div>
+    <div *ngIf="jogo.estado==='INICIADO' && !mostrarRegisto" class="team-staff">
+      <!-- colocar mensagem forte de jogo por registar -->
+      <h2>O jogo está por registar a informação</h2>
+    </div>
 
-  <!-- Players -->
-  <div class="team-staff">
-    <h2>👥 Jogadores</h2>
-    <ul>
-      <li>
-        <span class="badge">10</span>
-        <span class="staff-name"><img src="assets/img/jogadores/54_avatar.jpg" class="player-avatar">Afonso Sousa - GR</span>
-        <span class="staff-cards">💥</span>
-      </li>
-      <li>
-        <span class="badge">99</span>
-        <span class="staff-name"><img src="assets/img/jogadores/78_avatar.jpg" class="player-avatar">Helena Sousa - GR</span>
-        <span class="staff-cards">💥</span>
-      </li>
-      <li>
-        <span class="badge">8</span>
-        <span class="staff-name"><img src="assets/img/jogadores/51_avatar.jpg" class="player-avatar">Luis Oliveira</span>
-      </li>
-      <li>
-        <span class="badge">17</span>
-        <span class="staff-name"><img src="assets/img/jogadores/47_avatar.jpg" class="player-avatar">Alex Freitas (C)</span>
-        <span class="staff-cards">⚽</span>
-      </li>
-      <li>
-        <span class="badge">7</span>
-        <span class="staff-name"><img src="assets/img/jogadores/50_avatar.jpg" class="player-avatar">Afonso Silva</span>
-        <span class="staff-cards">⚽</span>
-      </li>
-      <li>
-        <span class="badge">11</span>
-        <span class="staff-name"><img src="assets/img/jogadores/58_avatar.jpg" class="player-avatar">Clésio Neves</span>
-        <span class="staff-cards">⚽</span>
-      </li>
-    </ul>
-  </div>
+    <!-- Seção de Registro de Informações do Jogo (Expandível por Jogador) -->
+    <div *ngIf="mostrarRegisto" class="registo-container">
+      <h3 class="titulo-registo">Registar Informação do Jogo</h3>
 
-  <!-- Staff -->
-  <div class="team-staff">
-    <h2>🎯 Staff Técnico</h2>
-    <ul>
-      <li>
-        <span class="staff-name">Pedro Ferreira - Treinador</span>
-        <span class="staff-cards card-red"></span>
-      </li>
-      <li>
-        <span class="staff-name">Mafalda - Treinador Adjunto</span>
-        <span class="staff-cards card-yellow"></span>
-      </li>
-      <li>
-        <span class="staff-name">Virginia Barbosa - Seccionista</span>
-      </li>
-    </ul>
+      <div *ngFor="let jogador of jogo.jogadores" class="jogador-item">
+        <div class="jogador-header" (click)="toggleJogadorExpand(jogador.id_jogador)">
+          <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
+            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+            class="player-avatar me-2" />
+          <span class="nome-jogador">{{ jogador.nome }}</span>
+          <i class="nc-icon" [ngClass]="{'nc-minimal-down': !jogador.expanded, 'nc-minimal-up': jogador.expanded}"></i>
+        </div>
+
+        <div *ngIf="jogador.expanded" class="jogador-details">
+          <div class="linha-info">
+            <label for="capitao-{{jogador.id_jogador}}">Capitão</label>
+            <input type="checkbox" [(ngModel)]="jogador.capitao" name="capitao-{{jogador.id_jogador}}"
+              id="capitao-{{jogador.id_jogador}}" (change)="definirCapitao(jogador)" />
+          </div>
+
+          <div class="linha-info">
+            <label>Nº Camisola</label>
+            <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1" max="99"
+              class="input-numero" />
+          </div>
+
+          <div class="linha-info">
+            <label>GR</label>
+            <input type="checkbox" [(ngModel)]="jogador.isGR" name="isGR-{{jogador.id_jogador}}"
+              id="isGR-{{jogador.id_jogador}}" class="input-isGR" />
+          </div>
+
+          <hr class="separador" />
+
+          <div class="eventos-jogador">
+            <div *ngIf="!jogador.isGR" class="grupo-eventos">
+              <h4>⚽ Golos Marcados</h4>
+              <div class="controles">
+                <ng-container *ngFor="let tipo of tiposGolo">
+                  <div class="linha-controle">
+                    <label>{{ tipo.label }}</label>
+                    <button class="btn btn-sm btn-outline-danger" (click)="alterarGolo(jogador, tipo.key, true, -1)"
+                      [disabled]="getGoloCount(jogador, tipo.key, true) === 0">−</button>
+                    <span class="contador">{{ getGoloCount(jogador, tipo.key, true) }}</span>
+                    <button class="btn btn-sm btn-outline-success"
+                      (click)="alterarGolo(jogador, tipo.key, true, 1)">+</button>
+                  </div>
+                </ng-container>
+              </div>
+
+            </div>
+
+            <div *ngIf="jogador.isGR" class="grupo-eventos">
+              <h4>🥅 Golos Sofridos</h4>
+              <div class="controles">
+                <ng-container *ngFor="let tipo of tiposGolo">
+                  <div class="linha-controle">
+                    <label>{{ tipo.label }}</label>
+                    <button class="btn btn-sm btn-outline-danger" (click)="alterarGolo(jogador, tipo.key, false, -1)"
+                      [disabled]="getGoloCount(jogador, tipo.key, false) === 0">−</button>
+                    <span class="contador">{{ getGoloCount(jogador, tipo.key, false) }}</span>
+                    <button class="btn btn-sm btn-outline-success"
+                      (click)="alterarGolo(jogador, tipo.key, false, 1)">+</button>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+
+            <div class="grupo-eventos">
+              <h4>🟨🟥 Cartões</h4>
+              <div class="controles">
+                <ng-container *ngFor="let tipo of tiposCartao">
+                  <div class="linha-controle">
+                    <label>{{ tipo.label }}</label>
+                    <button class="btn btn-sm btn-outline-danger" (click)="alterarCartao(jogador, tipo.key, -1)"
+                      [disabled]="getCartaoCount(jogador, tipo.key) === 0">−</button>
+                    <span class="contador">{{ getCartaoCount(jogador, tipo.key) }}</span>
+                    <button class="btn btn-sm btn-outline-success"
+                      (click)="alterarCartao(jogador, tipo.key, 1)">+</button>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-3">
+        <button class="btn btn-success btn-lg" (click)="salvarRegisto()">
+          <i class="fas fa-save me-2"></i>Salvar Registo
+        </button>
+      </div>
+    </div>
+
+    <!-- Players -->
+    <div *ngIf="jogo.estado==='CONCLUIDO' && !mostrarRegisto" class="team-staff">
+      <h2>👥 Jogadores</h2>
+      <ul>
+        <li *ngFor="let jogador of jogo.jogadores">
+          <span class="badge">{{jogador.numero}}</span>
+          <span class="staff-name"><img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
+              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+              class="player-avatar">{{jogador.nome}}</span>
+          <span class="staff-cards">
+            <!-- Cartões -->
+            <span *ngIf="jogador.amarelo > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.amarelo)">🟨</ng-container>
+            </span>
+            <span *ngIf="jogador.azul > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.azul)">🟦</ng-container>
+            </span>
+            <span *ngIf="jogador.vermelho > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.vermelho)">🟥</ng-container>
+            </span>
+            <!-- Golos Marcados -->
+            <span *ngIf="jogador.golos_normal > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_normal)">⚫</ng-container>
+            </span>
+            <span *ngIf="jogador.golos_p > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_p)">🥅</ng-container>
+            </span>
+            <span *ngIf="jogador.golos_pp > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_pp)">⬆️</ng-container>
+            </span>
+            <span *ngIf="jogador.golos_up > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_up)">⬇️</ng-container>
+            </span>
+            <span *ngIf="jogador.golos_ld > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_ld)">🏑</ng-container>
+            </span>
+            <!-- Golos Sofridos -->
+            <span *ngIf="jogador.golos_s_normal > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_normal)">⚫</ng-container>
+            </span>
+            <span *ngIf="jogador.golos_s_p > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_p)">🥅</ng-container>
+            </span>
+            <span *ngIf="jogador.golos_s_pp > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_pp)">⬆️</ng-container>
+            </span>
+            <span *ngIf="jogador.golos_s_up > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_up)">⬇️</ng-container>
+            </span>
+            <span *ngIf="jogador.golos_s_ld > 0">
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_ld)">🏑</ng-container>
+            </span>
+          </span>
+        </li>
+
+        <div class="legenda-golos">
+          <span>⚫ Golo</span>
+          <span>🥅 Penalty</span>
+          <span>🏑 Livre Direto</span>
+          <span>⬆️ Golo em PowerPlay</span>
+          <span>⬇️ Golo em UnderPlay</span>
+        </div>
+
+
+      </ul>
+    </div>
+
+    <div class="d-flex justify-content-between ">
+      <button type="button" class="btn btn-secondary btn-lg" (click)="voltar()">
+        <i class="nc-icon nc-minimal-left me-2"></i> Voltar
+      </button>
+      <button type="button" *ngIf="jogo.estado==='INICIADO' && !mostrarRegisto" class="btn btn-warning btn-lg"
+        (click)="registarInformacaoJogo()">
+        <i class="nc-icon nc-ruler-pencil me-2"></i> Registar Informação do Jogo
+      </button>
+      <button type="button" *ngIf="jogo.estado==='CONCLUIDO' && !mostrarRegisto" class="btn btn-warning btn-lg"
+        (click)="editarJogo()">
+        <i class="nc-icon nc-ruler-pencil me-2"></i> Editar
+      </button>
+      <button class="btn btn-info btn-lg" (click)="verConvocatoria(jogo.id)">
+        <i class="nc-icon nc-bullet-list-67 me-2"></i>Convocatória
+      </button>
+    </div>
   </div>
 </div>

@@ -4,21 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JogoService } from '../../services/jogo.service';
 import { EquipaService } from '../../services/equipa.service';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap'; // Importar NgbModal
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap'; // Importar NgbModal e NgbModule
 import { ClubeData } from '../gestao-clubes/clubesData';
 import { ClubeService } from '../../services/clube.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { environment } from '../../../environments/environment';
-import { Login } from '../login/login.component';
 import { LoginServiceService } from '../../services/login-service.service';
-import e from 'express';
+
 
 
 
 @Component({
   selector: 'lista-jogos',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatCheckboxModule],
+  imports: [FormsModule, CommonModule, MatCheckboxModule, NgbModule],
   templateUrl: './lista-jogos.component.html',
   styleUrl: './lista-jogos.component.css'
 })
@@ -96,6 +95,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
       arbitro_1: 0,
       arbitro_2: 0,
       estado: 'REGISTADO', // Padrão
+      jogadores: [] // Inicialmente vazio
     };
   }
 
@@ -156,7 +156,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     });
 
     console.log('ListaJogosComponent | adicionarJjogo | novoJogo:', this.novoJogo);
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       if (result === 'save') {
         this.salvarNovoJogo();
       }
@@ -243,8 +243,15 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     if (this.novoJogo.tipo_local === 'F') {
       this.novoJogo.tipo_local = 'Fora'
     }
+    if(this.novoJogo.tipoEquipa==='B'){
+      this.isEquipaB_local = true;
+    }
+    if(this.novoJogo.tipoEquipa_adv==='B'){
+      this.isEquipaB_adv = true;
+    }
+
     console.log('ListaJogosComponent | editarJogo | novoJogo:', this.novoJogo);
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'lg' }).result.then((result) => {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       if (result === 'save') {
         if (this.isModoEditar) {
           this.salvarEdicaoJogo();
@@ -268,9 +275,13 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
 
     if (this.isEquipaB_local) {
       this.novoJogo.tipoEquipa = 'B';
+    }else{
+      this.novoJogo.tipoEquipa = ' ';
     }
     if (this.isEquipaB_adv) {
       this.novoJogo.tipoEquipa_adv = 'B';
+    }else{
+      this.novoJogo.tipoEquipa_adv = ' ';
     }
 
     this.novoJogo.tipo_local === 'Casa' ? this.novoJogo.tipo_local = 'C' : this.novoJogo.tipo_local = 'F';

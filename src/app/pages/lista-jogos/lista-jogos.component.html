@@ -7,60 +7,82 @@
   </div>
 
   <! -- Mensagem para nenhum jogo encontrado -->
-  <div *ngIf="!loading && jogos.length === 0" class="alert alert-info text-center" role="alert">
-    Nenhum jogo encontrado. Clique em "Adicionar Novo Jogo" para começar a adicionar jogos.
-  </div>
+    <div *ngIf="!loading && jogos.length === 0" class="alert alert-info text-center" role="alert">
+      Nenhum jogo encontrado. Clique em "Adicionar Novo Jogo" para começar a adicionar jogos.
+    </div>
 
-  <table class="table project-list-table table-nowrap align-middle" *ngIf="!loading && jogos.length > 0">
-    <thead class="thead-light">
-      <tr class="table-active">
-        <th>Data</th>
-        <th>Equipa</th>
-        <th>Resultado</th>
-        <th></th>
-        <th class="d-none d-md-table-cell">Competição</th>
-        <th>Acção</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let jogo of jogos" [class.jogo-registado]="jogo.estado === 'REGISTADO'">
-        <td>{{ jogo.data | date:'dd/MM' }}</td>
-        <td style="width: 300px;">
-          ({{ jogo.tipo_local }})
-          <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
-            onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" class="team-logo" />
-          {{ jogo.equipa_adv_nome }}
-        </td>
-        <td style="width: 12%;text-align: center;">
-          <span *ngIf="jogo.estado === 'CONCLUIDO'"
-            [ngClass]="{'loss': jogo.golos_equipa_adv > jogo.golos_equipa, 'win': jogo.golos_equipa_adv < jogo.golos_equipa, 'draw': jogo.golos_equipa_adv === jogo.golos_equipa}">{{jogo.golos_equipa}}
-            - {{jogo.golos_equipa_adv}}</span>
-        </td>
-        <td style="width: 12%;text-align: end;">
-          <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png" class="flag-icon" />
-        </td>
-        <td class="d-none d-md-table-cell">
-          {{ jogo.competicao_nome }}
-        </td>
-        <td>
-          <button *ngIf="jogo.estado === 'REGISTADO'" (click)="verConvocatoria(jogo.id)" class="btn btn-warning btn-sm me-2">
-            <i class="nc-icon nc-bullet-list-67"></i> <span class="d-none d-md-inline"> Convocatória</span></button>
-          <button *ngIf="jogo.estado === 'CONCLUIDO'" (click)="verJogo(jogo.id)" class="btn btn-info btn-sm me-2">
-            <i class="nc-icon nc-zoom-split"></i> <span class="d-none d-md-inline"> Ver Jogo</span></button>
-          <button *ngIf="isAdmin" (click)="editarJogo(jogo, content)" class="btn btn-primary btn-sm me-2">
-            <i class="nc-icon nc-ruler-pencil"></i> <span class="d-none d-md-inline"> Editar</span></button>
-          <button *ngIf="isAdmin" (click)="apagarJogo(jogo)" class="btn btn-danger btn-sm me-2">
-            <i class="nc-icon nc-simple-remove"></i> <span class="d-none d-md-inline"> Apagar</span></button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+    <table class="table project-list-table table-nowrap align-middle" *ngIf="!loading && jogos.length > 0">
+      <thead class="thead-light">
+        <tr class="table-active">
+          <th>Data</th>
+          <th style="text-align: center;">Local</th>
+          <th>Equipa</th>
+          <th style="width: 12%;text-align: center;">Resultado</th>
+          <th></th>
+          <th class="d-none d-md-table-cell">Competição</th>
+          <th>Acção</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let jogo of jogos" [class.jogo-registado]="jogo.estado === 'REGISTADO'"
+          (click)="(jogo.estado === 'CONCLUIDO' || jogo.estado === 'INICIADO') && verJogo(jogo.id)">
+          <td>{{ jogo.data | date:'dd/MM' }}</td>
+          <td style="text-align: center;">({{ jogo.tipo_local }})</td>
+          <td style="width: 300px;">
 
-  <div class="text-center mt-3">
-    <button class="btn btn-primary" (click)="adicionarJjogo(content)">
-      <b>+</b> Adicionar Novo Jogo
-    </button>
-  </div>
+            <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
+              onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" class="team-logo" />
+            {{ jogo.equipa_adv_nome }} <span *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span>
+          </td>
+          <td style="width: 12%;text-align: center;">
+            <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'"
+              [ngClass]="{'loss': jogo.golos_equipa_adv > jogo.golos_equipa, 'win': jogo.golos_equipa_adv < jogo.golos_equipa, 'draw': jogo.golos_equipa_adv === jogo.golos_equipa}">{{jogo.golos_equipa}}
+              - {{jogo.golos_equipa_adv}}</span>
+            <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'"
+              [ngClass]="{'loss': jogo.golos_equipa_adv > jogo.golos_equipa, 'win': jogo.golos_equipa_adv < jogo.golos_equipa, 'draw': jogo.golos_equipa_adv === jogo.golos_equipa}">{{jogo.golos_equipa_adv}}
+              - {{jogo.golos_equipa}}</span>
+          </td>
+          <td style="width: 12%;text-align: end;">
+            <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
+              onerror="this.onerror=null; this.src='assets/img/competicoes/default_competicao.png'" class="flag-icon" />
+          </td>
+          <td class="d-none d-md-table-cell">
+            {{ jogo.competicao_nome }}
+          </td>
+          <td>
+            <div ngbDropdown class="d-inline-block" (click)="$event.stopPropagation()">
+              <button class="btn btn-sm btn-secondary" ngbDropdownToggle>
+                <i class="nc-icon nc-settings-gear-65"></i> Ações
+              </button>
+
+              <div ngbDropdownMenu>
+                <button *ngIf="jogo.estado === 'REGISTADO'" ngbDropdownItem (click)="verConvocatoria(jogo.id)">
+                  <i class="nc-icon nc-bullet-list-67 me-2"></i>Convocatória
+                </button>
+
+                <button *ngIf="jogo.estado !== 'REGISTADO'" ngbDropdownItem (click)="verJogo(jogo.id)">
+                  <i class="nc-icon nc-zoom-split me-2"></i>Ver Jogo
+                </button>
+
+                <button *ngIf="isAdmin" ngbDropdownItem (click)="editarJogo(jogo, content)">
+                  <i class="nc-icon nc-ruler-pencil me-2"></i>Editar
+                </button>
+
+                <button *ngIf="isAdmin" ngbDropdownItem (click)="apagarJogo(jogo)">
+                  <i class="nc-icon nc-simple-remove me-2 text-danger"></i>Apagar
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="text-center mt-3">
+      <button class="btn btn-primary" (click)="adicionarJjogo(content)">
+        <b>+</b> Adicionar Novo Jogo
+      </button>
+    </div>
 </div>
 
 <!-- Modal para Adicionar Novo Jogo (Transformado Visualmente - Estilo Ficha Atleta) -->
@@ -183,7 +205,8 @@
               <label for="tipoLocal" class="form-label fw-bold">
                 <i class="nc-icon nc-home-50 me-1 text-primary"></i>Tipo de Local
               </label>
-              <select class="form-select form-select" id="tipoLocal" [(ngModel)]="novoJogo.tipo_local" name="tipoLocal" (change)="onTipoLocal()">
+              <select class="form-select form-select" id="tipoLocal" [(ngModel)]="novoJogo.tipo_local" name="tipoLocal"
+                (change)="onTipoLocal()">
                 <option value="Casa">Casa</option>
                 <option value="Fora">Fora</option>
               </select>
