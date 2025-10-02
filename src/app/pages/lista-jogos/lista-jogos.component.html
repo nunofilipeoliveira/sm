@@ -50,9 +50,9 @@
             {{ jogo.competicao_nome }}
           </td>
           <td>
-            <div ngbDropdown class="d-inline-block" (click)="$event.stopPropagation()">
+            <div ngbDropdown class="d-inline-block"   (click)="$event.stopPropagation()">
               <button class="btn btn-sm btn-secondary" ngbDropdownToggle>
-                <i class="nc-icon nc-settings-gear-65"></i> Ações
+                <i class="nc-icon nc-settings-gear-65"></i> <span class="d-none d-md-inline">Ações</span> 
               </button>
 
               <div ngbDropdownMenu>
