@@ -14,6 +14,9 @@ export const ROUTES: RouteInfo[] = [
   { path: '/equipa', title: 'Equipa', icon: 'nc-badge', class: '' },
   { path: '/mpresenca', title: 'Marcar Presença', icon: 'nc-tap-01', class: '' },
   { path: '/presencas', title: 'Presenças', icon: 'nc-paper', class: '' },
+  { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' },
+  { path: '/gestao-clubes', title: 'Clubes', icon: 'nc-html5', class: '' },
+
   //{ path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' }, // Nova entrada para administração
   //{ path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' },
   { path: '/', title: 'Sair', icon: 'nc-key-25', class: 'active-pro' },
@@ -54,8 +57,7 @@ export class SidebarComponent implements OnInit {
 
     if (this.tmpUser == "Nuno") {
       this.menuItems.push(this.historicologinsMenu)
-      this.menuItems.push(this.jogosMenu)
-      this.menuItems.push(this.gestaoClubesMenu)
+
     }
 
     if (this.loginws.getLoginData().perfil == "ADMIN") {
