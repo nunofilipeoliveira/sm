@@ -64,3 +64,23 @@ tbody {
   background-color: #f8f9fa !important;
 }
 
+.tabela-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.tabela-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
+/* Impede quebra de linha e mantém tudo numa só linha */
+.nome-equipa {
+  white-space: nowrap;
+}
+
+/* (opcional) Garante que o texto não é cortado */
+.table {
+  table-layout: auto;
+  width: 100%;
+}
