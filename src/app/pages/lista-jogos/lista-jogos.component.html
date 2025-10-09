@@ -23,7 +23,7 @@
         <th>Data</th>
         <th style="text-align: center;">Local</th>
         <th >Equipa</th>
-        <th style="width: 12%; text-align: center;">Resultado</th>
+        <th >Resultado</th>
         <th></th>
         <th class="d-none d-md-table-cell">Competição</th>
         <th>Ação</th>
@@ -37,7 +37,7 @@
       >
         <td>{{ jogo.data | date:'dd/MM' }}</td>
         <td style="text-align: center;">({{ jogo.tipo_local }})</td>
-        <td class="nome-equipa">
+        <td class="nome-equipa pe-4">
           <img
             src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
             onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
@@ -46,7 +46,7 @@
           {{ jogo.equipa_adv_nome }}
           <span *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span>
         </td>
-        <td style="width: 12%; text-align: center;">
+        <td style="text-align: center;">
           <span
             *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'"
             [ngClass]="{

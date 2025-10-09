@@ -65,7 +65,7 @@
                                 {{ jogo.local }} | <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
                                     class="flag-icon" /> {{ jogo.competicao_nome }}
                                 <p></p>
-                                {{ jogo?.data | date:'dd/MM/yyyy' }} às {{ jogo?.hora }}
+                                {{ jogo.data | date:'dd/MM/yyyy' }} às {{ jogo.hora }}
 
                             </div>
 
@@ -87,7 +87,7 @@
                                 {{ jogo.local }} | <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
                                     class="flag-icon" /> {{ jogo.competicao_nome }}
                                 <p></p>
-                                {{ jogo?.data | date:'dd/MM/yyyy' }} às {{ jogo?.hora }}
+                                {{ jogo.data | date:'dd/MM/yyyy' }} às {{ jogo.hora }}
                             </div>
 
                         </div>
@@ -173,7 +173,7 @@
 </div>
 <!-- Div oculto para gerar a imagem da convocatória com avatares (atualizado para evitar cortes) -->
 <div id="convocatoria-imagem"
-    style="display: none; width: 600px; height: auto; background: #f8f9fa; padding: 20px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; position: relative; overflow: hidden;">
+    style="display: none; width: 600px; height: auto; background: #f8f9fa; padding: 20px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.15);  position: relative; overflow: hidden;">
 
     <!-- Fundo com logotipo oblíquo e transparente -->
     <img [src]="'assets/img/clubes/clube_' + meuClubeid + '.png'"
