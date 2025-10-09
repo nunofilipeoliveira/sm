@@ -192,6 +192,12 @@ export class JogadorSeleccaoComponent implements OnInit {
 
   cancelarSelecao() {
     console.log("JogadorSeleccaoComponent | Cancelar seleção");
+
+    if(this.idjogo && this.idjogo > 0){
+      this.router.navigate(['/convocatoria/' + this.idjogo]);
+      return;
+    }
+
     if (this.origem_gestao_equipa) {
       this.router.navigate(['/gestao-equipa' + '/' + this.idEscalao]);
     } else {

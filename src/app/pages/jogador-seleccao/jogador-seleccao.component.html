@@ -20,7 +20,7 @@
             </th>
           </tr>
           <tr *ngIf="origem_gestao_equipa">
-            <td>
+            <td *ngIf="idjogo==0 || !idjogo" colspan="3">
               <button type="button" class="btn btn-info text-white" (click)="novoJogador()"
                 *ngIf="origem_gestao_equipa">Addicionar Novo Jogador</button>
             </td>
@@ -43,8 +43,8 @@
         </tbody>
       </table>
       <button type="button" class="btn btn-warning text-white" (click)="cancelarSelecao()">Cancelar</button>
-      <button type="button" class="btn btn-info text-white" (click)="novoJogador()"
-        *ngIf="origem_gestao_equipa">Addicionar Novo Jogador</button>
+      <button  type="button" class="btn btn-info text-white" (click)="novoJogador()"
+        *ngIf="origem_gestao_equipa && (idjogo==0 || !idjogo)">Addicionar Novo Jogador</button>
     </div>
 
 
