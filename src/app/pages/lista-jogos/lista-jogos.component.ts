@@ -44,6 +44,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
   selectedClube: ClubeData | undefined;
   isAdmin: boolean = false; // Para verificar se o utilizador é admin
   isModoEditar: boolean = false; // Para verificar se está em modo editar
+  hasEquipaB:boolean = true;
 
   ngOnInit(): void {
     this.loading = true; // Inicia o loading

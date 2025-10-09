@@ -440,7 +440,7 @@ export class Marcar_presencaComponent implements OnInit {
             this.collapse_first = false;
             this.collapse_second = true;
             this.sbmErroDia = true;
-            document.location.href = '#top';
+           // document.location.href = '#top';
 
           } else {
             this.sbmErroDia = false;

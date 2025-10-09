@@ -86,7 +86,7 @@ export class SidebarComponent implements OnInit {
     // Verifica se o utilizador é "Nuno"
     if (user == "Nuno") {
       // Cria um array com os títulos dos menus que Nuno deve ter
-      const requiredMenus = [this.historicologinsMenu.title, this.jogosMenu.title, this.gestaoClubesMenu.title];
+      const requiredMenus = [this.historicologinsMenu.title];
 
       // Cria um array com os títulos dos menus atualmente disponíveis
       const currentMenuTitles = this.menuItems.map(item => item.title);
@@ -96,7 +96,7 @@ export class SidebarComponent implements OnInit {
 
       // Se algum menu estiver faltando, adiciona-o
       if (!allMenusPresent) {
-        this.menuItems = [...this.menuItems, this.historicologinsMenu, this.jogosMenu, this.gestaoClubesMenu];
+        this.menuItems = [...this.menuItems, this.historicologinsMenu];
       }
     }
 
