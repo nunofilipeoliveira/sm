@@ -13,7 +13,15 @@
       Nenhum jogo encontrado. Clique em "Adicionar Novo Jogo" para começar a adicionar jogos.
     </div>
 
-   <div class="tabela-scroll">
+   <div  class="tabela-scroll" >
+      <div  *ngIf="hasEquipaB" class="d-flex justify-content-between align-items-center mb-3 mt-3">
+            <mat-button-toggle-group  (change)="filtrarEquipas()" [(ngModel)]="filtro">
+          <mat-button-toggle value="todos">Todos</mat-button-toggle>
+          <mat-button-toggle value="equipa_a">Equipa A</mat-button-toggle>
+          <mat-button-toggle value="equipa_b">Equipa B</mat-button-toggle>
+    
+        </mat-button-toggle-group>
+      </div>
   <table
     class="table table-sm table-responsive table-hover project-list-table align-middle"
     *ngIf="!loading && jogos.length > 0"
@@ -135,7 +143,7 @@
 
   <!-- Seção 1: Equipa Clube -->
   <div class="modal-body p-4">
-    <div *ngIf="hasEquipaB" class="card border-0 shadow-sm mb-4">
+    <div class="card border-0 shadow-sm mb-4">
       <div class="card-header bg-success text-white">
         <h6 class="mb-0"><i class="nc-icon nc-single-02 me-2"></i>Equipa Clube</h6>
       </div>

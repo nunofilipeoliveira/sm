@@ -1,5 +1,5 @@
 <div *ngIf="loading" class="loading-indicator">
-  <p></p>
+    <p></p>
 </div>
 
 <div *ngIf="!loading" class="container mt-4">
@@ -53,13 +53,15 @@
                                 <img src="assets/img/clubes/clube_{{ meuClubeid }}.png"
                                     onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
                                     alt="Nossa Equipa" class="logo-jogo me-2" />
-                                <b>{{ equipaAtual?.escalao || 'Nossa Equipa' }}</b>
+                                <b>{{ equipaAtual?.escalao || 'Nossa Equipa' }}<span
+                                        *ngIf="jogo.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></b>
                                 <h6 class="text-muted mb-2">VS</h6>
                                 <div class="text-center">
                                     <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
                                         onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
                                         alt="Adversário" class="logo-jogo me-2" /><strong>{{ jogo.equipa_adv_nome
-                                        }}</strong>
+                                        }} <span
+                                            *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span></strong>
                                 </div>
                                 <p></p>
                                 {{ jogo.local }} | <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
@@ -74,14 +76,16 @@
                                     <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
                                         onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
                                         alt="Adversário" class="logo-jogo me-2" /><strong>{{ jogo.equipa_adv_nome
-                                        }}</strong>
+                                        }} <span
+                                            *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span></strong>
                                 </div>
                                 <h6 class="text-muted mb-2">VS</h6>
                                 <div class="text-center">
                                     <img src="assets/img/clubes/clube_{{ meuClubeid }}.png"
                                         onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
                                         alt="Nossa Equipa" class="logo-jogo me-2" />
-                                    <b>{{ equipaAtual?.escalao || 'Nossa Equipa' }}</b>
+                                    <b>{{ equipaAtual?.escalao || 'Nossa Equipa' }} <span
+                                            *ngIf="jogo.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></b>
                                 </div>
                                 <p></p>
                                 {{ jogo.local }} | <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
@@ -187,7 +191,8 @@
             style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
         <h2 style="color: #273890; margin: 0; font-size: 28px; font-weight: 700;">Convocatória Oficial</h2>
         <p style="color: #6c757d; margin: 8px 0 0 0; font-size: 17px;"><strong>Equipa:</strong> {{ equipaAtual?.escalao
-            || 'Equipa' }}</p>
+            || 'Equipa' }} <span
+            *ngIf="jogo?.tipoEquipa==='B'">({{jogo?.tipoEquipa}})</span></p>
     </div>
 
     <!-- Detalhes do Jogo -->
@@ -199,7 +204,8 @@
             <img src="assets/img/clubes/clube_{{ jogo?.equipa_adv_id }}.png"
                 onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" alt="Adversário"
                 style="width: 30px; height: 30px; border-radius: 50%; vertical-align: middle; margin-right: 8px; margin-left: 8px;" />
-            {{ jogo?.equipa_adv_nome || 'Indefinido' }}
+            {{ jogo?.equipa_adv_nome || 'Indefinido' }} <span
+            *ngIf="jogo?.tipoEquipa_adv==='B'">({{jogo?.tipoEquipa_adv}})</span>
         </p>
         <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>🗓 </strong> {{ jogo?.data |
             date:'dd/MM/yyyy' }} às {{ jogo?.hora || 'Indefinida' }}</p>

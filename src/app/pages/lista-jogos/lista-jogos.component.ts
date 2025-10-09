@@ -10,6 +10,7 @@ import { ClubeService } from '../../services/clube.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { environment } from '../../../environments/environment';
 import { LoginServiceService } from '../../services/login-service.service';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 
 
 
@@ -17,7 +18,7 @@ import { LoginServiceService } from '../../services/login-service.service';
 @Component({
   selector: 'lista-jogos',
   standalone: true,
-  imports: [FormsModule, CommonModule, MatCheckboxModule, NgbModule],
+  imports: [FormsModule, CommonModule, MatCheckboxModule, NgbModule, MatButtonToggleModule],
   templateUrl: './lista-jogos.component.html',
   styleUrl: './lista-jogos.component.css'
 })
@@ -35,6 +36,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
   clubes: ClubeData[] = []; // Para popular o dropdown de clubes
   clubeCasa: ClubeData | undefined; // Clube da casa
   jogos: JogoData[] = [];
+  jogosBackup: JogoData[] = []; // Backup dos jogos para filtros
   tmpEquipa: EquipaData | undefined;
   loading: boolean = true; // Adicionar propriedade de loading
   competicoes: CompeticaoData[] = []; // Para popular o dropdown de competições
@@ -45,6 +47,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
   isAdmin: boolean = false; // Para verificar se o utilizador é admin
   isModoEditar: boolean = false; // Para verificar se está em modo editar
   hasEquipaB:boolean = true;
+  filtro: string = 'todos'; // Filtro inicial para todos
 
   ngOnInit(): void {
     this.loading = true; // Inicia o loading
@@ -106,6 +109,14 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
         next: (data) => {
           console.log('ListaJogosComponent | getAllJogosByEquipa | data:', data);
           this.jogos = data;
+          this.jogosBackup = data; // Guarda o backup dos jogos
+          //verifica se tem equipa B
+          this.hasEquipaB = this.jogos.some(jogo => jogo.tipoEquipa === 'B');
+
+          if (!this.hasEquipaB) {
+            this.filtro = 'todos';
+          }
+          this.filtrarEquipas(); // Aplica o filtro inicial
           this.loading = false; // Finaliza o loading
         },
         error: (error) => {
@@ -217,6 +228,20 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     }
   }
 
+  filtrarEquipas(){
+    this.jogos = this.jogosBackup; // Primeiro, restaura a lista original de jogos
+    if(this.filtro==='todos'){
+      //primeiro remover filtros
+      this.jogos = this.jogos.filter(jogo => jogo);
+    }
+    if(this.filtro==='equipa_a'){
+      this.jogos = this.jogos.filter(jogo => jogo.tipoEquipa !=='B');
+    }
+    if(this.filtro==='equipa_b'){
+      this.jogos = this.jogos.filter(jogo => jogo.tipoEquipa ==='B');
+    } 
+  } 
+
 
   // carrega clube da casa
   getClubeCasa(): void {
@@ -309,6 +334,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
         next: (response) => {
           console.log('Jogo apagado com sucesso:', response);
           this.loadJogos(); // Recarrega a lista de jogos
+   
         },
         error: (error) => {
           console.error('Erro ao apagar jogo:', error);
