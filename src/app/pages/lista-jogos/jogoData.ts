@@ -17,6 +17,8 @@ interface JogoData {
     arbitro_1: number;
     arbitro_2: number;
     estado: string;
+    hora_concentracao: string;
+    obs: string;
     jogadores: JogadorJogo[];
 }
 

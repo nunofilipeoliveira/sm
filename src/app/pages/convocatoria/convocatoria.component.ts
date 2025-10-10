@@ -20,7 +20,29 @@ import html2canvas from 'html2canvas'; // Import da html2canvas
 })
 export class ConvocatoriaComponent implements OnInit {
   idJogo: number = 0;
-  jogo: JogoData | undefined;
+  jogo: JogoData ={
+    id: 0,
+    epoca_id: 0,
+    equipa_id: 0,
+    tipoEquipa: '',
+    data: new Date(),
+    hora: '',
+    local: '',
+    golos_equipa: 0,
+    equipa_adv_id: 0,
+    equipa_adv_nome: '',
+    tipoEquipa_adv: '',
+    golos_equipa_adv: 0,
+    tipo_local: '',
+    competicao_id: 0,
+    competicao_nome: '',
+    arbitro_1: 0,
+    arbitro_2: 0,
+    estado: '',
+    hora_concentracao: '',
+    obs: '',
+    jogadores: []
+  }
   atletasDisponiveis: ConvocatoriaData[] = [];
   equipaAtual: EquipaData | undefined;
   loading: boolean = true;
@@ -418,12 +440,23 @@ export class ConvocatoriaComponent implements OnInit {
       this.jogoService.salvarConvocatoria(this.idJogo, jogadoresConvocados).subscribe({
         next: (response) => {
           console.log('Convocatória salva com sucesso:', response);
+          
+          this.jogoService.updateJogo(this.jogo).subscribe({
+            next: (resp) => {
+              console.log('Detalhes do jogo atualizados com sucesso:', resp);
+            },
+            error: (err) => {
+              console.error('Erro ao atualizar detalhes do jogo:', err);
+            }
+          });
+
           this.sbmSuccess = true;
 
-          // Opcional: Redirecionar ou mostrar mensagem de sucesso
           this.isModoVisualizacao = true; // Volta para o modo de visualização após salvar
           this.carregarConvocatoria(); // Recarrega a convocatória para refletir as mudanças
           this.loading = false;
+
+
         },
         error: (err) => {
           console.error('Erro ao salvar convocatória:', err);

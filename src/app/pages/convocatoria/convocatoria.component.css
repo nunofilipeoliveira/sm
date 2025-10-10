@@ -216,3 +216,75 @@
   .table-nowrap td, .table-nowrap th {
       white-space: nowrap;
   }
+
+
+  /* Novos Estilos para Hora de Concentração e Observações */
+.info-box {
+  background-color: #f8f9fa; /* Fundo claro */
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 12px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-box.edit-mode {
+  border-color: #007bff; /* Borda azul em modo edição */
+  background-color: #e3f2fd; /* Fundo azul claro em edição */
+}
+
+.info-icon {
+  color: #007bff; /* Azul primário */
+  font-size: 1.2rem;
+  margin-right: 8px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 4px;
+  display: block;
+  font-size: 0.9rem;
+}
+
+.info-value {
+  font-size: 1rem;
+  color: #212529;
+  font-weight: 500;
+  padding: 4px 0;
+}
+
+.info-input {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Anel azul no foco */
+  outline: none;
+}
+
+/* Responsividade para Mobile */
+@media (max-width: 768px) {
+  .info-box {
+    padding: 10px;
+  }
+  
+  .info-icon {
+    font-size: 1rem;
+  }
+  
+  .info-label {
+    font-size: 0.85rem;
+  }
+  
+  .info-value, .info-input {
+    font-size: 0.95rem;
+  }
+}

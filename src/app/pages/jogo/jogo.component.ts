@@ -51,6 +51,8 @@ export class JogoComponent implements OnInit {
     arbitro_1: 0,
     arbitro_2: 0,
     estado: '',
+    hora_concentracao: '',
+    obs: '',
     jogadores: []
   }
 
