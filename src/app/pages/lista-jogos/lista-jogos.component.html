@@ -14,12 +14,12 @@
     </div>
 
    <div  class="tabela-scroll" >
-      <div  *ngIf="hasEquipaB" class="d-flex justify-content-between align-items-center mb-3 mt-3">
+      <div  *ngIf="hasEquipaB  && !loading" class="d-flex justify-content-between align-items-center mb-3 mt-3">
             <mat-button-toggle-group  (change)="filtrarEquipas()" [(ngModel)]="filtro">
           <mat-button-toggle value="todos">Todos</mat-button-toggle>
           <mat-button-toggle value="equipa_a">Equipa A</mat-button-toggle>
           <mat-button-toggle value="equipa_b">Equipa B</mat-button-toggle>
-    
+
         </mat-button-toggle-group>
       </div>
   <table

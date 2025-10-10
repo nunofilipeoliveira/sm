@@ -7,7 +7,7 @@
   {
       "type": "chrome",                // ou "pwa-msedge" se usar Edge
       "request": "launch",
-      "name": "Debug Angular",
+      "name": "CHROME - TESTE",
       "url": "http://localhost",  // endereço do ng serve
       "webRoot": "${workspaceFolder}",
       "sourceMaps": true
@@ -15,7 +15,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Angular Serve (ng)",
+      "name": "SM - FRONTEND",
       "runtimeExecutable": "npx",
       "runtimeArgs": [
         "ng",

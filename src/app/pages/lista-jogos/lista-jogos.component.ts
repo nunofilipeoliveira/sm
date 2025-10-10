@@ -239,8 +239,8 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     }
     if(this.filtro==='equipa_b'){
       this.jogos = this.jogos.filter(jogo => jogo.tipoEquipa ==='B');
-    } 
-  } 
+    }
+  }
 
 
   // carrega clube da casa
@@ -249,7 +249,9 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
       next: (clube) => {
         // handle clube data here, e.g., assign to a property
         this.clubeCasa = clube;
-        this.novoJogo.local = this.clubeCasa?.pav_nome || '';
+        if (this.novoJogo.tipo_local === 'Casa') {
+          this.novoJogo.local = this.clubeCasa?.pav_nome || '';
+        }
       },
       error: (error) => {
         console.error('Error fetching clube:', error);
@@ -334,7 +336,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
         next: (response) => {
           console.log('Jogo apagado com sucesso:', response);
           this.loadJogos(); // Recarrega a lista de jogos
-   
+
         },
         error: (error) => {
           console.error('Erro ao apagar jogo:', error);
