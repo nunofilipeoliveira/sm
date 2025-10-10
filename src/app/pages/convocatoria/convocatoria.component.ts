@@ -20,7 +20,7 @@ import html2canvas from 'html2canvas'; // Import da html2canvas
 })
 export class ConvocatoriaComponent implements OnInit {
   idJogo: number = 0;
-  jogo: JogoData ={
+  jogo: JogoData = {
     id: 0,
     epoca_id: 0,
     equipa_id: 0,
@@ -44,7 +44,9 @@ export class ConvocatoriaComponent implements OnInit {
     jogadores: []
   }
   atletasDisponiveis: ConvocatoriaData[] = [];
+  atletasIndisponiveis: ConvocatoriaData[] = [];
   equipaAtual: EquipaData | undefined;
+  nomeEscalao: string = '';
   loading: boolean = true;
   errorMessage: string | null = null;
   sbmSuccess: boolean = false;
@@ -53,6 +55,10 @@ export class ConvocatoriaComponent implements OnInit {
   isModoVisualizacao: boolean = false; // Novo flag para modo de visualização
   today = new Date();
   horaConcentracao: string = '';
+
+    mostrarModalIndisponivel: boolean = false;
+  jogadorSelecionadoIndisponivel: ConvocatoriaData | null = null;
+  obsIndisponivel: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -65,6 +71,7 @@ export class ConvocatoriaComponent implements OnInit {
     this.loading = true;
     const routeParams = this.route.snapshot.paramMap;
     this.idJogo = Number(routeParams.get('id'));
+    this.nomeEscalao= localStorage.getItem("descritivo_escalao") || '';
 
     if (this.idJogo) {
 
@@ -83,29 +90,38 @@ export class ConvocatoriaComponent implements OnInit {
       this.errorMessage = 'ID do jogo não fornecido.';
       this.loading = false;
     }
-    
+
   }
+
+ 
 
   carregarConvocatoria(): void {
     // Lógica para carregar a convocatória existente, se necessário
     this.atletasDisponiveis = []; // Limpa a lista antes de carregar
+    this.atletasIndisponiveis=[];
     this.jogoService.getConvocatoriaByJogoId(this.idJogo).subscribe({
       next: (data: ConvocatoriaDataWS) => {
         console.log('Convocatória | Convocatória carregada:', data);
-        if (!data || !data.jogadoresConvocados || data.jogadoresConvocados.length > 0) {
-          for (let atleta of data.jogadoresConvocados) {
-            this.equipaService.loadJogadorbyId(atleta).subscribe({
-              next: (jogador) => {
+        if (!data || !data.jogadoresConvocatoria || data.jogadoresConvocatoria.length > 0) {
+          for (let atleta of data.jogadoresConvocatoria) {
+           
+             
+            if(atleta.estado==='CONVOCADO'){
                 this.atletasDisponiveis.push({
-                  id_jogador: atleta,
-                  nome_jogador: jogador.nome,
-                  selecionado: true
+                  id_jogador: atleta.id_jogador,
+                  nome_jogador: atleta.nome,
+                  selecionado: true,
+                  obs: atleta.obs || ''
                 });
-              },
-              error: (err) => {
-                console.error('Erro ao carregar jogador:', err);
-              }
-            });
+            } else {
+                this.atletasIndisponiveis.push({
+                  id_jogador: atleta.id_jogador,
+                  nome_jogador: atleta.nome,
+                  selecionado: false,
+                  obs: atleta.obs || ''
+                }); 
+            }
+            
 
             this.equipaAtual = this.equipaService.getEquipa();
             this.equipaAtual = this.equipaService.getEquipa();
@@ -315,7 +331,7 @@ export class ConvocatoriaComponent implements OnInit {
   // **Novo método: Gera imagem PNG com avatares e baixa/compartilha**
   async gerarImagemComFotos(): Promise<void> {
 
-    
+
     if (!this.jogo || this.atletasDisponiveis.length === 0) {
       alert('Não há convocatória para gerar imagem ou detalhes do jogo incompletos.');
       return;
@@ -403,7 +419,8 @@ export class ConvocatoriaComponent implements OnInit {
       this.atletasDisponiveis = this.equipaAtual.jogadores.map(jogador => ({
         id_jogador: jogador.id,
         nome_jogador: jogador.nome,
-        selecionado: false // Por padrão, nenhum atleta está selecionado
+        selecionado: false,
+        obs: '' // Observações sobre o jogador na convocatória
       }));
       this.loading = false;
     } else {
@@ -432,15 +449,33 @@ export class ConvocatoriaComponent implements OnInit {
     this.sbmSuccess = false;
     this.sbmError = false;
 
-    const jogadoresConvocados = this.atletasDisponiveis
+    const jogadoresConvocados: JogadorConvocado[] = this.atletasDisponiveis
       .filter(atleta => atleta.selecionado)
-      .map(atleta => atleta.id_jogador);
+      .map(atleta => ({
+        id_jogador: atleta.id_jogador,
+        nome: atleta.nome_jogador,
+        estado: 'CONVOCADO',
+        obs: ''
+      }));
+
+      jogadoresConvocados.push(...this.atletasIndisponiveis
+      .map(atleta => ({
+        id_jogador: atleta.id_jogador,
+        nome: atleta.nome_jogador,
+        estado: 'INDISPONÍVEL',
+        obs: atleta.obs || ''
+      })));
+
 
     if (this.idJogo && jogadoresConvocados.length > 0) {
       this.jogoService.salvarConvocatoria(this.idJogo, jogadoresConvocados).subscribe({
         next: (response) => {
           console.log('Convocatória salva com sucesso:', response);
-          
+
+          this.jogo.jogadores = [];  
+          this.jogo.golos_equipa=0;
+          this.jogo.golos_equipa_adv=0;
+                  
           this.jogoService.updateJogo(this.jogo).subscribe({
             next: (resp) => {
               console.log('Detalhes do jogo atualizados com sucesso:', resp);
@@ -494,23 +529,83 @@ export class ConvocatoriaComponent implements OnInit {
   }
 
   calcularHoraConcentracao(): void {
-  if (!this.jogo?.hora) {
-    this.horaConcentracao = 'Indefinida';
-    return;
+    if (!this.jogo?.hora) {
+      this.horaConcentracao = 'Indefinida';
+      return;
+    }
+    // Supondo que this.jogo.hora está no formato "HH:mm"
+    const [horaStr, minutoStr] = this.jogo.hora.split(':');
+    let hora = parseInt(horaStr, 10);
+    const minuto = parseInt(minutoStr, 10);
+    // Subtrai 1 hora
+    hora = hora - 1;
+    if (hora < 0) {
+      hora = 23; // volta para o dia anterior (23 horas)
+    }
+    // Formata com zero à esquerda
+    const horaFormatada = hora.toString().padStart(2, '0');
+    const minutoFormatado = minuto.toString().padStart(2, '0');
+    this.horaConcentracao = `${horaFormatada}:${minutoFormatado}`;
   }
-  // Supondo que this.jogo.hora está no formato "HH:mm"
-  const [horaStr, minutoStr] = this.jogo.hora.split(':');
-  let hora = parseInt(horaStr, 10);
-  const minuto = parseInt(minutoStr, 10);
-  // Subtrai 1 hora
-  hora = hora - 1;
-  if (hora < 0) {
-    hora = 23; // volta para o dia anterior (23 horas)
+
+// Novo método: Adicionar Indisponibilidade
+  adicionarIndisponibilidade(): void {
+    if (this.atletasDisponiveis.length === 0) {
+      alert('Não há jogadores disponíveis para adicionar como indisponível.');
+      return;
+    }
+    // Abra o modal (o template será passado no HTML)
+    this.mostrarModalIndisponivel = true;  // Use *ngIf para mostrar o modal
+    this.jogadorSelecionadoIndisponivel = null;
+    this.obsIndisponivel = '';
   }
-  // Formata com zero à esquerda
-  const horaFormatada = hora.toString().padStart(2, '0');
-  const minutoFormatado = minuto.toString().padStart(2, '0');
-  this.horaConcentracao = `${horaFormatada}:${minutoFormatado}`;
+  // Método para confirmar a adição de indisponível
+  confirmarIndisponivel(): void {
+    if (!this.jogadorSelecionadoIndisponivel) {
+      alert('Selecione um jogador.');
+      return;
+    }
+    // Encontra e remove o jogador de atletasDisponiveis
+    const indexDisponivel = this.atletasDisponiveis.findIndex(a => a.id_jogador === this.jogadorSelecionadoIndisponivel!.id_jogador);
+    if (indexDisponivel !== -1) {
+      const jogadorMovido = { ...this.atletasDisponiveis[indexDisponivel] };
+      this.atletasDisponiveis.splice(indexDisponivel, 1);
+      // Adiciona a indisponíveis com obs e selecionado: false (indisponível não é selecionado por padrão)
+      jogadorMovido.selecionado = false;
+      jogadorMovido.obs = this.obsIndisponivel || '';  // Adiciona observação se fornecida
+      this.atletasIndisponiveis.push(jogadorMovido);
+      // Fecha o modal
+      this.mostrarModalIndisponivel = false;
+    
+    }
+  }
+  // Método para cancelar o modal
+  cancelarIndisponivel(): void {
+    this.mostrarModalIndisponivel = false;
+    this.jogadorSelecionadoIndisponivel = null;
+    this.obsIndisponivel = '';
+  }
+  // Atualize o getter getIndisponiveis() para retornar a lista com obs
+  getIndisponiveis(): ConvocatoriaData[] {
+    return this.atletasIndisponiveis;
+  }
+
+
+  // No TS, adicione este método
+removerIndisponivel(atleta: ConvocatoriaData): void {
+  
+    const indexIndisponivel = this.atletasIndisponiveis.findIndex(a => a.id_jogador === atleta.id_jogador);
+    if (indexIndisponivel !== -1) {
+      // Remove obs ao voltar para disponíveis
+      const jogadorRemovido = { ...this.atletasIndisponiveis[indexIndisponivel] };
+     
+      jogadorRemovido.selecionado = false;  // Mantém não selecionado
+      this.atletasIndisponiveis.splice(indexIndisponivel, 1);
+      this.atletasDisponiveis.push(jogadorRemovido);
+      
+    }
+  
 }
+
 
 }

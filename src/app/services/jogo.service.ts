@@ -58,12 +58,12 @@ export class JogoService {
       return this.http.put<JogoData>(urltmp, { headers });
   }
 
-  salvarConvocatoria(jogoId: number, atletasIds: number[]): Observable<any> {
+  salvarConvocatoria(jogoId: number, jogadoresConvocados: JogadorConvocado[]): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
     const urltmp = environment.apiUrl + "/sm/salvarConvocatoria";
     const body = {
       id: jogoId,
-      jogadoresConvocados: atletasIds
+      jogadoresConvocatoria: jogadoresConvocados
     };
       console.log('JogoService | url:', this, urltmp);
       console.log('JogoService | body:', body);

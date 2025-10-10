@@ -73,6 +73,8 @@ export class JogoComponent implements OnInit {
     { key: 'vermelho', label: 'Vermelho' }
   ];
 
+  atletasIndisponiveis: JogadorConvocado[] = [];
+
   constructor(private route: ActivatedRoute, private jogoService: JogoService, private clubeService: ClubeService, private router: Router,) { }
   
   ngOnInit() {
@@ -86,6 +88,17 @@ export class JogoComponent implements OnInit {
           ...data,
           jogadores: data.jogadores.map((jogador: JogadorJogo) => ({ ...jogador, expanded: false }))
         };
+        //carregar a convocatória para obter os jogadores indisponíveis
+        this.atletasIndisponiveis = data.jogadores.filter(j => j.estado !== 'CONVOCADO').map(j => ({
+          id_jogador: j.id_jogador,
+          nome: j.nome,
+          estado: j.estado,
+          obs: j.obs
+        }));
+
+        //retirar os jogadores indisponíveis da lista de jogadores do jogo
+        this.jogo.jogadores = this.jogo.jogadores.filter(j => j.estado === 'CONVOCADO');  
+
         this.loading = false;
         console.log('Jogo Componente | Dados do jogo:', this.jogo);
       }});
@@ -198,6 +211,33 @@ export class JogoComponent implements OnInit {
     console.log('Registo salvo:', this.jogo.jogadores);
     // Aqui pode enviar para backend ou atualizar estado
     this.jogo.estado='CONCLUIDO';
+    //adicionar os jogadores indisponiveis à lista de jogadores do jogo
+    this.jogo.jogadores.push(
+      ...this.atletasIndisponiveis.map(atleta => ({
+        id_jogador: atleta.id_jogador,
+        nome: atleta.nome,
+        capitao: false,
+        numero: 0,
+        amarelo: 0,
+        azul: 0,
+        vermelho: 0,
+        golos_p: 0,
+        golos_ld: 0,
+        golos_pp: 0,
+        golos_up: 0,
+        golos_normal: 0,
+        golos_s_p: 0,
+        golos_s_ld: 0,
+        golos_s_pp: 0,
+        golos_s_up: 0,
+        golos_s_normal: 0,
+        estado: atleta.estado,
+        obs: atleta.obs,
+        isGR: false,
+        expanded: false
+      }))
+    );
+    
     this.jogoService.atualizarJogo(this.jogo).subscribe({
       next: (data) => {
         console.log('Jogo atualizado com sucesso:', data);
@@ -205,6 +245,8 @@ export class JogoComponent implements OnInit {
           ...data,
           jogadores: data.jogadores.map((jogador: JogadorJogo) => ({ ...jogador, expanded: false }))
         }; // Atualiza o jogo com a resposta do backend
+        //volta a retirar os jogadores indisponíveis da lista de jogadores do jogo
+        this.jogo.jogadores = this.jogo.jogadores.filter(j => j.estado === 'CONVOCADO');
       },
       error: (error) => {
         console.error('Erro ao atualizar o jogo:', error);
