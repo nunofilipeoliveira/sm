@@ -475,6 +475,7 @@ export class ConvocatoriaComponent implements OnInit {
           this.jogo.jogadores = [];  
           this.jogo.golos_equipa=0;
           this.jogo.golos_equipa_adv=0;
+          this.jogo.estado='INICIADO';
                   
           this.jogoService.updateJogo(this.jogo).subscribe({
             next: (resp) => {

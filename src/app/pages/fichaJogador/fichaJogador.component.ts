@@ -7,6 +7,8 @@ import { CommonModule } from '@angular/common';
 import { LoginServiceService } from '../../services/login-service.service';
 import { FormsModule } from '@angular/forms';
 import { DataPipe } from './DataPipe'; // Seu DataPipe personalizado
+import { JogoService } from '../../services/jogo.service';
+import { CONNREFUSED } from 'dns';
 
 @Component({
   selector: 'user-cmp',
@@ -42,6 +44,11 @@ export class FichaJogadorComponent implements OnInit {
   fotoUrl: string = '';
   avatarUrl: string = '';
 
+  jogosPorEscalao: { escalao: string; total: number }[] = [];
+  totalGeralJogos: number = 0;
+  loadingJogos: boolean = false; // Opcional: para spinner se quiser
+  escaloes: { idescalao: number; nomeEscalao: string }[] = [];
+
   // Nova propriedade para controlar a visibilidade da tabela de faltas
   public showFaltas: boolean = false; // Inicialmente oculta
   public showPresencas: boolean = false; // Inicialmente oculta
@@ -50,7 +57,7 @@ export class FichaJogadorComponent implements OnInit {
   // Propriedade para a data de nascimento formatada (AAAA-MM-DD)
   public dataNascimentoDisplay: string = '';
 
-  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private router: Router, private ficheirosService: FicheirosService) {
+  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private router: Router, private ficheirosService: FicheirosService, private jogoService: JogoService) {
     this.jogadorData = {
       id: 0,
       nome: "",
@@ -82,6 +89,7 @@ export class FichaJogadorComponent implements OnInit {
     this.sbmSuccess = false;
     const routeParams = this.route.snapshot.paramMap;
     const idJogador = Number(routeParams.get('id'));
+
     console.log('FichaJogadorComoponent | idJogador:', idJogador);
     this.loadJogadorImages(idJogador);
 
@@ -146,6 +154,64 @@ export class FichaJogadorComponent implements OnInit {
                   this.sbmError = true;
                 }
               });
+
+            // SUBSCRIBE CORRIGIDO PARA JOGOS (com cálculo do total geral)
+            this.loadingJogos = true;
+
+            this.jogoService.getJogosByJogadorId(idJogador).subscribe({
+              next: (jogos: JogoData[]) => {
+
+                //carregar as equipas possiveis
+
+
+                this.equipaService.getEquipasPorEpoca().subscribe({
+                  next: (data) => {
+                    data.forEach((esc: any) => {
+                      this.escaloes.push({ idescalao: esc.id, nomeEscalao: esc.escalao });
+                    });
+
+                    console.log('Escalões carregados:', this.escaloes);
+
+                    // Agora processa os jogos
+                    console.log('Jogos do jogador:', jogos);  
+
+                    // Agrupamento por escalão (mesmo de antes)
+                    const agrupamento = new Map<string, number>();
+                    jogos.forEach(jogo => {
+                      const escalao = this.escaloes.find(e => e.idescalao === jogo.equipa_id)?.nomeEscalao || 'Desconhecido';
+                      agrupamento.set(escalao, (agrupamento.get(escalao) || 0) + 1);
+                    });
+
+                    // Converta para array ordenado
+                    this.jogosPorEscalao = Array.from(agrupamento.entries())
+                      .map(([escalao, total]) => ({ escalao, total }))
+                      .sort((a, b) => a.escalao.localeCompare(b.escalao));
+
+                    // NOVA: Calcule o total geral aqui (simples e eficiente)
+                    this.totalGeralJogos = jogos.length; // Ou: this.jogosPorEscalao.reduce((sum, item) => sum + item.total, 0);
+
+                    this.loadingJogos = false;
+                    console.log('Jogos por escalão:', this.jogosPorEscalao);
+                    console.log('Total geral de jogos:', this.totalGeralJogos);
+
+                    console.log('Escalões carregados:', this.escaloes);
+
+
+                    console.log('Equipa do jogador:', this.equipaData);
+                  }
+
+                });
+
+
+              },
+              error: (error) => {
+                console.error('Erro ao carregar jogos do jogador:', error);
+                this.jogosPorEscalao = [];
+                this.totalGeralJogos = 0; // Reset em erro
+                this.loadingJogos = false;
+              }
+            });
+
           }
         },
         error: error => {

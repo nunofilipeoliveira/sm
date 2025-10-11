@@ -85,5 +85,12 @@ export class JogoService {
       return this.http.put<any>(urltmp, jogo, { headers });
   }
 
+  getJogosByJogadorId(jogadorId: number): Observable<JogoData[]> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/getJogosByJogadorId/" + jogadorId;
+      console.log('JogoService | url:', this, urltmp);
+      return this.http.put<JogoData[]>(urltmp, { headers });
+  }
+
 
 }

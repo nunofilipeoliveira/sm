@@ -238,3 +238,53 @@ button[aria-expanded="true"] i.nc-icon {
   transform: rotate(180deg);
   transition: transform 0.3s ease;
 }
+
+
+/* ... (CSS existente) ... */
+
+/* NOVOS ESTILOS PARA O CARD DE JOGOS (reusa classes existentes onde possível) */
+.faltas-card .info-title {
+  font-size: 24px;
+  font-weight: 600;
+  border-bottom: 2px solid #6fb5f3; /* Azul para consistência */
+  padding-bottom: 10px;
+  color: #1f78d1; /* Azul primário para títulos de stats */
+}
+
+.faltas-card .display-4 {
+  font-size: 3rem; /* Grande e impactante */
+  font-weight: 700;
+  color: #1f78d1; /* Azul para destaque */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* Sombra sutil para profundidade */
+}
+
+.faltas-card .text-muted {
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* Hover no botão de expandir */
+.faltas-card button[aria-expanded="true"] i.nc-icon {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease;
+}
+
+/* Responsividade: Em mobile, centraliza e reduz fonte */
+@media (max-width: 768px) {
+  .faltas-card .display-4 {
+    font-size: 2.5rem;
+  }
+  
+  .faltas-card .info-title {
+    font-size: 1.2rem;
+  }
+  
+  .linha-info {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .linha-info label {
+    margin-bottom: 5px;
+  }
+}

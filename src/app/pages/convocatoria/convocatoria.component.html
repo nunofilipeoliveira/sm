@@ -185,7 +185,7 @@
 
                 <!-- Card de Seleção de Atletas Indisponiveis -->
                 <div class="card shadow-lg mb-4">
-                    <div class="card-header bg-danger text-white">
+                    <div *ngIf="!isModoVisualizacao || atletasIndisponiveis.length > 0" class="card-header bg-danger text-white">
                         <h5 class="card-title mb-0"><i class="nc-icon nc_users-1 me-2"></i>Atletas Indisponíveis</h5>
                         <small *ngIf="!isModoVisualizacao" class="text-white-50">Adicionar as indisponibilidades</small>
                     </div>
