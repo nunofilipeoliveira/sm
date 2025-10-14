@@ -98,6 +98,8 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
       competicao_nome: '', // Será preenchido
       arbitro_1: 0,
       arbitro_2: 0,
+      hora_concentracao: '',
+      obs: '',
       estado: 'REGISTADO', // Padrão
       jogadores: [] // Inicialmente vazio
     };

@@ -132,7 +132,7 @@ export class JogadorSeleccaoComponent implements OnInit {
         console.log('JogadorSeleccaoComponent | Current convocatoria before adding:', convocatoria);
         //adiciona o jogador
         console.log('JogadorSeleccaoComponent | Adding player to convocatoria:', tmpJogador);
-        convocatoria.push({ id_jogador: tmpJogador.id, nome_jogador: tmpJogador.nome, selecionado: true });
+        convocatoria.push({ id_jogador: tmpJogador.id, nome_jogador: tmpJogador.nome, selecionado: true, obs: '' });
         console.log('JogadorSeleccaoComponent | Updated convocatoria:', convocatoria);
         //guardar na sessão
         const data = JSON.stringify(convocatoria);

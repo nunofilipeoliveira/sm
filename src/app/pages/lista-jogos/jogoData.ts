@@ -17,6 +17,8 @@ interface JogoData {
     arbitro_1: number;
     arbitro_2: number;
     estado: string;
+    hora_concentracao: string;
+    obs: string;
     jogadores: JogadorJogo[];
 }
 
@@ -41,4 +43,6 @@ interface JogadorJogo {
     isGR: boolean;
     // Adicione a propriedade expanded aqui para que seja parte da interface original
     expanded?: boolean; // Adicione esta linha
+    estado: string; // Ex: "Convocado", "Lesionado", "Suspenso", "Indisponível"
+    obs: string; // Observações adicionais sobre o jogador na convocatória
 }

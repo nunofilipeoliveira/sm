@@ -43,24 +43,25 @@
 
             <div *ngIf="!loading && jogo">
                 <!-- Card de Detalhes do Jogo com Logotipos -->
+                <!-- Card de Detalhes do Jogo com Logotipos -->
                 <div class="card shadow-lg mb-4">
                     <div class="card-header bg-info text-white d-flex align-items-center justify-content-between">
                         <h5 class="card-title mb-0"><i class="nc-icon nc-calendar-60 me-2"></i>Detalhes do Jogo</h5>
                     </div>
                     <div class="card-body">
                         <div class="row align-items-center">
-                            <div *ngIf="jogo.tipo_local=='C'" class=" text-center">
+                            <div *ngIf="jogo.tipo_local=='C'" class="text-center col-12">
                                 <img src="assets/img/clubes/clube_{{ meuClubeid }}.png"
                                     onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
                                     alt="Nossa Equipa" class="logo-jogo me-2" />
-                                <b>{{ equipaAtual?.escalao || 'Nossa Equipa' }}<span
+                                <b>{{ nomeEscalao }}<span
                                         *ngIf="jogo.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></b>
                                 <h6 class="text-muted mb-2">VS</h6>
                                 <div class="text-center">
                                     <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
                                         onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
-                                        alt="Adversário" class="logo-jogo me-2" /><strong>{{ jogo.equipa_adv_nome
-                                        }} <span
+                                        alt="Adversário" class="logo-jogo me-2" /><strong>{{ jogo.equipa_adv_nome }}
+                                        <span
                                             *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span></strong>
                                 </div>
                                 <p></p>
@@ -68,15 +69,14 @@
                                     class="flag-icon" /> {{ jogo.competicao_nome }}
                                 <p></p>
                                 {{ jogo.data | date:'dd/MM/yyyy' }} às {{ jogo.hora }}
-
                             </div>
 
-                            <div *ngIf="jogo.tipo_local=='F'" class="text-center">
+                            <div *ngIf="jogo.tipo_local=='F'" class="text-center col-12">
                                 <div class="text-center">
                                     <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
                                         onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
-                                        alt="Adversário" class="logo-jogo me-2" /><strong>{{ jogo.equipa_adv_nome
-                                        }} <span
+                                        alt="Adversário" class="logo-jogo me-2" /><strong>{{ jogo.equipa_adv_nome }}
+                                        <span
                                             *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span></strong>
                                 </div>
                                 <h6 class="text-muted mb-2">VS</h6>
@@ -84,7 +84,7 @@
                                     <img src="assets/img/clubes/clube_{{ meuClubeid }}.png"
                                         onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
                                         alt="Nossa Equipa" class="logo-jogo me-2" />
-                                    <b>{{ equipaAtual?.escalao || 'Nossa Equipa' }} <span
+                                    <b>{{ nomeEscalao }} <span
                                             *ngIf="jogo.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></b>
                                 </div>
                                 <p></p>
@@ -94,9 +94,44 @@
                                 {{ jogo.data | date:'dd/MM/yyyy' }} às {{ jogo.hora }}
                             </div>
 
+                            <!-- Nova Seção: Hora de Concentração e Observações (Grid Responsiva) -->
+                            <div class="col-12 mt-3">
+                                <div class="row">
+                                    <!-- Hora de Concentração -->
+                                    <div class="col-md-6 mb-3">
+                                        <div class="info-box" [class.edit-mode]="!isModoVisualizacao">
+
+                                            <label class="info-label"> <i
+                                                    class="nc-icon nc-time-alarm info-icon"></i>Hora de
+                                                Concentração</label>
+                                            <div class="info-value" *ngIf="isModoVisualizacao">
+                                                {{ horaConcentracao || 'Não definida' }}
+                                            </div>
+                                            <input *ngIf="!isModoVisualizacao" type="time"
+                                                class="form-control info-input" [(ngModel)]="jogo.hora_concentracao"
+                                                placeholder="HH:MM">
+                                        </div>
+                                    </div>
+
+                                    <!-- Observações -->
+                                    <div *ngIf="jogo.obs || !isModoVisualizacao" class="col-md-6 mb-3">
+                                        <div class="info-box" [class.edit-mode]="!isModoVisualizacao">
+                                            <i class="nc-icon nc-notes info-icon"></i>
+                                            <label class="info-label">Observações</label>
+                                            <div class="info-value" *ngIf="isModoVisualizacao">
+                                                {{ jogo.obs }}
+                                            </div>
+                                            <input *ngIf="!isModoVisualizacao" type="text"
+                                                class="form-control info-input" [(ngModel)]="jogo.obs"
+                                                placeholder="Adicione observações...">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Card de Seleção de Atletas -->
                 <div class="card shadow-lg mb-4">
@@ -148,6 +183,70 @@
                     </div>
                 </div>
 
+                <!-- Card de Seleção de Atletas Indisponiveis -->
+                <div class="card shadow-lg mb-4">
+                    <div *ngIf="!isModoVisualizacao || atletasIndisponiveis.length > 0" class="card-header bg-danger text-white">
+                        <h5 class="card-title mb-0"><i class="nc-icon nc_users-1 me-2"></i>Atletas Indisponíveis</h5>
+                        <small *ngIf="!isModoVisualizacao" class="text-white-50">Adicionar as indisponibilidades</small>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div *ngIf="atletasIndisponiveis.length > 0">
+                            <table class="table project-list-table table-nowrap align-middle table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+
+                                        <th>Nome do Atleta</th>
+                                        <th>Observação</th> <!-- Nova coluna para Obs -->
+                                        <th *ngIf="!isModoVisualizacao" width="60">Ação</th>
+                                        <!-- Coluna para toggle, se necessário -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let atleta of atletasIndisponiveis"
+                                        [class.selected]="atleta.selecionado" (click)="toggleSelecao(atleta)"
+                                        class="atleta-row">
+
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <img src="assets/img/jogadores/{{atleta.id_jogador}}_avatar.jpg"
+                                                    onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                                                    alt="{{ atleta.nome_jogador }}"
+                                                    class="avatar-md rounded-circle me-3" />
+                                                <span class="atleta-nome">{{ atleta.nome_jogador }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span *ngIf="atleta.obs && atleta.obs.trim() !== ''"
+                                                class="badge bg-secondary">{{ atleta.obs }}</span>
+                                            <span *ngIf="!atleta.obs || atleta.obs.trim() === ''" class="text-muted">Sem
+                                                observação</span>
+                                        </td>
+                                        <td *ngIf="!isModoVisualizacao">
+                                            <!-- Botão para remover de indisponíveis e voltar para disponíveis, se necessário -->
+                                            <button *ngIf="!isModoVisualizacao" class="btn btn-sm btn-outline-primary"
+                                                (click)="removerIndisponivel(atleta); $event.stopPropagation()">
+                                                -
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div *ngIf="!isModoVisualizacao && atletasIndisponiveis.length === 0"
+                            class="text-center text-muted py-4">
+                            <i class="nc-icon nc_users fs-1 mb-2"></i>
+                            <p>Nenhum atleta indisponível para seleção.</p>
+                        </div>
+
+                        <div *ngIf="!isModoVisualizacao" class="text-center mt-1">
+                            <button class="btn btn-primary" (click)="adicionarIndisponibilidade()">
+                                <b>+</b> Adicionar Indisponível
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Botões de Ação -->
                 <div class="d-flex justify-content-between ">
                     <button type="button" class="btn btn-secondary btn-lg" (click)="voltar()">
@@ -175,6 +274,52 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="modal-backdrop fade" [class.show]="mostrarModalIndisponivel" *ngIf="mostrarModalIndisponivel"></div>
+
+<div class="modal fade" [class.show]="mostrarModalIndisponivel"
+    [style.display]="mostrarModalIndisponivel ? 'block' : 'none'" tabindex="-1" role="dialog"
+    *ngIf="mostrarModalIndisponivel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title mb-0">Adicionar Jogador Indisponível</h5>
+                <button type="button" class="btn-close btn-close-white" (click)="cancelarIndisponivel()"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group mb-3">
+                        <label for="jogadorIndisponivel">Selecionar Jogador *</label>
+                        <select class="form-select" id="jogadorIndisponivel"
+                            [(ngModel)]="jogadorSelecionadoIndisponivel" name="jogadorIndisponivel" required>
+                            <option [ngValue]="null" disabled selected>Escolha um jogador disponível</option>
+                            <option *ngFor="let atleta of atletasDisponiveis" [ngValue]="atleta">
+                                {{ atleta.nome_jogador }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="obsIndisponivel">Observação (opcional)</label>
+                        <input type="text" class="form-control" id="obsIndisponivel" [(ngModel)]="obsIndisponivel"
+                            name="obsIndisponivel" placeholder="Ex: Lesionado, Suspenso, etc.">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cancelarIndisponivel()">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="confirmarIndisponivel()"
+                    [disabled]="!jogadorSelecionadoIndisponivel">Adicionar Indisponível</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 <!-- Div oculto para gerar a imagem da convocatória com avatares (atualizado para evitar cortes) -->
 <div id="convocatoria-imagem"
     style="display: none; width: 600px; height: auto; background: #f8f9fa; padding: 20px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.15);  position: relative; overflow: hidden;">
@@ -190,9 +335,8 @@
             onerror="this.src='assets/img/clubes/default_clube.png'" alt="Logotipo do Clube"
             style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
         <h2 style="color: #273890; margin: 0; font-size: 28px; font-weight: 700;">Convocatória Oficial</h2>
-        <p style="color: #6c757d; margin: 8px 0 0 0; font-size: 17px;"><strong>Equipa:</strong> {{ equipaAtual?.escalao
-            || 'Equipa' }} <span
-            *ngIf="jogo?.tipoEquipa==='B'">({{jogo?.tipoEquipa}})</span></p>
+        <p style="color: #6c757d; margin: 8px 0 0 0; font-size: 17px;"><strong>Equipa:</strong> {{ nomeEscalao }} <span
+                *ngIf="jogo?.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></p>
     </div>
 
     <!-- Detalhes do Jogo -->
@@ -201,25 +345,28 @@
         <h3 style="color: #b52732; margin: 0 0 12px 0; font-size: 20px; font-weight: 600;">Detalhes do Jogo</h3>
         <p style="margin: 5px 0; font-size: 15px; color: #495057;">
             <strong>Adversário:</strong>
-            <img src="assets/img/clubes/clube_{{ jogo?.equipa_adv_id }}.png"
+            <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
                 onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" alt="Adversário"
                 style="width: 30px; height: 30px; border-radius: 50%; vertical-align: middle; margin-right: 8px; margin-left: 8px;" />
-            {{ jogo?.equipa_adv_nome || 'Indefinido' }} <span
-            *ngIf="jogo?.tipoEquipa_adv==='B'">({{jogo?.tipoEquipa_adv}})</span>
+            {{ jogo.equipa_adv_nome || 'Indefinido' }} <span
+                *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span>
         </p>
-        <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>🗓 </strong> {{ jogo?.data |
-            date:'dd/MM/yyyy' }} às {{ jogo?.hora || 'Indefinida' }}</p>
-        <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>📍</strong> {{ jogo?.local || 'Indefinido' }}
-        </p>
-        <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>Hora de concentração:</strong> {{
-            horaConcentracao }}</p>
-
         <p style="margin: 5px 0; font-size: 15px; color: #495057;">
             <strong>Competição:</strong>
-            <img src="assets/img/competicoes/c_{{ jogo?.competicao_id }}.png" alt="Competição"
+            <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png" alt="Competição"
                 style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px; margin-left: 8px;" />
-            {{ jogo?.competicao_nome || 'Indefinida' }}
+            {{ jogo.competicao_nome || 'Indefinida' }}
         </p>
+        <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>🗓 </strong> {{ jogo.data |
+            date:'dd/MM/yyyy' }} às {{ jogo.hora || 'Indefinida' }}</p>
+        <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>📍</strong> {{ jogo.local || 'Indefinido' }}
+        </p>
+        <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>Hora de concentração:</strong> {{
+            jogo.hora_concentracao }}</p>
+        <p *ngIf="jogo.obs" style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>Observações:</strong> {{
+            jogo.obs }}</p>
+
+
     </div>
 
     <!-- Lista de Convocados com Avatares -->
@@ -243,6 +390,8 @@
             </p>
         </ng-template>
     </div>
+
+
 
 
 </div>
