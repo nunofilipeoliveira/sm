@@ -42,7 +42,12 @@ export class PoppupMotivoComponent {
   }
 
   keepFocus(el: HTMLTextAreaElement) {
-  setTimeout(() => el.focus(), 0);
+
+    setTimeout(() => {
+    el.focus();
+  }, 100);
+
+
 }
 
 

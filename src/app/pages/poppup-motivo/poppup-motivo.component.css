@@ -6,7 +6,7 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
    background-image: linear-gradient(to bottom, #273890, #b52732);
@@ -27,7 +27,7 @@ display: ruby;
   padding-bottom: 10px;
   text-align: center;
   position: relative;
-	overflow: hidden;
+	overflow: visible;
   align-self: center;
 
 
@@ -42,89 +42,6 @@ display: ruby;
 		;
 	}
 
-	.signup {
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		-webkit-transform: translate(-50%, -50%);
-		width: 65%;
-		z-index: 5;
-		-webkit-transition: all .3s ease;
 
-
-		&.slide-up {
-			top: 5%;
-			-webkit-transform: translate(-50%, 0%);
-			-webkit-transition: all .3s ease;
-		}
-
-		&.slide-up .form-holder,
-		&.slide-up .submit-btn {
-			opacity: 0;
-			visibility: hidden;
-		}
-
-    .erroLogin {
-      height: 30px;
-      line-height: 30px;
-      width: 100%;
-      font-size: 15px;
-      color:red;
-      align-self: center;
-    }
-
-		.form-holder {
-			border-radius: 15px;
-			background-color: #000000;
-			overflow: hidden;
-			margin-top: 50px;
-			opacity: 1;
-			visibility: visible;
-			-webkit-transition: all .3s ease;
-
-			.input {
-				border: 0;
-				outline: none;
-				box-shadow: none;
-				display: block;
-				height: 30px;
-				line-height: 30px;
-				padding: 8px 15px;
-				border-bottom: 1px solid #eee;
-				width: 100%;
-				font-size: 15px;
-
-       	&:last-child {
-					border-bottom: 0;
-				}
-				&::-webkit-input-placeholder {
-					color: #273890;
-				}
-			}
-		}
-
-		.submit-btn {
-			background-color: #273890;
-			color: rgba(256,256,256,0.7);
-			border:0;
-			border-radius: 15px;
-			display: block;
-			margin: 15px auto;
-			padding: 15px 45px;
-			width: 100%;
-			font-size: 15px;
-			cursor: pointer;
-			opacity: 1;
-			visibility: visible;
-			-webkit-transition: all .3s ease;
-
-			&:hover {
-				transition: all .3s ease;
-				background-color:#b52732;
-			}
-
-
-		}
-	}
 
 }
