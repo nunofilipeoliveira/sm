@@ -59,7 +59,7 @@
     <div class="game-header">
       <p class="game-league"><img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
           onerror="this.onerror=null; this.src='assets/img/competicoes/default_competicao.png'" class="flag-icon" />
-        {{jogo.competicao_nome}}</p>
+        {{jogo.competicao_nome}} <span *ngIf="jogo.numeroJogo"> (Jogo Nº:{{jogo.numeroJogo}} )</span></p>
       <p class="game-date">📅 {{jogo.data | date: 'fullDate'}} - {{jogo.hora}}</p>
       <p class="game-venue">📍 {{jogo.local}}</p>
     </div>

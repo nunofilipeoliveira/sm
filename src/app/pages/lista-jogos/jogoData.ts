@@ -19,6 +19,7 @@ interface JogoData {
     estado: string;
     hora_concentracao: string;
     obs: string;
+    numeroJogo: String;
     jogadores: JogadorJogo[];
 }
 

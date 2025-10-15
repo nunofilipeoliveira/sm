@@ -101,6 +101,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
       hora_concentracao: '',
       obs: '',
       estado: 'REGISTADO', // Padrão
+      numeroJogo:'',
       jogadores: [] // Inicialmente vazio
     };
   }

@@ -53,6 +53,7 @@ export class JogoComponent implements OnInit {
     estado: '',
     hora_concentracao: '',
     obs: '',
+    numeroJogo:'',
     jogadores: []
   }
 
@@ -93,7 +94,8 @@ export class JogoComponent implements OnInit {
           id_jogador: j.id_jogador,
           nome: j.nome,
           estado: j.estado,
-          obs: j.obs
+          obs: j.obs,
+          licenca:""
         }));
 
         //retirar os jogadores indisponíveis da lista de jogadores do jogo
