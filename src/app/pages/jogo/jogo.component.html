@@ -185,45 +185,45 @@
             </span>
             <!-- Golos Marcados -->
             <span *ngIf="jogador.golos_normal > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_normal)">⚫</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_normal)"><img src="assets/img/jogo/GOLO.png" class="item-goal"></ng-container>
             </span>
             <span *ngIf="jogador.golos_p > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_p)">🥅</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_p)"><img src="assets/img/jogo/P.png" class="item-goal"></ng-container>
             </span>
             <span *ngIf="jogador.golos_pp > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_pp)">⬆️</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_pp)"><img src="assets/img/jogo/PP.png" class="item-goal"></ng-container>
             </span>
             <span *ngIf="jogador.golos_up > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_up)">⬇️</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_up)"><img src="assets/img/jogo/UP.png" class="item-goal"></ng-container>
             </span>
             <span *ngIf="jogador.golos_ld > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_ld)">🏑</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_ld)"><img src="assets/img/jogo/LD.png" class="item-goal"></ng-container>
             </span>
             <!-- Golos Sofridos -->
             <span *ngIf="jogador.golos_s_normal > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_normal)">⚫</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_normal)"><img src="assets/img/jogo/GOLO_S.png" class="item-goal"></ng-container>
             </span>
             <span *ngIf="jogador.golos_s_p > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_p)">🥅</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_p)"><img src="assets/img/jogo/P_S.png" class="item-goal"></ng-container>
             </span>
             <span *ngIf="jogador.golos_s_pp > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_pp)">⬆️</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_pp)"><img src="assets/img/jogo/PP_S.png" class="item-goal"></ng-container>
             </span>
             <span *ngIf="jogador.golos_s_up > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_up)">⬇️</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_up)"><img src="assets/img/jogo/UP_S.png" class="item-goal"></ng-container>
             </span>
             <span *ngIf="jogador.golos_s_ld > 0">
-              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_ld)">🏑</ng-container>
+              <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_ld)"><img src="assets/img/jogo/LD_S.png" class="item-goal"></ng-container>
             </span>
           </span>
         </li>
 
         <div class="legenda-golos">
-          <span>⚫ Golo</span>
-          <span>🥅 Penalty</span>
-          <span>🏑 Livre Direto</span>
-          <span>⬆️ Golo em PowerPlay</span>
-          <span>⬇️ Golo em UnderPlay</span>
+          <span><img src="assets/img/jogo/GOLO.png" class="item-goal"> Golo</span>
+          <span><img src="assets/img/jogo/P.png" class="item-goal"> Penalty</span>
+          <span><img src="assets/img/jogo/LD.png" class="item-goal"> Livre Direto</span>
+          <span><img src="assets/img/jogo/PP.png" class="item-goal"> Golo em PowerPlay</span>
+          <span><img src="assets/img/jogo/UP.png" class="item-goal"> Golo em UnderPlay</span>
         </div>
 
 

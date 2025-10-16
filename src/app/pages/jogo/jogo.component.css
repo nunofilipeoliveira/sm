@@ -117,6 +117,12 @@
   margin-right: 10px;
 }
 
+.item-goal {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+}
+
 .staff-name {
   flex: 1;
   font-size: 15px;
