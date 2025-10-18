@@ -84,7 +84,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
       id: 0,
       epoca_id: 0, // Será preenchido com a época atual
       equipa_id: this.tmpEquipa?.id || 0, // ID da equipa atual
-      tipoEquipa: this.tmpEquipa?.escalao || '', // Escalão da equipa atual
+      tipoEquipa: '', // Escalão da equipa atual
       data: new Date(),
       hora: '00:00',
       local: this.clubeCasa?.pav_nome || '', // Endereço do clube da casa
