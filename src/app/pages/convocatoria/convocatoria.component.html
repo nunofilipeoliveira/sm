@@ -54,8 +54,7 @@
                                 <img src="assets/img/clubes/clube_{{ meuClubeid }}.png"
                                     onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
                                     alt="Nossa Equipa" class="logo-jogo me-2" />
-                                <b>{{ nomeEscalao }}<span
-                                        *ngIf="jogo.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></b>
+                                <b>{{ nomeEscalao }}<span *ngIf="jogo.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></b>
                                 <h6 class="text-muted mb-2">VS</h6>
                                 <div class="text-center">
                                     <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
@@ -66,7 +65,8 @@
                                 </div>
                                 <p></p>
                                 {{ jogo.local }} | <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
-                                    class="flag-icon" /> {{ jogo.competicao_nome }}
+                                    class="flag-icon" /> {{ jogo.competicao_nome }}<span *ngIf="jogo.numeroJogo"> (Jogo
+                                    Nº:{{jogo.numeroJogo}} )</span>
                                 <p></p>
                                 {{ jogo.data | date:'dd/MM/yyyy' }} às {{ jogo.hora }}
                             </div>
@@ -89,7 +89,8 @@
                                 </div>
                                 <p></p>
                                 {{ jogo.local }} | <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
-                                    class="flag-icon" /> {{ jogo.competicao_nome }}
+                                    class="flag-icon" /> {{ jogo.competicao_nome }} <span *ngIf="jogo.numeroJogo"> (Jogo
+                                    Nº:{{jogo.numeroJogo}} )</span>
                                 <p></p>
                                 {{ jogo.data | date:'dd/MM/yyyy' }} às {{ jogo.hora }}
                             </div>
@@ -105,7 +106,7 @@
                                                     class="nc-icon nc-time-alarm info-icon"></i>Hora de
                                                 Concentração</label>
                                             <div class="info-value" *ngIf="isModoVisualizacao">
-                                                {{ horaConcentracao || 'Não definida' }}
+                                                {{ jogo.hora_concentracao }}
                                             </div>
                                             <input *ngIf="!isModoVisualizacao" type="time"
                                                 class="form-control info-input" [(ngModel)]="jogo.hora_concentracao"
@@ -185,7 +186,8 @@
 
                 <!-- Card de Seleção de Atletas Indisponiveis -->
                 <div class="card shadow-lg mb-4">
-                    <div *ngIf="!isModoVisualizacao || atletasIndisponiveis.length > 0" class="card-header bg-danger text-white">
+                    <div *ngIf="!isModoVisualizacao || atletasIndisponiveis.length > 0"
+                        class="card-header bg-danger text-white">
                         <h5 class="card-title mb-0"><i class="nc-icon nc_users-1 me-2"></i>Atletas Indisponíveis</h5>
                         <small *ngIf="!isModoVisualizacao" class="text-white-50">Adicionar as indisponibilidades</small>
                     </div>
@@ -322,7 +324,7 @@
 
 <!-- Div oculto para gerar a imagem da convocatória com avatares (atualizado para evitar cortes) -->
 <div id="convocatoria-imagem"
-    style="display: none; width: 600px; height: auto; background: #f8f9fa; padding: 20px; border-radius: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.15);  position: relative; overflow: hidden;">
+    style="display: none; width: 600px; height: auto; background: #f8f9fa; padding: 18px; border-radius: 18px; box-shadow: 0 8px 25px rgba(0,0,0,0.15);  position: relative; overflow: hidden;">
 
     <!-- Fundo com logotipo oblíquo e transparente -->
     <img [src]="'assets/img/clubes/clube_' + meuClubeid + '.png'"
@@ -333,7 +335,7 @@
     <div style="text-align: center; margin-bottom: 25px; position: relative; z-index: 1;">
         <img [src]="'assets/img/clubes/clube_' + meuClubeid + '.png'"
             onerror="this.src='assets/img/clubes/default_clube.png'" alt="Logotipo do Clube"
-            style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 15px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
+            style="width: 100px; height: 100px; border-radius: 50%; margin-bottom: 18px; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" />
         <h2 style="color: #273890; margin: 0; font-size: 28px; font-weight: 700;">Convocatória Oficial</h2>
         <p style="color: #6c757d; margin: 8px 0 0 0; font-size: 17px;"><strong>Equipa:</strong> {{ nomeEscalao }} <span
                 *ngIf="jogo?.tipoEquipa==='B'">({{jogo.tipoEquipa}})</span></p>
@@ -341,9 +343,9 @@
 
     <!-- Detalhes do Jogo -->
     <div
-        style="background: #e9ecef; padding: 20px; border-radius: 10px; margin-bottom: 25px; text-align: center; position: relative; z-index: 1;">
-        <h3 style="color: #b52732; margin: 0 0 12px 0; font-size: 20px; font-weight: 600;">Detalhes do Jogo</h3>
-        <p style="margin: 5px 0; font-size: 15px; color: #495057;">
+        style="background: #e9ecef; padding: 18px; border-radius: 10px; margin-bottom: 25px; text-align: center; position: relative; z-index: 1;">
+        <h3 style="color: #b52732; margin: 0 0 12px 0; font-size: 18px; font-weight: 600;">Detalhes do Jogo</h3>
+        <p style="margin: 5px 0; font-size: 18px; color: #495057;">
             <strong>Adversário:</strong>
             <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
                 onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" alt="Adversário"
@@ -351,19 +353,23 @@
             {{ jogo.equipa_adv_nome || 'Indefinido' }} <span
                 *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span>
         </p>
-        <p style="margin: 5px 0; font-size: 15px; color: #495057;">
+        <p style="margin: 5px 0; font-size: 18px; color: #495057;">
             <strong>Competição:</strong>
             <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png" alt="Competição"
                 style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px; margin-left: 8px;" />
             {{ jogo.competicao_nome || 'Indefinida' }}
         </p>
-        <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>🗓 </strong> {{ jogo.data |
-            date:'dd/MM/yyyy' }} às {{ jogo.hora || 'Indefinida' }}</p>
-        <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>📍</strong> {{ jogo.local || 'Indefinido' }}
+        <p *ngIf="jogo.numeroJogo" style="margin: 5px 0; font-size: 18px; color: #495057;">
+            <strong>Jogo nº:</strong>
+            {{ jogo.numeroJogo}}
         </p>
-        <p style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>Hora de concentração:</strong> {{
+        <p style="margin: 5px 0; font-size: 18px; color: #495057;"><strong>🗓 </strong> {{ jogo.data |
+            date:'dd/MM/yyyy' }} às {{ jogo.hora || 'Indefinida' }}</p>
+        <p style="margin: 5px 0; font-size: 18px; color: #495057;"><strong>📍</strong> {{ jogo.local || 'Indefinido' }}
+        </p>
+        <p style="margin: 5px 0; font-size: 18px; color: #495057;"><strong>Hora de concentração:</strong> {{
             jogo.hora_concentracao }}</p>
-        <p *ngIf="jogo.obs" style="margin: 5px 0; font-size: 15px; color: #495057;"><strong>Observações:</strong> {{
+        <p *ngIf="jogo.obs" style="margin: 5px 0; font-size: 18px; color: #495057;"><strong>Observações:</strong> {{
             jogo.obs }}</p>
 
 
@@ -374,17 +380,27 @@
         <h3 style="color: #273890; margin: 0 0 18px 0; font-size: 22px; font-weight: 600; text-align: center;">Atletas
             Convocados</h3>
         <div *ngIf="selecionadosCount > 0; else semConvocados"
-            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 18px;">
             <div *ngFor="let atleta of getConvocados(); let i = index"
-                style="display: flex; align-items: center; padding: 12px 15px; background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+    style="display: flex; flex-direction: column; align-items: center; padding: 12px 18px; background: #ffffff; border: 1px solid #dee2e6; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
 
-                <img [src]="'assets/img/jogadores/' + atleta.id_jogador + '_avatar.jpg'"
-                    onerror="this.src='assets/img/jogadores/default_avatar.jpg'" alt="{{ atleta.nome_jogador }}"
-                    style="width: 55px; height: 55px; border-radius: 50%; margin-right: 15px; object-fit: cover; border: 2px solid #273890;" />
-                <span style="flex: 1; font-size: 17px; font-weight: 600; color: #343a40;">{{ atleta.nome_jogador
-                    }}</span>
-            </div>
+    <!-- Subcontêiner para a imagem e o nome -->
+    <div style="display: flex; align-items: center; width: 100%;">
+        <img [src]="'assets/img/jogadores/' + atleta.id_jogador + '_avatar.jpg'"
+            onerror="this.src='assets/img/jogadores/default_avatar.jpg'" alt="{{ atleta.nome_jogador }}"
+            style="width: 55px; height: 55px; border-radius: 50%; margin-right: 18px; object-fit: cover; border: 2px solid #273890;" />
+        <span style="font-size: 20px; color: #343a40;">{{ atleta.nome_jogador }}</span>
+    </div>
+
+    <!-- Elemento para a licença, com a nova estilização -->
+    <span *ngIf="atleta.licenca"
+        style="font-size: 14px; color: #343a40; text-align: center; width: 100%; margin-top: 2px; display: inline-block; padding: 6px 12px; background-color: #e9ecef; border-radius: 20px; border: 1px solid #dee2e6; box-shadow: 0 2px 4px rgba(0,0,0,0.05);"><span *ngIf="atleta.licenca!== '0'" >Licença: {{ atleta.licenca }}</span><span *ngIf="atleta.licenca== '0'" >- </span></span>
+    
+   
+</div>
+
         </div>
+
         <ng-template #semConvocados>
             <p style="text-align: center; color: #999; font-style: italic; font-size: 16px;">Nenhum atleta convocado.
             </p>

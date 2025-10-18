@@ -179,7 +179,11 @@ export class FichaJogadorComponent implements OnInit {
                     const agrupamento = new Map<string, number>();
                     jogos.forEach(jogo => {
                       const escalao = this.escaloes.find(e => e.idescalao === jogo.equipa_id)?.nomeEscalao || 'Desconhecido';
+                      if(jogo.tipoEquipa.trim()!=='' && !this.escaloes.find(e => e.nomeEscalao === jogo.tipoEquipa)){
+                        agrupamento.set(escalao+' ('+jogo.tipoEquipa+')', (agrupamento.get(escalao+' ('+jogo.tipoEquipa+')') || 0) + 1);
+                      }else{
                       agrupamento.set(escalao, (agrupamento.get(escalao) || 0) + 1);
+                      }
                     });
 
                     // Converta para array ordenado

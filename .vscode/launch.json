@@ -23,7 +23,8 @@
         "--open",
         "--host=0.0.0.0",
         "--port",
-        "80"
+        "80",
+        "-c=advalongo"
       ],
       "console": "integratedTerminal"
     }

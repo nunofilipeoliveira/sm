@@ -41,6 +41,7 @@ export class ConvocatoriaComponent implements OnInit {
     estado: '',
     hora_concentracao: '',
     obs: '',
+    numeroJogo:'',
     jogadores: []
   }
   atletasDisponiveis: ConvocatoriaData[] = [];
@@ -54,7 +55,7 @@ export class ConvocatoriaComponent implements OnInit {
   meuClubeid: number = environment.clube_id
   isModoVisualizacao: boolean = false; // Novo flag para modo de visualização
   today = new Date();
-  horaConcentracao: string = '';
+  
 
     mostrarModalIndisponivel: boolean = false;
   jogadorSelecionadoIndisponivel: ConvocatoriaData | null = null;
@@ -111,14 +112,16 @@ export class ConvocatoriaComponent implements OnInit {
                   id_jogador: atleta.id_jogador,
                   nome_jogador: atleta.nome,
                   selecionado: true,
-                  obs: atleta.obs || ''
+                  obs: atleta.obs || '',
+                  licenca:atleta.licenca
                 });
             } else {
                 this.atletasIndisponiveis.push({
                   id_jogador: atleta.id_jogador,
                   nome_jogador: atleta.nome,
                   selecionado: false,
-                  obs: atleta.obs || ''
+                  obs: atleta.obs || '',
+                  licenca:atleta.licenca
                 }); 
             }
             
@@ -185,7 +188,7 @@ export class ConvocatoriaComponent implements OnInit {
         this.jogo = data;
         // Você pode querer carregar a convocatória existente aqui, se houver
         // Ex: this.jogoService.getConvocatoriaByJogo(id).subscribe(...)
-        this.calcularHoraConcentracao();
+       
       },
       error: (err) => {
         console.error('Erro ao carregar detalhes do jogo:', err);
@@ -420,7 +423,8 @@ export class ConvocatoriaComponent implements OnInit {
         id_jogador: jogador.id,
         nome_jogador: jogador.nome,
         selecionado: false,
-        obs: '' // Observações sobre o jogador na convocatória
+        obs: '', // Observações sobre o jogador na convocatória
+        licenca: jogador.licenca.toString()
       }));
       this.loading = false;
     } else {
@@ -455,7 +459,8 @@ export class ConvocatoriaComponent implements OnInit {
         id_jogador: atleta.id_jogador,
         nome: atleta.nome_jogador,
         estado: 'CONVOCADO',
-        obs: ''
+        obs: '',
+        licenca:atleta.licenca
       }));
 
       jogadoresConvocados.push(...this.atletasIndisponiveis
@@ -463,7 +468,8 @@ export class ConvocatoriaComponent implements OnInit {
         id_jogador: atleta.id_jogador,
         nome: atleta.nome_jogador,
         estado: 'INDISPONÍVEL',
-        obs: atleta.obs || ''
+        obs: atleta.obs || '',
+        licenca: atleta.licenca
       })));
 
 
@@ -529,25 +535,7 @@ export class ConvocatoriaComponent implements OnInit {
     }
   }
 
-  calcularHoraConcentracao(): void {
-    if (!this.jogo?.hora) {
-      this.horaConcentracao = 'Indefinida';
-      return;
-    }
-    // Supondo que this.jogo.hora está no formato "HH:mm"
-    const [horaStr, minutoStr] = this.jogo.hora.split(':');
-    let hora = parseInt(horaStr, 10);
-    const minuto = parseInt(minutoStr, 10);
-    // Subtrai 1 hora
-    hora = hora - 1;
-    if (hora < 0) {
-      hora = 23; // volta para o dia anterior (23 horas)
-    }
-    // Formata com zero à esquerda
-    const horaFormatada = hora.toString().padStart(2, '0');
-    const minutoFormatado = minuto.toString().padStart(2, '0');
-    this.horaConcentracao = `${horaFormatada}:${minutoFormatado}`;
-  }
+
 
 // Novo método: Adicionar Indisponibilidade
   adicionarIndisponibilidade(): void {
