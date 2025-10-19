@@ -386,18 +386,18 @@
                       <table class="table table-sm table-borderless">
                         <thead>
                           <tr>
-                            <th>Data</th>
-                            <th>Adversário</th>
-                            <th>Resultado</th>
+                            <th class="small-header">Data</th>
+                            <th class="small-header">Adversário</th>
+                            <th class="small-header text-end">Resultado</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let jogo of item.jogos" (click)="navigateToJogo(jogo.id)" style="cursor: pointer;">
+                          <tr *ngFor="let jogo of item.jogos" (click)="navigateToJogo(jogo.id)" style="cursor: pointer;" class="jogo-row">
                             <td>{{ jogo.data | date:'dd/MM' }}</td>
                             <td class="nome-equipa pe-4">
                               <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
                                 onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" class="team-logo me-2" style="width: 20px; height: 20px;" />
-                              {{ jogo.equipa_adv_nome }}
+                              <span class="team-name">{{ jogo.equipa_adv_nome }}</span>
                               <span *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span>
                             </td>
                             <td style="text-align: center;">
@@ -411,7 +411,7 @@
                                 'loss': jogo.golos_equipa_adv > jogo.golos_equipa,
                                 'draw': jogo.golos_equipa_adv === jogo.golos_equipa
                               }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
-                              <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted">Não jogado</span>
+                              <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted"></span>
                             </td>
                           </tr>
                         </tbody>

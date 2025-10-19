@@ -243,6 +243,19 @@ ngb-alert {
   display: none; /* Chrome, Safari, Edge */
 }
 
+.jogo-row {
+  border-bottom: 1px solid #e9ecef;
+}
+
+.team-name {
+  font-size: 0.9em;
+}
+
+.small-header {
+  font-size: 0.8em;
+  font-weight: 600;
+}
+
 /* Ajuste para o botão de colapsar */
 button[aria-expanded="true"] i.nc-icon {
   transform: rotate(180deg);
