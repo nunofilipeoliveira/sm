@@ -217,6 +217,10 @@ body {
   border-radius: 8px;
 }
 
+.jogo-row-modern:has(.d-inline-block.show) {
+  margin-bottom: 200px;
+}
+
 /* Empty State */
 .empty-state-modern {
   text-align: center;
