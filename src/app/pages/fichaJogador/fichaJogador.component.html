@@ -28,23 +28,30 @@
     </div>
 
     <div class="col-md-8">
-      <div class="info-card shadow">
-        <h5 class="info-title d-flex justify-content-between align-items-center"><span><img height="30px" width="30px"
-              [src]="avatarUrl" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-              class="rounded-circle" /> Inf. Pessoais
-          </span>
+      <div class="modern-card shadow">
+        <div class="card-header-modern">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <div class="icon-circle me-3">
+                <img [src]="avatarUrl" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
+                     class="rounded-circle" style="width: 30px; height: 30px;" />
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold" style="color: #495057;">Informações Pessoais</h5>
+                <small style="color: #6c757d;">Dados do jogador</small>
+              </div>
+            </div>
+            <button type="button" class="btn-toggle-modern" (click)="toggleInfoVisibility()">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path *ngIf="!showInfo" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="showInfo" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+              </svg>
+            </button>
+          </div>
+        </div>
 
-          <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="toggleInfoVisibility()">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path *ngIf="!showFaltas"
-                d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-              <path *ngIf="showFaltas"
-                d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-            </svg>
-          </button>
-        </h5>
-
-        <form #staffForm="ngForm" *ngIf="showInfo">
+        <div class="card-body-modern" *ngIf="showInfo">
+          <form #staffForm="ngForm">
           <div class="form-row">
             <div class="col-md-7">
               <div class="form-group">
@@ -226,45 +233,58 @@
             <input type="file" (change)="onFileSelected($event)" class="form-control-file mb-2">
           </div>
 
-        </form>
+          </form>
+        </div>
       </div>
 
-      <div class="faltas-card shadow mt-4">
-        <h5 class="info-title d-flex justify-content-between align-items-center">
-          <span>{{total_faltas}} Faltas</span>
-          <!-- Botão com ícone para alternar a visibilidade da tabela de faltas -->
-          <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="toggleFaltasVisibility()">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path *ngIf="!showFaltas"
-                d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-              <path *ngIf="showFaltas"
-                d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-            </svg>
-          </button>
-        </h5>
-        <!-- A tabela de faltas só será renderizada se 'showFaltas' for verdadeiro -->
-        <div *ngIf="showFaltas">
-          <table class="table table-hover mt-3" *ngIf="hasFaltas">
-            <thead>
-              <tr>
-                <th>Data</th>
-                <th>Hora</th>
-                <th>Escalão</th>
-                <th>Tipo Falta</th>
-                <th>Motivo</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let falta of faltas">
-                <td>{{falta.data | data}}</td>
-                <td>{{falta.hora}}</td>
-                <td>{{falta.nome_escalao}}</td>
-                <td>{{falta.estado}}</td>
-                <td>{{falta.motivo}}</td>
-              </tr>
-            </tbody>
-          </table>
-          <div *ngIf="!hasFaltas" class="text-center text-muted">Sem Faltas</div>
+      <div class="modern-card shadow mt-4">
+        <div class="card-header-modern">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <div class="icon-circle me-3">
+                <i class="nc-icon nc-alert-circle-i text-white"></i>
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold" style="color: #495057;">{{total_faltas}} Faltas</h5>
+                <small style="color: #6c757d;">Registo disciplinar</small>
+              </div>
+            </div>
+            <button type="button" class="btn-toggle-modern" (click)="toggleFaltasVisibility()">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path *ngIf="!showFaltas" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="showFaltas" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="card-body-modern" *ngIf="showFaltas">
+          <div *ngIf="hasFaltas">
+            <div class="faltas-list">
+              <div *ngFor="let falta of faltas" class="falta-card">
+                <div class="falta-content">
+                  <div class="falta-date">
+                    <div class="date-main">{{falta.data | data}}</div>
+                    <small class="text-muted">{{falta.hora}}</small>
+                  </div>
+                  <div class="falta-details">
+                    <div class="falta-escalao">
+                      <span class="badge-escalao">{{falta.nome_escalao}}</span>
+                    </div>
+                    <div class="falta-info">
+                      <div class="falta-tipo">{{falta.estado}}</div>
+                      <div class="falta-motivo">{{falta.motivo}}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!hasFaltas" class="empty-state">
+            <div class="empty-icon">
+              <i class="nc-icon nc-check-2"></i>
+            </div>
+            <p class="mb-0 text-muted">Sem registos de faltas</p>
+          </div>
         </div>
       </div>
 
@@ -272,166 +292,200 @@
 
 
 
-      <div class="faltas-card shadow mt-4">
-        <h5 class="info-title d-flex justify-content-between align-items-center">
-          <span>{{total_presencas}} Presenças</span>
-          <!-- Botão com ícone SVG inline para alternar a visibilidade -->
-          <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="togglePresencasVisibility()">
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-              <path *ngIf="!showPresencas"
-                d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-              <path *ngIf="showPresencas"
-                d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-            </svg>
-          </button>
-        </h5>
-
-        <div *ngIf="showPresencas">
-          <div *ngIf="load_presencas" class="spinner-border text-info spinner-border-sm" role="status">
-            <span class="sr-only"></span>
+      <div class="modern-card shadow mt-4">
+        <div class="card-header-modern">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <div class="icon-circle me-3">
+                <i class="nc-icon nc-calendar-60 text-white"></i>
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold" style="color: #495057;">{{total_presencas}} Presenças</h5>
+                <small style="color: #6c757d;">Assiduidade nos treinos</small>
+              </div>
+            </div>
+            <button type="button" class="btn-toggle-modern" (click)="togglePresencasVisibility()">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path *ngIf="!showPresencas" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="showPresencas" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+              </svg>
+            </button>
           </div>
-          <table *ngIf="!load_presencas" class="table table-hover table-wrapper mt-3" style="font-size: smaller;">
-            <thead>
-              <tr>
-                <th>Escalão</th>
-                <th style="text-align: center; font-size: small;">Set</th>
-                <th style="text-align: center; font-size: small;">Out</th>
-                <th style="text-align: center; font-size: small;">Nov</th>
-                <th style="text-align: center; font-size: small;">Dez</th>
-                <th style="text-align: center; font-size: small;">Jan</th>
-                <th style="text-align: center; font-size: small;">Fev</th>
-                <th style="text-align: center; font-size: small;">Mar</th>
-                <th style="text-align: center; font-size: small;">Abr</th>
-                <th style="text-align: center; font-size: small;">Mai</th>
-                <th style="text-align: center; font-size: small;">Jun</th>
-                <th style="text-align: center; font-size: small;">Jul</th>
-                <th style="text-align: center; font-size: medium;">TOTAL</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let presenca of count_presencas">
-                <td style="background-color:#babab9; color:white" class="card px-1">{{presenca.escalao}}</td>
-                <td style="text-align: center;font-size: small;">{{presenca.set}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.out}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.nov}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.dez}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.jan}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.fev}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.mar}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.abr}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.mai}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.jun}}</td>
-                <td style="text-align: center; font-size: small;">{{presenca.jul}}</td>
-                <td style="text-align: center; font-size: medium;">{{presenca.set + presenca.out + presenca.nov +
-                  presenca.dez + presenca.jan + presenca.fev + presenca.mar + presenca.abr + presenca.mai + presenca.jun
-                  +
-                  presenca.jul}}</td>
-              </tr>
+        </div>
 
+        <div class="card-body-modern" *ngIf="showPresencas">
+          <div *ngIf="load_presencas" class="text-center py-4">
+            <div class="spinner-modern">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only"></span>
+              </div>
+              <p class="mt-2 text-muted small">Carregando presenças...</p>
+            </div>
+          </div>
 
-            </tbody>
-          </table>
+          <div *ngIf="!load_presencas">
+            <div class="presencas-grid">
+              <div *ngFor="let presenca of count_presencas" class="presenca-card">
+                <div class="presenca-header">
+                  <h6 class="mb-0 fw-bold">{{presenca.escalao}}</h6>
+                  <div class="total-badge">
+                    Total: {{presenca.set + presenca.out + presenca.nov + presenca.dez + presenca.jan + presenca.fev + presenca.mar + presenca.abr + presenca.mai + presenca.jun + presenca.jul}}
+                  </div>
+                </div>
+                <div class="presenca-months">
+                  <div class="month-item">
+                    <span class="month-label">Set</span>
+                    <span class="month-value">{{presenca.set}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Out</span>
+                    <span class="month-value">{{presenca.out}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Nov</span>
+                    <span class="month-value">{{presenca.nov}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Dez</span>
+                    <span class="month-value">{{presenca.dez}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Jan</span>
+                    <span class="month-value">{{presenca.jan}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Fev</span>
+                    <span class="month-value">{{presenca.fev}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Mar</span>
+                    <span class="month-value">{{presenca.mar}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Abr</span>
+                    <span class="month-value">{{presenca.abr}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Mai</span>
+                    <span class="month-value">{{presenca.mai}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Jun</span>
+                    <span class="month-value">{{presenca.jun}}</span>
+                  </div>
+                  <div class="month-item">
+                    <span class="month-label">Jul</span>
+                    <span class="month-value">{{presenca.jul}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
 
       <!-- NOVO CARD SIMPLIFICADO: Jogos Participados (após o card de Presenças) -->
-      <!-- NOVO CARD CORRIGIDO: Jogos por Escalão -->
-<div class="faltas-card shadow mt-4">
-  <h5 class="info-title d-flex justify-content-between align-items-center">
-    <span>
-      <i class="nc-icon nc-trophy me-2 text-primary"></i>
-      Jogos por Escalão
-    </span>
-    <!-- Botão com ícone SVG inline para alternar a visibilidade -->
-    <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="toggleJogosVisibility()">
-      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-        <path *ngIf="!showJogos" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-        <path *ngIf="showJogos" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-      </svg>
-    </button>
-  </h5>
+            <!-- NOVO CARD CORRIGIDO: Jogos por Escalão -->
+      <div class="modern-card shadow mt-4">
+        <div class="card-header-modern">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <div class="icon-circle me-3">
+                <i class="nc-icon nc-trophy text-white"></i>
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold" style="color: #495057;">Jogos por Escalão</h5>
+                <small style="color: #6c757d;">Histórico de participações</small>
+              </div>
+            </div>
+            <button type="button" class="btn-toggle-modern" (click)="toggleJogosVisibility()">
+              <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path *ngIf="!showJogos" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="showJogos" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+              </svg>
+            </button>
+          </div>
+        </div>
 
   <!-- Conteúdo com Spinner e Controle de Visibilidade -->
-  <div class="mt-3" *ngIf="showJogos">
-    <div *ngIf="loadingJogos" class="text-center">
-      <div class="spinner-border text-info spinner-border-sm" role="status">
-        <span class="sr-only"></span>
+  <div class="card-body-modern" *ngIf="showJogos">
+    <div *ngIf="loadingJogos" class="text-center py-4">
+      <div class="spinner-modern">
+        <div class="spinner-border text-primary" role="status">
+          <span class="sr-only"></span>
+        </div>
+        <p class="mt-2 text-muted small">Carregando jogos...</p>
       </div>
     </div>
-    
+
     <div *ngIf="!loadingJogos">
-      <!-- Tabela Responsiva (mesma de antes, fonte normal) -->
-      <div>
-        <table class="table table-sm table-borderless table-nowrap">
-          <thead class="table-light">
-            <tr>
-              <th scope="col" class="text-start fw-semibold">Escalão</th>
-              <th scope="col" class="text-end fw-semibold">Número de Jogos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <ng-container *ngFor="let item of jogosPorEscalao">
-              <tr>
-                <td class="text-start">{{ item.escalao }}</td>
-                <td class="text-end fw-medium">
-                  <a href="#" (click)="toggleJogosDetail(item); $event.preventDefault()" class="text-decoration-none">{{ item.jogos.length }}</a>
-                </td>
-              </tr>
-              <!-- Expanded row for games details -->
-              <tr *ngIf="expandedEscalao === item.escalao" class="table-secondary">
-                <td colspan="2">
-                  <div class="mt-2">
-                    <div class="table-scroll">
-                      <table class="table table-sm table-borderless">
-                        <thead>
-                          <tr>
-                            <th class="small-header">Data</th>
-                            <th class="small-header">Adversário</th>
-                            <th class="small-header text-end">Resultado</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let jogo of item.jogos" (click)="navigateToJogo(jogo.id)" style="cursor: pointer;" class="jogo-row">
-                            <td>{{ jogo.data | date:'dd/MM' }}</td>
-                            <td class="nome-equipa pe-4">
-                              <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
-                                onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" class="team-logo me-2" style="width: 20px; height: 20px;" />
-                              <span class="team-name">{{ jogo.equipa_adv_nome }}</span>
-                              <span *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span>
-                            </td>
-                            <td style="text-align: center;">
-                              <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
-                                'win': jogo.golos_equipa_adv < jogo.golos_equipa,
-                                'loss': jogo.golos_equipa_adv > jogo.golos_equipa,
-                                'draw': jogo.golos_equipa_adv === jogo.golos_equipa
-                              }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
-                              <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'" [ngClass]="{
-                                'win': jogo.golos_equipa_adv < jogo.golos_equipa,
-                                'loss': jogo.golos_equipa_adv > jogo.golos_equipa,
-                                'draw': jogo.golos_equipa_adv === jogo.golos_equipa
-                              }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
-                              <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted"></span>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
+      <!-- Lista de Escalões com Design Moderno -->
+      <div class="escalao-list">
+        <div *ngFor="let item of jogosPorEscalao" class="escalao-item" (click)="toggleJogosDetail(item)">
+          <div class="escalao-header">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="escalao-info">
+                <h6 class="mb-0 fw-bold">{{ item.escalao }}</h6>
+                <small class="text-muted">{{ item.jogos.length }} jogos</small>
+              </div>
+              <div class="expand-icon">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" [class.rotated]="expandedEscalao === item.escalao">
+                  <path d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Jogos expandidos -->
+          <div class="jogos-expanded" *ngIf="expandedEscalao === item.escalao">
+            <div class="jogos-list">
+              <div *ngFor="let jogo of item.jogos" class="jogo-card" (click)="navigateToJogo(jogo.id)">
+                <div class="jogo-content-linear">
+                  <div class="jogo-date">
+                    <small class="text-muted">{{ jogo.data | date:'dd/MM' }}</small>
                   </div>
-                </td>
-              </tr>
-            </ng-container>
-            <!-- Linha Vazia se Não Houver Jogos -->
-            <tr *ngIf="jogosPorEscalao.length === 0">
-              <td colspan="2" class="text-center text-muted py-3">Nenhum jogo encontrado para este jogador.</td>
-            </tr>
-          </tbody>
-        </table>
+                  <div class="jogo-opponent-compact">
+                    <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
+                         onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
+                         class="opponent-logo-small" />
+                    <span class="opponent-name-compact">{{ jogo.equipa_adv_nome }}</span>
+                    <small *ngIf="jogo.tipoEquipa_adv==='B'" class="text-muted">({{jogo.tipoEquipa_adv}})</small>
+                  </div>
+                  <div class="jogo-result">
+                    <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
+                      'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                      'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                      'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                    }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
+                    <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'" [ngClass]="{
+                      'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                      'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                      'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                    }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
+                    <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted small"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <!-- CORRIGIDO: Total Geral (agora usa propriedade do TS, sem reduce no template) -->
-      <div *ngIf="jogosPorEscalao.length > 0" class="text-end mt-2 text-muted small">
-        Total Geral: {{ totalGeralJogos }} jogos
+
+      <!-- Total Geral Moderno -->
+      <div *ngIf="jogosPorEscalao.length > 0" class="total-summary">
+        <div class="total-badge">
+          <i class="nc-icon nc-trophy me-2"></i>
+          Total: {{ totalGeralJogos }} jogos
+        </div>
+      </div>
+
+      <!-- Mensagem quando não há jogos -->
+      <div *ngIf="jogosPorEscalao.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <i class="nc-icon nc-trophy"></i>
+        </div>
+        <p class="mb-0 text-muted">Nenhum jogo encontrado para este jogador.</p>
       </div>
     </div>
   </div>

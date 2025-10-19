@@ -1,43 +1,225 @@
 body{
   margin-top:20px;
-  background-color:#eee;
+  background-color:#f8f9fa;
   }
 
-  .tr{
-    border-color: red;
-    &:hover{
-      background-color: #b52732;
-    }
-  }
+/* Modern Card Styles */
+.modern-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
 
+.card-header-modern {
+  background: #f8f9fa;
+  padding: 20px;
+  border: none;
+  border-bottom: 1px solid #e9ecef;
+}
 
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
 
-  .badge{
-    font-size:18px;
-    background-color:#b52732;
-  }
+.card-body-modern {
+  background: white;
+  padding: 24px;
+}
 
-  .table-responsive {
-    overflow: auto;
-    padding-bottom: 10px;
-  }
+/* Jogadores Grid */
+.jogadores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
 
-  .project-list-table {
-      border-collapse: separate;
-      border-spacing: 0 12px
-  }
+.jogador-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #e9ecef;
+}
 
-  .project-list-table tr {
-      background-color: #fff
-  }
+.jogador-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
 
-  .table-nowrap td, .table-nowrap th {
-      white-space: nowrap;
-  }
+.jogador-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
+.jogador-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
 
-  .table-nowrap td-r {
-      text-align: right;
+.avatar-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.numero-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #b52732;
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+.jogador-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.jogador-nome {
+  margin: 0 0 4px 0;
+  font-size: 1em;
+  font-weight: 600;
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jogador-details {
+  display: flex;
+  gap: 8px;
+}
+
+.idade-badge {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  display: flex;
+  align-items: center;
+}
+
+.jogador-action {
+  flex-shrink: 0;
+}
+
+.btn-modern {
+  background: #6c757d;
+  border: 1px solid #6c757d;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+}
+
+.btn-modern:hover {
+  background: #5a6268;
+  border-color: #5a6268;
+  transform: scale(1.05);
+}
+
+/* Staff Grid */
+.staff-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.staff-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #e9ecef;
+}
+
+.staff-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.staff-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.staff-avatar {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.tipo-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #28a745;
+  color: white;
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.7em;
+  font-weight: bold;
+  border: 2px solid white;
+}
+
+.staff-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.staff-nome {
+  margin: 0 0 4px 0;
+  font-size: 1em;
+  font-weight: 600;
+  color: #000000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.staff-role {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.role-badge {
+  background: #28a745;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75em;
+  font-weight: 500;
+}
+
+.staff-action {
+  flex-shrink: 0;
 }
 
   .table-borderless>:not(caption)>*>* {

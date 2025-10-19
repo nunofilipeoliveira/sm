@@ -1,86 +1,333 @@
-/* lista-jogos.component.css - Versão atualizada com maior especificidade */
-
-/* Seus estilos existentes... */
-tbody {
-  margin-top: 20px;
-  margin-right: 10px;
-  background-color: #eee;
-  font-size: 14px;
+/* Modern Lista Jogos Styles */
+body {
+  background-color: #f8f9fa;
 }
 
-
-.team-logo {
-  width: 24px;
-  height: 24px;
+/* Filter Section */
+.modern-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
 }
 
-.flag-icon {
-  width: 24px;
-  height: 24px;
+.card-body-modern {
+  background: white;
+  padding: 24px;
 }
 
-.win {
-  background-color: #28a745;
+.filter-group {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filter-btn {
+  border-radius: 8px !important;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.filter-btn.mat-button-toggle-checked {
+  background: #6c757d !important;
+  color: white !important;
+}
+
+/* Jogos List - Single Row Layout */
+.jogos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.jogo-row-modern {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid #e9ecef;
+  overflow: hidden;
+}
+
+.jogo-row-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
+
+.jogo-row-modern.jogo-registado {
+  opacity: 0.7;
+  background: #f8f9fa;
+}
+
+.jogo-row-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  gap: 12px;
+}
+
+.jogo-date-mobile {
+  min-width: 50px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.date-main {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #495057;
+}
+
+.jogo-opponent-mobile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.opponent-logo-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.opponent-logo-mobile {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.local-indicator {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #6c757d;
   color: white;
-  padding: 5px;
-  border-radius: 3px;
-  margin-right: 8px;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6em;
+  font-weight: 600;
+  border: 2px solid white;
 }
 
-.draw {
-  background-color: #ffc107;
-  color: white;
-  padding: 5px;
-  border-radius: 3px;
-  margin-right: 8px;
+.opponent-info-mobile {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
 }
 
-.loss {
-  background-color: #dc3545;
-  color: white;
-  padding: 5px;
-  border-radius: 3px;
-  margin-right: 8px;
-}
-
-/* Estilo para jogos REGISTADO - Com seletor mais específico para a tabela */
-.project-list-table tbody tr.jogo-registado {
-  background-color: #f8f9fa !important; /* Cinza muito claro */
-  color: #b2b3b4 !important; /* Texto escuro para legibilidade */
-}
-
-/* Para células individuais (td), caso o tr não propague bem */
-.project-list-table tbody tr.jogo-registado td {
-  background-color: #f8f9fa !important;
-  color: #b2b3b4 !important;
-}
-
-/* Hover mantendo o tom claro */
-.project-list-table tbody tr.jogo-registado:hover {
-  background-color: #f8f9fa !important; /* Ligeiramente mais escuro no hover */
-}
-
-.project-list-table tbody tr.jogo-registado:hover td {
-  background-color: #f8f9fa !important;
-}
-
-.tabela-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none; /* Firefox */
-}
-
-.tabela-scroll::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Edge */
-}
-
-/* Impede quebra de linha e mantém tudo numa só linha */
-.nome-equipa {
+.opponent-name-mobile {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #495057;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
 }
 
-/* (opcional) Garante que o texto não é cortado */
-.table {
-  table-layout: auto;
-  width: 100%;
+.equipa-b-badge-mobile {
+  color: #343a40;
+  font-size: 0.65em;
+  font-weight: 500;
+}
+
+.jogo-result-mobile {
+  min-width: 60px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.result-win-mobile {
+  background: #d4edda;
+  color: #155724;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.result-loss-mobile {
+  background: #f8d7da;
+  color: #721c24;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.result-draw-mobile {
+  background: #fff3cd;
+  color: #856404;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.jogo-competition-mobile {
+  min-width: 32px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.competition-logo-mobile {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.jogo-actions-mobile {
+  min-width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.btn-action-mobile {
+  background: #6c757d;
+  border: 1px solid #6c757d;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 0.8em;
+  transition: all 0.3s ease;
+}
+
+.btn-action-mobile:hover {
+  background: #5a6268;
+  border-color: #5a6268;
+  transform: scale(1.05);
+}
+
+.dropdown-menu-modern {
+  border: none;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 8px;
+}
+
+/* Empty State */
+.empty-state-modern {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.empty-icon {
+  font-size: 4em;
+  color: #dee2e6;
+  margin-bottom: 20px;
+}
+
+.empty-state-modern h5 {
+  color: #495057;
+  margin-bottom: 10px;
+}
+
+/* Add Button */
+.btn-add-modern {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-weight: 500;
+  font-size: 1em;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+}
+
+.btn-add-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102,126,234,0.4);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .jogo-row-content {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .jogo-date-mobile {
+    min-width: 45px;
+  }
+
+  .opponent-logo-container {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .local-indicator {
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    width: 14px;
+    height: 14px;
+    font-size: 0.55em;
+  }
+
+  .jogo-opponent-mobile {
+    gap: 6px;
+  }
+
+  .opponent-logo-mobile {
+    width: 28px;
+    height: 28px;
+  }
+
+  .opponent-info-mobile {
+    gap: 4px;
+  }
+
+  .opponent-name-mobile {
+    font-size: 0.8em;
+  }
+
+  .equipa-b-badge-mobile {
+    font-size: 0.6em;
+    color: #495057;
+  }
+
+  .jogo-result-mobile {
+    min-width: 55px;
+  }
+
+  .result-win-mobile,
+  .result-loss-mobile,
+  .result-draw-mobile {
+    padding: 3px 6px;
+    font-size: 0.8em;
+  }
+
+  .jogo-competition-mobile {
+    min-width: 28px;
+  }
+
+  .competition-logo-mobile {
+    width: 20px;
+    height: 20px;
+  }
+
+  .jogo-actions-mobile {
+    min-width: 35px;
+  }
+
+  .btn-action-mobile {
+    padding: 4px 6px;
+    font-size: 0.75em;
+  }
 }

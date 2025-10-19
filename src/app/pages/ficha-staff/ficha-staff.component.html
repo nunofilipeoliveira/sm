@@ -19,17 +19,22 @@
       </div>
 
       <div class="col-md-8">
-        <div class="card info-card shadow">
-          <div class="card-header">
-            <h5 class="info-title">
-              <img height="30px" width="30px"
-                 [src]="avatarUrl" 
-                onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="Avatar"
-                class="rounded-circle" /> Inf. Pessoais  
-
-            </h5>
+        <div class="modern-card shadow">
+          <div class="card-header-modern">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <div class="icon-circle me-3">
+                  <img [src]="avatarUrl" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="Avatar"
+                       class="rounded-circle" style="width: 30px; height: 30px;" />
+                </div>
+                <div>
+                  <h5 class="mb-0 fw-bold" style="color: #495057;">Informações Pessoais</h5>
+                  <small style="color: #6c757d;">Dados do staff</small>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="card-body">
+          <div class="card-body-modern">
 
 
             <form #staffForm="ngForm">

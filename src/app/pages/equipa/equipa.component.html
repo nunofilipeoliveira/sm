@@ -1,54 +1,97 @@
-<div>
-  <div>
+<div class="main-content">
+  <div class="d-flex justify-content-center" style="vertical-align:middle;">
+    <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
 
-    <div class="d-flex justify-content-center" style="vertical-align:middle;">
-      <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
-        <span class="sr-only"></span>
+  <div class="container-fluid" *ngIf="!spinner">
+    <!-- Jogadores Section -->
+    <div class="modern-card shadow mb-4">
+      <div class="card-header-modern">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <div class="icon-circle me-3">
+              <i class="nc-icon nc-single-02 text-white"></i>
+            </div>
+            <div>
+              <h5 class="mb-0 fw-bold" style="color: #000000;">Plantel</h5>
+              <small style="color: #000000;">Jogadores da equipa</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body-modern">
+        <div class="jogadores-grid">
+          <div *ngFor="let jogador of equipaData?.jogadores" class="jogador-card" (click)="doFichaAtleta(jogador.id)">
+            <div class="jogador-content">
+              <div class="jogador-avatar">
+                <img src="assets/img/jogadores/{{jogador.id}}_avatar.jpg"
+                     onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                     alt="Avatar" class="avatar-img" />
+                <div class="numero-badge" *ngIf="jogador.numero && jogador.numero !== '0'">{{jogador.numero}}</div>
+              </div>
+              <div class="jogador-info">
+                <h6 class="jogador-nome">{{jogador.nome}}</h6>
+                <div class="jogador-details">
+                  <span class="idade-badge">
+                    <i class="nc-icon nc-calendar-60 me-1"></i>
+                    {{jogador.data_nascimento | idade : epocaAtual.anoInicio : idadeEscalao}}
+                  </span>
+                </div>
+              </div>
+              <div class="jogador-action">
+                <button type="button" class="btn-modern" (click)="doFichaAtleta(jogador.id); $event.stopPropagation()">
+                  <i class="nc-icon nc-zoom-split"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-      <div class="table-responsive col-lg-8" *ngIf="!spinner">
-        <table class="table project-list-table table-nowrap align-middle">
-          <thead>
-            <tr>
-              <th scope="col" style="width: 5px;">#</th>
-              <th scope="col">Nome</th>
-              <th *ngIf="epocaAtual.anoInicio === 0" scope="col" style="width: 10px;">Idade</th>
-              <th *ngIf="epocaAtual.anoInicio >0" scope="col" style="width: 10px;">Ano</th>
-              <th scope="col" style="width: 10px;">Ficha atleta</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let jogador of equipaData?.jogadores; index as posicao">
-              <td><span class="badge">{{jogador.numero}}</span></td>
-              <td><img src="assets/img/jogadores/{{jogador.id}}_avatar.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-                  class="avatar-sm rounded-circle me-2" />{{jogador.nome}}</td>
-              <td class="td-total">{{jogador.data_nascimento | idade : epocaAtual.anoInicio : idadeEscalao}}</td>
-              <td class="td-total"><button type="button" class="btn btn-info text-white" (click)="doFichaAtleta(jogador.id)">Ver</button></td>
-            </tr>
-          </tbody>
-        </table>
-
-
-        <table class="table project-list-table table-nowrap align-middle">
-          <thead>
-            <tr>
-              <th scope="col" style="width: 5px;">STAFF</th>
-              <th scope="col"></th>
-              <th scope="col" style="width: 10px;"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let stafItem of equipaData.staff; index as posicao">
-              <td><span class="badge">{{stafItem.tipo}}</span></td>
-              <td><img src="assets/img/jogadores/{{stafItem.id}}_avatar_staff.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-                  class="avatar-sm rounded-circle me-2" />{{stafItem.nome}}</td>
-              <td class="td-total"><button type="button" class="btn btn-info text-white" (click)="doFichaStaff(stafItem.id, stafItem.id_jogador)">Ver</button></td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- Staff Section -->
+    <div class="modern-card shadow">
+      <div class="card-header-modern">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center">
+            <div class="icon-circle me-3">
+              <i class="nc-icon nc-badge text-white"></i>
+            </div>
+            <div>
+              <h5 class="mb-0 fw-bold" style="color: #000000;">Staff</h5>
+              <small style="color: #000000;">Equipa técnica</small>
+            </div>
+          </div>
+        </div>
       </div>
 
-
+      <div class="card-body-modern">
+        <div class="staff-grid">
+          <div *ngFor="let stafItem of equipaData.staff" class="staff-card" (click)="doFichaStaff(stafItem.id, stafItem.id_jogador)">
+            <div class="staff-content">
+              <div class="staff-avatar">
+                <img src="assets/img/jogadores/{{stafItem.id}}_avatar_staff.jpg"
+                     onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                     alt="Avatar" class="avatar-img" />
+              </div>
+              <div class="staff-info">
+                <h6 class="staff-nome">{{stafItem.nome}}</h6>
+                <div class="staff-role">
+                  <span class="role-badge">{{stafItem.tipo}}</span>
+                </div>
+              </div>
+              <div class="staff-action">
+                <button type="button" class="btn-modern" (click)="doFichaStaff(stafItem.id, stafItem.id_jogador); $event.stopPropagation()">
+                  <i class="nc-icon nc-zoom-split"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -1,77 +1,76 @@
-<P>
-<div class="container">
-  <div *ngIf="loading" class="d-flex justify-content-center my-4">
-    <div class="spinner-border text-primary" role="status">
+<div class="main-content">
+  <div class="d-flex justify-content-center" style="vertical-align:middle;">
+    <div class="spinner-border text-danger" *ngIf="loading" styrole="status">
       <span class="sr-only"></span>
     </div>
   </div>
 
-
-
-  <! -- Mensagem para nenhum jogo encontrado -->
-    <div *ngIf="!loading && jogos.length === 0" class="alert alert-info text-center" role="alert">
-      Nenhum jogo encontrado. Clique em "Adicionar Novo Jogo" para começar a adicionar jogos.
+  <div class="container-fluid" *ngIf="!loading">
+    <!-- Filtros Section -->
+    <div *ngIf="hasEquipaB" class="modern-card shadow mb-4">
+      <div class="card-body-modern">
+        <div class="d-flex justify-content-center">
+          <mat-button-toggle-group (change)="filtrarEquipas()" [(ngModel)]="filtro" class="filter-group">
+            <mat-button-toggle value="todos" class="filter-btn">Todos</mat-button-toggle>
+            <mat-button-toggle value="equipa_a" class="filter-btn">Equipa A</mat-button-toggle>
+            <mat-button-toggle value="equipa_b" class="filter-btn">Equipa B</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
     </div>
 
-    <div class="tabela-scroll">
-      <div *ngIf="hasEquipaB  && !loading" class="d-flex justify-content-between align-items-center mb-3 mt-3">
-        <mat-button-toggle-group (change)="filtrarEquipas()" [(ngModel)]="filtro">
-          <mat-button-toggle value="todos">Todos</mat-button-toggle>
-          <mat-button-toggle value="equipa_a">Equipa A</mat-button-toggle>
-          <mat-button-toggle value="equipa_b">Equipa B</mat-button-toggle>
+    <!-- Jogos Section -->
+    <div *ngIf="jogos.length > 0">
+      <div class="jogos-list">
+        <div *ngFor="let jogo of jogos" class="jogo-row-modern"
+             [class.jogo-registado]="jogo.estado === 'REGISTADO'"
+             (click)="(jogo.estado === 'CONCLUIDO' || jogo.estado === 'INICIADO') && verJogo(jogo.id)">
 
-        </mat-button-toggle-group>
-      </div>
-      <table class="table table-sm table-responsive table-hover project-list-table align-middle"
-        *ngIf="!loading && jogos.length > 0">
-        <thead class="thead-light">
-          <tr>
-            <th>Data</th>
-            <th style="text-align: center;">Local</th>
-            <th>Equipa</th>
-            <th>Resultado</th>
-            <th></th>
-            <th class="d-none d-md-table-cell">Competição</th>
-            <th>Ação</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let jogo of jogos" [class.jogo-registado]="jogo.estado === 'REGISTADO'"
-            (click)="(jogo.estado === 'CONCLUIDO' || jogo.estado === 'INICIADO') && verJogo(jogo.id)">
-            <td>{{ jogo.data | date:'dd/MM' }}</td>
-            <td style="text-align: center;">({{ jogo.tipo_local }})</td>
-            <td class="nome-equipa pe-4">
-              <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
-                onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" class="team-logo" />
-              {{ jogo.equipa_adv_nome }}
-              <span *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span>
-            </td>
-            <td style="text-align: center;">
+          <div class="jogo-row-content">
+            <div class="jogo-date-mobile">
+              <div class="date-main">{{ jogo.data | date:'dd/MM' }}</div>
+              <small class="text-muted d-none d-md-inline">{{ jogo.data | date:'yyyy' }}</small>
+            </div>
+
+            <div class="jogo-opponent-mobile">
+              <div class="opponent-logo-container">
+                <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
+                     onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
+                     class="opponent-logo-mobile" />
+                <span class="local-indicator">{{ jogo.tipo_local === 'C' ? 'C' : 'F' }}</span>
+              </div>
+              <div class="opponent-info-mobile">
+                <span class="opponent-name-mobile">{{ jogo.equipa_adv_nome }}<span *ngIf="jogo.tipoEquipa_adv==='B'" class="equipa-b-badge-mobile"> B</span></span>
+              </div>
+            </div>
+
+            <div class="jogo-result-mobile">
               <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
-              loss: jogo.golos_equipa_adv > jogo.golos_equipa,
-              win: jogo.golos_equipa_adv < jogo.golos_equipa,
-              draw: jogo.golos_equipa_adv === jogo.golos_equipa
-            }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
+                'result-win-mobile': jogo.golos_equipa_adv < jogo.golos_equipa,
+                'result-loss-mobile': jogo.golos_equipa_adv > jogo.golos_equipa,
+                'result-draw-mobile': jogo.golos_equipa_adv === jogo.golos_equipa
+              }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
               <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'" [ngClass]="{
-              loss: jogo.golos_equipa_adv > jogo.golos_equipa,
-              win: jogo.golos_equipa_adv < jogo.golos_equipa,
-              draw: jogo.golos_equipa_adv === jogo.golos_equipa
-            }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
-            </td>
-            <td style="width: 12%; text-align: end;">
+                'result-win-mobile': jogo.golos_equipa_adv < jogo.golos_equipa,
+                'result-loss-mobile': jogo.golos_equipa_adv > jogo.golos_equipa,
+                'result-draw-mobile': jogo.golos_equipa_adv === jogo.golos_equipa
+              }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
+              <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted small">Não jogado</span>
+            </div>
+
+            <div class="jogo-competition-mobile">
               <img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
-                onerror="this.onerror=null; this.src='assets/img/competicoes/default_competicao.png'"
-                class="flag-icon" />
-            </td>
-            <td class="d-none d-md-table-cell">{{ jogo.competicao_nome }}</td>
-            <td>
+                   onerror="this.onerror=null; this.src='assets/img/competicoes/default_competicao.png'"
+                   class="competition-logo-mobile" />
+            </div>
+
+            <div class="jogo-actions-mobile">
               <div ngbDropdown class="d-inline-block" (click)="$event.stopPropagation()">
-                <button class="btn btn-sm btn-secondary" ngbDropdownToggle>
+                <button class="btn-action-mobile" ngbDropdownToggle>
                   <i class="nc-icon nc-settings-gear-65"></i>
-                  <span class="d-none d-md-inline">Ações</span>
                 </button>
 
-                <div ngbDropdownMenu>
+                <div ngbDropdownMenu class="dropdown-menu-modern">
                   <button *ngIf="jogo.estado === 'REGISTADO'" ngbDropdownItem (click)="verConvocatoria(jogo.id)">
                     <i class="nc-icon nc-bullet-list-67 me-2"></i>Convocatória
                   </button>
@@ -89,19 +88,28 @@
                   </button>
                 </div>
               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <!-- Empty State -->
+    <div *ngIf="jogos.length === 0" class="empty-state-modern">
+      <div class="empty-icon">
+        <i class="nc-icon nc-trophy"></i>
+      </div>
+      <h5>Nenhum jogo encontrado</h5>
+      <p class="text-muted">Clique em "Adicionar Novo Jogo" para começar a adicionar jogos.</p>
+    </div>
 
-    <div class="text-center mt-3">
-      <button class="btn btn-primary" (click)="adicionarJjogo(content)">
-        <b>+</b> Adicionar Novo Jogo
+    <!-- Add Game Button -->
+    <div class="text-center mt-4">
+      <button class="btn-add-modern" (click)="adicionarJjogo(content)">
+        <i class="nc-icon nc-simple-add me-2"></i>Adicionar Novo Jogo
       </button>
     </div>
-</div>
+  </div>
 
 <!-- Modal para Adicionar Novo Jogo (Transformado Visualmente - Estilo Ficha Atleta) -->
 <ng-template #content let-modal>
