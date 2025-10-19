@@ -55,7 +55,7 @@
                 'result-loss-mobile': jogo.golos_equipa_adv > jogo.golos_equipa,
                 'result-draw-mobile': jogo.golos_equipa_adv === jogo.golos_equipa
               }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
-              <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted small">Não jogado</span>
+              <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted small"></span>
             </div>
 
             <div class="jogo-competition-mobile">
