@@ -15,7 +15,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "SM - FRONTEND",
+      "name": "SM - FRONTEND Valongo",
       "runtimeExecutable": "npx",
       "runtimeArgs": [
         "ng",
@@ -25,6 +25,22 @@
         "--port",
         "80",
         "-c=advalongo"
+      ],
+      "console": "integratedTerminal"
+    }
+    ,
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "SM - FRONTEND",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "ng",
+        "serve",
+        "--open",
+        "--host=0.0.0.0",
+        "--port",
+        "80"
       ],
       "console": "integratedTerminal"
     }

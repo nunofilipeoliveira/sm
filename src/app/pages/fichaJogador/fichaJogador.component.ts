@@ -44,15 +44,19 @@ export class FichaJogadorComponent implements OnInit {
   fotoUrl: string = '';
   avatarUrl: string = '';
 
-  jogosPorEscalao: { escalao: string; total: number }[] = [];
+  jogosPorEscalao: { escalao: string; jogos: JogoData[] }[] = [];
   totalGeralJogos: number = 0;
   loadingJogos: boolean = false; // Opcional: para spinner se quiser
   escaloes: { idescalao: number; nomeEscalao: string }[] = [];
+  selectedEscalao: string = '';
+  selectedJogos: JogoData[] = [];
+  expandedEscalao: string = '';
 
   // Nova propriedade para controlar a visibilidade da tabela de faltas
   public showFaltas: boolean = false; // Inicialmente oculta
   public showPresencas: boolean = false; // Inicialmente oculta
   public showInfo: boolean = false; // Inicialmente visível
+  public showJogos: boolean = false;
 
   // Propriedade para a data de nascimento formatada (AAAA-MM-DD)
   public dataNascimentoDisplay: string = '';
@@ -175,20 +179,22 @@ export class FichaJogadorComponent implements OnInit {
                     // Agora processa os jogos
                     console.log('Jogos do jogador:', jogos);  
 
-                    // Agrupamento por escalão (mesmo de antes)
-                    const agrupamento = new Map<string, number>();
+                    // Agrupamento por escalão (agora com arrays de jogos)
+                    const agrupamento = new Map<string, JogoData[]>();
                     jogos.forEach(jogo => {
                       const escalao = this.escaloes.find(e => e.idescalao === jogo.equipa_id)?.nomeEscalao || 'Desconhecido';
-                      if(jogo.tipoEquipa.trim()!=='' && !this.escaloes.find(e => e.nomeEscalao === jogo.tipoEquipa)){
-                        agrupamento.set(escalao+' ('+jogo.tipoEquipa+')', (agrupamento.get(escalao+' ('+jogo.tipoEquipa+')') || 0) + 1);
-                      }else{
-                      agrupamento.set(escalao, (agrupamento.get(escalao) || 0) + 1);
+                      const chave = (jogo.tipoEquipa.trim() !== '' && !this.escaloes.find(e => e.nomeEscalao === jogo.tipoEquipa))
+                        ? escalao + ' (' + jogo.tipoEquipa + ')'
+                        : escalao;
+                      if (!agrupamento.has(chave)) {
+                        agrupamento.set(chave, []);
                       }
+                      agrupamento.get(chave)!.push(jogo);
                     });
 
                     // Converta para array ordenado
                     this.jogosPorEscalao = Array.from(agrupamento.entries())
-                      .map(([escalao, total]) => ({ escalao, total }))
+                      .map(([escalao, jogos]) => ({ escalao, jogos }))
                       .sort((a, b) => a.escalao.localeCompare(b.escalao));
 
                     // NOVA: Calcule o total geral aqui (simples e eficiente)
@@ -371,5 +377,22 @@ export class FichaJogadorComponent implements OnInit {
 
   togglePresencasVisibility() {
     this.showPresencas = !this.showPresencas;
+  }
+
+    toggleJogosVisibility() {
+    this.showJogos = !this.showJogos;
+  }
+
+  toggleJogosDetail(item: { escalao: string; jogos: JogoData[] }) {
+    if (this.expandedEscalao === item.escalao) {
+      this.expandedEscalao = '';
+    } else {
+      this.expandedEscalao = item.escalao;
+    }
+  }
+
+  navigateToJogo(jogoId: number) {
+    // Navigate to the game page
+    this.router.navigate(['/jogo', jogoId]);
   }
 }

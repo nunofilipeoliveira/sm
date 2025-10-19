@@ -233,10 +233,44 @@ ngb-alert {
   margin-top: 0.5rem;
 }
 
+.table-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+}
+
+.table-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Edge */
+}
+
 /* Ajuste para o botão de colapsar */
 button[aria-expanded="true"] i.nc-icon {
   transform: rotate(180deg);
   transition: transform 0.3s ease;
+}
+
+.win {
+  background-color: #28a745;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+.draw {
+  background-color: #ffc107;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 8px;
+}
+
+.loss {
+  background-color: #dc3545;
+  color: white;
+  padding: 5px;
+  border-radius: 3px;
+  margin-right: 8px;
 }
 
 

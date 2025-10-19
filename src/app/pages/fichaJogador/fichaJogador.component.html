@@ -336,25 +336,33 @@
 
 
       <!-- NOVO CARD SIMPLIFICADO: Jogos Participados (após o card de Presenças) -->
-<!-- CARD CORRIGIDO: Jogos por Escalão -->
+      <!-- NOVO CARD CORRIGIDO: Jogos por Escalão -->
 <div class="faltas-card shadow mt-4">
-  <h5 class="info-title">
-    <i class="nc-icon nc-trophy me-2 text-primary"></i>
-    Jogos por Escalão
+  <h5 class="info-title d-flex justify-content-between align-items-center">
+    <span>
+      <i class="nc-icon nc-trophy me-2 text-primary"></i>
+      Jogos por Escalão
+    </span>
+    <!-- Botão com ícone SVG inline para alternar a visibilidade -->
+    <button type="button" class="btn-sm btn-outline-light text-muted p-1" (click)="toggleJogosVisibility()">
+      <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+        <path *ngIf="!showJogos" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+        <path *ngIf="showJogos" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+      </svg>
+    </button>
   </h5>
 
-  <!-- Conteúdo com Spinner -->
-  <div class="mt-3">
+  <!-- Conteúdo com Spinner e Controle de Visibilidade -->
+  <div class="mt-3" *ngIf="showJogos">
     <div *ngIf="loadingJogos" class="text-center">
       <div class="spinner-border text-info spinner-border-sm" role="status">
         <span class="sr-only"></span>
       </div>
-      
     </div>
     
     <div *ngIf="!loadingJogos">
       <!-- Tabela Responsiva (mesma de antes, fonte normal) -->
-      <div >
+      <div>
         <table class="table table-sm table-borderless table-nowrap">
           <thead class="table-light">
             <tr>
@@ -363,10 +371,56 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let item of jogosPorEscalao">
-              <td class="text-start">{{ item.escalao }}</td>
-              <td class="text-end fw-medium">{{ item.total }}</td>
-            </tr>
+            <ng-container *ngFor="let item of jogosPorEscalao">
+              <tr>
+                <td class="text-start">{{ item.escalao }}</td>
+                <td class="text-end fw-medium">
+                  <a href="#" (click)="toggleJogosDetail(item); $event.preventDefault()" class="text-decoration-none">{{ item.jogos.length }}</a>
+                </td>
+              </tr>
+              <!-- Expanded row for games details -->
+              <tr *ngIf="expandedEscalao === item.escalao" class="table-secondary">
+                <td colspan="2">
+                  <div class="mt-2">
+                    <div class="table-scroll">
+                      <table class="table table-sm table-borderless">
+                        <thead>
+                          <tr>
+                            <th>Data</th>
+                            <th>Adversário</th>
+                            <th>Resultado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let jogo of item.jogos" (click)="navigateToJogo(jogo.id)" style="cursor: pointer;">
+                            <td>{{ jogo.data | date:'dd/MM' }}</td>
+                            <td class="nome-equipa pe-4">
+                              <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
+                                onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'" class="team-logo me-2" style="width: 20px; height: 20px;" />
+                              {{ jogo.equipa_adv_nome }}
+                              <span *ngIf="jogo.tipoEquipa_adv==='B'">({{jogo.tipoEquipa_adv}})</span>
+                            </td>
+                            <td style="text-align: center;">
+                              <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
+                                'win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                                'loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                                'draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                              }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
+                              <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'" [ngClass]="{
+                                'win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                                'loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                                'draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                              }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
+                              <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted">Não jogado</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
             <!-- Linha Vazia se Não Houver Jogos -->
             <tr *ngIf="jogosPorEscalao.length === 0">
               <td colspan="2" class="text-center text-muted py-3">Nenhum jogo encontrado para este jogador.</td>
@@ -382,6 +436,7 @@
     </div>
   </div>
 </div>
+
 
 
 
