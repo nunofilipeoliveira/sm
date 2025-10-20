@@ -275,4 +275,21 @@ export class JogoComponent implements OnInit {
   verConvocatoria(idJogo: number): void {
     this.router.navigate(['/convocatoria', idJogo]);
   }
+
+  // Método para verificar se o jogador tem estatísticas
+  hasStats(jogador: JogadorJogoExpandable): boolean {
+    return (jogador.golos_normal || 0) > 0 ||
+           (jogador.golos_p || 0) > 0 ||
+           (jogador.golos_pp || 0) > 0 ||
+           (jogador.golos_up || 0) > 0 ||
+           (jogador.golos_ld || 0) > 0 ||
+           (jogador.golos_s_normal || 0) > 0 ||
+           (jogador.golos_s_p || 0) > 0 ||
+           (jogador.golos_s_pp || 0) > 0 ||
+           (jogador.golos_s_up || 0) > 0 ||
+           (jogador.golos_s_ld || 0) > 0 ||
+           (jogador.amarelo || 0) > 0 ||
+           (jogador.azul || 0) > 0 ||
+           (jogador.vermelho || 0) > 0;
+  }
 }
