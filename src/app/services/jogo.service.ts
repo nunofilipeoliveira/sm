@@ -8,16 +8,16 @@ import { Observable, of } from 'rxjs';
 })
 export class JogoService {
 
-  
+
   URLGetAllJogosByEquipa = environment.apiUrl + "/sm/getAllJogosByEquipa";
 
   constructor(private http: HttpClient) { }
 
-  getAllJogosByEquipa(equipaId: number) {
+  getAllJogosByEquipa(equipaId: number): Observable<JogoData[]> {
     const headers = { 'Content-Type': 'application/json' };
     const urltmp = this.URLGetAllJogosByEquipa + '/' + equipaId;
       console.log('JogoService | url:', this, urltmp);
-      return this.http.put<any>(urltmp, { headers });
+      return this.http.put<JogoData[]>(urltmp, { headers });
     }
 
   getAllCompeticoes() {

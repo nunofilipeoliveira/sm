@@ -1,95 +1,351 @@
-body{
-  margin-top:0px;
-  background-color:#eee;
+/* Modern Marcar Presenca Component Styles */
+.marcar-presenca-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 1rem 0;
+}
+
+/* Card Styles */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 12px 12px 0 0 !important;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.card-footer {
+  border-top: 1px solid #e9ecef;
+  border-radius: 0 0 12px 12px !important;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Table Styles */
+.marcar-presenca-table {
+  margin-bottom: 0;
+}
+
+.marcar-presenca-table thead th {
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  color: #495057;
+  padding: 0.75rem 0.5rem;
+  vertical-align: middle;
+  font-size: 0.875rem;
+}
+
+.marcar-presenca-table tbody td {
+  padding: 0.75rem 0.5rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.marcar-presenca-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Avatar Styles */
+.avatar-sm {
+  height: 2rem;
+  width: 2rem;
+  border: 1px solid #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Dropdown Button Styles */
+.status-dropdown-btn {
+  min-width: 120px;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: 1px solid #dee2e6;
+}
+
+.status-dropdown-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.status-dropdown-btn.btn-success {
+  background-color: #198754;
+  color: white;
+  border-color: #198754;
+}
+
+.status-dropdown-btn.btn-warning {
+  background-color: #ffc107;
+  color: #212529;
+  border-color: #ffc107;
+}
+
+.status-dropdown-btn.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+
+.status-dropdown-btn.btn-danger {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+.status-dropdown-btn.btn-info {
+  background-color: #0dcaf0;
+  color: #212529;
+  border-color: #0dcaf0;
+}
+
+/* Alert Styles */
+.alert {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #d1e7dd 0%, #badbcc 100%);
+  color: #0f5132;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #f8d7da 0%, #f5c2c7 100%);
+  color: #721c24;
+}
+
+.alert-warning {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  color: #664d03;
+}
+
+/* Modern Loading Spinner */
+.modern-spinner {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.spinner-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 3px solid transparent;
+  border-top: 3px solid #0d6efd;
+  border-radius: 50%;
+  animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+}
+
+.spinner-ring:nth-child(1) {
+  animation-delay: -0.45s;
+}
+
+.spinner-ring:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.spinner-ring:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+.spinner-ring:nth-child(4) {
+  animation-delay: 0s;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mobile responsive spinner */
+@media (max-width: 576px) {
+  .modern-spinner {
+    width: 50px;
+    height: 50px;
   }
 
-   .table{
-    align-content: left;
-    display: contents;
+  .spinner-ring {
+    border-width: 2px;
+  }
+}
+
+/* Date Picker and Time Picker Styling */
+.input-group-text {
+  border: 1px solid #dee2e6;
+  border-right: none;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.input-group .ngb-dp-header,
+.input-group .ngb-dp-weekdays,
+.input-group .ngb-dp-day {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.input-group .ngb-dp-day:hover {
+  background-color: rgba(13, 110, 253, 0.1);
+  transform: scale(1.05);
+}
+
+.input-group .ngb-dp-day.selected {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+  color: white;
+  border-radius: 6px;
+}
+
+/* Form Controls */
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Button Styles */
+.btn {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0a58ca 0%, #084298 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #198754 0%, #146c43 100%);
+  border: none;
+}
+
+.btn-success:hover {
+  background: linear-gradient(135deg, #146c43 0%, #0f5132 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(25, 135, 84, 0.3);
+}
+
+.btn-outline-primary {
+  border-color: #0d6efd;
+  color: #0d6efd;
+}
+
+.btn-outline-primary:hover {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+  border-color: #0a58ca;
+  color: white;
+}
+
+.btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background: linear-gradient(135deg, #dc3545 0%, #b02a37 100%);
+  border-color: #b02a37;
+  color: white;
+}
+
+/* Utility Classes */
+.text-primary {
+  color: #0d6efd !important;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.fw-medium {
+  font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .marcar-presenca-container {
+    padding: 0.5rem 0;
   }
 
-    .badge{
-    font-size:18px;
-    background-color:#b52732;
+  .card-body {
+    padding: 1rem 0.5rem;
   }
 
-  .table-responsive {
-    overflow: auto;
-    padding-bottom: 0px;
-    padding-top: 10px;
-    display: table;
+  .marcar-presenca-table {
+    font-size: 0.875rem;
   }
 
-  .project-list-table {
-      border-collapse: separate;
-      border-spacing: 0 0px
-  }
-
-  .project-list-table tr {
-      background-color: #fff
-  }
-
-  .table-nowrap td, .table-nowrap th {
-      white-space: nowrap;
-  }
-  .table-borderless>:not(caption)>*>* {
-      border-bottom-width: 0;
-  }
-  .table>:not(caption)>*>* {
-      padding: 0.75rem 0.75rem;
-      background-color: var(--bs-table-bg);
-      border-bottom-width: 1px;
-      box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+  .marcar-presenca-table thead th,
+  .marcar-presenca-table tbody td {
+    padding: 0.5rem 0.25rem;
   }
 
   .avatar-sm {
-      height: 2rem;
-      width: 2rem;
-  }
-  .rounded-circle {
-      border-radius: 50%!important;
-  }
-  .me-2 {
-      margin-right: 0.5rem!important;
-  }
-  img, svg {
-      vertical-align: middle;
+    height: 1.75rem;
+    width: 1.75rem;
   }
 
-  a {
-      color: #3b76e1;
-      text-decoration: none;
+  .status-dropdown-btn {
+    min-width: 100px;
+    font-size: 0.875rem;
   }
 
-  .badge-soft-danger {
-      color: #f56e6e !important;
-      background-color: rgba(245,110,110,.1);
-  }
-  .badge-soft-success {
-      color: #63ad6f !important;
-      background-color: rgba(99,173,111,.1);
+  /* Mobile table scrolling */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    margin: 0 -0.5rem;
   }
 
-  .badge-soft-primary {
-      color: #3b76e1 !important;
-      background-color: rgba(59,118,225,.1);
+  .table-responsive .marcar-presenca-table {
+    width: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-header h5,
+  .card-title {
+    font-size: 1rem;
   }
 
-  .badge-soft-info {
-      color: #57c9eb !important;
-      background-color: rgba(87,201,235,.1);
+  .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
   }
 
-  .avatar-title {
-      align-items: center;
-      background-color: #3b76e1;
-      color: #fff;
-      display: flex;
-      font-weight: 500;
-      height: 100%;
-      justify-content: center;
-      width: 100%;
+  .input-group-text {
+    padding: 0.375rem 0.5rem;
   }
-  .bg-soft-primary {
-      background-color: rgba(59,118,225,.25)!important;
+
+  .status-dropdown-btn {
+    min-width: 80px;
+    font-size: 0.75rem;
   }
+
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .d-flex.justify-content-between .btn {
+    width: 100%;
+  }
+}

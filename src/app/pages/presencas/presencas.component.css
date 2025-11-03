@@ -1,131 +1,417 @@
-body{
-  margin-top:20px;
-  background-color:#eee;
+/* Modern Presencas Component Styles */
+.presencas-container {
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 1rem 0;
+}
+
+/* Card Styles */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 12px 12px 0 0 !important;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+/* Table Styles */
+.presencas-table {
+  margin-bottom: 0;
+  table-layout: fixed;
+}
+
+.presencas-table thead th {
+  border-bottom: 2px solid #dee2e6;
+  font-weight: 600;
+  color: #495057;
+  padding: 0.25rem 0.125rem;
+  vertical-align: middle;
+  font-size: 0.75rem;
+}
+
+.presencas-table tbody td {
+  padding: 0.25rem 0.125rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f3f4;
+}
+
+.presencas-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Avatar Styles */
+.avatar-sm {
+  height: 2rem;
+  width: 2rem;
+  border: 1px solid #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Status Button Styles */
+.status-btn {
+  min-width: 24px;
+  height: 24px;
+  padding: 0;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.status-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.status-btn.btn-success {
+  background-color: #198754;
+  color: white;
+}
+
+.status-btn.btn-warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.status-btn.btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.status-btn.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.status-btn.btn-info {
+  background-color: #0dcaf0;
+  color: #212529;
+}
+
+/* Badge Styles */
+.badge {
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+}
+
+/* Filter Section */
+.filter-toggle-group {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  padding: 4px;
+  transition: all 0.3s ease;
+}
+
+.filter-toggle-group:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.filter-btn {
+  border-radius: 8px !important;
+  border: none !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.filter-btn:hover::before {
+  left: 100%;
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.mat-button-toggle-checked {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%) !important;
+  color: white !important;
+  box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+}
+
+.mat-button-toggle-checked:hover {
+  background: linear-gradient(135deg, #0a58ca 0%, #084298 100%) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(13, 110, 253, 0.4);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .presencas-container {
+    padding: 0.5rem 0;
   }
 
-  .tr{
-    border-color: red;
-    &:hover{
-      background-color: #b52732;
-    }
+  .card-body {
+    padding: 1rem 0.5rem;
   }
 
-  .badge{
-    font-size:18px;
-    background-color:#b52732;
+  .presencas-table {
+    font-size: 0.875rem;
   }
 
-  .table-responsive {
-    overflow: auto;
-    padding-bottom: 10px;
-  }
-
-  .project-list-table {
-      border-collapse: separate;
-      border-spacing: 0 9px
-  }
-
-  .project-list-table tr {
-      background-color: #fff
-  }
-
-  .table-nowrap td, .table-nowrap th {
-      white-space: nowrap;
-  }
-  .table-borderless>:not(caption)>*>* {
-      border-bottom-width: 0;
-  }
-  .table>:not(caption)>*>* {
-      padding: 0.75rem 0.75rem;
-      background-color: var(--bs-table-bg);
-      border-bottom-width: 1px;
-      box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+  .presencas-table thead th,
+  .presencas-table tbody td {
+    padding: 0.1rem 0.1rem;
   }
 
   .avatar-sm {
-      height: 2rem;
-      width: 2rem;
-  }
-  .rounded-circle {
-      border-radius: 50%!important;
-  }
-  .me-2 {
-      margin-right: 0.5rem!important;
-  }
-  img, svg {
-      vertical-align: middle;
+    height: 1.75rem;
+    width: 1.75rem;
   }
 
-  a {
-      color: #3b76e1;
-      text-decoration: none;
+  .status-btn {
+    min-width: 25px;
+    height: 25px;
+    font-size: 0.625rem;
   }
 
-  .badge-soft-danger {
-      color: #f56e6e !important;
-      background-color: rgba(245,110,110,.1);
-  }
-  .badge-soft-success {
-      color: #63ad6f !important;
-      background-color: rgba(99,173,111,.1);
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
   }
 
-  .badge-soft-primary {
-      color: #3b76e1 !important;
-      background-color: rgba(59,118,225,.1);
+  /* Mobile table scrolling - enabled for horizontal scroll */
+  .table-responsive {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: auto;
+    margin: 0 -0.5rem;
   }
 
-  .badge-soft-info {
-      color: #57c9eb !important;
-      background-color: rgba(87,201,235,.1);
-  }
+  .table-responsive .presencas-table {
 
-  .avatar-title {
-      align-items: center;
-      background-color: #3b76e1;
-      color: #fff;
-      display: flex;
-      font-weight: 500;
-      height: 100%;
-      justify-content: center;
-      width: 100%;
+    width: auto;
   }
-  .bg-soft-primary {
-      background-color: rgba(59,118,225,.25)!important;
-  }
-.presencas-container {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
 }
 
-.table-responsive {
+@media (max-width: 576px) {
+  .card-header h5 {
+    font-size: 1rem;
+  }
+
+  .btn-outline-secondary {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .mat-button-toggle-group .mat-button-toggle {
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .filter-toggle-group {
+    padding: 2px;
+  }
+
+  .filter-btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .input-group-text {
+    padding: 0.375rem 0.5rem;
+  }
+
+  .filter-apply-btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+/* Modern Loading Spinner */
+.modern-spinner {
+  position: relative;
+  width: 60px;
+  height: 60px;
+}
+
+.spinner-ring {
+  position: absolute;
   width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
+  height: 100%;
+  border: 3px solid transparent;
+  border-top: 3px solid #0d6efd;
+  border-radius: 50%;
+  animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
-
-/* Fixar a primeira coluna em toda a tabela */
-.project-list-table th:first-child,
-.project-list-table td:first-child {
-  position: sticky;
-  left: 0;
-  background-color: white; /* ou a cor do fundo do seu cartão */
-  z-index: 10;
-  border-right: 1px solid #ddd;
+.spinner-ring:nth-child(1) {
+  animation-delay: -0.45s;
 }
 
-/* Para o cabeçalho da primeira coluna ficar acima */
-.project-list-table thead th:first-child {
-  z-index: 20;
+.spinner-ring:nth-child(2) {
+  animation-delay: -0.3s;
 }
 
-/* Para as linhas de filtro (que estão no tbody) ficarem acima das outras linhas */
-.project-list-table tbody tr td:first-child {
-  z-index: 15;
-  background-color: white; /* mesma cor do fundo */
-  position: sticky;
-  left: 0;
-  border-right: 1px solid #ddd;
+.spinner-ring:nth-child(3) {
+  animation-delay: -0.15s;
+}
+
+.spinner-ring:nth-child(4) {
+  animation-delay: 0s;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mobile responsive spinner */
+@media (max-width: 576px) {
+  .modern-spinner {
+    width: 50px;
+    height: 50px;
+  }
+
+  .spinner-ring {
+    border-width: 2px;
+  }
+}
+
+/* Alert Styles */
+.alert {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  color: #0c5460;
+}
+
+/* Date Picker Styling */
+.input-group-text {
+  border: 1px solid #dee2e6;
+  border-right: none;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  color: #495057;
+  transition: all 0.3s ease;
+}
+
+.input-group .ngb-dp-header,
+.input-group .ngb-dp-weekdays,
+.input-group .ngb-dp-day {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.input-group .ngb-dp-day:hover {
+  background-color: rgba(13, 110, 253, 0.1);
+  transform: scale(1.05);
+}
+
+.input-group .ngb-dp-day.selected {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+  color: white;
+  border-radius: 6px;
+}
+
+/* Form Controls */
+.form-control:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%);
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+}
+
+.filter-apply-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.filter-apply-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.filter-apply-btn:hover::before {
+  left: 100%;
+}
+
+/* Utility Classes */
+.text-primary {
+  color: #0d6efd !important;
+}
+
+.bg-light {
+  background-color: #f8f9fa !important;
+}
+
+.fw-medium {
+  font-weight: 500;
+}
+
+.fs-6 {
+  font-size: 0.875rem;
+}
+
+/* Sortable Headers */
+.sortable-header {
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.sort-icon {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+.sortable-header:hover .sort-icon {
+  opacity: 1;
+}
+
+.sortable-header .sort-icon.fa-sort-up,
+.sortable-header .sort-icon.fa-sort-down {
+  color: #0d6efd;
+  opacity: 1;
 }

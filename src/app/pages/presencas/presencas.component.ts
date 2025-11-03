@@ -91,7 +91,9 @@ export class PresencasComponent implements OnInit {
 
   modoResumo: boolean = true;
 
-
+  // Sorting properties
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   constructor(private presencaService: PresencaService, private equipaService: EquipaService) { }
 
@@ -271,8 +273,8 @@ export class PresencasComponent implements OnInit {
 
     this.filtroNomes.push("");
     this.loadFromBDPresencas(this.filtro);
-    this.presencasFiltradas = this.linhasQuadro;
-    this.presencasStaffFiltradas = this.linhasQuadroStaff;
+    this.presencasFiltradas = [...this.linhasQuadro];
+    this.presencasStaffFiltradas = [...this.linhasQuadroStaff];
 
   }
 
@@ -281,8 +283,9 @@ export class PresencasComponent implements OnInit {
     console.log("toggleFiltroNomes", this.flagFiltroNomes);
     if (this.flagFiltroNomes == false) {
       this.filtroNomes = [];
-      this.presencasFiltradas = this.linhasQuadro;
-      this.presencasStaffFiltradas = this.linhasQuadroStaff;
+      this.presencasFiltradas = [...this.linhasQuadro];
+      this.presencasStaffFiltradas = [...this.linhasQuadroStaff];
+      this.sortData();
     }
     if (this.flagFiltroNomes == true && this.filtroNomes.length == 0) {
       this.filtroNomes.push("");
@@ -300,29 +303,39 @@ export class PresencasComponent implements OnInit {
     this.filtroNomes.push("");
   }
 
+  removeFiltro(index: number) {
+    if (this.filtroNomes.length > 1) {
+      this.filtroNomes.splice(index, 1);
+      this.filtrarTabela();
+    }
+  }
+
   filtrarTabela() {
 
 
     if (this.filtroNomes.length == 0 || this.filtroNomes.every(filtro => !filtro)) {
-      this.presencasFiltradas = this.linhasQuadro;
-      this.presencasStaffFiltradas = this.linhasQuadroStaff;
-      return;
-    }
-    this.presencasFiltradas = this.linhasQuadro.filter(presenca => {
-      const nome = presenca.nomeJogador.toLowerCase();
-      return (
-        this.filtroNomes.length > 0 &&
-        this.filtroNomes.some(filtro => filtro && nome.includes(filtro.toLowerCase()))
-      );
-    });
+      this.presencasFiltradas = [...this.linhasQuadro];
+      this.presencasStaffFiltradas = [...this.linhasQuadroStaff];
+    } else {
+      this.presencasFiltradas = this.linhasQuadro.filter(presenca => {
+        const nome = presenca.nomeJogador.toLowerCase();
+        return (
+          this.filtroNomes.length > 0 &&
+          this.filtroNomes.some(filtro => filtro && nome.includes(filtro.toLowerCase()))
+        );
+      });
 
-    this.presencasStaffFiltradas = this.linhasQuadroStaff.filter(presenca => {
-      const nome = presenca.nomeJogador.toLowerCase();
-      return (
-        this.filtroNomes.length > 0 &&
-        this.filtroNomes.some(filtro => filtro && nome.includes(filtro.toLowerCase()))
-      );
-    });
+      this.presencasStaffFiltradas = this.linhasQuadroStaff.filter(presenca => {
+        const nome = presenca.nomeJogador.toLowerCase();
+        return (
+          this.filtroNomes.length > 0 &&
+          this.filtroNomes.some(filtro => filtro && nome.includes(filtro.toLowerCase()))
+        );
+      });
+    }
+
+    // Reapply sorting after filtering
+    this.sortData();
   }
 
   onValChange() {
@@ -344,6 +357,85 @@ export class PresencasComponent implements OnInit {
   changed_modoResumo() {
     this.modoResumo = !this.modoResumo;
     console.log("changed_modoResumo", this.modoResumo);
+  }
+
+  getStatusClass(status: string): string {
+    switch (status) {
+      case 'P': return 'btn-success';
+      case 'A': return 'btn-warning';
+      case 'N': return 'btn-secondary';
+      case 'F': return 'btn-danger';
+      case 'L': return 'btn-info';
+      default: return 'btn-light';
+    }
+  }
+
+  // Sorting methods
+  sortTable(column: string) {
+    if (this.sortColumn === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.sortData();
+  }
+
+  private sortData() {
+    if (!this.sortColumn) return;
+
+    const sortFn = (a: LinhaQuadro, b: LinhaQuadro) => {
+      let aValue: any;
+      let bValue: any;
+
+      switch (this.sortColumn) {
+        case 'nome':
+          aValue = a.nomeJogador.toLowerCase();
+          bValue = b.nomeJogador.toLowerCase();
+          break;
+        case 'presenca':
+          aValue = a.count_presenca;
+          bValue = b.count_presenca;
+          break;
+        case 'falta_justificada':
+          aValue = a.count_falta_justificada;
+          bValue = b.count_falta_justificada;
+          break;
+        case 'falta_injustificada':
+          aValue = a.count_falta_injustificada;
+          bValue = b.count_falta_injustificada;
+          break;
+        case 'falta_lesao':
+          aValue = a.count_falta_lesao;
+          bValue = b.count_falta_lesao;
+          break;
+        case 'taxa_presenca':
+          aValue = a.count_presenca / (a.count_falta_justificada + a.count_falta_injustificada + a.count_presenca) * 100;
+          bValue = b.count_presenca / (b.count_falta_justificada + b.count_falta_injustificada + b.count_presenca) * 100;
+          break;
+        case 'total':
+          aValue = a.count_treinos;
+          bValue = b.count_treinos;
+          break;
+        default:
+          return 0;
+      }
+
+      if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    };
+
+    this.presencasFiltradas.sort(sortFn);
+    this.presencasStaffFiltradas.sort(sortFn);
+  }
+
+  getSortIcon(column: string): string {
+    if (this.sortColumn !== column) {
+      return 'fas fa-sort text-muted';
+    }
+    return this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
   }
 
   loadFromBDPresencas(parmFiltro: string) {
@@ -413,6 +505,9 @@ export class PresencasComponent implements OnInit {
           if (data != null) {
             if (this.presencas[0] != null) {
               this.loadQuadro();
+              this.presencasFiltradas = [...this.linhasQuadro];
+              this.presencasStaffFiltradas = [...this.linhasQuadroStaff];
+              this.sortData();
               this.spinner = false;
               this.semRegistos = false;
             } else {

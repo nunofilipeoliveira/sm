@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EquipaService } from '../../services/equipa.service';
 import { JogoService } from '../../services/jogo.service';
-import { NgbAlertModule, NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbCollapseModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { JogadorSeleccaoComponent } from '../jogador-seleccao/jogador-seleccao.component';
 import { environment } from '../../../environments/environment';
 import html2canvas from 'html2canvas'; // Import da html2canvas
 
@@ -55,7 +56,7 @@ export class ConvocatoriaComponent implements OnInit {
   meuClubeid: number = environment.clube_id
   isModoVisualizacao: boolean = false; // Novo flag para modo de visualização
   today = new Date();
-  
+
 
     mostrarModalIndisponivel: boolean = false;
   jogadorSelecionadoIndisponivel: ConvocatoriaData | null = null;
@@ -65,7 +66,8 @@ export class ConvocatoriaComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private equipaService: EquipaService,
-    private jogoService: JogoService
+    private jogoService: JogoService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit(): void {
@@ -94,7 +96,7 @@ export class ConvocatoriaComponent implements OnInit {
 
   }
 
- 
+
 
   carregarConvocatoria(): void {
     // Lógica para carregar a convocatória existente, se necessário
@@ -105,8 +107,8 @@ export class ConvocatoriaComponent implements OnInit {
         console.log('Convocatória | Convocatória carregada:', data);
         if (!data || !data.jogadoresConvocatoria || data.jogadoresConvocatoria.length > 0) {
           for (let atleta of data.jogadoresConvocatoria) {
-           
-             
+
+
             if(atleta.estado==='CONVOCADO'){
                 this.atletasDisponiveis.push({
                   id_jogador: atleta.id_jogador,
@@ -122,9 +124,9 @@ export class ConvocatoriaComponent implements OnInit {
                   selecionado: false,
                   obs: atleta.obs || '',
                   licenca:atleta.licenca
-                }); 
+                });
             }
-            
+
 
             this.equipaAtual = this.equipaService.getEquipa();
             this.equipaAtual = this.equipaService.getEquipa();
@@ -173,7 +175,7 @@ export class ConvocatoriaComponent implements OnInit {
       selecionado: idsSelecionados.has(atleta.id_jogador)
     }));
 
-    // Adiciona os que estavam no localStorage mas não vieram da API
+    // Adiciona os que estavam no localStorage mas não vieram da API (incluindo jogadores de outros escalões)
     // Cria um Set com os IDs da lista que veio da API
     const idsAPI = new Set(this.atletasDisponiveis.map(a => a.id_jogador));
     let extras: ConvocatoriaData[] = atletasDisponiveis_antes.filter(a => !idsAPI.has(a.id_jogador));
@@ -188,7 +190,7 @@ export class ConvocatoriaComponent implements OnInit {
         this.jogo = data;
         // Você pode querer carregar a convocatória existente aqui, se houver
         // Ex: this.jogoService.getConvocatoriaByJogo(id).subscribe(...)
-       
+
       },
       error: (err) => {
         console.error('Erro ao carregar detalhes do jogo:', err);
@@ -478,11 +480,11 @@ export class ConvocatoriaComponent implements OnInit {
         next: (response) => {
           console.log('Convocatória salva com sucesso:', response);
 
-          this.jogo.jogadores = [];  
+          this.jogo.jogadores = [];
           this.jogo.golos_equipa=0;
           this.jogo.golos_equipa_adv=0;
           this.jogo.estado='INICIADO';
-                  
+
           this.jogoService.updateJogo(this.jogo).subscribe({
             next: (resp) => {
               console.log('Detalhes do jogo atualizados com sucesso:', resp);
@@ -529,7 +531,42 @@ export class ConvocatoriaComponent implements OnInit {
       const data = JSON.stringify(this.atletasDisponiveis);
       localStorage.removeItem("convocatoria_jogo");
       localStorage.setItem("convocatoria_jogo", data);
-      this.router.navigate(['/jogadorSeleccao/' + "-" + (localStorage.getItem("idequipa_escalao")) + '/' + this.idJogo]);
+      const modalRef = this.modalService.open(JogadorSeleccaoComponent, { size: 'lg' });
+      modalRef.componentInstance.idEscalao = Number(localStorage.getItem("idequipa_escalao"));
+      modalRef.componentInstance.idjogo = this.idJogo;
+      modalRef.componentInstance.origem_gestao_equipa = false;
+      modalRef.result.then(
+        (result) => {
+          console.log('Modal closed with result:', result);
+          if (result.action === 'presenca_multiple' && result.data) {
+            // Handle multiple selected players
+            for (const jogador of result.data) {
+              const jaExiste = this.atletasDisponiveis.some(a => a.id_jogador === jogador.id_jogador);
+              if (!jaExiste) {
+                this.atletasDisponiveis.push({
+                  id_jogador: jogador.id_jogador,
+                  nome_jogador: jogador.nome_jogador,
+                  selecionado: true,
+                  obs: '',
+                  licenca: jogador.licenca ? jogador.licenca.toString() : ''
+                });
+              }
+            }
+          } else if (result.action === 'select' && result.data) {
+            // Handle single selected player (legacy support)
+            this.atletasDisponiveis.push({
+              id_jogador: result.data.id,
+              nome_jogador: result.data.nome,
+              selecionado: true,
+              obs: '',
+              licenca: result.data.licenca.toString()
+            });
+          }
+        },
+        (reason) => {
+          console.log('Modal dismissed with reason:', reason);
+        }
+      );
     } else {
       this.errorMessage = 'Equipa atual não está definida.';
     }
@@ -565,7 +602,7 @@ export class ConvocatoriaComponent implements OnInit {
       this.atletasIndisponiveis.push(jogadorMovido);
       // Fecha o modal
       this.mostrarModalIndisponivel = false;
-    
+
     }
   }
   // Método para cancelar o modal
@@ -582,18 +619,18 @@ export class ConvocatoriaComponent implements OnInit {
 
   // No TS, adicione este método
 removerIndisponivel(atleta: ConvocatoriaData): void {
-  
+
     const indexIndisponivel = this.atletasIndisponiveis.findIndex(a => a.id_jogador === atleta.id_jogador);
     if (indexIndisponivel !== -1) {
       // Remove obs ao voltar para disponíveis
       const jogadorRemovido = { ...this.atletasIndisponiveis[indexIndisponivel] };
-     
+
       jogadorRemovido.selecionado = false;  // Mantém não selecionado
       this.atletasIndisponiveis.splice(indexIndisponivel, 1);
       this.atletasDisponiveis.push(jogadorRemovido);
-      
+
     }
-  
+
 }
 
 

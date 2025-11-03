@@ -402,3 +402,9 @@ $social-behance-state-color:       lighten(#1769ff, 6%) !default;
 $input-color-placeholder: #999 !default;
 
 $zindex-select-dropdown: 1060 !default; // must be higher than a modal background (1050)
+
+/* Modern Spinner Variables */
+$spinner-size: 60px !default;
+$spinner-ring-width: 3px !default;
+$spinner-color: #0d6efd !default;
+$spinner-animation-duration: 1.2s !default;

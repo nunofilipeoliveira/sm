@@ -25,7 +25,7 @@ export class EquipaService {
   URLAddJogadorEquipa = environment.apiUrl + "/sm/equipa/addJogadorEquipa/"
   URLAddStaffEquipa = environment.apiUrl + "/sm/equipa/addStaffEquipa/"
   URLGetAllStaff = environment.apiUrl + "/sm/getAllStaff/"
-  URLGetAllStaffDisponivel = environment.apiUrl + "/sm/getAllStaffDisponivel/"  
+  URLGetAllStaffDisponivel = environment.apiUrl + "/sm/getAllStaffDisponivel/"
   URLAddStaff = environment.apiUrl + "/sm/addStaff/"
   URLAddJogador = environment.apiUrl + "/sm/addJogador/"
   URLGetEpocaAtual = environment.apiUrl + "/sm/getEpocaAtual/";
@@ -146,9 +146,32 @@ export class EquipaService {
   }
 
   getEquipa(): EquipaData {
-   
+
      return this.equipa;
-  }
+   }
+
+   ensureEquipaLoaded(): Observable<any> {
+     // Check if equipa is already loaded
+     if (this.equipa && this.equipa.id > 0 && this.equipa.jogadores && this.equipa.jogadores.length > 0) {
+       // Return an observable that immediately emits the current equipa
+       return new Observable(subscriber => {
+         subscriber.next(this.equipa);
+         subscriber.complete();
+       });
+     } else {
+       // Load equipa from localStorage or API
+       const equipaId = localStorage.getItem("idequipa_escalao");
+       if (equipaId) {
+         return this.getEquipabyID(equipaId);
+       } else {
+         // Return an observable that emits null if no equipa ID is found
+         return new Observable(subscriber => {
+           subscriber.next(null);
+           subscriber.complete();
+         });
+       }
+     }
+   }
 
   clear() {
     console.log("equipaService - Clear");
@@ -211,7 +234,7 @@ export class EquipaService {
 
     return this.http.put<any>(urltmp, this.body_json, { headers });
 
-    
+
   }
 
 
@@ -225,7 +248,7 @@ export class EquipaService {
 
     return this.http.put<any>(urltmp, this.body_json, { headers });
 
-    
+
   }
 
 
@@ -276,7 +299,7 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
     this.body_json = JSON.stringify(jogador);
     console.log("addJogador | Json:", this.body_json);
     return this.http.put<any>(urltmp, this.body_json, { headers });
-  } 
+  }
 
   getEpocaAtual(): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
@@ -297,9 +320,9 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
     console.log('EquipaService | setEpocaAtual | url:', urltmp);
     // O corpo da requisição pode variar dependendo do seu backend.
     // Pode ser um PUT com um corpo vazio, ou um POST com o ID no corpo.
-    return this.http.put<any>(urltmp, {}, { headers }); 
+    return this.http.put<any>(urltmp, {}, { headers });
   }
-  
+
   getEquipasPorEpoca(): Observable<any> {
       const headers = { 'Content-Type': 'application/json' };
     const urltmp = this.URLGetEquipasPorEpoca + environment.tenant_id;
@@ -308,7 +331,7 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
 
   getAllEscaloes(): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
-    const urltmp = this.URLGetAllEscaloes 
+    const urltmp = this.URLGetAllEscaloes
     return this.http.put<any>(urltmp, this.body_json, { headers });
   }
 
@@ -320,7 +343,7 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
     console.log('EquipaService | createEscalaoEpoca | body:', this.body_json);
     // O corpo da requisição pode variar dependendo do seu backend.
     // Pode ser um PUT com um corpo vazio, ou um POST com o ID no corpo.
-    return this.http.put<any>(urltmp, this.body_json, { headers }); 
+    return this.http.put<any>(urltmp, this.body_json, { headers });
   }
 
     deleteEscalaoEpoca(epocadata: escalao_epoca): Observable<any> {
@@ -331,7 +354,7 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
     console.log('EquipaService | createEscalaoEpoca | body:', this.body_json);
     // O corpo da requisição pode variar dependendo do seu backend.
     // Pode ser um PUT com um corpo vazio, ou um POST com o ID no corpo.
-    return this.http.put<any>(urltmp, this.body_json, { headers }); 
+    return this.http.put<any>(urltmp, this.body_json, { headers });
   }
 
   getEscalaoByEquipa(idEquipa: number): Observable<any> {

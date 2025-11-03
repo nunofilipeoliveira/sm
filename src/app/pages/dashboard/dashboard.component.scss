@@ -1,63 +1,458 @@
-/* MultipleFiles/dashboard.component.scss (Novo Arquivo) */
-.container {
-  margin-top: 30px;
+/* Fundo branco */
+body {
+  background-color: #f8f9fa;
 }
 
-.card {
+.container{
+  margin-top: 50px;
+}
+
+/* Estilo dos cards de informação */
+.info-card, .faltas-card {
+  background-color: white;
+  padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-bottom: 25px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-.card-header {
+.info-card .info-title, .faltas-card .info-title {
+  font-size: 24px;
+  font-weight: 600;
+  border-bottom: 2px solid #6fb5f3;
+  padding-bottom: 10px;
+}
+
+/* Modern Card Styles */
+.modern-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.card-header-modern {
+  background: #f8f9fa;
+  padding: 20px;
+  border: none;
   border-bottom: 1px solid #e9ecef;
-  padding: 15px 20px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  background-color: #f8f9fa; // Cor de fundo para o cabeçalho do card
 }
 
-.card-title {
-  margin-bottom: 0;
+.icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #6c757d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.btn-toggle-modern {
+  background: #6c757d;
+  border: 1px solid #6c757d;
+  color: white;
+  border-radius: 8px;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+}
+
+.btn-toggle-modern:hover {
+  background: #5a6268;
+  border-color: #5a6268;
+  transform: scale(1.05);
+}
+
+.card-body-modern {
+  background: white;
+  padding: 24px;
+}
+
+.metric-card-modern {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 20px;
+  height: 100%;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.metric-card-modern:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.metric-icon-modern {
+  font-size: 2.5rem;
+  color: #6c757d;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.metric-content-modern h4 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.metric-label-modern {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6c757d;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-description-modern {
+  font-size: 0.85rem;
+  color: #868e96;
+  font-weight: 400;
+}
+
+.btn-group-toggle .btn {
+  border-radius: 25px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  border: 2px solid #3498db;
+  background: white;
+  color: #3498db;
+  transition: all 0.3s ease;
+  margin: 0 0.25rem;
+}
+
+.btn-group-toggle .btn:hover {
+  background: #3498db;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.btn-group-toggle .btn.active {
+  background: #3498db;
+  color: white;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.section-title-modern {
   font-size: 1.5rem;
   font-weight: 600;
-  color: #343a40;
+  color: #495057;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #6fb5f3;
+  padding-bottom: 0.5rem;
 }
 
-.card-body {
-  padding: 20px;
+.results-chart-modern {
+  position: relative;
 }
 
-.display-4 {
-  font-size: 3.5rem;
+.results-header-modern {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.results-header-modern i {
+  color: #f39c12;
+  font-size: 1.2rem;
+}
+
+.results-stats-modern {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.result-item-modern {
+  text-align: center;
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 10px;
+  margin: 0 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.result-item-modern:hover {
+  transform: translateY(-2px);
+}
+
+.result-item-modern.wins-modern {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+}
+
+.result-item-modern.draws-modern {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+}
+
+.result-item-modern.losses-modern {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.result-number-modern {
+  font-size: 2rem;
   font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.25rem;
 }
 
-.text-primary {
-  color: #273890 !important; /* Cor primária do seu tema (azul) */
+.result-label-modern {
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.text-info {
-  color: #17a2b8 !important; /* Cor info do seu tema (azul claro) */
+.competition-card-modern {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  padding: 2rem;
+  margin-top: 2rem;
 }
 
-.text-danger {
-  color: #b52732 !important; /* Cor danger do seu tema (vermelho) */
+.competition-title-modern {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 1.5rem;
 }
 
-.text-muted {
-  color: #6c757d !important;
+.competition-grid-modern {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
 }
 
-/* Estilos para os gráficos (se necessário, ajuste o tamanho do canvas) */
-canvas {
-  max-width: 100%;
-  height: auto;
+.competition-item-modern {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 4px solid #3498db;
+  transition: all 0.3s ease;
 }
 
-/* Responsividade para telas menores */
-@media (max-width: 767.98px) {
-  .display-4 {
-    font-size: 2.5rem; /* Reduz o tamanho da fonte em telas menores */
+.competition-item-modern:hover {
+  background: #e9ecef;
+  transform: translateX(5px);
+}
+
+.competition-name-modern {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.competition-stats-modern {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.stat-modern {
+  background: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid #dee2e6;
+}
+
+/* Loading spinner */
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+}
+
+.results-chart {
+  position: relative;
+}
+
+.results-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.results-header i {
+  color: #f39c12;
+  font-size: 1.2rem;
+}
+
+.results-stats {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.result-item {
+  text-align: center;
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 10px;
+  margin: 0 0.25rem;
+  transition: all 0.3s ease;
+}
+
+.result-item:hover {
+  transform: translateY(-2px);
+}
+
+.result-item.wins {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  color: white;
+}
+
+.result-item.draws {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+}
+
+.result-item.losses {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.result-number {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.result-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Loading spinner */
+.spinner-border {
+  width: 2rem;
+  height: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-title {
+    font-size: 2rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .metric-card {
+    padding: 1.25rem;
+  }
+
+  .metric-content h4 {
+    font-size: 1.75rem;
+  }
+
+  .metric-icon {
+    font-size: 2.25rem;
+  }
+
+  .competition-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-group-toggle .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin: 0.125rem;
+  }
+
+  .results-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .result-item {
+    margin: 0.125rem 0;
+  }
+
+  .result-number {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-container {
+    padding: 10px 0;
+  }
+
+  .metric-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .metric-content h4 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .metric-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .metric-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .metric-description {
+    font-size: 0.8rem;
+  }
+
+  .competition-item {
+    padding: 1rem;
+  }
+
+  .competition-stats {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .results-header {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .results-header i {
+    font-size: 1rem;
+  }
+
+  .result-item {
+    padding: 0.375rem;
+    margin: 0.125rem;
+  }
+
+  .result-number {
+    font-size: 1.25rem;
+  }
+
+  .result-label {
+    font-size: 0.75rem;
   }
 }

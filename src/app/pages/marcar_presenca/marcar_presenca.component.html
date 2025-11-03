@@ -1,131 +1,264 @@
-<ngb-alert type="success" *ngIf="sbmSuccess" (closed)="sair()">Folha de presenças registada com sucesso</ngb-alert>
-<ngb-alert type="danger" *ngIf="sbmError" (closed)="sair()">Erro a gravar folha de presenças</ngb-alert>
-<ngb-alert id="top" type="danger" *ngIf="sbmErroDia">Já existe uma Folha de Presenças registada no mesmo dia e
-  Hora</ngb-alert>
-<ngb-alert id="top" type="warning" *ngIf="sbmvalidacao" (closed)="desligarWarn()">Existem presenças por
-  marcar</ngb-alert>
-
-
-<div class="d-flex justify-content-center" style="vertical-align:middle;">
-  <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
-    <span class="sr-only"></span>
+<div class="container-fluid marcar-presenca-container">
+  <!-- Alerts Section -->
+  <div class="row mb-4" *ngIf="sbmSuccess || sbmError || sbmErroDia || sbmvalidacao" #alertsSection>
+    <div class="col-12">
+      <ngb-alert type="success" *ngIf="sbmSuccess" (closed)="sair()">
+        <i class="fas fa-check-circle me-2"></i>Folha de presenças registada com sucesso
+      </ngb-alert>
+      <ngb-alert type="danger" *ngIf="sbmError" (closed)="sair()">
+        <i class="fas fa-exclamation-triangle me-2"></i>Erro a gravar folha de presenças
+      </ngb-alert>
+      <ngb-alert type="danger" *ngIf="sbmErroDia">
+        <i class="fas fa-calendar-times me-2"></i>Já existe uma Folha de Presenças registada no mesmo dia e Hora
+      </ngb-alert>
+      <ngb-alert type="warning" *ngIf="sbmvalidacao" (closed)="desligarWarn()">
+        <i class="fas fa-exclamation-circle me-2"></i>Existem presenças por marcar
+      </ngb-alert>
+    </div>
   </div>
-</div>
 
-<div ngbAccordion #accordion="ngbAccordion" *ngIf="abrirMarcacao">
-  <div ngbAccordionItem="first" [collapsed]="collapse_first">
-    <h2 ngbAccordionHeader>
-      <button ngbAccordionButton>Data do treino</button>
-    </h2>
-    <div ngbAccordionCollapse>
-      <div ngbAccordionBody>
-        <ng-template>
-          <div class="table-responsive col-lg-8">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col" style="width: 5px;">Data</th>
-                  <th><ngb-datepicker #dp [(ngModel)]="dataTreino" />
-                  </th>
-                <tr>
-                  <th scope="col" style="width: 8px;">Hora</th>
-                  <th><ngb-timepicker [(ngModel)]="time" /></th>
-                </tr>
-              </thead>
-            </table>
+  <!-- Loading Spinner -->
+  <div class="d-flex justify-content-center align-items-center py-4" *ngIf="spinner">
+    <div class="modern-spinner">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="abrirMarcacao && !spinner">
+    <!-- Header Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-12">
+                <h4 class="card-title mb-0 text-primary">
+                  <i class="fas fa-calendar-plus me-2"></i>Marcar Presenças
+                </h4>
+                <p class="text-muted mb-0 mt-1">Selecione a data e hora do treino e marque as presenças dos jogadores e staff</p>
+              </div>
+            </div>
           </div>
-          <button class="btn btn-info text-white" (click)="doSelecionaData()">Próximo</button>
-        </ng-template>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 1: Date and Time Selection -->
+    <div class="row mb-4" *ngIf="!collapse_first">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <i class="fas fa-calendar-day me-2"></i>Data e Hora do Treino
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3 align-items-end">
+              <div class="col-md-6 col-12">
+                <label class="form-label fw-bold text-muted">
+                  <i class="fas fa-calendar-plus me-2"></i>Data:
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0">
+                    <i class="fas fa-calendar-day text-primary"></i>
+                  </span>
+                  <ngb-datepicker #dp [(ngModel)]="dataTreino" [startDate]="dataTreino" class="d-block border-start-0"></ngb-datepicker>
+                </div>
+              </div>
+              <div class="col-md-4 col-12">
+                <label class="form-label fw-bold text-muted">
+                  <i class="fas fa-clock me-2"></i>Hora:
+                </label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0">
+                    <i class="fas fa-clock text-primary"></i>
+                  </span>
+                  <ngb-timepicker [(ngModel)]="time" class="d-block border-start-0"></ngb-timepicker>
+                </div>
+              </div>
+              <div class="col-md-2 col-12">
+                <button type="button" class="btn btn-primary w-100" (click)="doSelecionaData()">
+                  <i class="fas fa-arrow-right me-2"></i>Próximo
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 2: Players and Staff Selection -->
+    <div class="row" *ngIf="!collapse_second">
+      <div class="col-12">
+        <!-- Training Date/Time Summary -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-8 col-12">
+                <div class="d-flex align-items-center">
+                  <i class="fas fa-calendar-check text-success me-3" style="font-size: 2rem;"></i>
+                  <div>
+                    <h6 class="mb-1 text-primary">Treino Seleccionado</h6>
+                    <p class="mb-0 fw-bold">
+                      <i class="fas fa-calendar-day me-2"></i>{{dataTreino.day}}/{{dataTreino.month}}/{{dataTreino.year}}
+                      <i class="fas fa-clock mx-3"></i>{{time.hour}}:{{time.minute | number:'2.0'}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4 col-12 text-md-end mt-3 mt-md-0">
+                <button type="button" class="btn btn-outline-secondary" (click)="voltarParaData()">
+                  <i class="fas fa-arrow-left me-2"></i>Alterar Data/Hora
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow-sm">
+          <div class="card-header bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <i class="fas fa-users me-2"></i>Jogadores e Staff
+              </h5>
+              <button type="button" class="btn btn-success btn-sm" (click)="allPresente()">
+                <i class="fas fa-check-circle me-1"></i>Marcar Todos Presentes
+              </button>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0 marcar-presenca-table">
+                <thead class="table-light">
+                  <tr>
+                    <th class="border-0 fw-bold text-muted" style="width: 60%; min-width: 200px;">
+                      <i class="fas fa-user me-1"></i>Nome
+                    </th>
+                    <th class="border-0 fw-bold text-muted text-center" style="width: 30%; min-width: 150px;">
+                      <i class="fas fa-clipboard-check me-1"></i>Estado
+                    </th>
+                                    <th class="border-0 fw-bold text-muted text-center" style="width: 30%; min-width: 150px;">
+                      <i class="fas fa-clipboard-check me-1"></i>Motivo
+                    </th>
+                    <th class="border-0 fw-bold text-muted text-center" style="width: 10%; min-width: 80px;">
+                      <i class="fas fa-cogs me-1"></i>Ações
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Players Section -->
+                  <tr class="table-secondary">
+                    <td colspan="4" class="border-0 fw-bold text-primary">
+                      <i class="fas fa-futbol me-2"></i>Jogadores
+                    </td>
+                  </tr>
+                  <tr *ngFor="let jogador of this.presencaJogadores; index as posicao">
+                    <td class="border-0" [style]="jogador.estilo_estado">
+                      <div class="d-flex align-items-center">
+                        <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
+                             onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                             alt="Avatar" class="avatar-sm rounded-circle me-2" />
+                        <span class="fw-medium">{{jogador.nome_jogador}}</span>
+                      </div>
+                    </td>
+                    <td class="border-0 text-center" [style]="jogador.estilo_estado">
+                      <div ngbDropdown class="d-inline-block">
+                        <button type="button" class="btn status-dropdown-btn" [ngClass]="getStatusBtnClass(jogador.estado)" ngbDropdownToggle>
+                          {{jogador.estado}}
+                        </button>
+                        <div ngbDropdownMenu>
+                          <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Presente')">
+                            <i class="fas fa-check-circle text-success me-2"></i>Presente
+                          </button>
+                          <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Não convocado')">
+                            <i class="fas fa-ban text-secondary me-2"></i>Não convocado
+                          </button>
+                          <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Ausente (Avisou)')">
+                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>Ausente (Avisou)
+                          </button>
+                          <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Ausente (Não Avisou)')">
+                            <i class="fas fa-times-circle text-danger me-2"></i>Ausente (Não Avisou)
+                          </button>
+                          <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Lesão')">
+                            <i class="fas fa-medkit text-info me-2"></i>Lesão
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="border-0 text-center" [style]="jogador.estilo_estado">{{jogador.motivo}}</td>
+                    <td class="border-0 text-center" [style]="jogador.estilo_estado">
+                      <button class="btn btn-outline-danger btn-sm" (click)="retirarJogador(jogador.id_jogador, posicao)" *ngIf="jogador.apagar" ngbTooltip="Retirar jogador">
+                        <i class="fas fa-user-minus"></i>
+                      </button>
+                    </td>
+                  </tr>
+
+                  <!-- Staff Section -->
+                  <tr *ngIf="presencaStaff && presencaStaff.length > 0" class="table-secondary">
+                    <td colspan="4" class="border-0 fw-bold text-primary">
+                      <i class="fas fa-user-tie me-2"></i>Staff
+                    </td>
+                  </tr>
+                  <tr *ngFor="let staff of presencaStaff; index as posicao" class="table-secondary">
+                    <td class="border-0" [style]="staff.estilo_estado">
+                      <div class="d-flex align-items-center">
+                        <img src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg"
+                             onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                             alt="Avatar Staff" class="avatar-sm rounded-circle me-2" />
+                        <span class="fw-medium">{{staff.nome_staff}}</span>
+                      </div>
+                    </td>
+                    <td class="border-0 text-center" [style]="staff.estilo_estado">
+                      <div ngbDropdown class="d-inline-block">
+                        <button type="button" class="btn status-dropdown-btn" [ngClass]="getStatusBtnClass(staff.estado)" ngbDropdownToggle>
+                          {{staff.estado}}
+                        </button>
+                        <div ngbDropdownMenu>
+                          <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Presente')">
+                            <i class="fas fa-check-circle text-success me-2"></i>Presente
+                          </button>
+                          <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Não convocado')">
+                            <i class="fas fa-ban text-secondary me-2"></i>Não convocado
+                          </button>
+                          <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Avisou)')">
+                            <i class="fas fa-exclamation-triangle text-warning me-2"></i>Ausente (Avisou)
+                          </button>
+                          <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Não Avisou)')">
+                            <i class="fas fa-times-circle text-danger me-2"></i>Ausente (Não Avisou)
+                          </button>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="border-0 text-center" [style]="staff.estilo_estado">{{staff.motivo}}</td>
+                    <td class="border-0 text-center" [style]="staff.estilo_estado">
+                      <!-- Staff doesn't have remove button -->
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <button type="button" class="btn btn-outline-primary me-2" (click)="seleccionarJogador()">
+                  <i class="fas fa-user-plus me-2"></i>Adicionar Jogador
+                </button>
+                <button type="button" class="btn btn-outline-danger" (click)="cancelarMarcacao()">
+                  <i class="fas fa-times me-2"></i>Cancelar
+                </button>
+              </div>
+              <button type="button" class="btn btn-success" (click)="doGravar()">
+                <i class="fas fa-save me-2"></i>Gravar Presenças
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div ngbAccordionItem="second" [collapsed]="collapse_second">
-    <h2 ngbAccordionHeader>
-      <button ngbAccordionButton>Jogadores</button>
-    </h2>
-     <button type="button" class="btn btn-outline-primary" (click)="allPresente()">
-                        Marcar todos como Presentes
-                      </button>
-    <div ngbAccordionCollapse>
-      <div ngbAccordionBody>
-        <ng-template>
-          <div class="table-responsive">
-            <table align="left" class="table project-list-table table-nowrap align-middle">
-              <tbody>
-                <tr *ngFor="let jogador of this.presencaJogadores; index as posicao">
-                  <td style="{{jogador.estilo_estado}}"><img
-                      src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
-                      onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-                      class="avatar-sm rounded-circle me-2" />{{jogador.nome_jogador}}</td>
-                  <td style="{{jogador.estilo_estado}}">
-
-                    <div ngbDropdown class="d-inline-block">
-                      <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                        {{jogador.estado}}
-                      </button>
-                      <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                        <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Presente')">Presente</button>
-                        <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Não convocado')">Não
-                          convocado</button>
-                        <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Ausente (Avisou)')">Ausente
-                          (Avisou)</button>
-                        <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Ausente (Não Avisou)')">Ausente (Não
-                          Avisou)</button>
-                        <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Lesão')">Lesão</button>
-                      </div>
-                    </div>
-
-                         <button style="margin-left: 10px" (click)="retirarJogador(jogador.id_jogador, posicao)" *ngIf="jogador.apagar"
-                                                class="btn btn-danger btn-sm ">
-                                                <i class="nc-icon nc-simple-remove"></i> <span
-                                                    class="d-none d-md-inline"> Retirar</span>
-                                            </button>
-
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <P>
-            <table align="left" class="table project-list-table table-nowrap align-middle">
-              <tbody>
-                <tr *ngFor="let staff of this.presencaStaff; index as posicao">
-                  <td style="{{staff.estilo_estado}}"><img
-                      src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg"
-                      onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-                      class="avatar-sm rounded-circle me-2" />{{staff.nome_staff}}</td>
-                  <td style="{{staff.estilo_estado}}">
-
-                    <div ngbDropdown class="d-inline-block">
-                      <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                        {{staff.estado}}
-                      </button>
-                      <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
-                        <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Presente')">Presente</button>
-                        <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Não convocado')">Não
-                          convocado</button>
-                        <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Avisou)')">Ausente
-                          (Avisou)</button>
-                        <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Não Avisou)')">Ausente
-                          (Não
-                          Avisou)</button>
-
-                      </div>
-                    </div>
-
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-          </div>
-
-          <button type="button" class="btn btn-default" (click)="seleccionarJogador()">Adicionar outro
-            Jogador</button><button type="button" class="btn btn-info text-white" (click)="doGravar()">Gravar</button>
-        </ng-template>
-      </div>
-    </div>
-  </div>
 </div>
-
-<hr />

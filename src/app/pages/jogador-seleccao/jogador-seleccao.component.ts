@@ -5,6 +5,7 @@ import { EquipaService } from '../../services/equipa.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FiltroJogadorPipe } from './filtroJogador.pipe';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { cp } from 'fs';
 
 
@@ -25,14 +26,25 @@ export class JogadorSeleccaoComponent implements OnInit {
   public filtro_nome: string = "";
   public filtro_visivel: boolean = false;
   public origem_gestao_equipa: boolean = false;
+  public filtro_equipa: string = "todas";
+  public escaloesDisponiveis: string[] = [];
   idjogo: number = 0;
+  public jogadoresSelecionados: number[] = [];
 
-  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private presencaService: PresencaService, private router: Router) { }
+  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private presencaService: PresencaService, private router: Router, public activeModal: NgbActiveModal) { }
+
 
 
 
   ngOnInit() {
     this.spinner = true;
+    console.log('JogadorSeleccaoComponent | ngOnInit - origem_gestao_equipa inicial:', this.origem_gestao_equipa);
+
+    // Verificar se foi passado via modal
+    if (this.origem_gestao_equipa === true) {
+      console.log('JogadorSeleccaoComponent | origem_gestao_equipa já definido como true via modal');
+    }
+
     const routeParams = this.route.snapshot.paramMap;
     this.idEscalao = Number(routeParams.get('id'));
     this.idjogo = Number(routeParams.get('idjogo'));
@@ -53,8 +65,13 @@ export class JogadorSeleccaoComponent implements OnInit {
 
     } else {
       console.log("JogadorSeleccaoComponent | Modo seleção jogador origem marcação presença");
-      this.origem_gestao_equipa = false;
+      // Só definir como false se não foi definido como true via modal
+      if (this.origem_gestao_equipa !== true) {
+        this.origem_gestao_equipa = false;
+      }
     }
+
+    console.log('JogadorSeleccaoComponent | ngOnInit - origem_gestao_equipa final:', this.origem_gestao_equipa);
 
     let modoObterJogadores = '0';
     if (this.origem_gestao_equipa == true) {
@@ -68,7 +85,9 @@ export class JogadorSeleccaoComponent implements OnInit {
           console.log("JogadorSeleccaoComponent | jogadores disponiveis", this.jogadores);
           this.spinner = false;
           if (data != null) {
-
+            // Generate unique escaloes from the players data
+            this.escaloesDisponiveis = [...new Set((data as JogadorSeleccao[]).map(j => j.escalao))].sort();
+            console.log("JogadorSeleccaoComponent | escaloes disponiveis", this.escaloesDisponiveis);
           } else {
 
           }
@@ -82,133 +101,107 @@ export class JogadorSeleccaoComponent implements OnInit {
   }
 
   seleciona(indice_jogador: number) {
-
-    console.log("JogadorSeleccaoComponent | Seleciona");
-    console.log("JogadorSeleccaoComponent | Seleciona | jogadores:", this.jogadores);
+    console.log("JogadorSeleccaoComponent | Toggle seleção");
     console.log("JogadorSeleccaoComponent | Seleciona | indice:", indice_jogador);
 
-    if (this.origem_gestao_equipa) {
-      console.log("Modo seleção jogador genérico");
-      let posicao = this.jogadores.findIndex(x => x.id_Jogador == indice_jogador);
-      let tmpJogador: jogadorData = {
-        id: this.jogadores[posicao].id_Jogador,
-        nome: this.jogadores[posicao].nome_Jogador,
-        nome_completo: '',
-        data_nascimento: 0,
-        email: '',
-        telemovel: '',
-        pai_nome: '',
-        pai_email: '',
-        pai_telemovel: '',
-        mae_nome: '',
-        mae_email: '',
-        mae_telemovel: '',
-        morada: '',
-        cidade: '',
-        codigo_postal: '',
-        observacoes: '',
-        numero: '',
-        cc: '',
-        nif: 0,
-        licenca: 0
-      };
-
-
-
-      // Inicia o spinner para indicar que uma operação está em andamento
-      this.spinner = true;
-
-      //verifica se está numa seleção de jogador para um jogo
-      if (this.idjogo && this.idjogo > 0) {
-        //está na seleção de jogador para um jogo
-        console.log("JogadorSeleccaoComponent | Seleciona | Está na seleção de jogador para um jogo");
-
-        const storedData = localStorage.getItem('convocatoria_jogo');
-        let convocatoria: ConvocatoriaData[] = [];
-        if (storedData) {
-          convocatoria = JSON.parse(storedData);
-          console.log('JogadorSeleccaoComponent | List loaded from session:', convocatoria);
-        }
-        console.log('JogadorSeleccaoComponent | Current convocatoria before adding:', convocatoria);
-        //adiciona o jogador
-        console.log('JogadorSeleccaoComponent | Adding player to convocatoria:', tmpJogador);
-        convocatoria.push({ id_jogador: tmpJogador.id, nome_jogador: tmpJogador.nome, selecionado: true, obs: '', licenca:tmpJogador.licenca.toString() });
-        console.log('JogadorSeleccaoComponent | Updated convocatoria:', convocatoria);
-        //guardar na sessão
-        const data = JSON.stringify(convocatoria);
-        localStorage.setItem("convocatoria_jogo", data);
-        console.log('JogadorSeleccaoComponent | Data saved to session:', data);
-
-
-
-
-        this.router.navigate(['/convocatoria/' + this.idjogo]);
-        this.spinner = false;
-      } else {
-
-
-
-        this.equipaService.addJogadorEquipa(tmpJogador, this.idEscalao).subscribe({
-          next: (response) => {
-            // O serviço retornou sucesso
-            console.log('Jogador adicionado com sucesso:', response);
-
-            this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
-            this.spinner = false; // Desativa o spinner
-          },
-          error: (error) => {
-            // O serviço retornou um erro
-            console.error('Erro ao adicionar jogador à equipa:', error);
-            alert('Ocorreu um erro ao adicionar o jogador à equipa');
-            this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
-            this.spinner = false; // Desativa o spinner
-          }
-        });
-      }
-
+    // Toggle selection - only add/remove from selection array
+    const index = this.jogadoresSelecionados.indexOf(indice_jogador);
+    if (index > -1) {
+      this.jogadoresSelecionados.splice(index, 1);
+      console.log("JogadorSeleccaoComponent | Jogador removido da seleção");
     } else {
+      this.jogadoresSelecionados.push(indice_jogador);
+      console.log("JogadorSeleccaoComponent | Jogador adicionado à seleção");
+    }
 
-      let posicao = this.jogadores.findIndex(x => x.id_Jogador == indice_jogador);
-      let tmpPresencaJogador: jogadorPresencaData = {
-        id_jogador: this.jogadores[posicao].id_Jogador,
-        nome_jogador: this.jogadores[posicao].nome_Jogador,
-        estado: "Presente",
-        motivo: "",
-        estilo_estado: "background-color: lightgreen;"
-        , apagar: true
+    console.log("JogadorSeleccaoComponent | Jogadores selecionados:", this.jogadoresSelecionados);
+  }
 
+  confirmarSelecao() {
+    console.log("JogadorSeleccaoComponent | Confirmar seleção múltipla");
+    console.log("JogadorSeleccaoComponent | origem_gestao_equipa:", this.origem_gestao_equipa);
+    if (this.jogadoresSelecionados.length === 0) {
+      alert('Selecione pelo menos um jogador.');
+      return;
+    }
+
+    if (this.origem_gestao_equipa) {
+      console.log("JogadorSeleccaoComponent | Retornando add_multiple para gestão de equipa");
+      // Para gestão de equipa, adicionar múltiplos jogadores
+      const jogadoresParaAdicionar: jogadorData[] = [];
+      for (const id of this.jogadoresSelecionados) {
+        const posicao = this.jogadores.findIndex(x => x.id_Jogador == id);
+        if (posicao !== -1) {
+          jogadoresParaAdicionar.push({
+            id: this.jogadores[posicao].id_Jogador,
+            nome: this.jogadores[posicao].nome_Jogador,
+            nome_completo: '',
+            data_nascimento: 0,
+            email: '',
+            telemovel: '',
+            pai_nome: '',
+            pai_email: '',
+            pai_telemovel: '',
+            mae_nome: '',
+            mae_email: '',
+            mae_telemovel: '',
+            morada: '',
+            cidade: '',
+            codigo_postal: '',
+            observacoes: '',
+            numero: '',
+            cc: '',
+            nif: 0,
+            licenca: 0
+          });
+        }
       }
-
-      let listaJogadoresPresenca: jogadorPresencaData[] = this.presencaService.getPresenca();
-      const jaExiste = listaJogadoresPresenca.some(j => j.id_jogador === tmpPresencaJogador.id_jogador);
-      if (!jaExiste) {
-        listaJogadoresPresenca.push(tmpPresencaJogador);
-        this.presencaService.setPresenca(listaJogadoresPresenca);
+      console.log("JogadorSeleccaoComponent | Dados a retornar:", { action: 'add_multiple', data: jogadoresParaAdicionar });
+      this.activeModal.close({ action: 'add_multiple', data: jogadoresParaAdicionar });
+    } else {
+      console.log("JogadorSeleccaoComponent | Retornando presenca_multiple para presença");
+      // Para presença, adicionar múltiplos jogadores
+      const jogadoresPresenca: jogadorPresencaData[] = [];
+      for (const id of this.jogadoresSelecionados) {
+        const posicao = this.jogadores.findIndex(x => x.id_Jogador == id);
+        if (posicao !== -1) {
+          jogadoresPresenca.push({
+            id_jogador: this.jogadores[posicao].id_Jogador,
+            nome_jogador: this.jogadores[posicao].nome_Jogador,
+            estado: "Presente",
+            motivo: "",
+            estilo_estado: "background-color: lightgreen;",
+            apagar: true
+          });
+        }
       }
-
-      this.router.navigate(['/mpresenca'])
+      console.log("JogadorSeleccaoComponent | Dados a retornar:", { action: 'presenca_multiple', data: jogadoresPresenca });
+      this.activeModal.close({ action: 'presenca_multiple', data: jogadoresPresenca });
     }
   }
 
   cancelarSelecao() {
     console.log("JogadorSeleccaoComponent | Cancelar seleção");
-
-    if(this.idjogo && this.idjogo > 0){
-      this.router.navigate(['/convocatoria/' + this.idjogo]);
-      return;
-    }
-
-    if (this.origem_gestao_equipa) {
-      this.router.navigate(['/gestao-equipa' + '/' + this.idEscalao]);
-    } else {
-      this.router.navigate(['/mpresenca']);
-    }
+    this.activeModal.close({ action: 'cancel' });
   }
 
   novoJogador() {
-    console.log("StaffSeleccaoComponent | Novo Staff");
+    console.log("JogadorSeleccaoComponent | Novo Jogador");
+    this.activeModal.close({ action: 'novo' });
+  }
 
-    this.router.navigate(['/novo-jogador/jogadorSeleccao/-' + this.idEscalao]);
+  onImageError(event: Event) {
+    const target = event.target as HTMLImageElement;
+    if (target) {
+      target.src = 'assets/img/jogadores/default_avatar.jpg';
+    }
+  }
+
+  filtrarPorEquipa(equipa: string) {
+    console.log("JogadorSeleccaoComponent | Filtrando por equipa:", equipa);
+    this.filtro_equipa = equipa;
+    // Aqui você pode implementar a lógica de filtragem por equipa
+    // Por enquanto, apenas define o filtro
   }
 
 }

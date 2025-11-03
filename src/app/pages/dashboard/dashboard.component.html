@@ -1,60 +1,238 @@
-<!-- MultipleFiles/dashboard.component.html (Novo Arquivo) -->
 <div class="container mt-4">
-    <div class="row">
-        <div class="col-md-12">
-            <h2 class="text-center mb-4">Dashboard de Treinos</h2>
-        </div>
+
+  <div class="d-flex justify-content-center" style="vertical-align:middle;">
+    <div class="spinner-border text-danger" *ngIf="false" role="status">
+      <span class="sr-only"></span>
     </div>
+  </div>
 
-    <!-- Seção de Métricas Principais (Cards) -->
-    <div class="row">
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <!-- Exemplo de card para Número de Treinos -->
-            <div class="card shadow">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Número de Treinos</h5>
-                    <div *ngIf="loading_numberOfTrainings" class="spinner-border text-primary spinner-border-sm"
-                        role="status">
-                        <span class="sr-only"></span>
-                    </div>
-                    <p *ngIf="!loading_numberOfTrainings" class="display-4 text-primary">{{numberOfTrainings}}</p>
-                    <!-- Substituir por dado dinâmico -->
-                    <p class="text-muted">Treinos realizados na época atual</p>
-                </div>
+
+
+  <div class="row justify-content-center" *ngIf="true">
+    <div class="col-md-12">
+      <div class="modern-card shadow">
+        <div class="card-header-modern">
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+              <div class="icon-circle me-3">
+                <i class="nc-icon nc-chart-bar-32 text-white"></i>
+              </div>
+              <div>
+                <h5 class="mb-0 fw-bold" style="color: #495057;">Dashboard Desportivo</h5>
+                <small style="color: #6c757d;">Indicadores de treino e jogo</small>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
-            <!-- Exemplo de card para Média de Atletas -->
-            <div class="card shadow">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Média de Atletas por Treino</h5>
-                    <div *ngIf="loading_avgAthletesPerTraining" class="spinner-border text-info spinner-border-sm"
-                        role="status">
-                        <span class="sr-only"></span>
-                    </div>
-                    <p *ngIf="!loading_avgAthletesPerTraining" class="display-4 text-info">{{avgAthletesPerTraining}}
-                    </p> <!-- Substituir por dado dinâmico -->
-                    <p class="text-muted">Média de atletas presentes por treino</p>
-                </div>
+
+        <div class="card-body-modern">
+          <!-- Team Filter -->
+          <div class="row mb-4" *ngIf="showTeamFilter">
+            <div class="col-12 text-center">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-outline-primary" [class.active]="selectedTeamFilter === 'all'">
+                  <input type="radio" name="teamFilter" value="all" [checked]="selectedTeamFilter === 'all'" (change)="setTeamFilter('all')"> Todas as Equipas
+                </label>
+                <label class="btn btn-outline-primary" [class.active]="selectedTeamFilter === 'A'">
+                  <input type="radio" name="teamFilter" value="A" [checked]="selectedTeamFilter === 'A'" (change)="setTeamFilter('A')"> Equipa A
+                </label>
+                <label class="btn btn-outline-primary" [class.active]="selectedTeamFilter === 'B'">
+                  <input type="radio" name="teamFilter" value="B" [checked]="selectedTeamFilter === 'B'" (change)="setTeamFilter('B')"> Equipa B
+                </label>
+              </div>
             </div>
-        </div>
-        <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
-            <!-- Exemplo de card para % de Faltas -->
-            <div class="card shadow">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Percentagem de Faltas</h5>
-                    <div *ngIf="loading_absencePercentage" class="spinner-border text-danger spinner-border-sm"
-                        role="status">
-                        <span class="sr-only"></span>
-                    </div>
-                    <p *ngIf="!loading_absencePercentage" class="display-4 text-danger">{{absencePercentage}}%</p>
-                    <!-- Substituir por dado dinâmico -->
-                    <p class="text-muted">Média de faltas em relação ao total de presenças</p>
-                </div>
+          </div>
+
+          <!-- Training Indicators -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h6 class="section-title-modern">Indicadores de Treino</h6>
             </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="metric-card-modern">
+                <div class="metric-icon-modern">
+                  <i class="fas fa-calendar-check"></i>
+                </div>
+                <div class="metric-content-modern">
+                  <h4 class="metric-value-modern">
+                    <span *ngIf="loading_numberOfTrainings" class="spinner-border spinner-border-sm" role="status"></span>
+                    <span *ngIf="!loading_numberOfTrainings">{{numberOfTrainings}}</span>
+                  </h4>
+                  <p class="metric-label-modern">Treinos Realizados</p>
+                  <small class="metric-description-modern">Total de treinos na época atual</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="metric-card-modern">
+                <div class="metric-icon-modern">
+                  <i class="fas fa-users"></i>
+                </div>
+                <div class="metric-content-modern">
+                  <h4 class="metric-value-modern">
+                    <span *ngIf="loading_avgAthletesPerTraining" class="spinner-border spinner-border-sm" role="status"></span>
+                    <span *ngIf="!loading_avgAthletesPerTraining">{{avgAthletesPerTraining | number:'1.1-1'}}</span>
+                  </h4>
+                  <p class="metric-label-modern">Atletas por Treino</p>
+                  <small class="metric-description-modern">Média de atletas presentes</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="metric-card-modern">
+                <div class="metric-icon-modern">
+                  <i class="fas fa-user-times"></i>
+                </div>
+                <div class="metric-content-modern">
+                  <h4 class="metric-value-modern">
+                    <span *ngIf="loading_absencePercentage" class="spinner-border spinner-border-sm" role="status"></span>
+                    <span *ngIf="!loading_absencePercentage">{{absencePercentage | number:'1.1-1'}}%</span>
+                  </h4>
+                  <p class="metric-label-modern">Taxa de Faltas</p>
+                  <small class="metric-description-modern">Percentagem de faltas</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Game Indicators -->
+          <div class="row mb-4">
+            <div class="col-12">
+              <h6 class="section-title-modern">Indicadores de Jogo</h6>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="metric-card-modern">
+                <div class="metric-icon-modern">
+                  <i class="fas fa-futbol"></i>
+                </div>
+                <div class="metric-content-modern">
+                  <h4 class="metric-value-modern">
+                    <span *ngIf="loading_gameIndicators" class="spinner-border spinner-border-sm" role="status"></span>
+                    <span *ngIf="!loading_gameIndicators">{{avgGoalsPerGame | number:'1.1-1'}}</span>
+                  </h4>
+                  <p class="metric-label-modern">Média Golos/Jogo</p>
+                  <small class="metric-description-modern">Golos marcados por jogo</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="metric-card-modern">
+                <div class="metric-icon-modern">
+                  <i class="fas fa-trophy"></i>
+                </div>
+                <div class="metric-content-modern">
+                  <h4 class="metric-value-modern">
+                    <span *ngIf="loading_gameIndicators" class="spinner-border spinner-border-sm" role="status"></span>
+                    <span *ngIf="!loading_gameIndicators">{{getCompetitionsCount()}}</span>
+                  </h4>
+                  <p class="metric-label-modern">Competições</p>
+                  <small class="metric-description-modern">Número de competições ativas</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="metric-card-modern">
+                <div class="metric-icon-modern">
+                  <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="metric-content-modern">
+                  <h4 class="metric-value-modern">
+                    <span *ngIf="loading_gameIndicators" class="spinner-border spinner-border-sm" role="status"></span>
+                    <span *ngIf="!loading_gameIndicators">{{getTotalGoalsScored()}}</span>
+                  </h4>
+                  <p class="metric-label-modern">Total Golos Marcados</p>
+                  <small class="metric-description-modern">Golos marcados em todas as competições</small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Game Indicators Row -->
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="metric-card-modern">
+                <div class="metric-icon-modern">
+                  <i class="fas fa-calendar-alt"></i>
+                </div>
+                <div class="metric-content-modern">
+                  <h4 class="metric-value-modern">
+                    <span *ngIf="loading_gameIndicators" class="spinner-border spinner-border-sm" role="status"></span>
+                    <span *ngIf="!loading_gameIndicators">{{getTotalGamesPlayed()}}</span>
+                  </h4>
+                  <p class="metric-label-modern">Jogos Realizados</p>
+                  <small class="metric-description-modern">Total de jogos terminados</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="metric-card-modern">
+                <div class="metric-icon-modern">
+                  <i class="fas fa-balance-scale"></i>
+                </div>
+                <div class="metric-content-modern">
+                  <h4 class="metric-value-modern">
+                    <span *ngIf="loading_gameIndicators" class="spinner-border spinner-border-sm" role="status"></span>
+                    <span *ngIf="!loading_gameIndicators">{{getGoalDifference()}}</span>
+                  </h4>
+                  <p class="metric-label-modern">Diferença de Golos</p>
+                  <small class="metric-description-modern">Saldo de golos marcados vs sofridos</small>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12 mb-4">
+              <div class="metric-card-modern results-chart-modern">
+                <div class="results-header-modern">
+                  <i class="fas fa-trophy"></i>
+                  <span>Resultados</span>
+                </div>
+                <div class="results-stats-modern" *ngIf="!loading_gameIndicators">
+                  <div class="result-item-modern wins-modern">
+                    <div class="result-number-modern">{{wins}}</div>
+                    <div class="result-label-modern">Vitórias</div>
+                  </div>
+                  <div class="result-item-modern draws-modern">
+                    <div class="result-number-modern">{{draws}}</div>
+                    <div class="result-label-modern">Empates</div>
+                  </div>
+                  <div class="result-item-modern losses-modern">
+                    <div class="result-number-modern">{{losses}}</div>
+                    <div class="result-label-modern">Derrotas</div>
+                  </div>
+                </div>
+                <div class="text-center" *ngIf="loading_gameIndicators">
+                  <div class="spinner-border" role="status"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Competition Details -->
+          <div class="row">
+            <div class="col-12">
+              <div class="competition-card-modern">
+                <h6 class="competition-title-modern">Detalhes por Competição</h6>
+                <div class="competition-grid-modern" *ngIf="!loading_gameIndicators">
+                  <div class="competition-item-modern" *ngFor="let comp of getCompetitionsArray()">
+                    <div class="competition-name-modern">{{comp.name}}</div>
+                    <div class="competition-stats-modern">
+                      <span class="stat-modern">{{comp.games}} jogos</span>
+                      <span class="stat-modern">{{comp.goalsScored}} GM</span>
+                      <span class="stat-modern">{{comp.goalsSuffered}} GS</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="text-center" *ngIf="loading_gameIndicators">
+                  <div class="spinner-border" role="status"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-
-
-
+  </div>
 </div>

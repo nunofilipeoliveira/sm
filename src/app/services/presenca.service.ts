@@ -118,113 +118,65 @@ export class PresencaService {
   createPresenca(parmPresenca: PresencaData) {
     const headers = { 'Content-Type': 'application/json' };
 
-    this.body_json = '{'
-      + '"data": ' + parmPresenca.data + ','
-      + '"hora": \"' + parmPresenca.hora + ' \",'
-      + '"id_escalao" : ' + parmPresenca.id_escalao + ','
-      + '"escalao_descricao" :\"' + parmPresenca.escalao_descricao + '\",'
-      + '"data_criacao" :\"' + parmPresenca.data_criacao + '\",'
-      + '"id_utilizador_criacao" :' + parmPresenca.id_utilizador_criacao + ','
-      + '"user_criacao" :\"' + parmPresenca.user_criacao + '\",'
-      + '"jogadoresPresenca" : [ {'
+    // Use Angular's HttpClient to send JSON directly instead of manual string building
+    const requestBody = {
+      data: parmPresenca.data,
+      hora: parmPresenca.hora.trim(),
+      id_escalao: parmPresenca.id_escalao,
+      escalao_descricao: parmPresenca.escalao_descricao,
+      data_criacao: parmPresenca.data_criacao,
+      id_utilizador_criacao: parmPresenca.id_utilizador_criacao,
+      user_criacao: parmPresenca.user_criacao,
+      jogadoresPresenca: parmPresenca.jogadoresPresenca.map(j => ({
+        id_jogador: j.id_jogador,
+        nome_jogador: j.nome_jogador,
+        estado: j.estado,
+        motivo: j.motivo
+      })),
+      staffPresenca: parmPresenca.staffPresenca.map(s => ({
+        id_staff: s.id_staff,
+        nome_staff: s.nome_staff,
+        estado: s.estado,
+        motivo: s.motivo
+      }))
+    };
 
-    for (let i = 0; i < parmPresenca.jogadoresPresenca.length; i++) {
-
-      this.body_json = this.body_json + '"id_jogador": ' + parmPresenca.jogadoresPresenca[i].id_jogador + ','
-        + '"nome_jogador": "' + parmPresenca.jogadoresPresenca[i].nome_jogador + '",'
-        + '"estado" :\"' + parmPresenca.jogadoresPresenca[i].estado + '\",'
-        + '"motivo" :\"' + parmPresenca.jogadoresPresenca[i].motivo + '\"}'
-
-      if ((parmPresenca.jogadoresPresenca.length - i) > 1) {
-        this.body_json = this.body_json + ',{'
-      }
-
-    }
-
-
-    this.body_json = this.body_json + '  ],'
-      + '"staffPresenca" : [ {'
-    for (let i = 0; i < parmPresenca.staffPresenca.length; i++) {
-
-      this.body_json = this.body_json + '"id_staff": ' + parmPresenca.staffPresenca[i].id_staff + ','
-        + '"nome_staff": "' + parmPresenca.staffPresenca[i].nome_staff + '",'
-        + '"estado" :\"' + parmPresenca.staffPresenca[i].estado + '\",'
-        + '"motivo" :\"' + parmPresenca.staffPresenca[i].motivo + '\"}'
-
-      if ((parmPresenca.staffPresenca.length - i) > 1) {
-        this.body_json = this.body_json + ',{'
-      }
-
-    }
-
-
-
-    this.body_json = this.body_json + ' ] }';
-
-
-
-    console.log("PresencaService | createPresenca | url: ", this.URLPresenca)
-    console.log("PresencaService | createPresenca | body: ", this.body_json)
-    return this.http.put<any>(this.URLPresenca + '/' + environment.tenant_id, this.body_json, { headers });
-
-
+    console.log("PresencaService | createPresenca | url: ", this.URLPresenca + '/' + environment.tenant_id);
+    console.log("PresencaService | createPresenca | body: ", JSON.stringify(requestBody));
+    return this.http.put<any>(this.URLPresenca + '/' + environment.tenant_id, requestBody, { headers });
   }
 
 
   updatePresenca(parmPresenca: PresencaData, parmIDutilizador: number) {
     const headers = { 'Content-Type': 'application/json' };
 
-    this.body_json = '{'
-      + '"id" : ' + parmPresenca.id + ','
-      + '"data": ' + parmPresenca.data + ','
-      + '"hora": \"' + parmPresenca.hora + ' \",'
-      + '"id_escalao" : ' + parmPresenca.id_escalao + ','
-      + '"escalao_descricao" :\"' + parmPresenca.escalao_descricao + '\",'
-      + '"data_criacao" :\"' + parmPresenca.data_criacao + '\",'
-      + '"id_utilizador_criacao" :' + parmPresenca.id_utilizador_criacao + ','
-      + '"user_criacao" :\"' + parmPresenca.user_criacao + '\",'
-      + '"jogadoresPresenca" : [ {'
+    // Use Angular's HttpClient to send JSON directly instead of manual string building
+    const requestBody = {
+      id: parmPresenca.id,
+      data: parmPresenca.data,
+      hora: parmPresenca.hora.trim(),
+      id_escalao: parmPresenca.id_escalao,
+      escalao_descricao: parmPresenca.escalao_descricao,
+      data_criacao: parmPresenca.data_criacao,
+      id_utilizador_criacao: parmPresenca.id_utilizador_criacao,
+      user_criacao: parmPresenca.user_criacao,
+      jogadoresPresenca: parmPresenca.jogadoresPresenca.map(j => ({
+        id_jogador: j.id_jogador,
+        nome_jogador: j.nome_jogador,
+        estado: j.estado,
+        motivo: j.motivo
+      })),
+      staffPresenca: parmPresenca.staffPresenca.map(s => ({
+        id_staff: s.id_staff,
+        nome_staff: s.nome_staff,
+        estado: s.estado,
+        motivo: s.motivo
+      }))
+    };
 
-    for (let i = 0; i < parmPresenca.jogadoresPresenca.length; i++) {
-
-      this.body_json = this.body_json + '"id_jogador": ' + parmPresenca.jogadoresPresenca[i].id_jogador + ','
-        + '"nome_jogador": "' + parmPresenca.jogadoresPresenca[i].nome_jogador + '",'
-        + '"estado" :\"' + parmPresenca.jogadoresPresenca[i].estado + '\",'
-        + '"motivo" :\"' + parmPresenca.jogadoresPresenca[i].motivo + '\"}'
-
-      if ((parmPresenca.jogadoresPresenca.length - i) > 1) {
-        this.body_json = this.body_json + ',{'
-      }
-
-    }
-
-
-    this.body_json = this.body_json + '  ],'
-      + '"staffPresenca" : [ {'
-    for (let i = 0; i < parmPresenca.staffPresenca.length; i++) {
-
-      this.body_json = this.body_json + '"id_staff": ' + parmPresenca.staffPresenca[i].id_staff + ','
-        + '"nome_staff": "' + parmPresenca.staffPresenca[i].nome_staff + '",'
-        + '"estado" :\"' + parmPresenca.staffPresenca[i].estado + '\",'
-        + '"motivo" :\"' + parmPresenca.staffPresenca[i].motivo + '\"}'
-
-      if ((parmPresenca.staffPresenca.length - i) > 1) {
-        this.body_json = this.body_json + ',{'
-      }
-
-    }
-
-
-
-    this.body_json = this.body_json + ' ] }';
-
-
-
-    console.log("PresencaService | update | url: ", this.URLUpdatePresenca + parmIDutilizador)
-    console.log("PresencaService | update | body: ", this.body_json)
-    return this.http.put<any>(this.URLUpdatePresenca + parmIDutilizador, this.body_json, { headers });
-
-
+    console.log("PresencaService | update | url: ", this.URLUpdatePresenca + parmIDutilizador);
+    console.log("PresencaService | update | body: ", JSON.stringify(requestBody));
+    return this.http.put<any>(this.URLUpdatePresenca + parmIDutilizador, requestBody, { headers });
   }
 
 

@@ -29,7 +29,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let jogador of equipa.jogadores">
+                <tr *ngFor="let jogador of equipa?.jogadores">
 
                   <td><img src="assets/img/jogadores/{{jogador.id}}_avatar.jpg"
                       onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
@@ -59,7 +59,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let member of equipa.staff">
+                <tr *ngFor="let member of equipa?.staff">
                   <td><span class="badge">{{member.tipo || '-'}}</span></td>
                   <td><img src="assets/img/jogadores/{{member.id}}_avatar_staff.jpg"
                       onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""

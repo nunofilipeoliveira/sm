@@ -1,184 +1,373 @@
-<div class="d-flex justify-content-center" style="vertical-align:middle;">
-  <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
-    <span class="sr-only"></span>
-  </div>
-</div>
-<p></p>
-<div *ngIf="spinner==false">
-
-
-
-
- <mat-slide-toggle
-          [ngModel]="modoResumo"
-           (change)="changed_modoResumo()">
-          Modo Resumo
-      </mat-slide-toggle>
-<p> </p>
-  <table class="align-middle">
-    <tbody>
-      <tr>
-        <mat-button-toggle-group name="filtroData" (change)="onValChange()" [(ngModel)]="filtro">
-          <mat-button-toggle value="todos">Todos</mat-button-toggle>
-          <mat-button-toggle value="mes_atual">Mês Atual</mat-button-toggle>
-          <mat-button-toggle value="semana_atual">Semana Atual</mat-button-toggle>
-          <mat-button-toggle value="datas">Datas específicas</mat-button-toggle>
-        </mat-button-toggle-group>
-      </tr>
-
-    </tbody>
-  </table>
-  <div class="table-responsive" *ngIf="filtro_datas">
-    <ngb-datepicker #dp [(ngModel)]="filtro_dataInicio" /> <ngb-datepicker #dp [(ngModel)]="filtro_dataFim" />
-    <p> <button type="button" class="btn btn-info text-white" (click)="aplicarFiltro()">Aplicar</button>
+<div class="container-fluid presencas-container">
+  <div class="d-flex justify-content-center align-items-center py-4" *ngIf="spinner">
+    <div class="modern-spinner">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+    </div>
   </div>
 
+  <div *ngIf="!spinner">
+    <!-- Header Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-6 col-12 mb-3 mb-md-0">
+                <h4 class="card-title mb-0 text-primary">
+                  <i class="fas fa-calendar-check me-2"></i>Controlo de Presenças
+                </h4>
+              </div>
+              <div class="col-md-6 col-12 text-md-end">
+                <mat-slide-toggle
+                  [ngModel]="modoResumo"
+                  (change)="changed_modoResumo()"
+                  class="me-3">
+                  Modo Resumo
+                </mat-slide-toggle>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div *ngIf="semRegistos">Sem registos</div>
+    <!-- Filters Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 mb-3">
+                <label class="form-label fw-bold text-muted mb-3">
+                  <i class="fas fa-filter me-2"></i>Filtrar por período:
+                </label>
+                <mat-button-toggle-group
+                  name="filtroData"
+                  (change)="onValChange()"
+                  [(ngModel)]="filtro"
+                  class="d-flex flex-wrap gap-2 filter-toggle-group">
+                  <mat-button-toggle value="todos" class="btn-sm filter-btn">
+                    <i class="fas fa-calendar-alt me-1"></i>Todos
+                  </mat-button-toggle>
+                  <mat-button-toggle value="mes_atual" class="btn-sm filter-btn">
+                    <i class="fas fa-calendar-day me-1"></i>Mês Atual
+                  </mat-button-toggle>
+                  <mat-button-toggle value="semana_atual" class="btn-sm filter-btn">
+                    <i class="fas fa-calendar-week me-1"></i>Semana Atual
+                  </mat-button-toggle>
+                  <mat-button-toggle value="datas" class="btn-sm filter-btn">
+                    <i class="fas fa-calendar-range me-1"></i>Datas específicas
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
 
-  <div *ngIf="!semRegistos" class="table-responsive">
+              <div class="col-12" *ngIf="filtro_datas">
+                <div class="row g-3 align-items-end">
+                  <div class="col-md-4 col-12">
+                    <label class="form-label fw-bold text-muted">
+                      <i class="fas fa-calendar-plus me-2"></i>Data Início:
+                    </label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-end-0">
+                        <i class="fas fa-calendar-day text-primary"></i>
+                      </span>
+                      <ngb-datepicker #dp [(ngModel)]="filtro_dataInicio" class="d-block border-start-0"></ngb-datepicker>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-12">
+                    <label class="form-label fw-bold text-muted">
+                      <i class="fas fa-calendar-minus me-2"></i>Data Fim:
+                    </label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-end-0">
+                        <i class="fas fa-calendar-day text-primary"></i>
+                      </span>
+                      <ngb-datepicker #dp [(ngModel)]="filtro_dataFim" class="d-block border-start-0"></ngb-datepicker>
+                    </div>
+                  </div>
+                  <div class="col-md-4 col-12">
+                    <button type="button" class="btn btn-primary w-100 filter-apply-btn" (click)="aplicarFiltro()">
+                      <i class="fas fa-search me-2"></i>Aplicar Filtro
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-    <table class=" project-list-table" *ngIf="!semRegistos">
-      <thead>
-        <tr>
-          <th>Nome <a class="form-label" (click)="toggleFiltroNomes()">🔎</a></th>
-          <ng-container *ngIf="!modoResumo">
-            <th *ngFor="let presenca of presencas" style="width: 5px; text-align: center;">
-              <a href="#/presenca/{{presenca.id}}">
-                {{(presenca.data).toString().slice(6,8)}}/{{(presenca.data).toString().slice(4,6)}}
-              </a>
-            </th>
-            <th style="text-align: right;">Total</th>
-          </ng-container>
-           <ng-container *ngIf="modoResumo">
-            <th style="width: 60px; text-align: center;" ngbTooltip="Presença">P</th>
-            <th style="width: 60px; text-align: center;" ngbTooltip="Falta Justificada">FJ</th>
-            <th style="width: 60px; text-align: center;" ngbTooltip="Falta Injustificada">FI</th>
-            <th style="width: 60px; text-align: center;" ngbTooltip="Falta Lesão">FL</th>
-            <th style="width: 60px; text-align: center;" ngbTooltip="Taxa Presença">TP</th>
-          </ng-container>
+    <!-- No Records Message -->
+    <div class="row" *ngIf="semRegistos">
+      <div class="col-12">
+        <div class="alert alert-info text-center py-5" role="alert">
+          <i class="fas fa-info-circle fa-3x mb-3 text-info"></i>
+          <h5 class="alert-heading">Sem registos encontrados</h5>
+          <p class="mb-0">Não existem presenças registadas para o período selecionado.</p>
+        </div>
+      </div>
+    </div>
 
-        </tr>
-      </thead>
+    <!-- Attendance Table Section -->
+    <div class="row" *ngIf="!semRegistos">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="mb-0">
+                <i class="fas fa-table me-2"></i>Quadro de Presenças
+              </h5>
+              <button class="btn btn-outline-secondary btn-sm" (click)="toggleFiltroNomes()">
+                <i class="fas fa-search me-1"></i>Filtrar Nomes
+              </button>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0 presencas-table">
+                <thead class="table-light">
+                  <tr>
+                    <th class="border-0 fw-bold text-muted sortable-header" style="width: 140px; min-width: 140px; max-width: 140px;" (click)="sortTable('nome')" role="button">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <span><i class="fas fa-user me-1"></i>Nome</span>
+                        <i [class]="getSortIcon('nome')" class="sort-icon"></i>
+                      </div>
+                    </th>
+                    <ng-container *ngIf="!modoResumo">
+                      <th *ngFor="let presenca of presencas" class="text-center border-0 fw-bold text-muted small" style="width: 40px; min-width: 40px; max-width: 40px; padding: 0.375rem 0.1875rem;">
+                        <a href="#/presenca/{{presenca.id}}" class="text-decoration-none">
+                          {{(presenca.data).toString().slice(6,8)}}/{{(presenca.data).toString().slice(4,6)}}
+                        </a>
+                      </th>
+                      <th class="text-end border-0 fw-bold text-muted sortable-header" style="width: 45px; min-width: 45px;" (click)="sortTable('total')" role="button">
+                        <div class="d-flex align-items-center justify-content-end">
+                          <span>Total</span>
+                          <i [class]="getSortIcon('total')" class="sort-icon ms-1"></i>
+                        </div>
+                      </th>
+                    </ng-container>
+                    <ng-container *ngIf="modoResumo">
+                      <th class="text-center border-0 fw-bold text-muted sortable-header" style="width: 45px; min-width: 45px;" ngbTooltip="Presença" placement="top" container="body" (click)="sortTable('presenca')" role="button">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <i class="fas fa-check-circle text-success me-1"></i>
+                          <span>P</span>
+                          <i [class]="getSortIcon('presenca')" class="sort-icon ms-1"></i>
+                        </div>
+                      </th>
+                      <th class="text-center border-0 fw-bold text-muted sortable-header" style="width: 45px; min-width: 45px;" ngbTooltip="Falta Justificada" placement="top" container="body" (click)="sortTable('falta_justificada')" role="button">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <i class="fas fa-exclamation-triangle text-warning me-1"></i>
+                          <span>FJ</span>
+                          <i [class]="getSortIcon('falta_justificada')" class="sort-icon ms-1"></i>
+                        </div>
+                      </th>
+                      <th class="text-center border-0 fw-bold text-muted sortable-header" style="width: 45px; min-width: 45px;" ngbTooltip="Falta Injustificada" placement="top" container="body" (click)="sortTable('falta_injustificada')" role="button">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <i class="fas fa-times-circle text-danger me-1"></i>
+                          <span>FI</span>
+                          <i [class]="getSortIcon('falta_injustificada')" class="sort-icon ms-1"></i>
+                        </div>
+                      </th>
+                      <th class="text-center border-0 fw-bold text-muted sortable-header" style="width: 45px; min-width: 45px;" ngbTooltip="Falta Lesão" placement="top" container="body" (click)="sortTable('falta_lesao')" role="button">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <i class="fas fa-medkit text-info me-1"></i>
+                          <span>FL</span>
+                          <i [class]="getSortIcon('falta_lesao')" class="sort-icon ms-1"></i>
+                        </div>
+                      </th>
+                      <th class="text-center border-0 fw-bold text-muted sortable-header" style="width: 45px; min-width: 45px;" ngbTooltip="Taxa Presença" placement="top" container="body" (click)="sortTable('taxa_presenca')" role="button">
+                        <div class="d-flex align-items-center justify-content-center">
+                          <i class="fas fa-percentage me-1"></i>
+                          <span>TP</span>
+                          <i [class]="getSortIcon('taxa_presenca')" class="sort-icon ms-1"></i>
+                        </div>
+                      </th>
+                    </ng-container>
+                  </tr>
+                </thead>
 
-      <tbody>
-        <!-- Linha(s) de filtro -->
+                <tbody>
+                  <!-- Filter Rows -->
+                  <ng-container *ngIf="flagFiltroNomes">
+                    <tr class="table-light">
+                      <td class="border-0" style="width: 140px; min-width: 140px; max-width: 140px;">
+                        <div class="d-flex gap-1">
+                          <input type="text" class="form-control form-control-sm flex-grow-1" placeholder="Filtrar por nome" [(ngModel)]="filtroNomes[0]" (input)="filtrarTabela()" />
+                          <button class="btn btn-outline-success btn-sm" type="button" (click)="addFiltro()" title="Adicionar filtro">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                                            <button class="btn btn-outline-danger btn-sm" type="button" (click)="toggleFiltroNomes()" title="Remover este filtro">
+                            <i class="fas fa-minus"></i>
+                          </button>
+                        </div>
+                      </td>
+                      <td *ngIf="!modoResumo" [attr.colspan]="presencas.length + 1" class="border-0"></td>
+                      <td *ngIf="modoResumo" colspan="5" class="border-0"></td>
+                    </tr>
+                    <tr *ngFor="let filtro of filtroNomes.slice(1); index as i; trackBy: trackByIndex" class="table-light">
+                      <td class="border-0" style="width: 140px; min-width: 140px; max-width: 140px;">
+                        <div class="d-flex gap-1">
+                          <input type="text" class="form-control form-control-sm flex-grow-1" placeholder="Filtrar por nome" [(ngModel)]="filtroNomes[i+1]" (input)="filtrarTabela()" />
+                          <button class="btn btn-outline-success btn-sm" type="button" (click)="addFiltro()" title="Adicionar outro filtro">
+                            <i class="fas fa-plus"></i>
+                          </button>
+                          <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeFiltro(i+1)" title="Remover este filtro">
+                            <i class="fas fa-minus"></i>
+                          </button>
+                        </div>
+                      </td>
+                      <td *ngIf="!modoResumo" [attr.colspan]="presencas.length + 1" class="border-0"></td>
+                      <td *ngIf="modoResumo" colspan="5" class="border-0"></td>
+                    </tr>
+                  </ng-container>
+
+                  <!-- Hours Row (Detailed Mode) -->
+                  <ng-container *ngIf="!modoResumo">
+                    <tr class="table-light">
+                      <th class="border-0 fw-bold text-muted small">
+                        <i class="fas fa-clock me-2"></i>Hora
+                      </th>
+                      <th *ngFor="let presenca of presencas" class="text-center border-0 fw-bold text-muted small" style="width: 40px; min-width: 40px; max-width: 40px; padding: 0.375rem 0.1875rem;">
+                        {{presenca.hora}}
+                      </th>
+                      <th class="text-end border-0 fw-bold text-muted small">{{presencas.length}}</th>
+                    </tr>
+                  </ng-container>
+
+                  <!-- Detailed Mode Data Rows -->
+                  <ng-container *ngIf="!modoResumo">
+                    <!-- Player Rows -->
+                    <tr *ngFor="let linha of presencasFiltradas; index as posicao">
+                      <td class="border-0" style="width: 140px; min-width: 140px; max-width: 140px;">
+                        <div class="d-flex align-items-center">
+                          <img src="assets/img/jogadores/{{linha.idJogador}}_avatar.jpg"
+                            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                            alt="Avatar" class="avatar-sm rounded-circle me-1" />
+                          <span class="fw-medium" style="font-size: 0.9rem; white-space: nowrap; overflow: visible;">{{linha.nomeJogador}}</span>
+                        </div>
+                      </td>
+                      <td *ngFor="let treinos of linha.presenca_treino" class="text-center border-0" style="width: 40px; min-width: 40px; max-width: 40px; padding: 0.375rem 0.1875rem;">
+                        <button type="button" class="btn btn-sm status-btn" [ngClass]="getStatusClass(treinos.presenca_1letra)"
+                          placement="top" ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
+                          {{treinos.presenca_1letra}}
+                        </button>
+                      </td>
+                      <td class="text-end border-0 fw-bold">{{linha.count_treinos}}</td>
+                    </tr>
+
+                    <!-- Totals Row -->
+                    <tr class="table-light fw-bold">
+                      <td class="border-0">
+                        <i class="fas fa-calculator me-2 text-primary"></i>Total
+                      </td>
+                      <td *ngFor="let countJogadorTreino of count_presenca_por_treino; index as posicao" class="text-center border-0" style="width: 40px; min-width: 40px; max-width: 40px; padding: 0.375rem 0.1875rem;">
+                        {{countJogadorTreino}}
+                      </td>
+                      <td class="text-end border-0"></td>
+                    </tr>
+
+                    <!-- Separator -->
+                    <tr>
+                      <td [attr.colspan]="presencas.length + 2" class="border-0 bg-light" style="height: 10px;"></td>
+                    </tr>
+
+                    <!-- Staff Rows -->
+                    <tr *ngFor="let linha of presencasStaffFiltradas; index as posicao" class="table-secondary">
+                      <td class="border-0" style="width: 140px; min-width: 140px; max-width: 140px;">
+                        <div class="d-flex align-items-center">
+                          <img src="assets/img/jogadores/{{linha.idJogador}}_avatar_staff.jpg"
+                            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                            alt="Avatar Staff" class="avatar-sm rounded-circle me-1" />
+                          <span class="fw-medium" style="font-size: 0.9rem; white-space: nowrap; overflow: visible;">{{linha.nomeJogador}}</span>
+                        </div>
+                      </td>
+                      <td *ngFor="let treinos of linha.presenca_treino" class="text-center border-0" style="width: 40px; min-width: 40px; max-width: 40px; padding: 0.375rem 0.1875rem;">
+                        <button type="button" class="btn btn-sm status-btn" [ngClass]="getStatusClass(treinos.presenca_1letra)"
+                          placement="top" ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
+                          {{treinos.presenca_1letra}}
+                        </button>
+                      </td>
+                      <td class="text-end border-0 fw-bold">{{linha.count_treinos}}</td>
+                    </tr>
+                  </ng-container>
 
 
-        <!-- Linha com horas -->
-        <ng-container *ngIf="!modoResumo">
-          <tr>
-            <th></th>
-            <th *ngFor="let presenca of presencas" style="width: 5px; text-align: center; font-size: smaller;">
-              {{presenca.hora}}
-            </th>
-            <th style="text-align: right;">{{presencas.length}}</th>
-          </tr>
-        </ng-container>
 
-        <ng-container *ngIf="flagFiltroNomes">
-          <tr *ngFor="let filtro of filtroNomes; index as i; trackBy: trackByIndex">
-            <td style=" padding-right: 30px;width: 180px; min-width: 180px; max-width: 180px;">
-              <input *ngIf="flagFiltroNomes" type="text" placeholder="Filtrar por nome" [(ngModel)]="filtroNomes[i]"
-                (input)="filtrarTabela()" />
-              <a *ngIf="flagFiltroNomes" class="form-label" (click)="addFiltro()"
-                style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); cursor: pointer; font-weight: bold; font-size: 20px; user-select: none;">
-                +
-              </a>
-            </td>
+                  <!-- Summary Mode Data Rows -->
+                  <ng-container *ngIf="modoResumo">
+                    <!-- Player Rows -->
+                    <tr *ngFor="let linha of presencasFiltradas; index as posicao">
+                      <td class="border-0" style="width: 140px; min-width: 140px; max-width: 140px;">
+                        <div class="d-flex align-items-center">
+                          <img src="assets/img/jogadores/{{linha.idJogador}}_avatar.jpg"
+                            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                            alt="Avatar" class="avatar-sm rounded-circle me-1" />
+                          <span class="fw-medium" style="font-size: 0.9rem; white-space: nowrap; overflow: visible;">{{linha.nomeJogador}}</span>
+                        </div>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-success fs-6">{{linha.count_presenca}}</span>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-warning fs-6">{{linha.count_falta_justificada}}</span>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-danger fs-6">{{linha.count_falta_injustificada}}</span>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-info fs-6">{{linha.count_falta_lesao}}</span>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-primary fs-6">
+                          {{ (linha.count_presenca / (linha.count_falta_justificada + linha.count_falta_injustificada + linha.count_presenca) * 100) | number:'1.0-2' }}%
+                        </span>
+                      </td>
+                    </tr>
 
+                    <!-- Separator -->
+                    <tr>
+                      <td colspan="6" class="border-0 bg-light" style="height: 10px;"></td>
+                    </tr>
 
-          </tr>
-        </ng-container>
-
-        <ng-container *ngIf="!modoResumo">
-        <!-- Linhas de dados -->
-        <tr *ngFor="let linha of presencasFiltradas; index as posicao">
-          <td style="width: 180px; min-width: 180px; max-width: 180px; left: 0px;">
-            <img src="assets/img/jogadores/{{linha.idJogador}}_avatar.jpg"
-              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-              class="avatar-sm rounded-circle me-2" />
-            {{linha.nomeJogador}}
-          </td>
-          <td *ngFor="let treinos of linha.presenca_treino"
-            style="width: 5px; text-align: center; {{treinos.estilo_presenca}}">
-            <button type="button" placement="top" style="{{treinos.estilo_presenca}}"
-              ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
-              {{treinos.presenca_1letra}}
-            </button>
-          </td>
-          <td style="text-align: right; width: 5px;">{{linha.count_treinos}}</td>
-        </tr>
-
-        <!-- Linha de totais -->
-        <tr>
-          <td style="width: 180px; min-width: 180px; max-width: 180px; left: 0px;">Total</td>
-          <td *ngFor="let countJogadorTreino of count_presenca_por_treino; index as posicao"
-            style="width: 5px; text-align: center;">
-            {{countJogadorTreino}}
-          </td>
-        </tr>
-        <tr>
-          <td style="background-color: darkgray;" [attr.colspan]="presencas.length + 2"></td>
-        </tr>
-
-        <tr *ngFor="let linha of presencasStaffFiltradas  ; index as posicao">
-          <td style="width: 180px;min-width: 180px;max-width: 180px;left: 0px;"><img
-              src="assets/img/jogadores/{{linha.idJogador}}_avatar_staff.jpg"
-              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-              class="avatar-sm rounded-circle me-2" />{{linha.nomeJogador}}</td>
-          <td *ngFor="let treinos of linha.presenca_treino"
-            style="width: 5px; text-align: center;{{treinos.estilo_presenca}}">
-
-            <button type="button" placement="top" style="{{treinos.estilo_presenca}}"
-              ngbTooltip="{{treinos.presenca}} {{treinos.motivo}}">
-              {{treinos.presenca_1letra}}
-            </button>
-          </td>
-          <td style="text-align: right; width: 5px">{{linha.count_treinos}}</td>
-        </tr>
-
-        </ng-container>
-
-
-
-        <ng-container *ngIf="modoResumo">
-        <!-- Linhas de dados -->
-        <tr *ngFor="let linha of presencasFiltradas; index as posicao">
-          <td style="width: 180px; min-width: 180px; max-width: 180px; left: 0px;">
-            <img src="assets/img/jogadores/{{linha.idJogador}}_avatar.jpg"
-              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-              class="avatar-sm rounded-circle me-2" />
-            {{linha.nomeJogador}}
-          </td>
-          <td style="width: 60px; text-align: center;">{{linha.count_presenca}}</td>
-          <td style="width: 60px; text-align: center;">{{linha.count_falta_justificada}}</td>
-          <td style="width: 60px; text-align: center;">{{linha.count_falta_injustificada}}</td>
-          <td style="width: 60px; text-align: center;">{{linha.count_falta_lesao}}</td>
-          <td style="width: 60px; text-align: center;">{{ (linha.count_presenca / (linha.count_falta_justificada + linha.count_falta_injustificada + linha.count_presenca) * 100) | number:'1.0-2' }}%</td>
-        </tr>
-
-        
-        <tr>
-          <td style="background-color: darkgray;" colspan="5"></td>
-        </tr>
-
-        <tr *ngFor="let linha of presencasStaffFiltradas  ; index as posicao">
-          <td style="width: 180px;min-width: 180px;max-width: 180px;left: 0px;"><img
-              src="assets/img/jogadores/{{linha.idJogador}}_avatar_staff.jpg"
-              onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-              class="avatar-sm rounded-circle me-2" />{{linha.nomeJogador}}</td>
-          <td style="width: 60px; text-align: center;">{{linha.count_presenca}}</td>
-          <td style="width: 60px; text-align: center;">{{linha.count_falta_justificada}}</td>
-          <td style="width: 60px; text-align: center;">{{linha.count_falta_injustificada}}</td>
-            <td style="width: 60px; text-align: center;">0</td>
-          <td style="width: 60px; text-align: center;">{{ (linha.count_presenca / (linha.count_falta_justificada + linha.count_falta_injustificada+linha.count_presenca) * 100) | number:'1.0-2' }}%</td>
-        </tr>
-
-        </ng-container>
-
-      </tbody>
-    </table>
-  </div>
+                    <!-- Staff Rows -->
+                    <tr *ngFor="let linha of presencasStaffFiltradas; index as posicao" class="table-secondary">
+                      <td class="border-0" style="width: 140px; min-width: 140px; max-width: 140px;">
+                        <div class="d-flex align-items-center">
+                          <img src="assets/img/jogadores/{{linha.idJogador}}_avatar_staff.jpg"
+                            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                            alt="Avatar Staff" class="avatar-sm rounded-circle me-1" />
+                          <span class="fw-medium" style="font-size: 0.9rem; white-space: nowrap; overflow: visible;">{{linha.nomeJogador}}</span>
+                        </div>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-success fs-6">{{linha.count_presenca}}</span>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-warning fs-6">{{linha.count_falta_justificada}}</span>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-danger fs-6">{{linha.count_falta_injustificada}}</span>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-info fs-6">0</span>
+                      </td>
+                      <td class="text-center border-0" style="width: 45px; min-width: 45px; padding: 0.375rem 0.1875rem;">
+                        <span class="badge bg-primary fs-6">
+                          {{ (linha.count_presenca / (linha.count_falta_justificada + linha.count_falta_injustificada + linha.count_presenca) * 100) | number:'1.0-2' }}%
+                        </span>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
 </div>

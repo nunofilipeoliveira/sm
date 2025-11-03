@@ -1,11 +1,6 @@
-import { Component, model } from '@angular/core';
+import { Component, model, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-import {
-
-  MatDialogRef,
-
-} from '@angular/material/dialog';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 
 export interface DialogData {
@@ -20,17 +15,22 @@ export interface DialogData {
   standalone: true,
   imports: [CommonModule, FormsModule],
 })
-export class PoppupMotivoComponent {
+export class PoppupMotivoComponent implements OnInit {
 
+  @Input() motivoInicial: string = '';
   public motivoTexto: string = '';
   public saiu_ok: boolean = false;
-  constructor(private dialog: MatDialogRef<string>) { }
+  constructor(public activeModal: NgbActiveModal) { }
+
+  ngOnInit() {
+    this.motivoTexto = this.motivoInicial;
+  }
 
 
   doLogin() {
     console.log("Caixa motivo", this.motivoTexto);
     this.saiu_ok = true;
-    this.dialog.close(this.motivoTexto);
+    this.activeModal.close(this.motivoTexto);
 
   }
 
@@ -38,7 +38,7 @@ export class PoppupMotivoComponent {
     if (this.saiu_ok == false) {
       this.motivoTexto = '';
     }
-    this.dialog.close(this.motivoTexto);
+    this.activeModal.close(this.motivoTexto);
   }
 
   keepFocus(el: HTMLTextAreaElement) {

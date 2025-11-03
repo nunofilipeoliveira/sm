@@ -1,54 +1,334 @@
-<div>
-  <div>
-    <div class="d-flex justify-content-center" style="vertical-align:middle;">
-      <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
-        <span class="sr-only"></span>
-      </div>
+<div class="container-fluid presenca-container">
+  <!-- Loading Spinner -->
+  <div class="d-flex justify-content-center align-items-center py-4" *ngIf="spinner">
+    <div class="modern-spinner">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
     </div>
-      <div class="table-responsive col-lg-8" *ngIf="!spinner">
-        <table class="table project-list-table table-nowrap align-middle">
-          <thead>
-            <tr>
-              <th scope="col" style="text-transform: none;">Data: {{presencaData.data | data}} | {{presencaData.hora}}</th>
-              <th scope="col" style="width: 15px;"></th>
-              <th scope="col" style="width: 30px;"></th>
-            </tr>
-          </thead>
+  </div>
 
-          <thead>
-            <tr>
-              <th scope="col">Nome</th>
-              <th scope="col" style="width: 15px;">Presenca</th>
-              <th scope="col" style="width: 30px;">Motivo</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let jogador of presencaData?.jogadoresPresenca; index as posicao">
-              <td><img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-                  class="avatar-sm rounded-circle me-2" />{{jogador.nome_jogador}}</td>
-              <td>{{jogador.estado}}</td>
-              <td>{{jogador.motivo}}</td>
-            </tr>
-          </tbody>
-          <P></P>
-          <tbody>
-            <tr *ngFor="let staff of presencaData?.staffPresenca; index as posicao">
-              <td><img src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-                  class="avatar-sm rounded-circle me-2" />{{staff.nome_staff}}</td>
-              <td >{{staff.estado}}</td>
-              <td >{{staff.motivo}}</td>
-            </tr>
-          </tbody>
-        </table>
+  <!-- Main Content -->
+  <div *ngIf="!spinner">
+    <!-- Header Section -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-md-8 col-12">
+                <h4 class="card-title mb-0 text-primary">
+                  <i class="fas fa-calendar-check me-2"></i>{{editMode ? 'Editar Folha de Presenças' : 'Folha de
+                  Presenças'}}
+                </h4>
+                <div class="mt-2">
+                  <span class="badge bg-primary fs-6 me-3">
+                    <i class="fas fa-calendar-day me-1"></i>{{presencaData.data | data}}
+                  </span>
+                  <span class="badge bg-info fs-6">
+                    <i class="fas fa-clock me-1"></i>{{presencaData.hora}}
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4 col-12 text-md-end mt-3 mt-md-0">
+                <button type="button" class="btn btn-outline-secondary me-2" (click)="voltarParaPresencas()">
+                  <i class="fas fa-arrow-left me-2"></i>Voltar
+                </button>
+                <button type="button" class="btn btn-warning" (click)="alterarFicha()" *ngIf="!editMode">
+                  <i class="fas fa-edit me-2"></i>Alterar Ficha
+                </button>
 
-        <div class="form-group">
-          <button type="button" class="btn btn-info text-white" (click)="alterarFicha()">Alterar Ficha Presença</button>
+                  <button type="button" class="btn btn-outline-secondary me-2" (click)="cancelEdit()" *ngIf="editMode">
+                    <i class="fas fa-times me-2"></i>Cancelar
+                  </button>
+
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-  </div>
-</div>
+    </div>
 
-<div *ngIf="!spinner">
-  {{presencaData.data_criacao}} {{presencaData.user_criacao}} criou ficha presenças.
-<tr *ngFor="let historicoLinha of historico; index as posicao">{{historicoLinha}}.</tr>
+    <!-- Attendance Table -->
+    <div class="row mb-4" *ngIf="!editMode">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <i class="fas fa-users me-2"></i>Estado das Presenças
+            </h5>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover mb-0 presenca-table">
+                <thead class="table-light">
+                  <tr>
+                    <th class="border-0 fw-bold text-muted" style="width: 60%; min-width: 200px;">
+                      <i class="fas fa-user me-1"></i>Nome
+                    </th>
+                    <th class="border-0 fw-bold text-muted text-center" style="width: 20%; min-width: 120px;">
+                      <i class="fas fa-clipboard-check me-1"></i>Estado
+                    </th>
+                    <th class="border-0 fw-bold text-muted text-center" style="width: 20%; min-width: 120px;">
+                      <i class="fas fa-comment me-1"></i>Motivo
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Players Section -->
+                  <tr class="table-secondary">
+                    <td colspan="3" class="border-0 fw-bold text-primary">
+                      <i class="fas fa-futbol me-2"></i>Jogadores
+                    </td>
+                  </tr>
+                  <tr *ngFor="let jogador of presencaData?.jogadoresPresenca; index as posicao"
+                    [style]="getRowStyle(jogador.estado)">
+                    <td class="border-0">
+                      <div class="d-flex align-items-center">
+                        <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
+                          onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="Avatar"
+                          class="avatar-sm rounded-circle me-2" />
+                        <span class="fw-medium">{{jogador.nome_jogador}}</span>
+                      </div>
+                    </td>
+                    <td class="border-0 text-center">
+                      <span class="badge fs-6" [ngClass]="getStatusBadgeClass(jogador.estado)">
+                        {{jogador.estado}}
+                      </span>
+                    </td>
+                    <td class="border-0 text-center">
+                      <span class="text-muted small" *ngIf="jogador.motivo; else noMotivo">
+                        {{jogador.motivo}}
+                      </span>
+                      <ng-template #noMotivo>
+                        <span class="text-muted">-</span>
+                      </ng-template>
+                    </td>
+                  </tr>
+
+                  <!-- Staff Section -->
+                  <tr class="table-secondary">
+                    <td colspan="3" class="border-0 fw-bold text-primary">
+                      <i class="fas fa-user-tie me-2"></i>Staff
+                    </td>
+                  </tr>
+                  <tr *ngFor="let staff of presencaData?.staffPresenca; index as posicao"
+                    [style]="getRowStyle(staff.estado)">
+                    <td class="border-0">
+                      <div class="d-flex align-items-center">
+                        <img src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg"
+                          onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                          alt="Avatar Staff" class="avatar-sm rounded-circle me-2" />
+                        <span class="fw-medium">{{staff.nome_staff}}</span>
+                      </div>
+                    </td>
+                    <td class="border-0 text-center">
+                      <span class="badge fs-6" [ngClass]="getStatusBadgeClass(staff.estado)">
+                        {{staff.estado}}
+                      </span>
+                    </td>
+                    <td class="border-0 text-center">
+                      <span class="text-muted small" *ngIf="staff.motivo; else noMotivoStaff">
+                        {{staff.motivo}}
+                      </span>
+                      <ng-template #noMotivoStaff>
+                        <span class="text-muted">-</span>
+                      </ng-template>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Mode: Include the Marcar_presencaComponent -->
+    <div *ngIf="editMode">
+
+
+      <div class="row">
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div class="card-header bg-light">
+              <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                  <i class="fas fa-users me-2"></i>Jogadores e Staff
+                </h5>
+                <button type="button" class="btn btn-success btn-sm" (click)="allPresente()">
+                  <i class="fas fa-check-circle me-1"></i>Marcar Todos Presentes
+                </button>
+              </div>
+            </div>
+            <div class="card-body p-0">
+              <div class="table-responsive">
+                <table class="table table-hover mb-0 presenca-table">
+                  <thead class="table-light">
+                    <tr>
+                      <th class="border-0 fw-bold text-muted" style="width: 60%; min-width: 200px;">
+                        <i class="fas fa-user me-1"></i>Nome
+                      </th>
+                      <th class="border-0 fw-bold text-muted text-center" style="width: 30%; min-width: 120px;">
+                        <i class="fas fa-clipboard-check me-1"></i>Estado
+                      </th>
+                      <th class="border-0 fw-bold text-muted text-center" style="width: 20%; min-width: 120px;">
+                        <i class="fas fa-comment me-1"></i>Motivo
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- Players Section -->
+                    <tr class="table-secondary">
+                      <td colspan="3" class="border-0 fw-bold text-primary">
+                        <i class="fas fa-futbol me-2"></i>Jogadores
+                      </td>
+                    </tr>
+                    <tr *ngFor="let jogador of presencaData?.jogadoresPresenca; index as posicao"
+                      [style]="getRowStyle(jogador.estado)">
+                      <td class="border-0">
+                        <div class="d-flex align-items-center">
+                          <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
+                            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="Avatar"
+                            class="avatar-sm rounded-circle me-2" />
+                          <span class="fw-medium">{{jogador.nome_jogador}}</span>
+                        </div>
+                      </td>
+                      <td class="border-0 text-center">
+                        <div ngbDropdown class="d-inline-block">
+                          <button type="button" class="btn status-dropdown-btn"
+                            [ngClass]="getStatusBtnClass(jogador.estado)" ngbDropdownToggle>
+                            {{jogador.estado}}
+                          </button>
+                          <div ngbDropdownMenu>
+                            <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Presente')">
+                              <i class="fas fa-check-circle text-success me-2"></i>Presente
+                            </button>
+                            <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Não convocado')">
+                              <i class="fas fa-ban text-secondary me-2"></i>Não convocado
+                            </button>
+                            <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Ausente (Avisou)')">
+                              <i class="fas fa-exclamation-triangle text-warning me-2"></i>Ausente (Avisou)
+                            </button>
+                            <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Ausente (Não Avisou)')">
+                              <i class="fas fa-times-circle text-danger me-2"></i>Ausente (Não Avisou)
+                            </button>
+                            <button ngbDropdownItem (click)="ngDropDwonClick(posicao, 'Lesão')">
+                              <i class="fas fa-medkit text-info me-2"></i>Lesão
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="border-0 text-center">
+                        <span class="text-muted small" *ngIf="jogador.motivo; else noMotivo">
+                          {{jogador.motivo}}
+                        </span>
+                        <ng-template #noMotivo>
+                          <span class="text-muted">-</span>
+                        </ng-template>
+                      </td>
+                    </tr>
+
+                    <!-- Staff Section -->
+                    <tr class="table-secondary">
+                      <td colspan="3" class="border-0 fw-bold text-primary">
+                        <i class="fas fa-user-tie me-2"></i>Staff
+                      </td>
+                    </tr>
+                    <tr *ngFor="let staff of presencaData?.staffPresenca; index as posicao"
+                      [style]="getRowStyle(staff.estado)">
+                      <td class="border-0">
+                        <div class="d-flex align-items-center">
+                          <img src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg"
+                            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                            alt="Avatar Staff" class="avatar-sm rounded-circle me-2" />
+                          <span class="fw-medium">{{staff.nome_staff}}</span>
+                        </div>
+                      </td>
+                      <td class="border-0 text-center">
+                        <div ngbDropdown class="d-inline-block">
+                          <button type="button" class="btn status-dropdown-btn"
+                            [ngClass]="getStatusBtnClass(staff.estado)" ngbDropdownToggle>
+                            {{staff.estado}}
+                          </button>
+                          <div ngbDropdownMenu>
+                            <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Presente')">
+                              <i class="fas fa-check-circle text-success me-2"></i>Presente
+                            </button>
+                            <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Não convocado')">
+                              <i class="fas fa-ban text-secondary me-2"></i>Não convocado
+                            </button>
+                            <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Avisou)')">
+                              <i class="fas fa-exclamation-triangle text-warning me-2"></i>Ausente (Avisou)
+                            </button>
+                            <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Não Avisou)')">
+                              <i class="fas fa-times-circle text-danger me-2"></i>Ausente (Não Avisou)
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="border-0 text-center">
+                        <span class="text-muted small" *ngIf="staff.motivo; else noMotivoStaff">
+                          {{staff.motivo}}
+                        </span>
+                        <ng-template #noMotivoStaff>
+                          <span class="text-muted">-</span>
+                        </ng-template>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer bg-light">
+              <div class="d-flex justify-content-end">
+                <button type="button" class="btn btn-success" (click)="saveEdit()">
+                  <i class="fas fa-save me-2"></i>Gravar Alterações
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- History Section -->
+    <div class="row" *ngIf="historico && historico.length > 0">
+      <div class="col-12">
+        <div class="card shadow-sm">
+          <div class="card-header bg-light">
+            <h5 class="mb-0">
+              <i class="fas fa-history me-2"></i>Histórico de Alterações
+            </h5>
+          </div>
+          <div class="card-body">
+            <div class="timeline">
+              <div *ngFor="let historicoLinha of historico; index as posicao" class="timeline-item">
+                <div class="timeline-marker bg-primary"></div>
+                <div class="timeline-content">
+                  <p class="mb-0">{{historicoLinha}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer bg-light text-muted small">
+            <i class="fas fa-user me-1"></i>{{presencaData.data_criacao}} - {{presencaData.user_criacao}} criou a ficha
+            de presenças
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Creation Info (if no history) -->
+    <div class="row" *ngIf="!historico || historico.length === 0">
+      <div class="col-12">
+        <div class="alert alert-info" role="alert">
+          <i class="fas fa-info-circle me-2"></i>
+          <strong>Informação:</strong> {{presencaData.data_criacao}} - {{presencaData.user_criacao}} criou a ficha de
+          presenças.
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

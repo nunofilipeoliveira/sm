@@ -128,7 +128,39 @@ export class NovoJogadorComponent implements OnInit {
               if (resultado == true) {
                 this.sbmSuccess = true;
                 console.log("FichaJogadorComponent | gravarFichaJogador | resultado == true");
-                this.router.navigate(['/' + this.origem + '/' + this.idEquipa + '/' + this.jogadorData.nome]);
+
+                // Se veio da gestão de equipa, adicionar o jogador à equipa e navegar para gestão-equipa
+                if (this.origem === 'jogadorSeleccao') {
+                  // O idEquipa pode vir negativo (por causa da navegação), então converter para positivo
+                  const idEquipaCorrigido = Math.abs(this.idEquipa);
+                  console.log("NovoJogadorComponent | Adicionando jogador à equipa:", idEquipaCorrigido, "(original:", this.idEquipa + ")");
+
+                  // Primeiro, precisamos obter o ID do jogador recém-criado
+                  // O jogadorData.id deve ter sido definido após a criação
+                  console.log("NovoJogadorComponent | Jogador criado com ID:", this.jogadorData.id);
+
+                  if (this.jogadorData.id > 0) {
+                    this.equipaService.addJogadorEquipa(this.jogadorData, idEquipaCorrigido).subscribe({
+                      next: (addResult) => {
+                        console.log("NovoJogadorComponent | Jogador adicionado à equipa com sucesso");
+                        // Navegar para gestão-equipa com a equipa selecionada
+                        this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
+                      },
+                      error: (error) => {
+                        console.error("NovoJogadorComponent | Erro ao adicionar jogador à equipa:", error);
+                        // Mesmo com erro, navegar para gestão-equipa
+                        this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
+                      }
+                    });
+                  } else {
+                    console.error("NovoJogadorComponent | ID do jogador não foi definido após criação");
+                    // Mesmo assim, navegar para gestão-equipa
+                    this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
+                  }
+                } else {
+                  // Navegação padrão para outras origens
+                  this.router.navigate(['/' + this.origem + '/' + this.idEquipa + '/' + this.jogadorData.nome]);
+                }
               }else{
                 console.warn("FichaJogadorComponent | gravarFichaJogador | resultado <> true");
               }
@@ -179,7 +211,14 @@ export class NovoJogadorComponent implements OnInit {
   }
 
   cancelar() {
-    console.log("NovoStaffComponent | Cancelar");
-    this.router.navigate(['/' + this.origem + '/' + this.idEquipa]);
+    console.log("NovoJogadorComponent | Cancelar");
+    // Se veio da gestão de equipa, voltar para a gestão-equipa da equipa correta
+    if (this.origem === 'jogadorSeleccao') {
+      const idEquipaCorrigido = Math.abs(this.idEquipa);
+      this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
+    } else {
+      // Navegação padrão para outras origens
+      this.router.navigate(['/' + this.origem + '/' + this.idEquipa]);
+    }
   }
 }

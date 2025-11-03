@@ -4,7 +4,6 @@ import { EquipaComponent } from '../../pages/equipa/equipa.component';
 import { Marcar_presencaComponent } from '../../pages/marcar_presenca/marcar_presenca.component';
 import { PresencasComponent } from '../../pages/presencas/presencas.component';
 import { PresencaComponent } from '../../pages/presenca/presenca.component';
-import { JogadorSeleccaoComponent } from '../../pages/jogador-seleccao/jogador-seleccao.component';
 import { FichaStaffComponent } from '../../pages/ficha-staff/ficha-staff.component';
 import { HistoricoLoginsComponent } from '../../pages/historico-logins/historico-logins.component';
 import { ListaJogosComponent } from '../../pages/lista-jogos/lista-jogos.component';
@@ -29,8 +28,6 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'mpresenca/:id', component: Marcar_presencaComponent, canActivate: [AuthGuard] },
   { path: 'presencas', component: PresencasComponent, canActivate: [AuthGuard] },
   { path: 'presenca/:id', component: PresencaComponent, canActivate: [AuthGuard] },
-  { path: 'jogadorSeleccao/:id/:idjogo', component: JogadorSeleccaoComponent, canActivate: [AuthGuard] },
-  { path: 'jogadorSeleccao/:id', component: JogadorSeleccaoComponent, canActivate: [AuthGuard] },
   { path: 'staffSeleccao/:id', component: StaffSeleccaoComponent, canActivate: [AuthGuard] },
   { path: 'historicologins', component: HistoricoLoginsComponent, canActivate: [AuthGuard] },
   { path: 'listajogos', component: ListaJogosComponent, canActivate: [AuthGuard] },
@@ -40,7 +37,6 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'novo-staff/:origem/:idEquipa', component: NovoStaffComponent, canActivate: [AuthGuard] },
   { path: 'novo-jogador/:origem/:idEquipa', component: NovoJogadorComponent, canActivate: [AuthGuard] },
   { path: 'staffSeleccao/:id/:nomeStaff', component: StaffSeleccaoComponent, canActivate: [AuthGuard] },
-  { path: 'jogadorSeleccao/:id/:nomeJogador', component: JogadorSeleccaoComponent, canActivate: [AuthGuard] },
   { path: 'administracao', component: AdministracaoComponent, canActivate: [AuthGuard] }, // Nova rota para administração
   { path: 'gestao-utilizador/:idUtilizador', component: GestaoutilizadorComponent, canActivate: [AuthGuard] },
   { path: 'gestao-clubes', component: GestaoClubesComponent, canActivate: [AuthGuard] },
