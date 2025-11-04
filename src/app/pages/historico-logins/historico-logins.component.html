@@ -1,41 +1,149 @@
-<div>
-  <div>
+<!-- Mobile-First Modern Design for Login History -->
+<div class="modern-login-history">
 
-    <div class="d-flex justify-content-center" style="vertical-align:middle;">
-      <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
-        <span class="sr-only"></span>
+  <!-- Floating Action Button for Filters (Mobile) -->
+  <button class="fab-filter" (click)="toggleFilters()" [class.active]="showFilters">
+    <i class="fas fa-filter"></i>
+  </button>
+
+  <!-- Compact Header -->
+  <div class="header-section">
+    <div class="header-content">
+      <div class="header-title">
+        <i class="fas fa-history header-icon"></i>
+        <div>
+          <h1>Histórico de Logins</h1>
+          <p>{{ filteredHistorico.length }} acessos registados</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="view-toggle" (click)="toggleViewMode()">
+          <i class="fas" [class]="viewMode === 'list' ? 'fa-th' : 'fa-list'"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Collapsible Filters Panel -->
+  <div class="filters-panel" [class.expanded]="showFilters">
+    <div class="filters-content">
+      <div class="filter-group">
+        <label class="filter-label">
+          <i class="fas fa-user"></i>
+          Utilizador
+        </label>
+        <select class="filter-select" [(ngModel)]="selectedUser" (change)="onFilterChange()">
+          <option value="">Todos os utilizadores</option>
+          <option *ngFor="let user of uniqueUsers" [value]="user">{{ user }}</option>
+        </select>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-group half">
+          <label class="filter-label">
+            <i class="fas fa-calendar"></i>
+            Data Inicial
+          </label>
+          <input type="date" class="filter-input" [(ngModel)]="dataInicial" (change)="onFilterChange()">
+        </div>
+        <div class="filter-group half">
+          <label class="filter-label">
+            <i class="fas fa-calendar-check"></i>
+            Data Final
+          </label>
+          <input type="date" class="filter-input" [(ngModel)]="dataFinal" (change)="onFilterChange()">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mini Statistics Bar -->
+  <div class="stats-bar">
+    <div class="stat-item" *ngFor="let stat of statsData">
+      <div class="stat-icon" [style.background]="stat.color">
+        <i class="fas" [class]="stat.icon"></i>
+      </div>
+      <div class="stat-content">
+        <div class="stat-value">{{ stat.value }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="spinner">
+    <div class="loading-spinner">
+      <div class="spinner-ring"></div>
+      <p>Carregando dados...</p>
+    </div>
+  </div>
+
+  <!-- Timeline/List View -->
+  <div class="timeline-container" *ngIf="!spinner">
+
+    <!-- List View -->
+    <div class="timeline-list" *ngIf="viewMode === 'list'">
+      <div class="timeline-item ultra-compact"
+           *ngFor="let linhaHistorico of filteredHistorico | slice:(currentPage * pageSize):(currentPage * pageSize + pageSize); let i = index">
+
+        <div class="single-line-record ultra-compact">
+          <div class="record-avatar">
+            <div class="user-avatar tiny" [style.background]="getUserColor(linhaHistorico.nome)">
+              {{ linhaHistorico.nome.charAt(0).toUpperCase() }}
+            </div>
+          </div>
+          <div class="record-info">
+            <span class="user-name">{{ linhaHistorico.nome }}</span>
+          </div>
+          <div class="record-meta">
+            <span class="record-datetime">{{ linhaHistorico.dataHistorico | date:'dd/MM HH:mm' }}</span>
+          </div>
+          <div class="record-status">
+            <span class="status-dot"></span>
+          </div>
+        </div>
       </div>
     </div>
 
+    <!-- Card Grid View -->
+    <div class="timeline-list" *ngIf="viewMode === 'cards'">
+      <div class="timeline-item ultra-compact"
+           *ngFor="let linhaHistorico of filteredHistorico | slice:(currentPage * pageSize):(currentPage * pageSize + pageSize)">
 
-    <div class="table-responsive col-lg-8">
-      <table class="table project-list-table table-nowrap align-middle">
-        <thead>
-          <tr>
-            <th>Filtro</th>
-            <th width="100%">
-              <div class="form-group">
-                <input type="text" class="form-control" name="nome_completo" [(ngModel)]="filtro_nome">
-              </div>
-            </th>
-          </tr>
-          <tr>
-            <th scope="col">Últimos 500 acessos</th>
-          </tr>
-          <tr>
-            <th scope="col">Nome</th>
-            <th scope="col" class="td-total">data</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let linhaHistorico of historico | HistoricoLoginPipe:filtro_nome; index as posicao;">
-            <td class="td-total" style="font-size: smaller;">{{linhaHistorico.nome}}</td>
-            <td class="td-total" style="font-size: smaller;">{{linhaHistorico.dataHistorico}}</td>
-          </tr>
-        </tbody>
-      </table>
+        <div class="single-line-record ultra-compact">
+          <div class="record-avatar">
+            <div class="user-avatar tiny" [style.background]="getUserColor(linhaHistorico.nome)">
+              {{ linhaHistorico.nome.charAt(0).toUpperCase() }}
+            </div>
+          </div>
+          <div class="record-info">
+            <span class="user-name">{{ linhaHistorico.nome }}</span>
+          </div>
+          <div class="record-meta">
+            <span class="record-datetime">{{ linhaHistorico.dataHistorico | date:'dd/MM HH:mm' }}</span>
+          </div>
+          <div class="record-status">
+            <span class="status-dot"></span>
+          </div>
+        </div>
+      </div>
     </div>
 
+    <!-- Load More Button -->
+    <div class="load-more-container" *ngIf="filteredHistorico.length > (currentPage + 1) * pageSize">
+      <button class="load-more-btn" (click)="loadMore()">
+        <i class="fas fa-plus"></i>
+        Carregar mais registos
+      </button>
+    </div>
 
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredHistorico.length === 0">
+      <div class="empty-icon">
+        <i class="fas fa-search"></i>
+      </div>
+      <h3>Nenhum registo encontrado</h3>
+      <p>Ajuste os filtros para ver mais resultados</p>
+    </div>
   </div>
 </div>
