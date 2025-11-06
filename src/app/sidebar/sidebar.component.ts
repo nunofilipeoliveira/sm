@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginServiceService } from '../services/login-service.service';
+import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 
 export interface RouteInfo {
@@ -47,7 +48,7 @@ export class SidebarComponent implements OnInit {
 
 
 
-  constructor(private loginws: LoginServiceService) { }
+  constructor(private loginws: LoginServiceService, private router: Router) { }
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.tmpUser = this.loginws.getLoginData().user;
@@ -122,6 +123,11 @@ export class SidebarComponent implements OnInit {
 
 
     console.log('SideBar | Menu Items atuais:', this.menuItems);
+  }
+
+  logout() {
+    console.log('SidebarComponent | logout | clearing all session data');
+    this.loginws.clear();
   }
 
 

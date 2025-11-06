@@ -6,6 +6,7 @@ import { Subject, Observable } from 'rxjs';
 import { of } from 'rxjs'
 import { map, catchError } from 'rxjs/operators';
 import { EquipaService } from './equipa.service';
+import { PresencaService } from './presenca.service';
 import { UtilizadorData } from '../pages/gestaoutilizador/UtilizadorData';
 import { UtilizadorParaAtivarData } from '../pages/gestaoutilizador/UtilizadorParaAtivarData';
 import e from 'express';
@@ -24,7 +25,7 @@ export class LoginServiceService {
   loginData!: loginData; // Pode ser inicializado como null ou com valores padrão
   private AUTH_TOKEN_KEY = 'AuthToken'; // Chave para armazenar o token no localStorage
 
-  constructor(private http: HttpClient, private router: Router, private equipaService: EquipaService) {
+  constructor(private http: HttpClient, private router: Router, private equipaService: EquipaService, private presencaService: PresencaService) {
     this.isAuthenticated().subscribe((isAuth: boolean) => {
       this.userLoggedIn.next(isAuth);
     }); // Inicializa com o estado de autenticação atual
@@ -174,8 +175,11 @@ export class LoginServiceService {
     localStorage.removeItem("idequipa_escalao");
     localStorage.removeItem("descritivo_escalao");
     localStorage.removeItem('token'); // Limpa o token do localStorage
+    localStorage.removeItem("jogadores_selecionados");
+    localStorage.removeItem("convocatoria_jogo");
     this.loginData = {} as loginData; // Limpa os dados em memória
     this.equipaService.clear(); // Limpa os dados da equipa
+    this.presencaService.clear(); // Limpa os dados de presença
     this.userLoggedIn.next(false); // Notifica que o utilizador fez logout
     this.router.navigate(['/']); // Redireciona para a página de login
 
@@ -187,6 +191,7 @@ export class LoginServiceService {
     localStorage.removeItem("idequipa_escalao");
     localStorage.removeItem("descritivo_escalao");
     this.equipaService.clear(); // Limpa os dados da equipa
+    this.presencaService.clear(); // Limpa os dados de presença
 
   }
 
