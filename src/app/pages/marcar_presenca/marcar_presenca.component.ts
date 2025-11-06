@@ -422,7 +422,10 @@ export class Marcar_presencaComponent implements OnInit {
         }
       },
       (reason: any) => {
-        // dismissed
+        // dismissed - reset state to unfilled
+        this.presencaJogadores[posicao]["estado"] = "";
+        this.presencaJogadores[posicao]["estilo_estado"] = "";
+        this.presencaJogadores[posicao]["motivo"] = "";
       }
     );
   }
@@ -446,7 +449,10 @@ export class Marcar_presencaComponent implements OnInit {
         }
       },
       (reason: any) => {
-        // dismissed
+        // dismissed - reset state to unfilled
+        this.presencaStaff[posicao]["estado"] = "";
+        this.presencaStaff[posicao]["estilo_estado"] = "";
+        this.presencaStaff[posicao]["motivo"] = "";
       }
     );
   }

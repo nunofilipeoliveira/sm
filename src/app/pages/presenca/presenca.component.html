@@ -109,7 +109,7 @@
 
                   <!-- Staff Section -->
                   <tr class="table-secondary">
-                    <td colspan="3" class="border-0 fw-bold text-primary">
+                    <td colspan="4" class="border-0 fw-bold text-primary">
                       <i class="fas fa-user-tie me-2"></i>Staff
                     </td>
                   </tr>
@@ -157,9 +157,14 @@
                 <h5 class="mb-0">
                   <i class="fas fa-users me-2"></i>Jogadores e Staff
                 </h5>
-                <button type="button" class="btn btn-success btn-sm" (click)="allPresente()">
-                  <i class="fas fa-check-circle me-1"></i>Marcar Todos Presentes
-                </button>
+                <div>
+                  <button type="button" class="btn btn-primary btn-sm me-2" (click)="seleccionarJogador()">
+                    <i class="fas fa-plus me-1"></i>Adicionar Jogadores
+                  </button>
+                  <button type="button" class="btn btn-success btn-sm" (click)="allPresente()">
+                    <i class="fas fa-check-circle me-1"></i>Marcar Todos Presentes
+                  </button>
+                </div>
               </div>
             </div>
             <div class="card-body p-0">
@@ -167,14 +172,17 @@
                 <table class="table table-hover mb-0 presenca-table">
                   <thead class="table-light">
                     <tr>
-                      <th class="border-0 fw-bold text-muted" style="width: 60%; min-width: 200px;">
+                      <th class="border-0 fw-bold text-muted" style="width: 50%; min-width: 200px;">
                         <i class="fas fa-user me-1"></i>Nome
                       </th>
-                      <th class="border-0 fw-bold text-muted text-center" style="width: 30%; min-width: 120px;">
+                      <th class="border-0 fw-bold text-muted text-center" style="width: 25%; min-width: 120px;">
                         <i class="fas fa-clipboard-check me-1"></i>Estado
                       </th>
-                      <th class="border-0 fw-bold text-muted text-center" style="width: 20%; min-width: 120px;">
+                      <th class="border-0 fw-bold text-muted text-center" style="width: 15%; min-width: 120px;">
                         <i class="fas fa-comment me-1"></i>Motivo
+                      </th>
+                      <th class="border-0 fw-bold text-muted text-center" style="width: 10%; min-width: 80px;">
+                        <i class="fas fa-cogs me-1"></i>Ações
                       </th>
                     </tr>
                   </thead>
@@ -228,6 +236,11 @@
                           <span class="text-muted">-</span>
                         </ng-template>
                       </td>
+                      <td class="border-0 text-center">
+                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="retirarJogador(posicao)">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </td>
                     </tr>
 
                     <!-- Staff Section -->
@@ -238,45 +251,50 @@
                     </tr>
                     <tr *ngFor="let staff of presencaData?.staffPresenca; index as posicao"
                       [style]="getRowStyle(staff.estado)">
-                      <td class="border-0">
-                        <div class="d-flex align-items-center">
-                          <img src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg"
-                            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
-                            alt="Avatar Staff" class="avatar-sm rounded-circle me-2" />
-                          <span class="fw-medium">{{staff.nome_staff}}</span>
-                        </div>
-                      </td>
-                      <td class="border-0 text-center">
-                        <div ngbDropdown class="d-inline-block">
-                          <button type="button" class="btn status-dropdown-btn"
-                            [ngClass]="getStatusBtnClass(staff.estado)" ngbDropdownToggle>
-                            {{staff.estado}}
-                          </button>
-                          <div ngbDropdownMenu>
-                            <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Presente')">
-                              <i class="fas fa-check-circle text-success me-2"></i>Presente
-                            </button>
-                            <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Não convocado')">
-                              <i class="fas fa-ban text-secondary me-2"></i>Não convocado
-                            </button>
-                            <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Avisou)')">
-                              <i class="fas fa-exclamation-triangle text-warning me-2"></i>Ausente (Avisou)
-                            </button>
-                            <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Não Avisou)')">
-                              <i class="fas fa-times-circle text-danger me-2"></i>Ausente (Não Avisou)
-                            </button>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="border-0 text-center">
-                        <span class="text-muted small" *ngIf="staff.motivo; else noMotivoStaff">
-                          {{staff.motivo}}
-                        </span>
-                        <ng-template #noMotivoStaff>
-                          <span class="text-muted">-</span>
-                        </ng-template>
-                      </td>
-                    </tr>
+                     <td class="border-0">
+                       <div class="d-flex align-items-center">
+                         <img src="assets/img/jogadores/{{staff.id_staff}}_avatar_staff.jpg"
+                           onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                           alt="Avatar Staff" class="avatar-sm rounded-circle me-2" />
+                         <span class="fw-medium">{{staff.nome_staff}}</span>
+                       </div>
+                     </td>
+                     <td class="border-0 text-center">
+                       <div ngbDropdown class="d-inline-block">
+                         <button type="button" class="btn status-dropdown-btn"
+                           [ngClass]="getStatusBtnClass(staff.estado)" ngbDropdownToggle>
+                           {{staff.estado}}
+                         </button>
+                         <div ngbDropdownMenu>
+                           <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Presente')">
+                             <i class="fas fa-check-circle text-success me-2"></i>Presente
+                           </button>
+                           <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Não convocado')">
+                             <i class="fas fa-ban text-secondary me-2"></i>Não convocado
+                           </button>
+                           <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Avisou)')">
+                             <i class="fas fa-exclamation-triangle text-warning me-2"></i>Ausente (Avisou)
+                           </button>
+                           <button ngbDropdownItem (click)="ngDropDwonClick_staff(posicao, 'Ausente (Não Avisou)')">
+                             <i class="fas fa-times-circle text-danger me-2"></i>Ausente (Não Avisou)
+                           </button>
+                         </div>
+                       </div>
+                     </td>
+                     <td class="border-0 text-center">
+                       <span class="text-muted small" *ngIf="staff.motivo; else noMotivoStaff">
+                         {{staff.motivo}}
+                       </span>
+                       <ng-template #noMotivoStaff>
+                         <span class="text-muted">-</span>
+                       </ng-template>
+                     </td>
+                     <td class="border-0 text-center">
+                       <button type="button" class="btn btn-outline-danger btn-sm" (click)="retirarStaff(posicao)">
+                         <i class="fas fa-trash-alt"></i>
+                       </button>
+                     </td>
+                   </tr>
                   </tbody>
                 </table>
               </div>

@@ -7,11 +7,14 @@ import { DataPipe } from '../fichaJogador/DataPipe';
 import { Marcar_presencaComponent } from '../marcar_presenca/marcar_presenca.component';
 import { NgbDropdownModule, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { PoppupMotivoComponent } from '../poppup-motivo/poppup-motivo.component';
+import { JogadorSeleccaoComponent } from '../jogador-seleccao/jogador-seleccao.component';
+import { EquipaService } from '../../services/equipa.service';
+import { LoginServiceService } from '../../services/login-service.service';
 
 @Component({
   selector: 'presenca',
   standalone: true,
-  imports: [CommonModule, DataPipe, NgbDropdownModule],
+  imports: [CommonModule, DataPipe, NgbDropdownModule, JogadorSeleccaoComponent],
   templateUrl: './presenca.component.html',
   styleUrl: './presenca.component.css'
 })
@@ -21,6 +24,8 @@ export class PresencaComponent implements OnInit {
   public spinner: boolean = false;
   public historico: string[] = [];
   public editMode: boolean = false;
+  public dataTreino: any;
+  public time: any;
 
   getRowStyle(estado: string): string {
     switch (estado) {
@@ -56,7 +61,7 @@ export class PresencaComponent implements OnInit {
     }
   }
 
-  constructor(private route: ActivatedRoute, private presencaService: PresencaService, private router: Router, private modalService: NgbModal) {
+  constructor(private route: ActivatedRoute, private presencaService: PresencaService, private router: Router, private modalService: NgbModal, private equipaService: EquipaService, private loginws: LoginServiceService) {
 
     this.presencaData = {
       id: 0,
@@ -78,14 +83,36 @@ export class PresencaComponent implements OnInit {
     const idFichaPresenca = Number(routeParams.get('id'));
     console.log('PresencaComponent | idFichaPresenca:', idFichaPresenca);
 
+    // Ensure equipa is loaded
+    this.equipaService.ensureEquipaLoaded().subscribe({
+      next: (equipaData) => {
+        if (equipaData) {
+          console.log("PresencaComponent | equipa loaded", equipaData);
+        } else {
+          console.error("PresencaComponent | No equipa data available");
+        }
+      },
+      error: (error) => {
+        console.error("PresencaComponent | Error loading equipa", error);
+      }
+    });
 
     this.spinner = true;
     this.presencaService.getPresencasByid(idFichaPresenca).subscribe(
       {
         next: data => {
-          this.presencaData = data;
-          console.log("PresencaComponent | carregou Presenca", this.presencaData);
-          console.log("PresencaComponent | spinner", this.spinner);
+           this.presencaData = data;
+           console.log("PresencaComponent | carregou Presenca", this.presencaData);
+           console.log("PresencaComponent | spinner", this.spinner);
+
+           // Set dataTreino and time from presencaData
+           let tmphora = this.presencaData.hora.split(':');
+           this.time = { hour: Number(tmphora[0]), minute: Number(tmphora[1]) };
+           this.dataTreino = {
+             "year": Number(this.presencaData.data / 10000 | 0),
+             "month": Number((((this.presencaData.data) - ((this.presencaData.data / 10000 | 0) * 10000)) / 100 | 0)),
+             "day": Number(this.presencaData.data - ((this.presencaData.data / 10000 | 0) * 10000 + ((((this.presencaData.data) - ((this.presencaData.data / 10000 | 0) * 10000)) / 100 | 0)) * 100))
+           };
 
           this.presencaService.getHistoricoByid(idFichaPresenca).subscribe(
             {
@@ -157,7 +184,7 @@ export class PresencaComponent implements OnInit {
 
   saveEdit() {
     // Save the edited attendance data
-    this.presencaService.updatePresenca(this.presencaData, this.presencaData.id_utilizador_criacao).subscribe({
+    this.presencaService.updatePresenca(this.presencaData, this.loginws.getLoginData().id).subscribe({
       next: (result) => {
         if (result) {
           this.editMode = false;
@@ -172,6 +199,16 @@ export class PresencaComponent implements OnInit {
         console.error('Error updating attendance:', error);
       }
     });
+  }
+
+  retirarJogador(posicao: number) {
+    console.log("Retirar Jogador", posicao);
+    this.presencaData.jogadoresPresenca.splice(posicao, 1);
+  }
+
+  retirarStaff(posicao: number) {
+    console.log("Retirar Staff", posicao);
+    this.presencaData.staffPresenca.splice(posicao, 1);
   }
 
   // Methods for handling dropdown changes in edit mode
@@ -199,9 +236,14 @@ export class PresencaComponent implements OnInit {
       (result) => {
         console.log(result);
         this.presencaData.jogadoresPresenca[posicao].motivo = result;
+        if (result == '') {
+          this.presencaData.jogadoresPresenca[posicao].estado = "";
+        }
       },
       (reason) => {
-        // dismissed
+        // dismissed - reset state to unfilled
+        this.presencaData.jogadoresPresenca[posicao].estado = "";
+        this.presencaData.jogadoresPresenca[posicao].motivo = "";
       }
     );
   }
@@ -212,12 +254,45 @@ export class PresencaComponent implements OnInit {
       (result) => {
         console.log(result);
         this.presencaData.staffPresenca[posicao].motivo = result;
+        if (result == '') {
+          this.presencaData.staffPresenca[posicao].estado = "";
+        }
       },
       (reason) => {
-        // dismissed
+        // dismissed - reset state to unfilled
+        this.presencaData.staffPresenca[posicao].estado = "";
+        this.presencaData.staffPresenca[posicao].motivo = "";
       }
     );
   }
+
+    seleccionarJogador() {
+      console.log("SelecionarJogador", this.presencaData);
+      this.presencaService.setPresenca(this.presencaData.jogadoresPresenca);
+      this.presencaService.setData_Presenca(this.dataTreino.year, this.dataTreino.month, this.dataTreino.day);
+      this.presencaService.setHora(this.time.hour, this.time.minute);
+      this.presencaService.setStaffPresenca(this.presencaData.staffPresenca);
+      this.presencaService.setPresencaTmp(this.presencaData);
+      const modalRef = this.modalService.open(JogadorSeleccaoComponent, { size: 'lg' });
+      modalRef.componentInstance.idEscalao = this.presencaData.id_escalao;
+      modalRef.componentInstance.origem_gestao_equipa = false;
+      modalRef.result.then(
+        (result) => {
+          console.log('Modal closed with result:', result);
+          if (result.action === 'presenca_multiple' && result.data) {
+            for (const jogador of result.data) {
+              const jaExiste = this.presencaData.jogadoresPresenca.some((j: any) => j.id_jogador === jogador.id_jogador);
+              if (!jaExiste) {
+                this.presencaData.jogadoresPresenca.push(jogador);
+              }
+            }
+          }
+        },
+        (reason) => {
+          console.log('Modal dismissed with reason:', reason);
+        }
+      );
+    }
 
   getStatusBtnClass(estado: string): string {
     switch (estado) {
