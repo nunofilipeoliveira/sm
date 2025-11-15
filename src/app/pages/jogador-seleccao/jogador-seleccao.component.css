@@ -272,31 +272,3 @@
   }
 }
 
-/* Dark mode support (if needed) */
-@media (prefers-color-scheme: dark) {
-  .card {
-    background-color: #2d3748;
-    color: #e2e8f0;
-  }
-
-  .form-control {
-    background-color: #4a5568;
-    border-color: #718096;
-    color: #e2e8f0;
-  }
-
-  .input-group-text {
-    background-color: #4a5568;
-    border-color: #718096;
-    color: #e2e8f0;
-  }
-
-  .player-card {
-    background-color: #2d3748;
-    border-color: #4a5568;
-  }
-
-  .player-card.selected {
-    background: linear-gradient(135deg, #2c5282, #3182ce);
-  }
-}
