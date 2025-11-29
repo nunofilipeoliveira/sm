@@ -27,8 +27,8 @@ interface JogoDataWithExpandablePlayers extends JogoData {
 })
 
 export class JogoComponent implements OnInit {
-  
-  
+
+
   loading: boolean = false;
   idJogo: number=0;
   // Use a nova interface para o objeto jogo
@@ -77,7 +77,7 @@ export class JogoComponent implements OnInit {
   atletasIndisponiveis: JogadorConvocado[] = [];
 
   constructor(private route: ActivatedRoute, private jogoService: JogoService, private clubeService: ClubeService, private router: Router,) { }
-  
+
   ngOnInit() {
     this.loading = true;
     const routeParams = this.route.snapshot.paramMap;
@@ -99,7 +99,14 @@ export class JogoComponent implements OnInit {
         }));
 
         //retirar os jogadores indisponíveis da lista de jogadores do jogo
-        this.jogo.jogadores = this.jogo.jogadores.filter(j => j.estado === 'CONVOCADO');  
+        this.jogo.jogadores = this.jogo.jogadores.filter(j => j.estado === 'CONVOCADO');
+
+        //marcar o GR
+        this.jogo.jogadores.forEach(j => {
+          if(j.golos_s_normal>0 || j.golos_s_p>0 || j.golos_s_ld>0 || j.golos_s_up>0 || j.golos_s_pp>0){
+            j.isGR = true;
+          }
+        })
 
         this.loading = false;
         console.log('Jogo Componente | Dados do jogo:', this.jogo);
@@ -239,7 +246,7 @@ export class JogoComponent implements OnInit {
         expanded: false
       }))
     );
-    
+
     this.jogoService.atualizarJogo(this.jogo).subscribe({
       next: (data) => {
         console.log('Jogo atualizado com sucesso:', data);
@@ -249,6 +256,13 @@ export class JogoComponent implements OnInit {
         }; // Atualiza o jogo com a resposta do backend
         //volta a retirar os jogadores indisponíveis da lista de jogadores do jogo
         this.jogo.jogadores = this.jogo.jogadores.filter(j => j.estado === 'CONVOCADO');
+
+        //marcar o GR
+        this.jogo.jogadores.forEach(j => {
+          if (j.golos_s_ld>0 || j.golos_s_p>0 || j.golos_s_up>0 || j.golos_s_pp>0 || j.golos_s_normal>0){
+            j.isGR = true;
+          }
+        });
       },
       error: (error) => {
         console.error('Erro ao atualizar o jogo:', error);

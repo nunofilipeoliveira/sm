@@ -86,7 +86,7 @@
           <div class="linha-info">
             <label for="capitao-{{jogador.id_jogador}}">Capitão</label>
             <input type="checkbox" [(ngModel)]="jogador.capitao" name="capitao-{{jogador.id_jogador}}"
-              id="capitao-{{jogador.id_jogador}}" (change)="definirCapitao(jogador)" />
+              id="capitao-{{jogador.id_jogador}}" />
           </div>
 
           <div class="linha-info">
@@ -176,7 +176,7 @@
               <div class="numero-badge" *ngIf="jogador.numero">{{jogador.numero}}</div>
             </div>
             <div class="jogador-info">
-              <h6 class="jogador-nome">{{jogador.nome}}</h6>
+              <h6 class="jogador-nome">{{jogador.nome}}<span *ngIf="jogador.capitao"> (C)</span></h6>
             </div>
             <div class="staff-cards" *ngIf="hasStats(jogador)">
               <!-- Golos Marcados -->
@@ -231,7 +231,7 @@
           <span><img src="assets/img/jogo/LD.png" class="item-goal"> Livre Direto</span>
           <span><img src="assets/img/jogo/PP.png" class="item-goal"> Golo em PowerPlay</span>
           <span><img src="assets/img/jogo/UP.png" class="item-goal"> Golo em UnderPlay</span>
-          
+
         </div>
 
 
