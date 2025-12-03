@@ -1,15 +1,10 @@
-
-
-
-
-
 <div class="container mt-4">
 
   <div class="d-flex justify-content-center" style="vertical-align:middle;">
     <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
       <span class="sr-only"></span>
     </div>
-    <ngb-alert type="danger" *ngIf="sbmError"  >{{mensagemErro}}</ngb-alert>
+    <ngb-alert type="danger" *ngIf="sbmError">{{mensagemErro}}</ngb-alert>
   </div>
 
 
@@ -22,7 +17,7 @@
     <div class="col-md-8">
       <div class="info-card shadow">
         <h5 class="info-title">Ficha Atleta</h5>
- 
+
         <form>
           <div class="form-row">
             <div class="col-md-7">
@@ -40,8 +35,8 @@
             <div class="col-md-5">
               <div class="form-group">
                 <label>Data Nascimento</label>
-                <input type="text" class="form-control" name="data_nascimento"
-      [(ngModel)]="dataNascimentoDisplay" (input)="handleInput($event)">
+                <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="dataNascimentoDisplay"
+                  (input)="handleInput($event)" required>
               </div>
             </div>
           </div>

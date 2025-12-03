@@ -8,6 +8,7 @@ import { LoginServiceService } from '../../services/login-service.service';
 import { FormsModule } from '@angular/forms';
 
 
+
 @Component({
   selector: 'user-cmp',
   templateUrl: 'novo-Jogador.component.html',
@@ -90,7 +91,7 @@ export class NovoJogadorComponent implements OnInit {
 
     // CONVERSÃO DA STRING AAAA-MM-DD DE VOLTA PARA NÚMERO AAAAMMDD ANTES DE SALVAR
     console.log("Antes de dataNascimentoDisplay");
-    if (this.dataNascimentoDisplay) {
+    if (this.dataNascimentoDisplay!='' && this.dataNascimentoDisplay.trim() !== 'AAAA-MM-DD') {
       console.log("dataNascimentoDisplay:", this.dataNascimentoDisplay);
       // Remove os hífens para obter AAAAMMDD
       const dataNumericaStr = this.dataNascimentoDisplay.replace(/-/g, '');
@@ -117,15 +118,15 @@ export class NovoJogadorComponent implements OnInit {
           next: data => {
             console.log("FichaJogadorComponent | gravarFichaJogador", data);
             if (data != null) {
-              let resultado: boolean = data;
+              let resultado: number = data;
               this.spinner = false;
-              if (resultado == false) {
+              if (resultado == 0) {
                 this.sbmError = true;
                 this.mensagemErro = 'Erro ao gravar a ficha do jogador. Por favor, tente novamente.';
                 console.warn("FichaJogadorComponent | gravarFichaJogador | resultado == false");
 
               }
-              if (resultado == true) {
+              if (resultado >0) {
                 this.sbmSuccess = true;
                 console.log("FichaJogadorComponent | gravarFichaJogador | resultado == true");
 
@@ -137,6 +138,7 @@ export class NovoJogadorComponent implements OnInit {
 
                   // Primeiro, precisamos obter o ID do jogador recém-criado
                   // O jogadorData.id deve ter sido definido após a criação
+                  this.jogadorData.id = resultado;
                   console.log("NovoJogadorComponent | Jogador criado com ID:", this.jogadorData.id);
 
                   if (this.jogadorData.id > 0) {
