@@ -37,6 +37,7 @@ export class ConvocatoriaComponent implements OnInit {
     tipo_local: '',
     competicao_id: 0,
     competicao_nome: '',
+    competicao_outro_descritivo: '',
     arbitro_1: 0,
     arbitro_2: 0,
     estado: '',

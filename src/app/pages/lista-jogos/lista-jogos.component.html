@@ -191,6 +191,17 @@
               </select>
             </div>
           </div>
+
+          <!-- Campo adicional para competição outro -->
+          <div class="row" *ngIf="novoJogo.competicao_id === 4">
+            <div class="col-md-12 mb-3">
+              <label for="competicaoOutro" class="form-label fw-bold">
+                <i class="nc-icon nc-pencil me-1 text-success"></i>Descrição da Competição Outro <span class="text-danger">*</span>
+              </label>
+              <input type="text" class="form-control form-control" id="competicaoOutro" [(ngModel)]="novoJogo.competicao_outro_descritivo"
+                name="competicaoOutro" placeholder="Descreva a competição" required>
+            </div>
+          </div>
         </form>
       </div>
     </div>

@@ -14,6 +14,7 @@ interface JogoData {
     tipo_local: string;
     competicao_id: number;
     competicao_nome: string;
+    competicao_outro_descritivo: string;
     arbitro_1: number;
     arbitro_2: number;
     estado: string;
