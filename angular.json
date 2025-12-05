@@ -78,6 +78,21 @@
                 }
               ]
             },
+            "cis": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.cis.ts"
+                }
+              ]
+            },
             "development": {
               "vendorChunk": true,
               "extractLicenses": false,
@@ -114,6 +129,9 @@
             },
             "advalongo": {
               "buildTarget": "SM:build:advalongo"
+            },
+            "cis": {
+              "buildTarget": "SM:build:cis"
             },
             "development": {
               "buildTarget": "SM:build:development"
