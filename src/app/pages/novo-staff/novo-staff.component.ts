@@ -96,12 +96,12 @@ export class NovoStaffComponent implements OnInit {
             this.spinner = false;
             if (data == false) {
               this.sbmError = true;
-              document.location.href = '#top';
+
             }
             if (data == true) {
               this.sbmSuccess = true;
               this.router.navigate(['/'+this.origem+'/' + this.idEquipa+'/'+this.staff.nome]);
-              document.location.href = '#top';
+
             }
           } else {
           }
