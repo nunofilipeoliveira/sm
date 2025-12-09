@@ -118,7 +118,7 @@ export class LoginServiceService {
     console.log("LoginWS | tmpEscaloes", tmpEscaloes);
     this.parmJson = "{\"nome\":\"" + parmUser.nome + "\",\"user\":\"" + parmUser.user + "\",\"password\":\"" + parmPassWord + "\", \"escalaoEpoca\" :[  ";
 
-    for (let i = 0; i < tmpEscaloes.length - 1; i++) {
+    for (let i = 0; i < tmpEscaloes.length; i++) {
       if (i > 0) {
         this.parmJson = this.parmJson + ","
       }

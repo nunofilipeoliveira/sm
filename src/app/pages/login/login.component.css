@@ -21,6 +21,10 @@
     background-image: linear-gradient(to bottom, #008B6C, #003D2F);;
 	}
 
+	&.color-variation-cis{
+    background-image: linear-gradient(to bottom, #ffffff, #b52732);;
+	}
+
 
 }
 
@@ -49,6 +53,11 @@
   }
   &.image-variation-advalongo::after {
     background-image: url('assets/img/ADValongo_fundo.png');
+	background-size: 250px;
+	top: 40px;
+  }
+    &.image-variation-cis::after {
+    background-image: url('assets/img/cis_fundo.png');
 	background-size: 250px;
 	top: 40px;
   }

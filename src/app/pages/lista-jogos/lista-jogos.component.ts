@@ -48,6 +48,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
   isModoEditar: boolean = false; // Para verificar se está em modo editar
   hasEquipaB:boolean = true;
   filtro: string = 'todos'; // Filtro inicial para todos
+  competicao_outro_descritivo: string = '';
 
   ngOnInit(): void {
     this.loading = true; // Inicia o loading
@@ -96,6 +97,7 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
       tipo_local: 'Casa', // Padrão
       competicao_id: 0, // Será selecionado
       competicao_nome: '', // Será preenchido
+      competicao_outro_descritivo: '', // Campo adicional para competição outro
       arbitro_1: 0,
       arbitro_2: 0,
       hora_concentracao: '',
@@ -190,6 +192,10 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     }
     if (this.isEquipaB_adv) {
       this.novoJogo.tipoEquipa_adv = 'B';
+    }
+
+    if(this.novoJogo.competicao_id===4){
+      this.novoJogo.competicao_nome=this.novoJogo.competicao_outro_descritivo;
     }
 
     this.jogoService.createJogo(this.novoJogo).subscribe({
@@ -316,6 +322,10 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     }
 
     this.novoJogo.tipo_local === 'Casa' ? this.novoJogo.tipo_local = 'C' : this.novoJogo.tipo_local = 'F';
+
+    if(this.novoJogo.competicao_id===4){
+      this.novoJogo.competicao_nome=this.novoJogo.competicao_outro_descritivo;
+    }
 
     this.jogoService.updateJogo(this.novoJogo).subscribe({
       next: (response) => {

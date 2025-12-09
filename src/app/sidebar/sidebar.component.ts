@@ -72,7 +72,11 @@ export class SidebarComponent implements OnInit {
     } else if (environment.tenant_id === 2) {
       this.logoPath = 'assets/img/ADValongo_logo.png'; // Caminho para o logo do AD Valongo
       this.titleText = 'AD Valongo'; // Texto do título para AD Valongo
-    } else {
+    }else if (environment.tenant_id === 3) {
+      this.logoPath = 'assets/img/CIS_logo.png'; // Caminho para o logo do CIS
+      this.titleText = 'CIS'; // Texto do título para CIS
+    }
+    else {
       this.logoPath = 'assets/img/default_logo.png'; // Logo padrão se necessário
     }
 

@@ -48,6 +48,7 @@ export class JogoComponent implements OnInit {
     tipo_local: '',
     competicao_id: 0,
     competicao_nome: '',
+    competicao_outro_descritivo: '',
     arbitro_1: 0,
     arbitro_2: 0,
     estado: '',
@@ -246,6 +247,7 @@ export class JogoComponent implements OnInit {
         expanded: false
       }))
     );
+
 
     this.jogoService.atualizarJogo(this.jogo).subscribe({
       next: (data) => {

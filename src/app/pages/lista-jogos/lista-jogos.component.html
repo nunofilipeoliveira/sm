@@ -83,7 +83,7 @@
                     <i class="nc-icon nc-ruler-pencil me-2"></i>Editar
                   </button>
 
-                  <button *ngIf="isAdmin" ngbDropdownItem (click)="apagarJogo(jogo)">
+                  <button ngbDropdownItem (click)="apagarJogo(jogo)">
                     <i class="nc-icon nc-simple-remove me-2 text-danger"></i>Apagar
                   </button>
                 </div>
@@ -189,6 +189,17 @@
                 <option [ngValue]="0" disabled selected>Selecione uma competição</option>
                 <option *ngFor="let comp of competicoes" [ngValue]="comp.id">{{ comp.nome }}</option>
               </select>
+            </div>
+          </div>
+
+          <!-- Campo adicional para competição outro -->
+          <div class="row" *ngIf="novoJogo.competicao_id === 4">
+            <div class="col-md-12 mb-3">
+              <label for="competicaoOutro" class="form-label fw-bold">
+                <i class="nc-icon nc-pencil me-1 text-success"></i>Descrição da Competição Outro <span class="text-danger">*</span>
+              </label>
+              <input type="text" class="form-control form-control" id="competicaoOutro" [(ngModel)]="novoJogo.competicao_outro_descritivo"
+                name="competicaoOutro" placeholder="Descreva a competição" required>
             </div>
           </div>
         </form>
