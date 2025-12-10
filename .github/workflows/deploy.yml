@@ -1,9 +1,10 @@
 name: Build & Deploy Angular Multi-Client
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   build-and-deploy:
