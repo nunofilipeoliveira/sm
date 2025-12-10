@@ -11,8 +11,8 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'user-cmp',
-  templateUrl: 'novo-Jogador.component.html',
-  styleUrl: './novo-Jogador.component.css',
+  templateUrl: 'novo-jogador.component.html',
+  styleUrl: './novo-jogador.component.css',
   standalone: true,
   imports: [NgbProgressbarModule, CommonModule, FormsModule, CommonModule, NgbAlertModule, NgbCollapseModule]
 })
