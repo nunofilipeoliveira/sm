@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
           local-dir: dist/${{ matrix.client }}/browser
-          server-dir: //httpdocs/teste/${{ matrix.client }}
+          server-dir: //httpdocs/teste/${{ matrix.client }}/
           exclude: |
             **/assets/**
             **/.git*
