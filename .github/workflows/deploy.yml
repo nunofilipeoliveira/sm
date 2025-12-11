@@ -9,6 +9,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: PROD
 
     strategy:
       matrix:
@@ -32,14 +33,23 @@ jobs:
       - name: Remove assets folder before upload
         run: rm -rf dist/${{ matrix.client }}/browser/assets
 
+      - name: Check FTP secrets
+        run: |
+          echo "Checking FTP secrets presence (via environment PROD)..."
+          if [ -z "${{ secrets.FTP_HOST }}" ] || [ -z "${{ secrets.FTP_USER }}" ] || [ -z "${{ secrets.FTP_PASS }}" ]; then
+            echo "ERROR: Required FTP secrets are not set."
+            echo "Please add secrets FTP_HOST, FTP_USER, FTP_PASS to the PROD environment."
+            exit 1
+          fi
+
       - name: Deploy via FTP
         uses: samkirkland/ftp-deploy-action@v4.3.6
         with:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USER }}
           password: ${{ secrets.FTP_PASS }}
-          local-dir: dist/${{ matrix.client }}/browser
-          server-dir: //httpdocs/teste/${{ matrix.client }}
+          local-dir: dist/
+          server-dir: //httpdocs/teste/${{ matrix.client }}/
           exclude: |
             **/assets/**
             **/.git*
