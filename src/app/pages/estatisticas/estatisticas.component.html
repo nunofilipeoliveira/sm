@@ -24,7 +24,7 @@
         <!-- Competition Filters -->
         <div class="filter-section mb-3" *ngIf="competicoes.length > 0">
           <div class="d-flex justify-content-center">
-            <div class="filter-group">
+            <div class="filter-group2">
               <button class="filter-btn" [class.active]="filtroCompeticao === 'todas'" (click)="setFiltro('todas')">Todas</button>
               <button *ngFor="let comp of competicoes" class="filter-btn" [class.active]="filtroCompeticao === comp" (click)="setFiltro(comp)">{{comp}}</button>
             </div>
