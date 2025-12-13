@@ -1,4 +1,4 @@
-interface JogoData {
+export interface JogoData {
     id: number;
     epoca_id: number;
     equipa_id: number;
@@ -24,7 +24,7 @@ interface JogoData {
     jogadores: JogadorJogo[];
 }
 
-interface JogadorJogo {
+export interface JogadorJogo {
     id_jogador: number;
     nome: string;
     capitao: boolean;

@@ -18,6 +18,7 @@ import { GestaoutilizadorComponent } from '../../pages/gestaoutilizador/gestaout
 import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 import { GestaoClubesComponent } from '../../pages/gestao-clubes/gestao-clubes.component';
 import { ConvocatoriaComponent } from '../../pages/convocatoria/convocatoria.component';
+import { EstatisticasComponent } from '../../pages/estatisticas/estatisticas.component';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }, // Nova rota para o dashboard
@@ -41,5 +42,6 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'gestao-utilizador/:idUtilizador', component: GestaoutilizadorComponent, canActivate: [AuthGuard] },
   { path: 'gestao-clubes', component: GestaoClubesComponent, canActivate: [AuthGuard] },
   { path: 'convocatoria/:id', component: ConvocatoriaComponent, canActivate: [AuthGuard] },
+  { path: 'estatisticas', component: EstatisticasComponent, canActivate: [AuthGuard] },
 
 ];

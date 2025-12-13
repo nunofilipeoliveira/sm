@@ -16,6 +16,7 @@ export const ROUTES: RouteInfo[] = [
   { path: '/mpresenca', title: 'Marcar Presença', icon: 'nc-tap-01', class: '' },
   { path: '/presencas', title: 'Presenças', icon: 'nc-paper', class: '' },
   { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' },
+  { path: '/estatisticas', title: 'Estatísticas', icon: 'nc-chart-bar-32', class: '' },
   { path: '/gestao-clubes', title: 'Clubes', icon: 'nc-html5', class: '' },
 
   //{ path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' }, // Nova entrada para administração
@@ -27,6 +28,7 @@ export const ROUTES: RouteInfo[] = [
   //{ path: '/typography',    title: 'Experiência -5-',   icon:'nc-minimal-right', class: '' },
 
 ];
+
 
 
 
@@ -45,6 +47,7 @@ export class SidebarComponent implements OnInit {
   jogosMenu: RouteInfo = { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' };
   adminMenu: RouteInfo = { path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' };
   gestaoClubesMenu: RouteInfo = { path: '/gestao-clubes', title: 'Clubes', icon: 'nc-html5', class: '' };
+
 
 
 

@@ -11,6 +11,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { environment } from '../../../environments/environment';
 import { LoginServiceService } from '../../services/login-service.service';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { CompeticaoData } from '../jogo/competicaoData';
+import { JogoData, JogadorJogo } from './jogoData';
+import { EquipaData } from '../equipa/equipaData';
 
 
 

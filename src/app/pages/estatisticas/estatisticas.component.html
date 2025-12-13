@@ -1,0 +1,108 @@
+<div class="main-content">
+  <div class="d-flex justify-content-center" style="vertical-align:middle;">
+    <div class="spinner-border text-danger" *ngIf="loading" role="status">
+      <span class="sr-only"></span>
+    </div>
+  </div>
+
+  <div class="container-fluid" *ngIf="!loading">
+    <!-- Filtros Section -->
+    <div *ngIf="hasEquipaB" class="modern-card shadow mb-4">
+      <div class="card-body-modern">
+        <div class="d-flex justify-content-center">
+          <mat-button-toggle-group (change)="filtrarEquipas()" [(ngModel)]="filtro" class="filter-group">
+            <mat-button-toggle value="todos" class="filter-btn">Todos</mat-button-toggle>
+            <mat-button-toggle value="equipa_a" class="filter-btn">Equipa A</mat-button-toggle>
+            <mat-button-toggle value="equipa_b" class="filter-btn">Equipa B</mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
+    </div>
+
+    <div class="modern-card shadow mb-4">
+      <div class="card-body-modern">
+        <!-- Competition Filters -->
+        <div class="filter-section mb-3" *ngIf="competicoes.length > 0">
+          <div class="d-flex justify-content-center">
+            <div class="filter-group">
+              <button class="filter-btn" [class.active]="filtroCompeticao === 'todas'" (click)="setFiltro('todas')">Todas</button>
+              <button *ngFor="let comp of competicoes" class="filter-btn" [class.active]="filtroCompeticao === comp" (click)="setFiltro(comp)">{{comp}}</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date Filter Toggle Button -->
+        <div class="filter-section">
+          <div class="d-flex justify-content-center">
+            <button
+              class="filter-btn date-toggle-btn"
+              [class.active]="showDateFilter"
+              (click)="toggleDateFilter()"
+              [attr.aria-expanded]="showDateFilter">
+              <i class="fas fa-calendar-alt me-2"></i>
+              {{ showDateFilter ? 'Ocultar Filtro de Data' : 'Filtrar por Data' }}
+              <i class="fas ms-2" [class.fa-chevron-down]="!showDateFilter" [class.fa-chevron-up]="showDateFilter"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Date Range Filter (Collapsible) -->
+        <div class="date-filter-section mt-3" *ngIf="showDateFilter">
+          <div class="d-flex justify-content-center align-items-center date-filter-container">
+            <label for="startDate" class="date-label">De:</label>
+            <input type="date" id="startDate" [(ngModel)]="startDate" (change)="onDateChange()" class="date-input">
+            <label for="endDate" class="date-label">Até:</label>
+            <input type="date" id="endDate" [(ngModel)]="endDate" (change)="onDateChange()" class="date-input">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estatisticas Section -->
+    <div *ngIf="estatisticas.length > 0" class="modern-card shadow">
+      <div class="card-body-modern">
+        <div class="table-responsive">
+          <table class="table-modern">
+            <thead>
+              <tr>
+                <th class="header-jogador">Jogador</th>
+                <th class="header-jogos sortable" (click)="sortBy('jogos')">Jogos</th>
+                <th class="header-golos sortable" (click)="sortBy('golos')">Golos</th>
+                <th class="header-cartoes">Cartões</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let stat of estatisticas" class="estatistica-row">
+                <td class="jogador-cell">
+                  <div class="jogador-info">
+                    <img src="assets/img/jogadores/{{stat.id_jogador}}_avatar.jpg"
+                     onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                     alt="Avatar" class="jogador-avatar-small" />
+
+                    <span class="jogador-name">{{ stat.nome }}</span>
+                  </div>
+                </td>
+                <td class="stat-cell">{{ stat.jogos }}</td>
+                <td class="stat-cell">{{ stat.golos }}</td>
+                <td class="cartoes-cell">
+                  <span class="cartao amarelo">{{ stat.cartao_amarelo }}</span>
+                  <span class="cartao azul">{{ stat.cartao_azul }}</span>
+                  <span class="cartao vermelho">{{ stat.cartao_vermelho }}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="estatisticas.length === 0" class="empty-state-modern">
+      <div class="empty-icon">
+        <i class="nc-icon nc-chart-bar-32"></i>
+      </div>
+      <h5>Nenhuma estatística encontrada</h5>
+      <p class="text-muted">Não há dados de estatísticas disponíveis.</p>
+    </div>
+  </div>
+</div>

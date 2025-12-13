@@ -1,0 +1,321 @@
+/* Modern Estatisticas Styles */
+body {
+  background-color: #f8f9fa;
+}
+
+/* Filter Section */
+.modern-card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.card-body-modern {
+  background: white;
+  padding: 24px;
+}
+
+.filter-group {
+  display: flex;
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+  gap: 4px;
+}
+
+/* Filter Sections */
+.filter-section {
+  width: 100%;
+}
+
+.date-filter-section {
+  width: 100%;
+  padding-top: 16px;
+  border-top: 1px solid #e9ecef;
+}
+
+.filter-btn {
+  border: none;
+  background: transparent;
+  color: #6c757d;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  background: #e9ecef;
+}
+
+.filter-btn.active {
+  background: #6c757d !important;
+  color: white !important;
+}
+
+/* Date Filter Toggle Button */
+.date-toggle-btn {
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.date-toggle-btn i {
+  transition: transform 0.3s ease;
+}
+
+.date-toggle-btn:hover {
+  background: #e9ecef;
+}
+
+.date-toggle-btn.active {
+  background: #6c757d !important;
+  color: white !important;
+}
+
+.date-toggle-btn.active i {
+  color: white;
+}
+
+.filter-btn.mat-button-toggle-checked {
+  background: #6c757d !important;
+  color: white !important;
+}
+
+/* Date Filter Styles */
+.date-filter-container {
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.date-label {
+  font-weight: 500;
+  color: #495057;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.date-input {
+  padding: 8px 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  font-size: 14px;
+  background: white;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.date-input:focus {
+  outline: 0;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Table Styles */
+.table-modern {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-modern thead th {
+  background: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  padding: 12px 16px;
+  text-align: center;
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9em;
+}
+
+.table-modern tbody td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.table-modern tbody tr:hover {
+  background: #f8f9fa;
+}
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable:hover {
+  background: #e9ecef;
+}
+
+.header-jogador {
+  width: 40%;
+}
+
+.header-jogos,
+.header-golos {
+  width: 15%;
+  text-align: center;
+}
+
+.header-cartoes {
+  width: 30%;
+  text-align: center;
+}
+
+.jogador-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.jogador-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jogador-avatar-small {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.jogador-name {
+  font-weight: 600;
+  color: #495057;
+}
+
+.stat-cell {
+  text-align: center;
+  font-weight: 600;
+  color: #495057;
+}
+
+.cartoes-cell {
+  text-align: center;
+}
+
+.cartao {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8em;
+  font-weight: 600;
+  color: white;
+  margin: 0 2px;
+}
+
+.cartao.amarelo {
+  background: #ffc107;
+}
+
+.cartao.azul {
+  background: #007bff;
+}
+
+.cartao.vermelho {
+  background: #dc3545;
+}
+
+/* Empty State */
+.empty-state-modern {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.empty-icon {
+  font-size: 4em;
+  color: #dee2e6;
+  margin-bottom: 20px;
+}
+
+.empty-state-modern h5 {
+  color: #495057;
+  margin-bottom: 10px;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .date-filter-container {
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .date-label {
+    align-self: flex-start;
+    margin-bottom: 4px;
+  }
+
+  .date-input {
+    width: 100%;
+    padding: 10px 12px;
+  }
+
+  .date-toggle-btn {
+    min-width: auto;
+    width: 100%;
+    font-size: 0.9em;
+    padding: 10px 16px;
+  }
+
+  .filter-section {
+    margin-bottom: 16px;
+  }
+
+  .date-filter-section {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .estatistica-row-content {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .jogador-photo {
+    min-width: 40px;
+  }
+
+  .jogador-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .jogador-name {
+    font-size: 0.8em;
+  }
+
+  .estatistica-jogos,
+  .estatistica-golos {
+    min-width: 50px;
+  }
+
+  .stat-value {
+    font-size: 0.8em;
+  }
+
+  .stat-label {
+    font-size: 0.65em;
+  }
+
+  .estatistica-cartoes {
+    min-width: 80px;
+    gap: 4px;
+  }
+
+  .cartao {
+    padding: 1px 4px;
+    font-size: 0.7em;
+  }
+}

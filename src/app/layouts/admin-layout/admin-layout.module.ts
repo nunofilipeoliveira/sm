@@ -10,6 +10,7 @@ import { GestaoEquipaComponent } from '../../pages/gestao-equipa/gestao-equipa.c
 import { AdministracaoComponent } from '../../pages/administracao/administracao.component';
 import { ListaJogosComponent } from '../../pages/lista-jogos/lista-jogos.component';
 import { ConvocatoriaComponent } from '../../pages/convocatoria/convocatoria.component';
+import { EstatisticasComponent } from '../../pages/estatisticas/estatisticas.component';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { ConvocatoriaComponent } from '../../pages/convocatoria/convocatoria.com
     GestaoEquipaComponent, // Adicione esta linha
     AdministracaoComponent, // Adicione esta linha
     ListaJogosComponent,
-    ConvocatoriaComponent
+    ConvocatoriaComponent,
+    EstatisticasComponent
   ],
   declarations: [ ]
 })

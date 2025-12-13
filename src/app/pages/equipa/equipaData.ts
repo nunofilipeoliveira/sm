@@ -1,5 +1,5 @@
 
-interface EquipaData {
+export interface EquipaData {
   id: number;
   epoca: string;
   escalao: string;
