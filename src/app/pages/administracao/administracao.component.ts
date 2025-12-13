@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms'; // Importar FormsModule para ngMod
 import { environment } from '../../../environments/environment';
 import { UtilizadorParaAtivarData } from '../gestaoutilizador/UtilizadorParaAtivarData';
 import { EpocaData } from './EpocaData';
+import { EquipaData } from '../equipa/equipaData';
 
 interface EscalaoData {
   id: number;
@@ -72,7 +73,7 @@ export class AdministracaoComponent implements OnInit {
 
 
 
-  
+
   ngOnInit(): void {
     this.carregarEpocaAtual();
     this.carregarListaEquipas();
@@ -307,11 +308,11 @@ export class AdministracaoComponent implements OnInit {
   private getBaseUrl(): string {
     // Obter o URL completo atual
     const fullUrl = window.location.href;
-    
+
     // Extrair apenas a parte base (protocolo + host + porta se existir)
     const url = new URL(fullUrl);
     const baseUrl = `${url.protocol}//${url.host}`;
-    
+
     return baseUrl+'/'+environment.root;
   }
 

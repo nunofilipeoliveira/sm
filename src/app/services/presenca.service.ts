@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
+import { EquipaData } from '../pages/equipa/equipaData';
 
 @Injectable({
   providedIn: 'root'

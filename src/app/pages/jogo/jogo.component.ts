@@ -5,6 +5,9 @@ import { CommonModule } from "@angular/common";
 import { environment } from "../../../environments/environment";
 import { ClubeService } from "../../services/clube.service";
 import { FormsModule } from "@angular/forms";
+import { CompeticaoData } from "./competicaoData";
+import { JogoData, JogadorJogo } from "../lista-jogos/jogoData";
+import { EquipaData } from "../equipa/equipaData";
 
 
 // Estenda a interface JogadorJogo para incluir a propriedade 'expanded'

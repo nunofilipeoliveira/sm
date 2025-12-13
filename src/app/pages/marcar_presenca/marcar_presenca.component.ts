@@ -13,6 +13,7 @@ import { JogadorSeleccaoComponent } from '../jogador-seleccao/jogador-seleccao.c
 import { EquipaService } from '../../services/equipa.service';
 import { LoginServiceService } from '../../services/login-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EquipaData } from '../equipa/equipaData';
 
 
 

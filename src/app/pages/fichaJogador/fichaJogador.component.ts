@@ -8,7 +8,8 @@ import { LoginServiceService } from '../../services/login-service.service';
 import { FormsModule } from '@angular/forms';
 import { DataPipe } from './DataPipe'; // Seu DataPipe personalizado
 import { JogoService } from '../../services/jogo.service';
-import { CONNREFUSED } from 'dns';
+import { JogoData } from '../lista-jogos/jogoData';
+import { EquipaData } from '../equipa/equipaData';
 
 @Component({
   selector: 'user-cmp',
@@ -177,7 +178,7 @@ export class FichaJogadorComponent implements OnInit {
                     console.log('Escalões carregados:', this.escaloes);
 
                     // Agora processa os jogos
-                    console.log('Jogos do jogador:', jogos);  
+                    console.log('Jogos do jogador:', jogos);
 
                     // Agrupamento por escalão (agora com arrays de jogos)
                     const agrupamento = new Map<string, JogoData[]>();

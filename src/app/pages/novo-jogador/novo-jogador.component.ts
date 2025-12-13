@@ -6,6 +6,7 @@ import { EquipaService } from './../../services/equipa.service';
 import { CommonModule } from '@angular/common';
 import { LoginServiceService } from '../../services/login-service.service';
 import { FormsModule } from '@angular/forms';
+import { EquipaData } from '../equipa/equipaData';
 
 
 

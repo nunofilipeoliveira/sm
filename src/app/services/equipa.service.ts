@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { empty, Observable } from 'rxjs';
-import e from 'express';
+import { EquipaData } from '../pages/equipa/equipaData';
 
 
 @Injectable({

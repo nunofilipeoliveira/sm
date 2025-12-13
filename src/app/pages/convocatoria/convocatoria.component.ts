@@ -8,6 +8,8 @@ import { NgbAlertModule, NgbCollapseModule, NgbModal } from '@ng-bootstrap/ng-bo
 import { JogadorSeleccaoComponent } from '../jogador-seleccao/jogador-seleccao.component';
 import { environment } from '../../../environments/environment';
 import html2canvas from 'html2canvas'; // Import da html2canvas
+import { JogoData } from '../lista-jogos/jogoData';
+import { EquipaData } from '../equipa/equipaData';
 
 
 

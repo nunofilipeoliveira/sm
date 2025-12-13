@@ -4,6 +4,8 @@ import { Chart, registerables, ChartTypeRegistry } from 'chart.js'; // Importar 
 import { EquipaService } from '../../services/equipa.service';
 import { PresencaService } from '../../services/presenca.service';
 import { JogoService } from '../../services/jogo.service';
+import { EquipaData } from '../equipa/equipaData';
+import { JogoData } from '../lista-jogos/jogoData';
 
 Chart.register(...registerables);
 

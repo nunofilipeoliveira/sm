@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JogadorSeleccaoComponent } from '../jogador-seleccao/jogador-seleccao.component';
+import { EquipaData } from '../equipa/equipaData';
 
 @Component({
   selector: 'gestao-equipa-cmp',

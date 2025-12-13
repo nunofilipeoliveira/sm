@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import moment, { Moment } from 'moment';
 import { IdadePipe } from './idadePipe';
 import { EpocaData } from '../administracao/EpocaData';
+import { EquipaData } from './equipaData';
 
 
 
