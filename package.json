@@ -9,10 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
-  "build:hcmaia": "ng build --configuration=hcmaia",
-  "build:advalongo": "ng build --configuration=advalongo",
-  "build:cis": "ng build --configuration=cis"
-
+    "build:hcmaia": "ng build --configuration=hcmaia",
+    "build:advalongo": "ng build --configuration=advalongo",
+    "build:cis": "ng build --configuration=cis"
   },
   "private": true,
   "dependencies": {
@@ -49,7 +48,9 @@
     "crypto-browserify": "^3.12.1",
     "express": "^4.19.2",
     "html2canvas": "^1.4.1",
+    "html2pdf.js": "^0.12.1",
     "jquery": "3.7.1",
+    "jspdf": "^3.0.4",
     "moment": "^2.30.1",
     "ngx-bootstrap": "^18.0.2",
     "ngx-toastr": "19.0.0",
@@ -85,5 +86,4 @@
     "tslib": "^2.6.3",
     "typescript": "~5.5.4"
   }
-
 }

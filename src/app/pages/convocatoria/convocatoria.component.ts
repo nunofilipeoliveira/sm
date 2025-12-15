@@ -10,6 +10,7 @@ import { environment } from '../../../environments/environment';
 import html2canvas from 'html2canvas'; // Import da html2canvas
 import { JogoData } from '../lista-jogos/jogoData';
 import { EquipaData } from '../equipa/equipaData';
+import { ConvocatoriaData, ConvocatoriaDataWS, JogadorConvocado } from './convocatoriaData';
 
 
 

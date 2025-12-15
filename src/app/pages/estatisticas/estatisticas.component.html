@@ -25,8 +25,10 @@
         <div class="filter-section mb-3" *ngIf="competicoes.length > 0">
           <div class="d-flex justify-content-center">
             <div class="filter-group2">
-              <button class="filter-btn" [class.active]="filtroCompeticao === 'todas'" (click)="setFiltro('todas')">Todas</button>
-              <button *ngFor="let comp of competicoes" class="filter-btn" [class.active]="filtroCompeticao === comp" (click)="setFiltro(comp)">{{comp}}</button>
+              <button class="filter-btn" [class.active]="filtroCompeticao === 'todas'"
+                (click)="setFiltro('todas')">Todas</button>
+              <button *ngFor="let comp of competicoes" class="filter-btn" [class.active]="filtroCompeticao === comp"
+                (click)="setFiltro(comp)">{{comp}}</button>
             </div>
           </div>
         </div>
@@ -34,10 +36,7 @@
         <!-- Date Filter Toggle Button -->
         <div class="filter-section">
           <div class="d-flex justify-content-center">
-            <button
-              class="filter-btn date-toggle-btn"
-              [class.active]="showDateFilter"
-              (click)="toggleDateFilter()"
+            <button class="filter-btn date-toggle-btn" [class.active]="showDateFilter" (click)="toggleDateFilter()"
               [attr.aria-expanded]="showDateFilter">
               <i class="fas fa-calendar-alt me-2"></i>
               {{ showDateFilter ? 'Ocultar Filtro de Data' : 'Filtrar por Data' }}
@@ -58,6 +57,20 @@
       </div>
     </div>
 
+    <!-- Advanced Statistics Toggle Button -->
+    <div class="modern-card shadow mb-4">
+      <div class="card-body-modern">
+        <div class="d-flex justify-content-center">
+          <button class="filter-btn advanced-toggle-btn" [class.active]="showAdvanced"
+            (click)="showAdvanced = !showAdvanced">
+            <i class="fas fa-chart-line me-2"></i>
+            {{ showAdvanced ? 'Ocultar Avançado' : 'Ver Avançado' }}
+            <i class="fas ms-2" [class.fa-chevron-down]="!showAdvanced" [class.fa-chevron-up]="showAdvanced"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Estatisticas Section -->
     <div *ngIf="estatisticas.length > 0" class="modern-card shadow">
       <div class="card-body-modern">
@@ -67,8 +80,40 @@
               <tr>
                 <th class="header-jogador">Jogador</th>
                 <th class="header-jogos sortable" (click)="sortBy('jogos')">Jogos</th>
-                <th class="header-golos sortable" (click)="sortBy('golos')">Golos</th>
+                <th *ngIf="!showAdvanced" class="header-golos sortable" (click)="sortBy('golos')">Golos</th>
                 <th class="header-cartoes">Cartões</th>
+
+                <!-- Colunas Avançadas - Estatísticas de Golos -->
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('golos_normal')"
+                  title="Golos Normais">Golo Normal</th>
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('golos_p')"
+                  title="Golos de Penalty">Golo Penalty</th>
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('golos_ld')"
+                  title="Golos de Livre Direto">Golo LD</th>
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('golos_pp')"
+                  title="Golos de Power Play">Golo PP</th>
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('golos_up')"
+                  title="Golos de Under Play">Golo UP</th>
+
+
+                <!-- Colunas Avançadas - Estatísticas de Jogo -->
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('assistencias')"
+                  title="Assistências">Assist.</th>
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('recuperacoes_bola')"
+                  title="Recuperações de Bola">Rcp Bola.</th>
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('perdas_bola')"
+                  title="Perdas de Bola">Perda Bola</th>
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('remates')" title="Remates">
+                  Remates</th>
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('faltas')" title="Faltas">Faltas
+                </th>
+
+                <!-- Colunas Avançadas - Estatísticas Específicas -->
+
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('penalty_falhado')"
+                  title="Penalties Falhados">Pen. Fal.</th>
+                <th *ngIf="showAdvanced" class="header-stat sortable" (click)="sortBy('ld_falhado')"
+                  title="Livres Diretos Falhados">LD Fal.</th>
               </tr>
             </thead>
             <tbody>
@@ -76,19 +121,38 @@
                 <td class="jogador-cell">
                   <div class="jogador-info">
                     <img src="assets/img/jogadores/{{stat.id_jogador}}_avatar.jpg"
-                     onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
-                     alt="Avatar" class="jogador-avatar-small" />
+                      onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="Avatar"
+                      class="jogador-avatar-small" />
 
                     <span class="jogador-name">{{ stat.nome }}</span>
                   </div>
                 </td>
                 <td class="stat-cell">{{ stat.jogos }}</td>
-                <td class="stat-cell">{{ stat.golos }}</td>
+                <td *ngIf="!showAdvanced" class="stat-cell">{{ stat.golos }}</td>
                 <td class="cartoes-cell">
                   <span class="cartao amarelo">{{ stat.cartao_amarelo }}</span>
                   <span class="cartao azul">{{ stat.cartao_azul }}</span>
                   <span class="cartao vermelho">{{ stat.cartao_vermelho }}</span>
                 </td>
+
+                <!-- Colunas Avançadas - Estatísticas de Golos -->
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.golos_normal}}</td>
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.golos_p }}</td>
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.golos_ld }}</td>
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.golos_pp }}</td>
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.golos_up }}</td>
+
+
+                <!-- Colunas Avançadas - Estatísticas de Jogo -->
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.assistencias }}</td>
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.recuperacoes_bola }}</td>
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.perdas_bola }}</td>
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.remates }}</td>
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.faltas }}</td>
+
+                <!-- Colunas Avançadas - Estatísticas Específicas -->
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.penalty_falhado }}</td>
+                <td *ngIf="showAdvanced" class="stat-cell">{{ stat.ld_falhado }}</td>
               </tr>
             </tbody>
           </table>

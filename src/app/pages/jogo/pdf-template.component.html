@@ -1,0 +1,30 @@
+<div id="pdfContent" style="width: 297mm; height: 210mm; background: linear-gradient(to bottom, #add8e6, #ffffff); padding: 20px; font-family: Arial, sans-serif;">
+  <header style="background: #6495ed; color: white; padding: 10px; border-radius: 10px; text-align: center;">
+    <h1>⚽ Ficha de Estatísticas</h1>
+    <p>{{ gameData.nomeClube }} vs {{ gameData.equipa_adv_nome }}</p>
+    <p>Placar: {{ gameData.golos_equipa }} - {{ gameData.golos_equipa_adv }}</p>
+  </header>
+
+  <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+    <thead>
+      <tr style="background: #f0f8ff;">
+        <th>Nº</th>
+        <th>Jogador</th>
+        <th>Golos</th>
+        <!-- Outras colunas -->
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let player of players; let i = index" [style.background]="i % 2 === 0 ? '#ffffff' : '#f0f8ff'">
+        <td>{{ player.numero }}</td>
+        <td>{{ player.nome }} <span *ngIf="player.capitao">👑</span></td>
+        <td><input type="text" placeholder="Preencher" style="border: none; background: transparent;"></td>
+        <!-- Outras células -->
+      </tr>
+    </tbody>
+  </table>
+
+  <footer style="margin-top: 20px; text-align: center; color: #888;">
+    Gerado em {{ new Date() | date:'short' }}
+  </footer>
+</div>

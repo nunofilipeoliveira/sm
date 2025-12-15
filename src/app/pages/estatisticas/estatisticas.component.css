@@ -94,6 +94,43 @@ body {
   color: white;
 }
 
+/* Advanced Toggle Button */
+.advanced-toggle-btn {
+  min-width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 10px 20px;
+  font-weight: 500;
+}
+
+.advanced-toggle-btn i {
+  transition: transform 0.3s ease;
+}
+
+.advanced-toggle-btn:hover {
+  background: #e9ecef;
+}
+
+.advanced-toggle-btn.active {
+  background: #28a745 !important;
+  color: white !important;
+}
+
+.advanced-toggle-btn.active i {
+  color: white;
+}
+
+/* Header Stat Columns */
+.header-stat {
+  width: 8%;
+  text-align: center;
+  font-size: 0.8em;
+}
+
 .filter-btn.mat-button-toggle-checked {
   background: #6c757d !important;
   color: white !important;

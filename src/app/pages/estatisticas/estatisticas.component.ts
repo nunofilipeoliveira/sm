@@ -29,6 +29,7 @@ export class EstatisticasComponent implements OnInit {
   startDate: string = '';
   endDate: string = '';
   showDateFilter: boolean = false;
+  showAdvanced: boolean = false;
 
   constructor(private equipaService: EquipaService, private jogoService: JogoService) { }
 
@@ -107,15 +108,64 @@ export class EstatisticasComponent implements OnInit {
               golos: 0,
               cartao_amarelo: 0,
               cartao_azul: 0,
-              cartao_vermelho: 0
+              cartao_vermelho: 0,
+              // Estatísticas detalhadas de golos
+              golos_p: 0,
+              golos_ld: 0,
+              golos_pp: 0,
+              golos_up: 0,
+              golos_normal: 0,
+              golos_s_p: 0,
+              golos_s_ld: 0,
+              golos_s_up: 0,
+              golos_s_pp: 0,
+              golos_s_normal: 0,
+              // Estatísticas de jogo
+              assistencias: 0,
+              recuperacoes_bola: 0,
+              perdas_bola: 0,
+              remates: 0,
+              faltas: 0,
+              // Estatísticas específicas
+              penalty_defesa: 0,
+              ld_defesa: 0,
+              penalty_falhado: 0,
+              ld_falhado: 0
             });
           }
           const stat = statsMap.get(jogador.id_jogador)!;
           stat.jogos += 1;
+
+          // Estatísticas básicas
           stat.golos += (jogador.golos_normal || 0) + (jogador.golos_p || 0) + (jogador.golos_ld || 0) + (jogador.golos_up || 0) + (jogador.golos_pp || 0);
           stat.cartao_amarelo += jogador.amarelo || 0;
           stat.cartao_azul += jogador.azul || 0;
           stat.cartao_vermelho += jogador.vermelho || 0;
+
+          // Estatísticas detalhadas de golos
+          stat.golos_p += jogador.golos_p || 0;
+          stat.golos_ld += jogador.golos_ld || 0;
+          stat.golos_pp += jogador.golos_pp || 0;
+          stat.golos_up += jogador.golos_up || 0;
+          stat.golos_normal += jogador.golos_normal || 0;
+          stat.golos_s_p += jogador.golos_s_p || 0;
+          stat.golos_s_ld += jogador.golos_s_ld || 0;
+          stat.golos_s_up += jogador.golos_s_up || 0;
+          stat.golos_s_pp += jogador.golos_s_pp || 0;
+          stat.golos_s_normal += jogador.golos_s_normal || 0;
+
+          // Estatísticas de jogo
+          stat.assistencias += jogador.assistencias || 0;
+          stat.recuperacoes_bola += jogador.recuperacoes_bola || 0;
+          stat.perdas_bola += jogador.perdas_bola || 0;
+          stat.remates += jogador.remates || 0;
+          stat.faltas += jogador.faltas || 0;
+
+          // Estatísticas específicas
+          stat.penalty_defesa += jogador.penalty_defesa || 0;
+          stat.ld_defesa += jogador.ld_defesa || 0;
+          stat.penalty_falhado += jogador.penalty_falhado || 0;
+          stat.ld_falhado += jogador.ld_falhado || 0;
         });
       }
     });

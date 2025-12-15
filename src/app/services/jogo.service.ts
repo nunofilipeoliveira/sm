@@ -3,6 +3,7 @@ import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { JogoData } from '../pages/lista-jogos/jogoData';
+import { ConvocatoriaDataWS, JogadorConvocado } from '../pages/convocatoria/convocatoriaData';
 
 @Injectable({
   providedIn: 'root'

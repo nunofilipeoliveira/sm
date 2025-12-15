@@ -1,19 +1,19 @@
-interface ConvocatoriaData {
+export interface ConvocatoriaData {
   id_jogador: number;
   nome_jogador: string;
   selecionado: boolean;
-  obs: string; 
+  obs: string;
   licenca: string;// Observações sobre o jogador na convocatória
   // Adicione outros campos relevantes para o jogador na convocatória, se necessário
 }
 
-interface ConvocatoriaDataWS {
+export interface ConvocatoriaDataWS {
   id: number;
   jogadoresConvocatoria: JogadorConvocado[];
 }
 
 
-interface JogadorConvocado {
+export interface JogadorConvocado {
   id_jogador: number;
   nome: string;
   estado: string; // Ex: "Convocado", "Lesionado", "Suspenso"

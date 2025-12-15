@@ -43,6 +43,17 @@ export interface JogadorJogo {
     golos_s_pp: number;
     golos_s_normal: number;
     isGR: boolean;
+    // Novas estatísticas de jogo
+    assistencias: number;
+    recuperacoes_bola: number;
+    perdas_bola: number;
+    remates: number;
+    faltas: number;
+    // Novas estatísticas específicas para GR e jogadores de campo
+    penalty_defesa: number; // Penalty defendido (GR)
+    ld_defesa: number; // Livre Direto defendido (GR)
+    penalty_falhado: number; // Penalty falhado (jogadores de campo)
+    ld_falhado: number; // Livre Direto falhado (jogadores de campo)
     // Adicione a propriedade expanded aqui para que seja parte da interface original
     expanded?: boolean; // Adicione esta linha
     estado: string; // Ex: "Convocado", "Lesionado", "Suspenso", "Indisponível"

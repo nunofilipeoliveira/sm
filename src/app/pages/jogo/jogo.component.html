@@ -83,22 +83,57 @@
         </div>
 
         <div *ngIf="jogador.expanded" class="jogador-details">
-          <div class="linha-info">
-            <label for="capitao-{{jogador.id_jogador}}">Capitão</label>
-            <input type="checkbox" [(ngModel)]="jogador.capitao" name="capitao-{{jogador.id_jogador}}"
-              id="capitao-{{jogador.id_jogador}}" />
-          </div>
+          <!-- Seção de Informações Básicas do Jogador -->
+          <div class="info-basica-container">
+            <h4 class="info-basica-titulo">📋 Informações Básicas</h4>
 
-          <div class="linha-info">
-            <label>Nº Camisola</label>
-            <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1" max="99"
-              class="input-numero" />
-          </div>
+            <div class="info-basica-grid">
+              <!-- Número da Camisola -->
+              <div class="info-item numero-item">
+                <div class="info-icon">
+                  <span class="icon-number">#</span>
+                </div>
+                <div class="info-content">
+                  <label class="info-label">Nº Camisola</label>
+                  <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1" max="99"
+                    class="input-numero-melhorado" placeholder="--" />
+                </div>
+              </div>
 
-          <div class="linha-info">
-            <label>GR</label>
-            <input type="checkbox" [(ngModel)]="jogador.isGR" name="isGR-{{jogador.id_jogador}}"
-              id="isGR-{{jogador.id_jogador}}" class="input-isGR" />
+              <!-- Capitão -->
+              <div class="info-item capitao-item">
+                <div class="info-icon">
+                  <i class="nc-icon nc-capitain"></i>
+                </div>
+                <div class="info-content">
+                  <label class="info-label">Capitão</label>
+                  <div class="toggle-container">
+                    <input type="checkbox" [(ngModel)]="jogador.capitao" name="capitao-{{jogador.id_jogador}}"
+                      id="capitao-{{jogador.id_jogador}}" class="toggle-input" />
+                    <label for="capitao-{{jogador.id_jogador}}" class="toggle-label">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Guarda-Redes -->
+              <div class="info-item gr-item">
+                <div class="info-icon">
+                  <span class="icon-gk">🥅</span>
+                </div>
+                <div class="info-content">
+                  <label class="info-label">Guarda-Redes</label>
+                  <div class="toggle-container">
+                    <input type="checkbox" [(ngModel)]="jogador.isGR" name="isGR-{{jogador.id_jogador}}"
+                      id="isGR-{{jogador.id_jogador}}" class="toggle-input" />
+                    <label for="isGR-{{jogador.id_jogador}}" class="toggle-label">
+                      <span class="toggle-slider"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <hr class="separador" />
@@ -152,6 +187,99 @@
                 </ng-container>
               </div>
             </div>
+
+            <!-- Nova seção para estatísticas adicionais -->
+            <div class="grupo-eventos">
+              <h4>📊 Outras Estatísticas</h4>
+              <div class="controles">
+                <div class="linha-controle">
+                  <label>🎯 Assistências</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'assistencias', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'assistencias') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'assistencias') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'assistencias', 1)">+</button>
+                </div>
+                <div class="linha-controle">
+                  <label>🛡️ Recuperações</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'recuperacoes_bola', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'recuperacoes_bola') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'recuperacoes_bola') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'recuperacoes_bola', 1)">+</button>
+                </div>
+                <div class="linha-controle">
+                  <label>⚠️ Perdas</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'perdas_bola', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'perdas_bola') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'perdas_bola') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'perdas_bola', 1)">+</button>
+                </div>
+                <div class="linha-controle">
+                  <label>🥅 Remates</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'remates', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'remates') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'remates') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'remates', 1)">+</button>
+                </div>
+                <div class="linha-controle">
+                  <label>🙋 Faltas</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'faltas', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'faltas') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'faltas') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'faltas', 1)">+</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nova seção para Guarda-Redes - Defesas de Penalty e Livre Direto -->
+            <div *ngIf="jogador.isGR" class="grupo-eventos">
+              <h4>🥅 Defesas (Guarda-Redes)</h4>
+              <div class="controles">
+                <div class="linha-controle">
+                  <label>🚫 Penalty Defendido</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'penalty_defesa', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'penalty_defesa') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'penalty_defesa') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'penalty_defesa', 1)">+</button>
+                </div>
+                <div class="linha-controle">
+                  <label>🚫 Livre Direto Defendido</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'ld_defesa', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'ld_defesa') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'ld_defesa') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'ld_defesa', 1)">+</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nova seção para Jogadores de Campo - Penalties e Livres Diretos Falhados -->
+            <div *ngIf="!jogador.isGR" class="grupo-eventos">
+              <h4>❌ Falhas (Jogadores de Campo)</h4>
+              <div class="controles">
+                <div class="linha-controle">
+                  <label>❌ Penalty Falhado</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'penalty_falhado', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'penalty_falhado') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'penalty_falhado') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'penalty_falhado', 1)">+</button>
+                </div>
+                <div class="linha-controle">
+                  <label>❌ Livre Direto Falhado</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'ld_falhado', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'ld_falhado') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'ld_falhado') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'ld_falhado', 1)">+</button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -168,59 +296,203 @@
       <h2>👥 Jogadores</h2>
       <ul>
         <li *ngFor="let jogador of jogo.jogadores">
-          <div class="jogador-content">
-            <div class="jogador-avatar">
-              <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
-                   onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
-                   alt="Avatar" class="avatar-img" />
-              <div class="numero-badge" *ngIf="jogador.numero">{{jogador.numero}}</div>
+          <div class="jogador-card" (click)="toggleJogadorView(jogador.id_jogador)" [class.expanded]="jogador.expandedView">
+            <div class="jogador-content">
+              <div class="jogador-avatar">
+                <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
+                     onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                     alt="Avatar" class="avatar-img" />
+                <div class="numero-badge" *ngIf="jogador.numero">{{jogador.numero}}</div>
+              </div>
+              <div class="jogador-info">
+                <h6 class="jogador-nome">{{jogador.nome}}<span *ngIf="jogador.capitao"> (C)</span></h6>
+                <span class="expand-icon">
+                  <i class="nc-icon" [ngClass]="{'nc-minimal-down': !jogador.expandedView, 'nc-minimal-up': jogador.expandedView}"></i>
+                </span>
+              </div>
+              <div class="staff-cards" *ngIf="hasStats(jogador)">
+                <!-- Golos Marcados -->
+                <span *ngIf="jogador.golos_normal > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_normal)"><img src="assets/img/jogo/GOLO.png" class="item-goal"></ng-container>
+                </span>
+                <span *ngIf="jogador.golos_p > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_p)"><img src="assets/img/jogo/P.png" class="item-goal"></ng-container>
+                </span>
+                <span *ngIf="jogador.golos_pp > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_pp)"><img src="assets/img/jogo/PP.png" class="item-goal"></ng-container>
+                </span>
+                <span *ngIf="jogador.golos_up > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_up)"><img src="assets/img/jogo/UP.png" class="item-goal"></ng-container>
+                </span>
+                <span *ngIf="jogador.golos_ld > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_ld)"><img src="assets/img/jogo/LD.png" class="item-goal"></ng-container>
+                </span>
+                <!-- Golos Sofridos -->
+                <span *ngIf="jogador.golos_s_normal > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_normal)"><img src="assets/img/jogo/GOLO_S.png" class="item-goal"></ng-container>
+                </span>
+                <span *ngIf="jogador.golos_s_p > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_p)"><img src="assets/img/jogo/P_S.png" class="item-goal"></ng-container>
+                </span>
+                <span *ngIf="jogador.golos_s_pp > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_pp)"><img src="assets/img/jogo/PP_S.png" class="item-goal"></ng-container>
+                </span>
+                <span *ngIf="jogador.golos_s_up > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_up)"><img src="assets/img/jogo/UP_S.png" class="item-goal"></ng-container>
+                </span>
+                <span *ngIf="jogador.golos_s_ld > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_ld)"><img src="assets/img/jogo/LD_S.png" class="item-goal"></ng-container>
+                </span>
+                <span *ngIf="jogador.assistencias > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.assistencias)"><span class="item-goal">A</span> </ng-container>
+                </span>
+                <!-- Cartões -->
+                <span *ngIf="jogador.amarelo > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.amarelo)">🟨</ng-container>
+                </span>
+                <span *ngIf="jogador.azul > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.azul)">🟦</ng-container>
+                </span>
+                <span *ngIf="jogador.vermelho > 0">
+                  <ng-container *ngFor="let _ of [].constructor(jogador.vermelho)">🟥</ng-container>
+                </span>
+              </div>
             </div>
-            <div class="jogador-info">
-              <h6 class="jogador-nome">{{jogador.nome}}<span *ngIf="jogador.capitao"> (C)</span></h6>
-            </div>
-            <div class="staff-cards" *ngIf="hasStats(jogador)">
-              <!-- Golos Marcados -->
-              <span *ngIf="jogador.golos_normal > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_normal)"><img src="assets/img/jogo/GOLO.png" class="item-goal"></ng-container>
-              </span>
-              <span *ngIf="jogador.golos_p > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_p)"><img src="assets/img/jogo/P.png" class="item-goal"></ng-container>
-              </span>
-              <span *ngIf="jogador.golos_pp > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_pp)"><img src="assets/img/jogo/PP.png" class="item-goal"></ng-container>
-              </span>
-              <span *ngIf="jogador.golos_up > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_up)"><img src="assets/img/jogo/UP.png" class="item-goal"></ng-container>
-              </span>
-              <span *ngIf="jogador.golos_ld > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_ld)"><img src="assets/img/jogo/LD.png" class="item-goal"></ng-container>
-              </span>
-              <!-- Golos Sofridos -->
-              <span *ngIf="jogador.golos_s_normal > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_normal)"><img src="assets/img/jogo/GOLO_S.png" class="item-goal"></ng-container>
-              </span>
-              <span *ngIf="jogador.golos_s_p > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_p)"><img src="assets/img/jogo/P_S.png" class="item-goal"></ng-container>
-              </span>
-              <span *ngIf="jogador.golos_s_pp > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_pp)"><img src="assets/img/jogo/PP_S.png" class="item-goal"></ng-container>
-              </span>
-              <span *ngIf="jogador.golos_s_up > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_up)"><img src="assets/img/jogo/UP_S.png" class="item-goal"></ng-container>
-              </span>
-              <span *ngIf="jogador.golos_s_ld > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_ld)"><img src="assets/img/jogo/LD_S.png" class="item-goal"></ng-container>
-              </span>
-              <!-- Cartões -->
-              <span *ngIf="jogador.amarelo > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.amarelo)">🟨</ng-container>
-              </span>
-              <span *ngIf="jogador.azul > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.azul)">🟦</ng-container>
-              </span>
-              <span *ngIf="jogador.vermelho > 0">
-                <ng-container *ngFor="let _ of [].constructor(jogador.vermelho)">🟥</ng-container>
-              </span>
+
+            <!-- Seção de Detalhes do Jogador (expandida) -->
+            <div *ngIf="jogador.expandedView" class="jogador-detalhes">
+              <div class="detalhes-header">
+                <h5>📊 Estatísticas Detalhadas</h5>
+              </div>
+
+              <div class="detalhes-content">
+
+                <!-- Golos Marcados -->
+                <div class="detalhe-secao" *ngIf="!jogador.isGR">
+                  <h6>⚽ Golos Marcados</h6>
+                  <div class="estatisticas-grid">
+                    <div class="stat-item" *ngIf="jogador.golos_normal > 0">
+                      <span class="stat-label">Golo Normal:</span>
+                      <span class="stat-value">{{jogador.golos_normal}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.golos_p > 0">
+                      <span class="stat-label">Penalty:</span>
+                      <span class="stat-value">{{jogador.golos_p}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.golos_ld > 0">
+                      <span class="stat-label">Livre Direto:</span>
+                      <span class="stat-value">{{jogador.golos_ld}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.golos_pp > 0">
+                      <span class="stat-label">Power Play:</span>
+                      <span class="stat-value">{{jogador.golos_pp}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.golos_up > 0">
+                      <span class="stat-label">Under Play:</span>
+                      <span class="stat-value">{{jogador.golos_up}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Golos Sofridos (apenas para GR) -->
+                <div class="detalhe-secao" *ngIf="jogador.isGR">
+                  <h6>🥅 Golos Sofridos</h6>
+                  <div class="estatisticas-grid">
+                    <div class="stat-item" *ngIf="jogador.golos_s_normal > 0">
+                      <span class="stat-label">Golo Normal:</span>
+                      <span class="stat-value">{{jogador.golos_s_normal}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.golos_s_p > 0">
+                      <span class="stat-label">Penalty:</span>
+                      <span class="stat-value">{{jogador.golos_s_p}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.golos_s_ld > 0">
+                      <span class="stat-label">Livre Direto:</span>
+                      <span class="stat-value">{{jogador.golos_s_ld}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.golos_s_pp > 0">
+                      <span class="stat-label">Power Play:</span>
+                      <span class="stat-value">{{jogador.golos_s_pp}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.golos_s_up > 0">
+                      <span class="stat-label">Under Play:</span>
+                      <span class="stat-value">{{jogador.golos_s_up}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Cartões -->
+                <div class="detalhe-secao" *ngIf="hasCards(jogador)">
+                  <h6>🟨🟥 Cartões</h6>
+                  <div class="estatisticas-grid">
+                    <div class="stat-item" *ngIf="jogador.amarelo > 0">
+                      <span class="stat-label">🟨 Amarelo:</span>
+                      <span class="stat-value">{{jogador.amarelo}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.azul > 0">
+                      <span class="stat-label">🟦 Azul:</span>
+                      <span class="stat-value">{{jogador.azul}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.vermelho > 0">
+                      <span class="stat-label">🟥 Vermelho:</span>
+                      <span class="stat-value">{{jogador.vermelho}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Outras Estatísticas -->
+                <div class="detalhe-secao" *ngIf="hasOtherStats(jogador)">
+                  <h6>📊 Outras Estatísticas</h6>
+                  <div class="estatisticas-grid">
+                    <div class="stat-item" *ngIf="jogador.assistencias > 0">
+                      <span class="stat-label">🎯 Assistências:</span>
+                      <span class="stat-value">{{jogador.assistencias}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.recuperacoes_bola > 0">
+                      <span class="stat-label">🛡️ Recuperações:</span>
+                      <span class="stat-value">{{jogador.recuperacoes_bola}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.perdas_bola > 0">
+                      <span class="stat-label">⚠️ Perdas:</span>
+                      <span class="stat-value">{{jogador.perdas_bola}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.remates > 0">
+                      <span class="stat-label">🥅 Remates:</span>
+                      <span class="stat-value">{{jogador.remates}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.faltas > 0">
+                      <span class="stat-label">🙋 Faltas:</span>
+                      <span class="stat-value">{{jogador.faltas}}</span>
+                    </div>
+                    <!-- Novas estatísticas para GR -->
+                    <div class="stat-item" *ngIf="jogador.isGR && jogador.penalty_defesa > 0">
+                      <span class="stat-label">🚫 Penalty Defendido:</span>
+                      <span class="stat-value">{{jogador.penalty_defesa}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="jogador.isGR && jogador.ld_defesa > 0">
+                      <span class="stat-label">🚫 Livre Direto Defendido:</span>
+                      <span class="stat-value">{{jogador.ld_defesa}}</span>
+                    </div>
+                    <!-- Novas estatísticas para jogadores de campo -->
+                    <div class="stat-item" *ngIf="!jogador.isGR && jogador.penalty_falhado > 0">
+                      <span class="stat-label">❌ Penalty Falhado:</span>
+                      <span class="stat-value">{{jogador.penalty_falhado}}</span>
+                    </div>
+                    <div class="stat-item" *ngIf="!jogador.isGR && jogador.ld_falhado > 0">
+                      <span class="stat-label">❌ Livre Direto Falhado:</span>
+                      <span class="stat-value">{{jogador.ld_falhado}}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Total de Golos -->
+                <div class="detalhe-secao" *ngIf="getTotalGolos(jogador) > 0">
+                  <h6>🎯 Total de Golos</h6>
+                  <div class="total-golos">
+                    <span class="total-value">{{getTotalGolos(jogador)}}</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </li>
@@ -228,13 +500,11 @@
         <div class="legenda-golos">
           <span><img src="assets/img/jogo/GOLO.png" class="item-goal"> Golo</span>
           <span><img src="assets/img/jogo/P.png" class="item-goal"> Penalty</span>
-          <span><img src="assets/img/jogo/LD.png" class="item-goal"> Livre Direto</span>
+          <span><img src="assets/img/jogo/LD.png" class="item-goal" /> Livre Direto</span>
           <span><img src="assets/img/jogo/PP.png" class="item-goal"> Golo em PowerPlay</span>
           <span><img src="assets/img/jogo/UP.png" class="item-goal"> Golo em UnderPlay</span>
-
+          <span><span class="item-goal">A</span> Assistência</span>
         </div>
-
-
       </ul>
     </div>
 
@@ -242,17 +512,27 @@
       <button type="button" class="btn btn-secondary btn-lg" (click)="voltar()">
         <i class="nc-icon nc-minimal-left me-2"></i> Voltar
       </button>
-      <button type="button" *ngIf="jogo.estado==='INICIADO' && !mostrarRegisto" class="btn btn-warning btn-lg"
-        (click)="registarInformacaoJogo()">
-        <i class="nc-icon nc-ruler-pencil me-2"></i> Registar Informação do Jogo
-      </button>
-      <button type="button" *ngIf="jogo.estado==='CONCLUIDO' && !mostrarRegisto" class="btn btn-warning btn-lg"
-        (click)="editarJogo()">
-        <i class="nc-icon nc-ruler-pencil me-2"></i> Editar
-      </button>
-      <button class="btn btn-info btn-lg" (click)="verConvocatoria(jogo.id)">
-        <i class="nc-icon nc-bullet-list-67 me-2"></i>Convocatória
-      </button>
+      <div class="d-flex gap-2">
+        <button type="button" *ngIf="jogo.estado==='INICIADO' && !mostrarRegisto" class="btn btn-warning btn-lg"
+          (click)="registarInformacaoJogo()">
+          <i class="nc-icon nc-ruler-pencil me-2"></i> Registar Informação do Jogo
+        </button>
+        <button type="button" *ngIf="jogo.estado==='CONCLUIDO' && !mostrarRegisto" class="btn btn-warning btn-lg"
+          (click)="editarJogo()">
+          <i class="nc-icon nc-ruler-pencil me-2"></i> Editar
+        </button>
+        <button type="button" *ngIf="jogo.estado==='CONCLUIDO' && !mostrarRegisto" class="btn btn-success btn-lg"
+          (click)="gerarFichaEstatistica()">
+          <i class="nc-icon nc-chart-bar-32 me-2"></i> Ficha Estatística
+        </button>
+        <button type="button" *ngIf="mostrarRegisto" class="btn btn-success btn-lg"
+          (click)="gerarFichaEstatistica()">
+          <i class="nc-icon nc-chart-bar-32 me-2"></i> Ficha Estatística
+        </button>
+        <button class="btn btn-info btn-lg" (click)="verConvocatoria(jogo.id)">
+          <i class="nc-icon nc-bullet-list-67 me-2"></i>Convocatória
+        </button>
+      </div>
     </div>
   </div>
 </div>
