@@ -119,13 +119,13 @@
             <tbody>
               <tr *ngFor="let stat of estatisticas" class="estatistica-row">
                 <td class="jogador-cell">
-                  <div class="jogador-info">
+
                     <img src="assets/img/jogadores/{{stat.id_jogador}}_avatar.jpg"
                       onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="Avatar"
                       class="jogador-avatar-small" />
 
-                    <span class="jogador-name">{{ stat.nome }}</span>
-                  </div>
+                    <span class="jogador-name"> {{ stat.nome }}</span>
+
                 </td>
                 <td class="stat-cell">{{ stat.jogos }}</td>
                 <td *ngIf="!showAdvanced" class="stat-cell">{{ stat.golos }}</td>

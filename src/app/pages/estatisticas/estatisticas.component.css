@@ -173,7 +173,7 @@ body {
 .table-modern thead th {
   background: #f8f9fa;
   border-bottom: 2px solid #dee2e6;
-  padding: 12px 16px;
+  padding: 4px 6px;
   text-align: center;
   font-weight: 600;
   color: #495057;
@@ -181,7 +181,7 @@ body {
 }
 
 .table-modern tbody td {
-  padding: 12px 16px;
+  padding: 4px 6px;
   border-bottom: 1px solid #e9ecef;
 }
 
@@ -204,7 +204,7 @@ body {
 
 .header-jogos,
 .header-golos {
-  width: 15%;
+  width: 10%;
   text-align: center;
 }
 
@@ -214,13 +214,12 @@ body {
 }
 
 .jogador-cell {
-  display: flex;
   align-items: center;
   gap: 12px;
 }
 
 .jogador-info {
-  display: flex;
+
   align-items: center;
   gap: 8px;
 }
