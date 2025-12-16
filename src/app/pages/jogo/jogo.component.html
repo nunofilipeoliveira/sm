@@ -76,8 +76,7 @@
       <div *ngFor="let jogador of jogo.jogadores" class="jogador-item">
         <div class="jogador-header" (click)="toggleJogadorExpand(jogador.id_jogador)">
           <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
-            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
-            class="avatar-img me-2" />
+            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" class="avatar-img me-2" />
           <span class="nome-jogador">{{ jogador.nome }}</span>
           <i class="nc-icon" [ngClass]="{'nc-minimal-down': !jogador.expanded, 'nc-minimal-up': jogador.expanded}"></i>
         </div>
@@ -95,8 +94,8 @@
                 </div>
                 <div class="info-content">
                   <label class="info-label">Nº Camisola</label>
-                  <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1" max="99"
-                    class="input-numero-melhorado" placeholder="--" />
+                  <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1"
+                    max="99" class="input-numero-melhorado" placeholder="--" />
                 </div>
               </div>
 
@@ -148,8 +147,7 @@
                     <button class="btn-outline-danger" (click)="alterarGolo(jogador, tipo.key, true, -1)"
                       [disabled]="getGoloCount(jogador, tipo.key, true) === 0">−</button>
                     <span class="contador">{{ getGoloCount(jogador, tipo.key, true) }}</span>
-                    <button class="btn-outline-success"
-                      (click)="alterarGolo(jogador, tipo.key, true, 1)">+</button>
+                    <button class="btn-outline-success" (click)="alterarGolo(jogador, tipo.key, true, 1)">+</button>
                   </div>
                 </ng-container>
               </div>
@@ -165,8 +163,7 @@
                     <button class="btn-outline-danger" (click)="alterarGolo(jogador, tipo.key, false, -1)"
                       [disabled]="getGoloCount(jogador, tipo.key, false) === 0">−</button>
                     <span class="contador">{{ getGoloCount(jogador, tipo.key, false) }}</span>
-                    <button class="btn-outline-success"
-                      (click)="alterarGolo(jogador, tipo.key, false, 1)">+</button>
+                    <button class="btn-outline-success" (click)="alterarGolo(jogador, tipo.key, false, 1)">+</button>
                   </div>
                 </ng-container>
               </div>
@@ -181,8 +178,7 @@
                     <button class="btn-outline-danger" (click)="alterarCartao(jogador, tipo.key, -1)"
                       [disabled]="getCartaoCount(jogador, tipo.key) === 0">−</button>
                     <span class="contador">{{ getCartaoCount(jogador, tipo.key) }}</span>
-                    <button class="btn-outline-success"
-                      (click)="alterarCartao(jogador, tipo.key, 1)">+</button>
+                    <button class="btn-outline-success" (click)="alterarCartao(jogador, tipo.key, 1)">+</button>
                   </div>
                 </ng-container>
               </div>
@@ -213,24 +209,21 @@
                   <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'perdas_bola', -1)"
                     [disabled]="getEstatisticaCount(jogador, 'perdas_bola') === 0">−</button>
                   <span class="contador">{{ getEstatisticaCount(jogador, 'perdas_bola') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'perdas_bola', 1)">+</button>
+                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'perdas_bola', 1)">+</button>
                 </div>
                 <div class="linha-controle">
                   <label>🥅 Remates</label>
                   <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'remates', -1)"
                     [disabled]="getEstatisticaCount(jogador, 'remates') === 0">−</button>
                   <span class="contador">{{ getEstatisticaCount(jogador, 'remates') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'remates', 1)">+</button>
+                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'remates', 1)">+</button>
                 </div>
                 <div class="linha-controle">
                   <label>🙋 Faltas</label>
                   <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'faltas', -1)"
                     [disabled]="getEstatisticaCount(jogador, 'faltas') === 0">−</button>
                   <span class="contador">{{ getEstatisticaCount(jogador, 'faltas') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'faltas', 1)">+</button>
+                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'faltas', 1)">+</button>
                 </div>
               </div>
             </div>
@@ -252,8 +245,7 @@
                   <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'ld_defesa', -1)"
                     [disabled]="getEstatisticaCount(jogador, 'ld_defesa') === 0">−</button>
                   <span class="contador">{{ getEstatisticaCount(jogador, 'ld_defesa') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'ld_defesa', 1)">+</button>
+                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'ld_defesa', 1)">+</button>
                 </div>
               </div>
             </div>
@@ -275,8 +267,7 @@
                   <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'ld_falhado', -1)"
                     [disabled]="getEstatisticaCount(jogador, 'ld_falhado') === 0">−</button>
                   <span class="contador">{{ getEstatisticaCount(jogador, 'ld_falhado') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'ld_falhado', 1)">+</button>
+                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'ld_falhado', 1)">+</button>
                 </div>
               </div>
             </div>
@@ -296,55 +287,68 @@
       <h2>👥 Jogadores</h2>
       <ul>
         <li *ngFor="let jogador of jogo.jogadores">
-          <div class="jogador-card" (click)="toggleJogadorView(jogador.id_jogador)" [class.expanded]="jogador.expandedView">
+          <div class="jogador-card" (click)="toggleJogadorView(jogador.id_jogador)"
+            [class.expanded]="jogador.expandedView">
             <div class="jogador-content">
               <div class="jogador-avatar">
                 <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
-                     onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
-                     alt="Avatar" class="avatar-img" />
+                  onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="Avatar"
+                  class="avatar-img" />
                 <div class="numero-badge" *ngIf="jogador.numero">{{jogador.numero}}</div>
               </div>
               <div class="jogador-info">
                 <h6 class="jogador-nome">{{jogador.nome}}<span *ngIf="jogador.capitao"> (C)</span></h6>
                 <span class="expand-icon">
-                  <i class="nc-icon" [ngClass]="{'nc-minimal-down': !jogador.expandedView, 'nc-minimal-up': jogador.expandedView}"></i>
+                  <i class="nc-icon"
+                    [ngClass]="{'nc-minimal-down': !jogador.expandedView, 'nc-minimal-up': jogador.expandedView}"></i>
                 </span>
               </div>
               <div class="staff-cards" *ngIf="hasStats(jogador)">
                 <!-- Golos Marcados -->
                 <span *ngIf="jogador.golos_normal > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_normal)"><img src="assets/img/jogo/GOLO.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_normal)"><img
+                      src="assets/img/jogo/GOLO.png" class="item-goal"></ng-container>
                 </span>
                 <span *ngIf="jogador.golos_p > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_p)"><img src="assets/img/jogo/P.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_p)"><img src="assets/img/jogo/P.png"
+                      class="item-goal"></ng-container>
                 </span>
                 <span *ngIf="jogador.golos_pp > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_pp)"><img src="assets/img/jogo/PP.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_pp)"><img src="assets/img/jogo/PP.png"
+                      class="item-goal"></ng-container>
                 </span>
                 <span *ngIf="jogador.golos_up > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_up)"><img src="assets/img/jogo/UP.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_up)"><img src="assets/img/jogo/UP.png"
+                      class="item-goal"></ng-container>
                 </span>
                 <span *ngIf="jogador.golos_ld > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_ld)"><img src="assets/img/jogo/LD.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_ld)"><img src="assets/img/jogo/LD.png"
+                      class="item-goal"></ng-container>
                 </span>
                 <!-- Golos Sofridos -->
                 <span *ngIf="jogador.golos_s_normal > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_normal)"><img src="assets/img/jogo/GOLO_S.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_normal)"><img
+                      src="assets/img/jogo/GOLO_S.png" class="item-goal"></ng-container>
                 </span>
                 <span *ngIf="jogador.golos_s_p > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_p)"><img src="assets/img/jogo/P_S.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_p)"><img src="assets/img/jogo/P_S.png"
+                      class="item-goal"></ng-container>
                 </span>
                 <span *ngIf="jogador.golos_s_pp > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_pp)"><img src="assets/img/jogo/PP_S.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_pp)"><img src="assets/img/jogo/PP_S.png"
+                      class="item-goal"></ng-container>
                 </span>
                 <span *ngIf="jogador.golos_s_up > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_up)"><img src="assets/img/jogo/UP_S.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_up)"><img src="assets/img/jogo/UP_S.png"
+                      class="item-goal"></ng-container>
                 </span>
                 <span *ngIf="jogador.golos_s_ld > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_ld)"><img src="assets/img/jogo/LD_S.png" class="item-goal"></ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.golos_s_ld)"><img src="assets/img/jogo/LD_S.png"
+                      class="item-goal"></ng-container>
                 </span>
                 <span *ngIf="jogador.assistencias > 0">
-                  <ng-container *ngFor="let _ of [].constructor(jogador.assistencias)"><span class="item-goal">A</span> </ng-container>
+                  <ng-container *ngFor="let _ of [].constructor(jogador.assistencias)"><span class="item-goal">A</span>
+                  </ng-container>
                 </span>
                 <!-- Cartões -->
                 <span *ngIf="jogador.amarelo > 0">
@@ -521,17 +525,19 @@
           (click)="editarJogo()">
           <i class="nc-icon nc-ruler-pencil me-2"></i> Editar
         </button>
+        <button class="btn btn-info btn-lg" (click)="verConvocatoria(jogo.id)">
+          <i class="nc-icon nc-bullet-list-67 me-2"></i>Convocatória
+        </button>
+      </div>
+      <div class="d-flex gap-2">
         <button type="button" *ngIf="jogo.estado==='CONCLUIDO' && !mostrarRegisto" class="btn btn-success btn-lg"
           (click)="gerarFichaEstatistica()">
           <i class="nc-icon nc-chart-bar-32 me-2"></i> Ficha Estatística
         </button>
-        <button type="button" *ngIf="mostrarRegisto" class="btn btn-success btn-lg"
-          (click)="gerarFichaEstatistica()">
+        <button type="button" *ngIf="mostrarRegisto" class="btn btn-success btn-lg" (click)="gerarFichaEstatistica()">
           <i class="nc-icon nc-chart-bar-32 me-2"></i> Ficha Estatística
         </button>
-        <button class="btn btn-info btn-lg" (click)="verConvocatoria(jogo.id)">
-          <i class="nc-icon nc-bullet-list-67 me-2"></i>Convocatória
-        </button>
+
       </div>
     </div>
   </div>
