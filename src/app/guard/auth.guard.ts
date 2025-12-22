@@ -30,7 +30,7 @@ export class AuthGuard implements CanActivate {
           // Tenta estender a sessão
           return this.loginService.extendSession().pipe(
             map(newToken => {
-              if (newToken) {
+              if (newToken!== null && newToken !=='') {
                 console.info('🚨 AuthGuard: Sessão estendida com sucesso');
                 // Se um novo token for recebido, armazena-o e permite o acesso
                 this.loginService.setAuthToken(newToken);
@@ -38,7 +38,7 @@ export class AuthGuard implements CanActivate {
               } else {
                 console.warn('🚨 AuthGuard: Não foi possível estender a sessão');
                 // Se não for possível estender a sessão, redireciona para login
-                
+
                 this.router.navigate(['/'], {
                   queryParams: { sessionExpired: 'true' },
                   replaceUrl: true
@@ -65,7 +65,7 @@ export class AuthGuard implements CanActivate {
       catchError(() => {
         // Se ocorrer um erro ao verificar a autenticação, redireciona para login
         this.loginService.clear();
-         console.error('🚨 AuthGuard: Erro ao verificar autenticação 1, redirecionando para login'); 
+         console.error('🚨 AuthGuard: Erro ao verificar autenticação 1, redirecionando para login');
         this.router.navigate(['/'], {
           queryParams: { sessionExpired: 'true' },
           replaceUrl: true

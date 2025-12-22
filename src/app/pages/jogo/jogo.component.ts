@@ -69,11 +69,12 @@ export class JogoComponent implements OnInit {
   mostrarRegisto: boolean = false;
 
   tiposGolo = [
+    { key: 'normal', label: 'Normal' },
     { key: 'p', label: 'Penalty' },
     { key: 'ld', label: 'Livre Direto' },
     { key: 'pp', label: 'Power Play' },
-    { key: 'up', label: 'Under Play' },
-    { key: 'normal', label: 'Normal' }
+    { key: 'up', label: 'Under Play' }
+
   ];
   tiposCartao = [
     { key: 'amarelo', label: 'Amarelo' },
