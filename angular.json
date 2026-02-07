@@ -21,8 +21,11 @@
               "chart.js"
             ],
             "assets": [
-              "src/assets"
+              "src/assets",
+              "src/manifest.webmanifest"
             ],
+            "serviceWorker": true,
+            "ngswConfigPath": "ngsw-config.json",
             "styles": [
               "@angular/material/prebuilt-themes/azure-blue.css",
               "node_modules/bootstrap/scss/bootstrap.scss",
@@ -121,7 +124,7 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
             "buildTarget": "SM:build"
-           
+
           },
           "configurations": {
             "hcmaia": {
