@@ -22,6 +22,14 @@ import '@angular/localize/init';
  * BROWSER POLYFILLS
  */
 
+/* Polyfills for older iOS Safari (iPad Air 2) */
+// Import core-js polyfills for ES features not supported in older Safari
+import 'core-js/es/array/at';
+import 'core-js/es/object/has-own';
+import 'core-js/es/string/replace-all';
+import 'core-js/es/promise/all-settled';
+import 'core-js/es/reflect';
+
 /** IE10 and IE11 requires the following for NgClass support on SVG elements */
 // import 'classlist.js';  // Run `npm install --save classlist.js`.
 
