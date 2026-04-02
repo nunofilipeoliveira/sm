@@ -10,6 +10,7 @@ import { CompeticaoData } from "./competicaoData";
 import { JogoData, JogadorJogo } from "../lista-jogos/jogoData";
 import { EquipaData } from "../equipa/equipaData";
 import { JogadorConvocado } from "../convocatoria/convocatoriaData";
+import { EquipaService } from "../../services/equipa.service";
 
 
 // Estenda a interface JogadorJogo para incluir a propriedade 'expanded'
@@ -67,6 +68,8 @@ export class JogoComponent implements OnInit {
   meuClubeid: number = environment.clube_id
   nomeClube: string = "";
   mostrarRegisto: boolean = false;
+  mostrarLicencasView: boolean = false;
+  indiceJogadorAtual: number = 0;
 
   tiposGolo = [
     { key: 'normal', label: 'Normal' },
@@ -84,7 +87,7 @@ export class JogoComponent implements OnInit {
 
   atletasIndisponiveis: JogadorConvocado[] = [];
 
-  constructor(private route: ActivatedRoute, private jogoService: JogoService, private clubeService: ClubeService, private pdfService: PdfService, private router: Router,) { }
+  constructor(private route: ActivatedRoute, private jogoService: JogoService, private clubeService: ClubeService, private pdfService: PdfService, private router: Router, private equipaService: EquipaService) { }
 
   ngOnInit() {
     this.loading = true;
@@ -133,6 +136,73 @@ export class JogoComponent implements OnInit {
 
   voltar(): void {
     this.router.navigate(['/listajogos']);
+  }
+
+  mostrarLicencas(): void {
+    this.mostrarLicencasView = true;
+    this.indiceJogadorAtual = 0;
+
+    // Carregar licenças dos jogadores a partir da equipa
+    this.equipaService.ensureEquipaLoaded().subscribe({
+      next: (equipa) => {
+        if (equipa && equipa.jogadores) {
+          // Atualizar cada jogador com a licença do jogador na equipa
+          this.jogo.jogadores.forEach(jogadorJogo => {
+            const jogadorEquipa = equipa.jogadores.find((j: any) => j.id === jogadorJogo.id_jogador);
+            if (jogadorEquipa) {
+              jogadorJogo.licenca = jogadorEquipa.licenca || '--';
+            }
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Erro ao carregar jogadores da equipa:', err);
+      }
+    });
+  }
+
+  fecharLicencas(): void {
+    this.mostrarLicencasView = false;
+  }
+
+  proximoJogador(): void {
+    if (this.jogo.jogadores && this.indiceJogadorAtual < this.jogo.jogadores.length - 1) {
+      this.indiceJogadorAtual++;
+    }
+  }
+
+  anteriorJogador(): void {
+    if (this.indiceJogadorAtual > 0) {
+      this.indiceJogadorAtual--;
+    }
+  }
+
+  // Touch handling for mobile swipe
+  touchStartX: number = 0;
+  touchEndX: number = 0;
+  minSwipeDistance: number = 50;
+
+  onTouchStart(event: TouchEvent): void {
+    this.touchStartX = event.changedTouches[0].screenX;
+  }
+
+  onTouchEnd(event: TouchEvent): void {
+    this.touchEndX = event.changedTouches[0].screenX;
+    this.handleSwipe();
+  }
+
+  private handleSwipe(): void {
+    const swipeDistance = this.touchEndX - this.touchStartX;
+
+    if (Math.abs(swipeDistance) > this.minSwipeDistance) {
+      if (swipeDistance > 0) {
+        // Swipe right - previous player
+        this.anteriorJogador();
+      } else {
+        // Swipe left - next player
+        this.proximoJogador();
+      }
+    }
   }
 
   registarInformacaoJogo() {
@@ -542,5 +612,16 @@ export class JogoComponent implements OnInit {
       console.error('❌ Erro ao gerar ficha estatística:', error);
       alert('Erro ao gerar a ficha estatística. Por favor, tente novamente.');
     }
+  }
+
+  // Get player image URL
+  getJogadorImage(idJogador: number): string {
+    return `assets/img/jogadores/${idJogador}_avatar.jpg`;
+  }
+
+  // Handle image error - replace with default
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.src = 'assets/img/jogadores/default_avatar.jpg';
   }
 }

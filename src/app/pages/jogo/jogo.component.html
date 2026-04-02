@@ -521,6 +521,9 @@
         <button class="btn btn-info btn-lg" (click)="verConvocatoria(jogo.id)">
           <i class="nc-icon nc-bullet-list-67 me-2"></i>Convocatória
         </button>
+        <button class="btn btn-primary btn-lg" (click)="mostrarLicencas()">
+          <span class="icon-license">📋</span> Licenças
+        </button>
       </div>
       <div class="d-flex gap-2">
         <button type="button" *ngIf="jogo.estado==='CONCLUIDO' && !mostrarRegisto" class="btn btn-success btn-lg"
@@ -531,6 +534,75 @@
           <i class="nc-icon nc-chart-bar-32 me-2"></i> Ficha Estatística
         </button>
 
+      </div>
+    </div>
+
+    <!-- Licenças Slide View (Modal) -->
+    <div *ngIf="mostrarLicencasView" class="modal-overlay" (click)="fecharLicencas()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>📋 Licenças</h3>
+          <button class="btn-close-modal" (click)="fecharLicencas()">
+            <i class="nc-icon nc-simple-remove"></i>
+          </button>
+        </div>
+
+        <div class="modal-body">
+          <div class="slide-container" *ngIf="jogo.jogadores && jogo.jogadores.length > 0" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+        <button class="slide-btn slide-btn-left" (click)="anteriorJogador()" [disabled]="indiceJogadorAtual === 0">
+          <i class="nc-icon nc-minimal-left"></i>
+        </button>
+
+        <div class="slide-content">
+          <div class="jogador-slide-card">
+            <div class="jogador-foto">
+              <img [src]="getJogadorImage(jogo.jogadores[indiceJogadorAtual].id_jogador)"
+                   (error)="onImageError($event)"
+                   alt="Foto do Jogador" />
+            </div>
+            <div class="jogador-info-slide">
+              <div class="jogador-badges" *ngIf="jogo.jogadores[indiceJogadorAtual].capitao || jogo.jogadores[indiceJogadorAtual].isGR">
+                <span class="badge-capitao" *ngIf="jogo.jogadores[indiceJogadorAtual].capitao">C</span>
+                <span class="badge-gr" *ngIf="jogo.jogadores[indiceJogadorAtual].isGR">GR</span>
+              </div>
+              <h4 class="nome-completo">{{jogo.jogadores[indiceJogadorAtual].nome}}</h4>
+              <div class="info-item-slide">
+                <span class="label">Nº Camisola:</span>
+                <span class="value">{{jogo.jogadores[indiceJogadorAtual].numero || '--'}}</span>
+              </div>
+              <div class="info-item-slide">
+                <span class="label">Nº Licença:</span>
+                <span class="value">{{jogo.jogadores[indiceJogadorAtual].licenca || '--'}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="slide-btn slide-btn-right" (click)="proximoJogador()" [disabled]="indiceJogadorAtual >= jogo.jogadores.length - 1">
+          <i class="nc-icon nc-minimal-right"></i>
+        </button>
+      </div>
+
+      <div class="slide-indicators-wrapper" *ngIf="jogo.jogadores && jogo.jogadores.length > 0">
+        <div class="slide-indicators">
+          <span class="indicator" *ngFor="let j of jogo.jogadores; let i = index"
+                [class.active]="i === indiceJogadorAtual"
+                (click)="indiceJogadorAtual = i">
+          </span>
+        </div>
+        <div class="slide-counter">
+          {{indiceJogadorAtual + 1}} / {{jogo.jogadores.length}}
+        </div>
+      </div>
+
+      <div class="no-jogadores" *ngIf="!jogo.jogadores || jogo.jogadores.length === 0">
+        <p>Não há jogadores associados a este jogo.</p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-lg" (click)="fecharLicencas()">
+          <i class="nc-icon nc-minimal-left me-2"></i> Voltar
+        </button>
       </div>
     </div>
   </div>

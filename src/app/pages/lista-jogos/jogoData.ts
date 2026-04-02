@@ -58,4 +58,5 @@ export interface JogadorJogo {
     expanded?: boolean; // Adicione esta linha
     estado: string; // Ex: "Convocado", "Lesionado", "Suspenso", "Indisponível"
     obs: string; // Observações adicionais sobre o jogador na convocatória
+    licenca?: string; // Número da licença do jogador
 }
