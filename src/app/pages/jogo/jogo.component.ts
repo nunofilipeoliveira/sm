@@ -142,23 +142,7 @@ export class JogoComponent implements OnInit {
     this.mostrarLicencasView = true;
     this.indiceJogadorAtual = 0;
 
-    // Carregar licenças dos jogadores a partir da equipa
-    this.equipaService.ensureEquipaLoaded().subscribe({
-      next: (equipa) => {
-        if (equipa && equipa.jogadores) {
-          // Atualizar cada jogador com a licença do jogador na equipa
-          this.jogo.jogadores.forEach(jogadorJogo => {
-            const jogadorEquipa = equipa.jogadores.find((j: any) => j.id === jogadorJogo.id_jogador);
-            if (jogadorEquipa) {
-              jogadorJogo.licenca = jogadorEquipa.licenca || '--';
-            }
-          });
-        }
-      },
-      error: (err) => {
-        console.error('Erro ao carregar jogadores da equipa:', err);
-      }
-    });
+
   }
 
   fecharLicencas(): void {
@@ -213,7 +197,15 @@ export class JogoComponent implements OnInit {
   toggleJogadorExpand(idJogador: number): void {
     const jogador = this.jogo.jogadores.find(j => j.id_jogador === idJogador);
     if (jogador) {
+      //retirar a expansão de todos os jogadores
+      this.jogo.jogadores.forEach(j => {
+        if (j.id_jogador !== idJogador) {
+          j.expanded = false;
+        }
+      });
+
       jogador.expanded = !jogador.expanded;
+
     }
   }
 
@@ -453,6 +445,34 @@ export class JogoComponent implements OnInit {
            (jogador.ld_defesa || 0) > 0 ||
            (jogador.penalty_falhado || 0) > 0 ||
            (jogador.ld_falhado || 0) > 0;
+  }
+
+  // Novo método para calcular o total de cartões
+  getTotalCartoes(jogador: JogadorJogoExpandable): number {
+    return (jogador.amarelo || 0) +
+           (jogador.azul || 0) +
+           (jogador.vermelho || 0);
+  }
+
+  // Novo método para verificar se o jogador tem alguma estatística
+  hasAnyStats(jogador: JogadorJogoExpandable): boolean {
+    return this.getTotalGolos(jogador) > 0 ||
+           this.getTotalCartoes(jogador) > 0 ||
+           (jogador.assistencias || 0) > 0 ||
+           (jogador.recuperacoes_bola || 0) > 0 ||
+           (jogador.perdas_bola || 0) > 0 ||
+           (jogador.remates || 0) > 0 ||
+           (jogador.faltas || 0) > 0;
+  }
+
+  // Novo método para navegar até um jogador específico
+  scrollToJogador(idJogador: number): void {
+    setTimeout(() => {
+      const element = document.getElementById('jogador-' + idJogador);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   }
 
   // Método para verificar se o jogador tem cartões

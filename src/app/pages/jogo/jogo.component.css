@@ -1,3 +1,283 @@
+/* Quick Navigation Bar for Players in Edit Mode */
+.quick-nav-bar {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #dee2e6;
+}
+
+.quick-nav-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+}
+
+.quick-nav-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.quick-nav-scroll::-webkit-scrollbar-thumb {
+  background: #adb5bd;
+  border-radius: 2px;
+}
+
+.quick-nav-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 48px;
+  padding: 6px;
+  background: #fff;
+  border: 2px solid #dee2e6;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.quick-nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.quick-nav-btn.active {
+  border-color: #b52732;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%);
+}
+
+.quick-nav-btn.has-stats::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background: #28a745;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.quick-nav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.quick-nav-number {
+  font-size: 0.7em;
+  font-weight: 700;
+  color: #b52732;
+  margin-top: 2px;
+}
+
+.quick-nav-hint {
+  display: block;
+  text-align: center;
+  font-size: 0.75em;
+  color: #6c757d;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Compact Stats Summary Row */
+.compact-stats-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+  justify-content: center;
+}
+
+.compact-stats-summary .summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 12px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.compact-stats-summary .summary-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.compact-stats-summary .summary-item.expanded {
+  border-color: #b52732;
+  background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%);
+}
+
+.compact-stats-summary .summary-number {
+  font-weight: 700;
+  font-size: 1.1em;
+  color: #b52732;
+}
+
+.compact-stats-summary .summary-name {
+  font-size: 0.7em;
+  color: #495057;
+  max-width: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compact-stats-summary .summary-icons {
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.compact-stats-summary .stat-badge {
+  font-size: 0.65em;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.compact-stats-summary .stat-badge.goal {
+  background: #d4edda;
+  color: #155724;
+}
+
+.compact-stats-summary .stat-badge.card {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.compact-stats-summary .stat-badge.assist {
+  background: #cce5ff;
+  color: #004085;
+}
+
+/* Compact Basic Info Row - Desktop */
+.info-basica-compact {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.compact-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.compact-field label {
+  font-size: 0.8em;
+  font-weight: 600;
+  color: #6c757d;
+  margin: 0;
+}
+
+.input-compact-numero {
+  width: 55px;
+  padding: 6px 8px;
+  font-size: 1em;
+  text-align: center;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+}
+
+.toggle-field {
+  justify-content: flex-start;
+  padding-top: 10px;
+}
+
+.small-toggle {
+  transform: scale(0.85);
+  transform-origin: top center;
+}
+
+/* Mobile Optimization */
+@media (max-width: 576px) {
+  .quick-nav-bar {
+    padding: 8px;
+    margin-bottom: 12px;
+  }
+
+  .quick-nav-btn {
+    min-width: 44px;
+    padding: 4px;
+  }
+
+  .quick-nav-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .compact-stats-summary {
+    gap: 6px;
+  }
+
+  .compact-stats-summary .summary-item {
+    padding: 6px 8px;
+    min-width: 50px;
+  }
+
+  /* Compact Basic Info Row */
+  .info-basica-compact {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+
+  .compact-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .compact-field label {
+    font-size: 0.7em;
+    font-weight: 600;
+    color: #6c757d;
+    margin: 0;
+  }
+
+  .input-compact-numero {
+    width: 45px;
+    padding: 4px 6px;
+    font-size: 0.9em;
+    text-align: center;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+  }
+
+  .toggle-field {
+    justify-content: flex-start;
+    padding-top: 8px;
+  }
+
+  .small-toggle {
+    transform: scale(0.75);
+    transform-origin: top center;
+  }
+}
+
 /* Global container */
 .game-summary {
   max-width: 800px;

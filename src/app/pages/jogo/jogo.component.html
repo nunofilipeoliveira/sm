@@ -73,7 +73,21 @@
     <div *ngIf="mostrarRegisto" class="registo-container">
       <h3 class="titulo-registo">Registar Informação do Jogo</h3>
 
-      <div *ngFor="let jogador of jogo.jogadores" class="jogador-item">
+      <!-- Compact Stats Summary Row - Quick access to all players -->
+      <div class="compact-stats-summary">
+        <div class="summary-item" *ngFor="let jogador of jogo.jogadores"
+             (click)="toggleJogadorExpand(jogador.id_jogador); scrollToJogador(jogador.id_jogador)"
+             [class.expanded]="jogador.expanded">
+          <span class="summary-number">{{jogador.numero || '-'}}</span>
+          <span class="summary-name">{{jogador.nome.split(' ')[0]}}</span>
+          <span class="summary-icons">
+            <span *ngIf="getTotalGolos(jogador) > 0" class="stat-badge goal">{{getTotalGolos(jogador)}}⚽</span>
+            <span *ngIf="getTotalCartoes(jogador) > 0" class="stat-badge card">{{getTotalCartoes(jogador)}}🟨</span>
+          </span>
+        </div>
+      </div>
+
+      <div *ngFor="let jogador of jogo.jogadores" class="jogador-item" id="jogador-{{jogador.id_jogador}}">
         <div class="jogador-header" (click)="toggleJogadorExpand(jogador.id_jogador)">
           <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
             onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" class="avatar-img me-2" />
@@ -82,55 +96,31 @@
         </div>
 
         <div *ngIf="jogador.expanded" class="jogador-details">
-          <!-- Seção de Informações Básicas do Jogador -->
-          <div class="info-basica-container">
-            <h4 class="info-basica-titulo">📋 Informações Básicas</h4>
-
-            <div class="info-basica-grid">
-              <!-- Número da Camisola -->
-              <div class="info-item numero-item">
-                <div class="info-icon">
-                  <span class="icon-number">#</span>
-                </div>
-                <div class="info-content">
-                  <label class="info-label">Nº Camisola</label>
-                  <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1"
-                    max="99" class="input-numero-melhorado" placeholder="--" />
-                </div>
+          <!-- Basic Info - Compact Row for Mobile -->
+          <div class="info-basica-compact">
+            <div class="compact-field">
+              <label>Nº</label>
+              <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1"
+                max="99" class="input-compact-numero" placeholder="--" />
+            </div>
+            <div class="compact-field toggle-field">
+              <label>Cap</label>
+              <div class="toggle-container small-toggle">
+                <input type="checkbox" [(ngModel)]="jogador.capitao" name="capitao-{{jogador.id_jogador}}"
+                  id="capitao-{{jogador.id_jogador}}" class="toggle-input" />
+                <label for="capitao-{{jogador.id_jogador}}" class="toggle-label">
+                  <span class="toggle-slider"></span>
+                </label>
               </div>
-
-              <!-- Capitão -->
-              <div class="info-item capitao-item">
-                <div class="info-icon">
-                  <i class="nc-icon nc-capitain"></i>
-                </div>
-                <div class="info-content">
-                  <label class="info-label">Capitão</label>
-                  <div class="toggle-container">
-                    <input type="checkbox" [(ngModel)]="jogador.capitao" name="capitao-{{jogador.id_jogador}}"
-                      id="capitao-{{jogador.id_jogador}}" class="toggle-input" />
-                    <label for="capitao-{{jogador.id_jogador}}" class="toggle-label">
-                      <span class="toggle-slider"></span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Guarda-Redes -->
-              <div class="info-item gr-item">
-                <div class="info-icon">
-                  <span class="icon-gk">🥅</span>
-                </div>
-                <div class="info-content">
-                  <label class="info-label">Guarda-Redes</label>
-                  <div class="toggle-container">
-                    <input type="checkbox" [(ngModel)]="jogador.isGR" name="isGR-{{jogador.id_jogador}}"
-                      id="isGR-{{jogador.id_jogador}}" class="toggle-input" />
-                    <label for="isGR-{{jogador.id_jogador}}" class="toggle-label">
-                      <span class="toggle-slider"></span>
-                    </label>
-                  </div>
-                </div>
+            </div>
+            <div class="compact-field toggle-field">
+              <label>GR</label>
+              <div class="toggle-container small-toggle">
+                <input type="checkbox" [(ngModel)]="jogador.isGR" name="isGR-{{jogador.id_jogador}}"
+                  id="isGR-{{jogador.id_jogador}}" class="toggle-input" />
+                <label for="isGR-{{jogador.id_jogador}}" class="toggle-label">
+                  <span class="toggle-slider"></span>
+                </label>
               </div>
             </div>
           </div>
