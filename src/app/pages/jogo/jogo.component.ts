@@ -69,6 +69,8 @@ export class JogoComponent implements OnInit {
   nomeClube: string = "";
   mostrarRegisto: boolean = false;
   mostrarLicencasView: boolean = false;
+  modoEdicaoLicencas: boolean = false;
+  alteracoesFeitasLicencas: boolean = false;
   indiceJogadorAtual: number = 0;
 
   tiposGolo = [
@@ -146,7 +148,16 @@ export class JogoComponent implements OnInit {
   }
 
   fecharLicencas(): void {
+    if (this.modoEdicaoLicencas && this.alteracoesFeitasLicencas) {
+      const confirmar = confirm('Tem alterações não guardadas. Deseja guardar as alterações antes de sair?');
+      if (confirmar) {
+        this.guardarAlteracoesLicencas();
+        return;
+      }
+    }
     this.mostrarLicencasView = false;
+    this.modoEdicaoLicencas = false;
+    this.alteracoesFeitasLicencas = false;
   }
 
   proximoJogador(): void {
@@ -643,5 +654,68 @@ export class JogoComponent implements OnInit {
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
     img.src = 'assets/img/jogadores/default_avatar.jpg';
+  }
+
+  toggleModoEdicaoLicencas(): void {
+    this.modoEdicaoLicencas = !this.modoEdicaoLicencas;
+    if (!this.modoEdicaoLicencas && this.alteracoesFeitasLicencas) {
+      const confirmar = confirm('Tem alterações não guardadas. Deseja guardar as alterações?');
+      if (confirmar) {
+        this.guardarAlteracoesLicencas();
+      } else {
+        this.alteracoesFeitasLicencas = false;
+        this.jogoService.getJogoById(this.idJogo).subscribe({
+          next: (data) => {
+            this.jogo = {
+              ...data,
+              jogadores: data.jogadores.map((jogador: JogadorJogo) => ({
+                ...jogador,
+                expanded: false,
+                expandedView: false
+              }))
+            };
+            this.jogo.jogadores = this.jogo.jogadores.filter(j => j.estado === 'CONVOCADO');
+            this.jogo.jogadores.forEach(j => {
+              if(j.golos_s_normal>0 || j.golos_s_p>0 || j.golos_s_ld>0 || j.golos_s_up>0 || j.golos_s_pp>0){
+                j.isGR = true;
+              }
+            });
+          }
+        });
+      }
+    }
+  }
+
+  onAlteracaoNumeroOuBadge(): void {
+    this.alteracoesFeitasLicencas = true;
+  }
+
+  guardarAlteracoesLicencas(): void {
+    this.jogoService.atualizarJogo(this.jogo).subscribe({
+      next: (data) => {
+        console.log('Jogo atualizado com sucesso:', data);
+        this.jogo = {
+          ...data,
+          jogadores: data.jogadores.map((jogador: JogadorJogo) => ({
+            ...jogador,
+            expanded: false,
+            expandedView: false
+          }))
+        };
+        this.jogo.jogadores = this.jogo.jogadores.filter(j => j.estado === 'CONVOCADO');
+        this.jogo.jogadores.forEach(j => {
+          if(j.golos_s_normal>0 || j.golos_s_p>0 || j.golos_s_ld>0 || j.golos_s_up>0 || j.golos_s_pp>0){
+            j.isGR = true;
+          }
+        });
+        this.alteracoesFeitasLicencas = false;
+        this.modoEdicaoLicencas = false;
+        alert('Alterações guardadas com sucesso!');
+      },
+      error: (error) => {
+        console.error('Erro ao atualizar o jogo:', error);
+        alert('Erro ao guardar as alterações.');
+      }
+    });
   }
 }
