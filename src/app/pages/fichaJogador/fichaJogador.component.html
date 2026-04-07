@@ -452,18 +452,30 @@
                     <span class="opponent-name-compact">{{ jogo.equipa_adv_nome }}</span>
                     <small *ngIf="jogo.tipoEquipa_adv==='B'" class="text-muted">({{jogo.tipoEquipa_adv}})</small>
                   </div>
-                  <div class="jogo-result">
-                    <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
-                      'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
-                      'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
-                      'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
-                    }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
-                    <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'" [ngClass]="{
-                      'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
-                      'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
-                      'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
-                    }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
-                    <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted small"></span>
+                  <div class="jogo-result-with-goals">
+                    <div class="goals-display" *ngIf="calcularGolosJogo(jogo) > 0">
+                      <div class="goal-ball">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                         ⚽
+                          <path d="M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20" fill="none" stroke="currentColor" stroke-width="2"/>
+                          <path d="M2 12h20M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10c-2.5-3-4-6.5-4-10s1.5-7 4-10z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                      </div>
+                      <span class="goal-count">{{ calcularGolosJogo(jogo) }}</span>
+                    </div>
+                    <div class="result-only">
+                      <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
+                        'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                        'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                        'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                      }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
+                      <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'" [ngClass]="{
+                        'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                        'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                        'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                      }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
+                      <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted small"></span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -474,9 +486,17 @@
 
       <!-- Total Geral Moderno -->
       <div *ngIf="jogosPorEscalao.length > 0" class="total-summary">
-        <div class="total-badge">
-          <i class="nc-icon nc-trophy me-2"></i>
-          Total: {{ totalGeralJogos }} jogos
+        <div class="total-badges">
+          <div class="total-badge games-badge">
+            <i class="nc-icon nc-trophy me-2"></i>
+            {{ totalGeralJogos }} jogos
+          </div>
+          <div class="total-badge goals-badge">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="me-1">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            {{ totalGeralGolos }} golos
+          </div>
         </div>
       </div>
 

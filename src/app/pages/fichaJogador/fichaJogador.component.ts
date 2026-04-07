@@ -47,6 +47,7 @@ export class FichaJogadorComponent implements OnInit {
 
   jogosPorEscalao: { escalao: string; jogos: JogoData[] }[] = [];
   totalGeralJogos: number = 0;
+  totalGeralGolos: number = 0;
   loadingJogos: boolean = false; // Opcional: para spinner se quiser
   escaloes: { idescalao: number; nomeEscalao: string }[] = [];
   selectedEscalao: string = '';
@@ -199,7 +200,10 @@ export class FichaJogadorComponent implements OnInit {
                       .sort((a, b) => a.escalao.localeCompare(b.escalao));
 
                     // NOVA: Calcule o total geral aqui (simples e eficiente)
-                    this.totalGeralJogos = jogos.length; // Ou: this.jogosPorEscalao.reduce((sum, item) => sum + item.total, 0);
+                    this.totalGeralJogos = jogos.length;
+                    
+                    // Calcular total de golos do jogador
+                    this.totalGeralGolos = jogos.reduce((total, jogo) => total + this.calcularGolosJogo(jogo), 0);
 
                     this.loadingJogos = false;
                     console.log('Jogos por escalão:', this.jogosPorEscalao);
@@ -395,5 +399,21 @@ export class FichaJogadorComponent implements OnInit {
   navigateToJogo(jogoId: number) {
     // Navigate to the game page
     this.router.navigate(['/jogo', jogoId]);
+  }
+
+  calcularGolosJogo(jogo: JogoData): number {
+    const idJogador = this.jogadorData.id;
+    const jogador = jogo.jogadores?.find(j => j.id_jogador === idJogador);
+    if (!jogador) return 0;
+    return (jogador.golos_p || 0) +
+           (jogador.golos_ld || 0) +
+           (jogador.golos_pp || 0) +
+           (jogador.golos_up || 0) +
+           (jogador.golos_normal || 0) +
+           (jogador.golos_s_p || 0) +
+           (jogador.golos_s_ld || 0) +
+           (jogador.golos_s_up || 0) +
+           (jogador.golos_s_pp || 0) +
+           (jogador.golos_s_normal || 0);
   }
 }

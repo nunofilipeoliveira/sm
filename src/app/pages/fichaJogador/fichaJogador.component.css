@@ -760,3 +760,93 @@ button[aria-expanded="true"] i.nc-icon {
     margin-bottom: 5px;
   }
 }
+
+/* Novos estilos para golos do jogador */
+.total-badges {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.games-badge {
+  background: #6c757d;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.goals-badge {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 0.9em;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 10px rgba(40, 167, 69, 0.3);
+}
+
+.jogo-result-with-goals {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 70px;
+}
+
+.goals-display {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.85em;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+}
+
+.goal-ball {
+  display: flex;
+  align-items: center;
+  color: white;
+}
+
+.goal-count {
+  font-weight: 700;
+}
+
+.result-only {
+  min-width: 50px;
+  text-align: center;
+}
+
+/* Mobile optimizations */
+@media (max-width: 576px) {
+  .total-badges {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  
+  .goals-badge, .games-badge {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .jogo-result-with-goals {
+    flex-direction: column;
+    gap: 4px;
+    min-width: 40px;
+  }
+  
+  .goals-display {
+    padding: 2px 6px;
+    font-size: 0.75em;
+  }
+}
