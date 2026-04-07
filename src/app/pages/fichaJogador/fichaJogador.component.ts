@@ -125,7 +125,9 @@ export class FichaJogadorComponent implements OnInit {
                   if (data != null) {
                     this.spinner = false;
                     this.faltas = data;
-                    this.total_faltas = this.faltas.length
+                    // retirar faltas do tipo Lesão
+                    this.faltas = this.faltas.filter(falta => falta.estado !== 'Lesão');
+                    this.total_faltas = this.faltas.length;
                     if (this.faltas.length == 0) {
                       this.hasFaltas = false;
                     } else {
@@ -201,7 +203,7 @@ export class FichaJogadorComponent implements OnInit {
 
                     // NOVA: Calcule o total geral aqui (simples e eficiente)
                     this.totalGeralJogos = jogos.length;
-                    
+
                     // Calcular total de golos do jogador
                     this.totalGeralGolos = jogos.reduce((total, jogo) => total + this.calcularGolosJogo(jogo), 0);
 
