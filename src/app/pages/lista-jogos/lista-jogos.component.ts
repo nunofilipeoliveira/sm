@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core'; // Adicionado OnInit
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { JogoService } from '../../services/jogo.service';
 import { EquipaService } from '../../services/equipa.service';
-import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap'; // Importar NgbModal e NgbModule
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ClubeData } from '../gestao-clubes/clubesData';
 import { ClubeService } from '../../services/clube.service';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -25,89 +25,140 @@ import { EquipaData } from '../equipa/equipaData';
   templateUrl: './lista-jogos.component.html',
   styleUrl: './lista-jogos.component.css'
 })
-export class ListaJogosComponent implements OnInit { // Implementar OnInit
+export class ListaJogosComponent implements OnInit {
   constructor(
     private router: Router,
     private jogoService: JogoService,
     private equipaService: EquipaService,
-    private modalService: NgbModal, // Injetar NgbModal
+    private modalService: NgbModal,
     private clubeService: ClubeService,
     private loginService: LoginServiceService
-
   ) { }
 
-  clubes: ClubeData[] = []; // Para popular o dropdown de clubes
-  clubeCasa: ClubeData | undefined; // Clube da casa
+  clubes: ClubeData[] = [];
+  clubeCasa: ClubeData | undefined;
   jogos: JogoData[] = [];
-  jogosBackup: JogoData[] = []; // Backup dos jogos para filtros
+  jogosBackup: JogoData[] = [];
   tmpEquipa: EquipaData | undefined;
-  loading: boolean = true; // Adicionar propriedade de loading
-  competicoes: CompeticaoData[] = []; // Para popular o dropdown de competições
-  novoJogo: JogoData = this.initializeNewJogo(); // Objeto para o novo jogo no modal
-  isEquipaB_local: boolean = false; // Para o checkbox de Equipa B
-  isEquipaB_adv: boolean = false; // Para o checkbox de Equipa B
+  loading: boolean = true;
+  competicoes: CompeticaoData[] = [];
+  novoJogo: JogoData = this.initializeNewJogo();
+  isEquipaB_local: boolean = false;
+  isEquipaB_adv: boolean = false;
   selectedClube: ClubeData | undefined;
-  isAdmin: boolean = false; // Para verificar se o utilizador é admin
-  isModoEditar: boolean = false; // Para verificar se está em modo editar
-  hasEquipaB:boolean = true;
-  filtro: string = 'todos'; // Filtro inicial para todos
+  isAdmin: boolean = false;
+  isModoEditar: boolean = false;
+  hasEquipaB: boolean = true;
+  filtro: string = 'todos';
   competicao_outro_descritivo: string = '';
 
+  // --- Pesquisa de clubes ---
+  clubeSearchTerm: string = '';
+  clubesFiltrados: ClubeData[] = [];
+  showClubeDropdown: boolean = false;
+
   ngOnInit(): void {
-    this.loading = true; // Inicia o loading
+    this.loading = true;
     this.tmpEquipa = this.equipaService.getEquipa();
-    if (this.tmpEquipa === undefined || this.tmpEquipa.id === 0) { // Verifica se a equipa não está carregada
+    if (this.tmpEquipa === undefined || this.tmpEquipa.id === 0) {
       this.equipaService.getEquipabyIDLight(localStorage.getItem("idequipa_escalao")).subscribe({
         next: (equipa) => {
           this.tmpEquipa = equipa;
           console.log("ListaJogosComponent - ngOnInit - equipa:", this.tmpEquipa?.id);
           this.loadJogos();
-          this.loadCompeticoes(); // Carregar competições
+          this.loadCompeticoes();
         },
         error: (error) => {
           console.error('Error fetching equipa:', error);
-          this.loading = false; // Finaliza o loading em caso de erro
+          this.loading = false;
         }
       });
     } else {
       console.log("ListaJogosComponent - ngOnInit - equipa:", this.tmpEquipa?.id);
       this.loadJogos();
-      this.loadCompeticoes(); // Carregar competições
-
+      this.loadCompeticoes();
     }
 
-    // Verifica se o utilizador é admin
     this.loginService.getLoginData().perfil === 'ADMIN' ? this.isAdmin = true : this.isAdmin = false;
     console.log('ListaJogosComponent | ngOnInit | isAdmin:', this.isAdmin);
-
   }
 
-  // Método para inicializar um novo objeto JogoData
+  // Fecha o dropdown ao clicar fora
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.clube-search-wrapper')) {
+      this.showClubeDropdown = false;
+    }
+  }
+
+  // Filtra a lista de clubes conforme o utilizador escreve
+  onClubeSearch(): void {
+    const termo = this.clubeSearchTerm.trim().toLowerCase();
+    if (termo.length === 0) {
+      this.clubesFiltrados = this.clubes.slice(0, 20); // mostra os primeiros 20 por defeito
+    } else {
+      this.clubesFiltrados = this.clubes
+        .filter(c => c.nome.toLowerCase().includes(termo))
+        .slice(0, 20);
+    }
+    this.showClubeDropdown = true;
+  }
+
+  // Seleciona um clube da lista
+  selecionarClube(clube: ClubeData): void {
+    this.selectedClube = clube;
+    this.novoJogo.equipa_adv_id = clube.id;
+    this.novoJogo.equipa_adv_nome = clube.nome;
+    this.clubeSearchTerm = '';
+    this.showClubeDropdown = false;
+    // Atualiza o local se for fora
+    if (this.novoJogo.tipo_local === 'Fora') {
+      this.novoJogo.local = clube.pav_nome || '';
+    }
+  }
+
+  // Limpa o clube selecionado, voltando ao modo de pesquisa
+  limparEquipaAdv(): void {
+    this.selectedClube = undefined;
+    this.novoJogo.equipa_adv_id = 0;
+    this.novoJogo.equipa_adv_nome = '';
+    this.clubeSearchTerm = '';
+    this.clubesFiltrados = this.clubes.slice(0, 20);
+    this.showClubeDropdown = false;
+  }
+
+  // Limpa apenas o texto de pesquisa
+  limparPesquisaClube(): void {
+    this.clubeSearchTerm = '';
+    this.clubesFiltrados = this.clubes.slice(0, 20);
+  }
+
   private initializeNewJogo(): JogoData {
     return {
       id: 0,
-      epoca_id: 0, // Será preenchido com a época atual
-      equipa_id: this.tmpEquipa?.id || 0, // ID da equipa atual
-      tipoEquipa: '', // Escalão da equipa atual
+      epoca_id: 0,
+      equipa_id: this.tmpEquipa?.id || 0,
+      tipoEquipa: '',
       data: new Date(),
       hora: '00:00',
-      local: this.clubeCasa?.pav_nome || '', // Endereço do clube da casa
+      local: this.clubeCasa?.pav_nome || '',
       golos_equipa: 0,
-      equipa_adv_id: 0, // Será selecionado
-      equipa_adv_nome: '', // Será preenchido
-      tipoEquipa_adv: '', // Será preenchido
+      equipa_adv_id: 0,
+      equipa_adv_nome: '',
+      tipoEquipa_adv: '',
       golos_equipa_adv: 0,
-      tipo_local: 'Casa', // Padrão
-      competicao_id: 0, // Será selecionado
-      competicao_nome: '', // Será preenchido
-      competicao_outro_descritivo: '', // Campo adicional para competição outro
+      tipo_local: 'Casa',
+      competicao_id: 0,
+      competicao_nome: '',
+      competicao_outro_descritivo: '',
       arbitro_1: 0,
       arbitro_2: 0,
       hora_concentracao: '',
       obs: '',
-      estado: 'REGISTADO', // Padrão
-      numeroJogo:'',
-      jogadores: [] // Inicialmente vazio
+      estado: 'REGISTADO',
+      numeroJogo: '',
+      jogadores: []
     };
   }
 
@@ -117,24 +168,22 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
         next: (data) => {
           console.log('ListaJogosComponent | getAllJogosByEquipa | data:', data);
           this.jogos = data;
-          this.jogosBackup = data; // Guarda o backup dos jogos
-          //verifica se tem equipa B
+          this.jogosBackup = data;
           this.hasEquipaB = this.jogos.some(jogo => jogo.tipoEquipa === 'B');
-
           if (!this.hasEquipaB) {
             this.filtro = 'todos';
           }
-          this.filtrarEquipas(); // Aplica o filtro inicial
-          this.loading = false; // Finaliza o loading
+          this.filtrarEquipas();
+          this.loading = false;
         },
         error: (error) => {
           console.error('Error fetching games:', error);
-          this.loading = false; // Finaliza o loading em caso de erro
+          this.loading = false;
         }
       });
     } else {
       console.warn('tmpEquipa is undefined or does not have an id.');
-      this.loading = false; // Finaliza o loading
+      this.loading = false;
     }
   }
 
@@ -153,6 +202,8 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     this.clubeService.getAllClubes().subscribe({
       next: (data: ClubeData[]) => {
         this.clubes = data;
+        // Prepara os primeiros 20 resultados para quando o utilizador abrir o campo
+        this.clubesFiltrados = data.slice(0, 20);
       },
       error: (error) => {
         console.error('Erro ao carregar clubes:', error);
@@ -165,12 +216,16 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     this.router.navigate(['jogo/', parmId]);
   }
 
-  // Método para abrir o modal de adicionar jogo
   adicionarJjogo(content: any) {
-    this.getClubeCasa(); // Carregar clube da casa
-    this.loadClubes(); // Carregar clubes para o dropdown
-    this.novoJogo = this.initializeNewJogo(); // Reinicia o objeto para um novo jogo
-    // Preenche a época atual
+    this.getClubeCasa();
+    this.loadClubes();
+    this.novoJogo = this.initializeNewJogo();
+    // Reseta estado de pesquisa
+    this.clubeSearchTerm = '';
+    this.showClubeDropdown = false;
+    this.isEquipaB_local = false;
+    this.isEquipaB_adv = false;
+
     this.equipaService.getEpocaAtual().subscribe(epoca => {
       this.novoJogo.epoca_id = epoca.id;
     });
@@ -181,15 +236,12 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
         this.salvarNovoJogo();
       }
     }, (reason) => {
-      // Modal fechado sem salvar (cancelar, esc, clique fora)
+      // Modal fechado sem salvar
     });
   }
 
-  // Método para salvar o novo jogo
   salvarNovoJogo(): void {
-    // Lógica para salvar o novo jogo via serviço
     console.log('Salvando novo jogo:', this.novoJogo);
-    // Aqui você chamaria o serviço para enviar this.novoJogo para o backend
     if (this.isEquipaB_local) {
       this.novoJogo.tipoEquipa = 'B';
     }
@@ -197,14 +249,14 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
       this.novoJogo.tipoEquipa_adv = 'B';
     }
 
-    if(this.novoJogo.competicao_id===4){
-      this.novoJogo.competicao_nome=this.novoJogo.competicao_outro_descritivo;
+    if (this.novoJogo.competicao_id === 4) {
+      this.novoJogo.competicao_nome = this.novoJogo.competicao_outro_descritivo;
     }
 
     this.jogoService.createJogo(this.novoJogo).subscribe({
       next: (response) => {
         console.log('Jogo criado com sucesso:', response);
-        this.loadJogos(); // Recarrega a lista de jogos
+        this.loadJogos();
       },
       error: (error) => {
         console.error('Erro ao criar jogo:', error);
@@ -213,7 +265,6 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     });
   }
 
-  // Método para lidar com a seleção da competição no modal
   onCompeticaoChange(competicaoId: number): void {
     const selectedCompeticao = this.competicoes.find(c => c.id === competicaoId);
     if (selectedCompeticao) {
@@ -221,14 +272,11 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     }
   }
 
-
-
-  // Método para lidar com a seleção da equipa adversária (se tiver uma lista de clubes)
+  // Mantido por compatibilidade mas o selecionarClube() faz o equivalente
   onEquipaAdversariaChange(equipaAdvId: number): void {
     this.selectedClube = this.clubes.find(c => c.id === equipaAdvId);
     if (this.selectedClube) {
       this.novoJogo.equipa_adv_nome = this.selectedClube.nome;
-
     }
   }
 
@@ -240,26 +288,22 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
     }
   }
 
-  filtrarEquipas(){
-    this.jogos = this.jogosBackup; // Primeiro, restaura a lista original de jogos
-    if(this.filtro==='todos'){
-      //primeiro remover filtros
+  filtrarEquipas() {
+    this.jogos = this.jogosBackup;
+    if (this.filtro === 'todos') {
       this.jogos = this.jogos.filter(jogo => jogo);
     }
-    if(this.filtro==='equipa_a'){
-      this.jogos = this.jogos.filter(jogo => jogo.tipoEquipa !=='B');
+    if (this.filtro === 'equipa_a') {
+      this.jogos = this.jogos.filter(jogo => jogo.tipoEquipa !== 'B');
     }
-    if(this.filtro==='equipa_b'){
-      this.jogos = this.jogos.filter(jogo => jogo.tipoEquipa ==='B');
+    if (this.filtro === 'equipa_b') {
+      this.jogos = this.jogos.filter(jogo => jogo.tipoEquipa === 'B');
     }
   }
 
-
-  // carrega clube da casa
   getClubeCasa(): void {
     this.clubeService.getClube(environment.clube_id).subscribe({
       next: (clube) => {
-        // handle clube data here, e.g., assign to a property
         this.clubeCasa = clube;
         if (this.novoJogo.tipo_local === 'Casa') {
           this.novoJogo.local = this.clubeCasa?.pav_nome || '';
@@ -267,26 +311,29 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
       },
       error: (error) => {
         console.error('Error fetching clube:', error);
-        // handle error case here
       }
     });
   }
 
   editarJogo(jogo: JogoData, content: any) {
     this.isModoEditar = true;
-    this.getClubeCasa(); // Carregar clube da casa
-    this.loadClubes(); // Carregar clubes para o dropdown
-    this.novoJogo = jogo
+    this.getClubeCasa();
+    this.loadClubes();
+    this.novoJogo = jogo;
+    // Reseta estado de pesquisa e pré-seleciona o clube atual
+    this.clubeSearchTerm = '';
+    this.showClubeDropdown = false;
+
     if (this.novoJogo.tipo_local === 'C') {
-      this.novoJogo.tipo_local = 'Casa'
+      this.novoJogo.tipo_local = 'Casa';
     }
     if (this.novoJogo.tipo_local === 'F') {
-      this.novoJogo.tipo_local = 'Fora'
+      this.novoJogo.tipo_local = 'Fora';
     }
-    if(this.novoJogo.tipoEquipa==='B'){
+    if (this.novoJogo.tipoEquipa === 'B') {
       this.isEquipaB_local = true;
     }
-    if(this.novoJogo.tipoEquipa_adv==='B'){
+    if (this.novoJogo.tipoEquipa_adv === 'B') {
       this.isEquipaB_adv = true;
     }
 
@@ -299,74 +346,63 @@ export class ListaJogosComponent implements OnInit { // Implementar OnInit
           this.salvarNovoJogo();
         }
       }
-      this.isModoEditar = false
-       this.novoJogo.tipo_local === 'Casa' ? this.novoJogo.tipo_local = 'C' : this.novoJogo.tipo_local = 'F';
+      this.isModoEditar = false;
+      this.novoJogo.tipo_local === 'Casa' ? this.novoJogo.tipo_local = 'C' : this.novoJogo.tipo_local = 'F';
     }, (reason) => {
-      // Modal fechado sem salvar (cancelar, esc, clique fora)
-      this.isModoEditar = false
-       this.novoJogo.tipo_local === 'Casa' ? this.novoJogo.tipo_local = 'C' : this.novoJogo.tipo_local = 'F';
+      this.isModoEditar = false;
+      this.novoJogo.tipo_local === 'Casa' ? this.novoJogo.tipo_local = 'C' : this.novoJogo.tipo_local = 'F';
     });
-
   }
 
   salvarEdicaoJogo(): void {
-    // Lógica para salvar o novo jogo via serviço
     console.log('Salvando edição do jogo:', this.novoJogo);
 
     if (this.isEquipaB_local) {
       this.novoJogo.tipoEquipa = 'B';
-    }else{
+    } else {
       this.novoJogo.tipoEquipa = ' ';
     }
     if (this.isEquipaB_adv) {
       this.novoJogo.tipoEquipa_adv = 'B';
-    }else{
+    } else {
       this.novoJogo.tipoEquipa_adv = ' ';
     }
 
     this.novoJogo.tipo_local === 'Casa' ? this.novoJogo.tipo_local = 'C' : this.novoJogo.tipo_local = 'F';
 
-    if(this.novoJogo.competicao_id===4){
-      this.novoJogo.competicao_nome=this.novoJogo.competicao_outro_descritivo;
+    if (this.novoJogo.competicao_id === 4) {
+      this.novoJogo.competicao_nome = this.novoJogo.competicao_outro_descritivo;
     }
 
     this.jogoService.updateJogo(this.novoJogo).subscribe({
       next: (response) => {
         console.log('Jogo editado com sucesso:', response);
-        this.loadJogos(); // Recarrega a lista de jogos
+        this.loadJogos();
       },
       error: (error) => {
         console.error('Erro ao editar jogo:', error);
         alert('Erro ao editar jogo. Verifique os dados e tente novamente.');
       }
     });
-
-
   }
 
   apagarJogo(jogo: JogoData) {
     if (confirm(`Tem a certeza que deseja apagar o jogo contra ${jogo.equipa_adv_nome} a ${new Date(jogo.data).toLocaleDateString()}?`)) {
-      // Lógica para apagar o jogo via serviço
       console.log('Apagando jogo:', jogo);
       this.jogoService.deleteJogo(jogo.id).subscribe({
         next: (response) => {
           console.log('Jogo apagado com sucesso:', response);
-          this.loadJogos(); // Recarrega a lista de jogos
-
+          this.loadJogos();
         },
         error: (error) => {
           console.error('Erro ao apagar jogo:', error);
           alert('Erro ao apagar jogo. Tente novamente.');
         }
       });
-      // Aqui você chamaria o serviço para apagar o jogo no backend
     }
   }
 
-    // Novo método para navegar para a convocatória
   verConvocatoria(idJogo: number): void {
     this.router.navigate(['/convocatoria', idJogo]);
   }
-
-
 }

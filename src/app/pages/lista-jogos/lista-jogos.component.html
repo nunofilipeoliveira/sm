@@ -111,7 +111,7 @@
     </div>
   </div>
 
-<!-- Modal para Adicionar Novo Jogo (Transformado Visualmente - Estilo Ficha Atleta) -->
+<!-- Modal para Adicionar Novo Jogo -->
 <ng-template #content let-modal>
   <div class="modal-header bg-light border-bottom">
     <h4 *ngIf="!isModoEditar" class="modal-title mb-0" id="modal-basic-title">
@@ -122,7 +122,6 @@
     </h4>
   </div>
 
-
   <!-- Seção 1: Equipa Clube -->
   <div class="modal-body p-4">
     <div class="card border-0 shadow-sm mb-4">
@@ -131,9 +130,8 @@
       </div>
       <div class="card-body">
         <form>
-          <!-- Tipo Equipa Adv -->
           <div class="col-md-6 mb-3">
-            <div class="form-check mt-2"> <!-- form-check para estrutura Bootstrap -->
+            <div class="form-check mt-2">
               <section class="example-section">
                 <mat-checkbox [(ngModel)]="isEquipaB_local">Equipa B</mat-checkbox>
               </section>
@@ -144,8 +142,7 @@
     </div>
   </div>
 
-
-  <!-- Seção 2: Adversário e Competição (Em Grid, Similar a Seções de Atleta) -->
+  <!-- Seção 2: Adversário e Competição -->
   <div class="modal-body p-4">
     <div class="card border-0 shadow-sm mb-4">
       <div class="card-header bg-success text-white">
@@ -154,23 +151,69 @@
       <div class="card-body">
         <form>
           <div class="row">
-            <!-- Equipa Adversária -->
+
+            <!-- Equipa Adversária com pesquisa -->
             <div class="col-md-6 mb-3">
-              <label for="equipaAdversaria" class="form-label fw-bold">
+              <label class="form-label fw-bold">
                 <i class="nc-icon nc_users-1 me-1 text-success"></i>Equipa Adversária <span class="text-danger">*</span>
               </label>
-              <select class="form-select form-select" id="equipaAdversaria" [(ngModel)]="novoJogo.equipa_adv_id"
-                name="equipaAdversaria" (change)="onEquipaAdversariaChange(novoJogo.equipa_adv_id)" required>
-                <option [ngValue]="0" disabled selected>Selecione uma equipa</option>
-                <option *ngFor="let clube of clubes" [ngValue]="clube.id">
-                  {{ clube.nome }}
-                </option>
-              </select>
+
+              <!-- Clube já selecionado -->
+              <div *ngIf="novoJogo.equipa_adv_id && novoJogo.equipa_adv_id !== 0" class="clube-selecionado">
+                <div class="clube-selecionado-inner">
+                  <img src="assets/img/clubes/clube_{{ novoJogo.equipa_adv_id }}.png"
+                       onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
+                       class="clube-selecionado-logo" />
+                  <span class="clube-selecionado-nome">{{ novoJogo.equipa_adv_nome }}</span>
+                  <button type="button" class="clube-selecionado-clear" (click)="limparEquipaAdv()">
+                    <i class="nc-icon nc-simple-remove"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Campo de pesquisa (visível quando não há clube selecionado) -->
+              <div *ngIf="!novoJogo.equipa_adv_id || novoJogo.equipa_adv_id === 0" class="clube-search-wrapper">
+                <div class="clube-search-input-wrap">
+                  <i class="nc-icon nc-zoom-split clube-search-icon"></i>
+                  <input
+                    type="text"
+                    class="form-control clube-search-input"
+                    placeholder="Pesquisar clube..."
+                    [(ngModel)]="clubeSearchTerm"
+                    name="clubeSearch"
+                    (input)="onClubeSearch()"
+                    (focus)="showClubeDropdown = true"
+                    autocomplete="off"
+                  />
+                  <button *ngIf="clubeSearchTerm" type="button" class="clube-search-clear" (click)="limparPesquisaClube()">
+                    <i class="nc-icon nc-simple-remove"></i>
+                  </button>
+                </div>
+
+                <!-- Lista de resultados -->
+                <div *ngIf="showClubeDropdown && clubesFiltrados.length > 0" class="clube-dropdown">
+                  <div
+                    *ngFor="let clube of clubesFiltrados"
+                    class="clube-dropdown-item"
+                    (mousedown)="selecionarClube(clube)"
+                  >
+                    <img src="assets/img/clubes/clube_{{ clube.id }}.png"
+                         onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
+                         class="clube-dropdown-logo" />
+                    <span class="clube-dropdown-nome">{{ clube.nome }}</span>
+                  </div>
+                </div>
+
+                <!-- Sem resultados -->
+                <div *ngIf="showClubeDropdown && clubeSearchTerm && clubesFiltrados.length === 0" class="clube-dropdown clube-dropdown-empty">
+                  <span>Nenhum clube encontrado para "<strong>{{ clubeSearchTerm }}</strong>"</span>
+                </div>
+              </div>
             </div>
 
             <!-- Tipo Equipa Adv -->
             <div class="col-md-6 mb-3">
-              <div class="form-check mt-2"> <!-- form-check para estrutura Bootstrap -->
+              <div class="form-check mt-2">
                 <section class="example-section">
                   <mat-checkbox [(ngModel)]="isEquipaB_adv">Equipa B</mat-checkbox>
                 </section>
@@ -206,8 +249,9 @@
       </div>
     </div>
   </div>
+
+  <!-- Seção 3: Detalhes do Jogo -->
   <div class="modal-body p-4">
-    <!-- Seção 1: Detalhes Básicos do Jogo (Em Grid de 2 Colunas, como em Ficha Atleta) -->
     <div class="card border-0 shadow-sm mb-4">
       <div class="card-header bg-primary text-white">
         <h6 class="mb-0"><i class="nc-icon nc-calendar-60 me-2"></i>Detalhes do Jogo</h6>
@@ -215,7 +259,6 @@
       <div class="card-body">
         <form>
           <div class="row">
-            <!-- Coluna Esquerda -->
             <div class="col-md-6 mb-3">
               <label for="dataJogo" class="form-label fw-bold">
                 <i class="nc-icon nc-calendar-60 text-primary me-1"></i>Data do Jogo <span class="text-danger">*</span>
@@ -225,7 +268,6 @@
               <div class="invalid-feedback">Data é obrigatória.</div>
             </div>
 
-            <!-- Coluna Direita -->
             <div class="col-md-6 mb-3">
               <label for="horaJogo" class="form-label fw-bold">
                 <i class="nc-icon nc-time-alarm me-1 text-primary"></i>Hora do Jogo <span class="text-danger">*</span>
@@ -237,7 +279,6 @@
           </div>
 
           <div class="row">
-            <!-- Tipo Local -->
             <div class="col-md-6 mb-3">
               <label for="tipoLocal" class="form-label fw-bold">
                 <i class="nc-icon nc-home-50 me-1 text-primary"></i>Tipo de Local
@@ -248,19 +289,16 @@
                 <option value="Fora">Fora</option>
               </select>
             </div>
-            <!-- Coluna Direita -->
             <div class="col-md-6 mb-3">
               <label for="numerJogo" class="form-label fw-bold">
-                Nº Jogo Oficial<span class="text-danger"></span>
+                Nº Jogo Oficial
               </label>
               <input type="text" class="form-control form-control" id="numeroJogo" [(ngModel)]="novoJogo.numeroJogo"
                 name="numeroJogo">
-
             </div>
           </div>
 
           <div class="row">
-            <!-- Local -->
             <div class="col-md-12 mb-3">
               <label for="localJogo" class="form-label fw-bold">
                 <i class="nc-icon nc-pin-3 me-1 text-primary"></i>Local do Jogo <span class="text-danger">*</span>
@@ -269,17 +307,12 @@
                 name="localJogo" placeholder="Ex: Pavilhão Municipal de Bragança" required>
             </div>
           </div>
-
-
         </form>
       </div>
     </div>
-
-
   </div>
 
   <div class="modal-footer bg-light border-top">
-
     <button type="button" class="btn btn-primary btn" (click)="modal.close('save')">
       <i class="nc-icon nc-check-2 me-2"></i>Salvar Jogo
     </button>
