@@ -180,7 +180,10 @@ export class Marcar_presencaComponent implements OnInit {
   }
 
   private initializePresencaData() {
-    // Initialize jogadores
+    if (this.presencaJogadores.length > 0 || this.presencaStaff.length > 0) {
+      return;
+    }
+
     if (this.equipaData && this.equipaData.jogadores && Array.isArray(this.equipaData.jogadores)) {
       for (let i = 0; i < this.equipaData.jogadores.length; i++) {
         const tmpPresencaJogador = {} as jogadorPresencaData;
@@ -194,8 +197,6 @@ export class Marcar_presencaComponent implements OnInit {
       }
     }
 
-    // Initialize staff
-    console.log("Marcar_presencaComponent | initializing staff, equipaData.staff:", this.equipaData?.staff);
     if (this.equipaData && this.equipaData.staff && Array.isArray(this.equipaData.staff)) {
       for (let i = 0; i < this.equipaData.staff.length; i++) {
         const tmpPresencaStaff = {} as staffPresencaData;
@@ -205,7 +206,6 @@ export class Marcar_presencaComponent implements OnInit {
         tmpPresencaStaff.estado = "";
         tmpPresencaStaff.estilo_estado = "";
         this.presencaStaff.push(tmpPresencaStaff);
-        console.log("Marcar_presencaComponent | added staff member:", tmpPresencaStaff);
       }
     }
 
