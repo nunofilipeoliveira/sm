@@ -455,11 +455,7 @@
                   <div class="jogo-result-with-goals">
                     <div class="goals-display" *ngIf="calcularGolosJogo(jogo) > 0">
                       <div class="goal-ball">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                         ⚽
-                          <path d="M12 2a10 10 0 0 1 0 20 10 10 0 0 1 0-20" fill="none" stroke="currentColor" stroke-width="2"/>
-                          <path d="M2 12h20M12 2c2.5 3 4 6.5 4 10s-1.5 7-4 10c-2.5-3-4-6.5-4-10s1.5-7 4-10z" fill="none" stroke="currentColor" stroke-width="2"/>
-                        </svg>
+                      <img src="assets/img/jogo/GOLO.png" class="item-goal">
                       </div>
                       <span class="goal-count">{{ calcularGolosJogo(jogo) }}</span>
                     </div>
