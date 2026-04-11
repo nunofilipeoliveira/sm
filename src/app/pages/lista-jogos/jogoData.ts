@@ -43,6 +43,7 @@ export interface JogadorJogo {
     golos_s_pp: number;
     golos_s_normal: number;
     isGR: boolean;
+    gr: boolean;
     // Novas estatísticas de jogo
     assistencias: number;
     recuperacoes_bola: number;

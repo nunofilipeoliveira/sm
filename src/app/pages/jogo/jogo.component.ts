@@ -120,7 +120,7 @@ export class JogoComponent implements OnInit {
 
         //marcar o GR
         this.jogo.jogadores.forEach(j => {
-          if(j.golos_s_normal>0 || j.golos_s_p>0 || j.golos_s_ld>0 || j.golos_s_up>0 || j.golos_s_pp>0){
+          if (j.gr) {
             j.isGR = true;
           }
         })
@@ -381,6 +381,7 @@ export class JogoComponent implements OnInit {
         estado: atleta.estado,
         obs: atleta.obs,
         isGR: false,
+        gr: false,
         expanded: false
       }))
     );
@@ -402,7 +403,7 @@ export class JogoComponent implements OnInit {
 
         //marcar o GR
         this.jogo.jogadores.forEach(j => {
-          if (j.golos_s_ld>0 || j.golos_s_p>0 || j.golos_s_up>0 || j.golos_s_pp>0 || j.golos_s_normal>0){
+          if (j.gr) {
             j.isGR = true;
           }
         });
@@ -569,6 +570,7 @@ export class JogoComponent implements OnInit {
           numero: 0, // Jogadores indisponíveis não têm número definido
           capitao: false,
           isGR: false,
+          gr: false,
           estado: atleta.estado,
           obs: atleta.obs,
           expanded: false,
@@ -676,7 +678,7 @@ export class JogoComponent implements OnInit {
             };
             this.jogo.jogadores = this.jogo.jogadores.filter(j => j.estado === 'CONVOCADO');
             this.jogo.jogadores.forEach(j => {
-              if(j.golos_s_normal>0 || j.golos_s_p>0 || j.golos_s_ld>0 || j.golos_s_up>0 || j.golos_s_pp>0){
+              if(j.gr) {
                 j.isGR = true;
               }
             });

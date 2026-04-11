@@ -116,7 +116,7 @@
             <div class="compact-field toggle-field">
               <label>GR</label>
               <div class="toggle-container small-toggle">
-                <input type="checkbox" [(ngModel)]="jogador.isGR" name="isGR-{{jogador.id_jogador}}"
+                <input type="checkbox" [(ngModel)]="jogador.gr" name="isGR-{{jogador.id_jogador}}"
                   id="isGR-{{jogador.id_jogador}}" class="toggle-input" />
                 <label for="isGR-{{jogador.id_jogador}}" class="toggle-label">
                   <span class="toggle-slider"></span>
@@ -576,8 +576,8 @@
                       <span class="edit-badge-text">Capitão</span>
                     </label>
                   </div>
-                  <div class="edit-badge-item" [class.active]="jogo.jogadores[indiceJogadorAtual].isGR">
-                    <input type="checkbox" [(ngModel)]="jogo.jogadores[indiceJogadorAtual].isGR" 
+                  <div class="edit-badge-item" [class.active]="jogo.jogadores[indiceJogadorAtual].gr">
+                    <input type="checkbox" [(ngModel)]="jogo.jogadores[indiceJogadorAtual].gr" 
                            (change)="onAlteracaoNumeroOuBadge()"
                            id="gr-edit-{{indiceJogadorAtual}}" class="edit-badge-checkbox" />
                     <label for="gr-edit-{{indiceJogadorAtual}}" class="edit-badge-content">
