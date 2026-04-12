@@ -84,12 +84,16 @@ export class ConvocatoriaComponent implements OnInit {
 
       //verifica se tem a convocatoria na sessão
       const convocatoriaSessao = localStorage.getItem("convocatoria_jogo");
-      if (convocatoriaSessao != undefined && convocatoriaSessao != null) {
+      const idJogoSessao = localStorage.getItem("convocatoria_jogo_id");
+      if (convocatoriaSessao != undefined && convocatoriaSessao != null && idJogoSessao == String(this.idJogo)) {
         this.atletasDisponiveis = JSON.parse(convocatoriaSessao);
         console.log('Convocatória | Convocatória carregada da sessão:', this.atletasDisponiveis);
         this.loading = false;
         localStorage.removeItem("convocatoria_jogo");
+        localStorage.removeItem("convocatoria_jogo_id");
       } else {
+        localStorage.removeItem("convocatoria_jogo");
+        localStorage.removeItem("convocatoria_jogo_id");
         this.carregarConvocatoria();
       }
       this.carregarDetalhesJogo(this.idJogo);
@@ -484,6 +488,9 @@ export class ConvocatoriaComponent implements OnInit {
         next: (response) => {
           console.log('Convocatória salva com sucesso:', response);
 
+          localStorage.removeItem("convocatoria_jogo");
+          localStorage.removeItem("convocatoria_jogo_id");
+
           this.jogo.jogadores = [];
           this.jogo.golos_equipa=0;
           this.jogo.golos_equipa_adv=0;
@@ -525,6 +532,8 @@ export class ConvocatoriaComponent implements OnInit {
   }
 
   voltar(): void {
+    localStorage.removeItem("convocatoria_jogo");
+    localStorage.removeItem("convocatoria_jogo_id");
     this.router.navigate(['/listajogos']);
   }
 
@@ -534,7 +543,9 @@ export class ConvocatoriaComponent implements OnInit {
       //adicionar à sessão a convocatória
       const data = JSON.stringify(this.atletasDisponiveis);
       localStorage.removeItem("convocatoria_jogo");
+      localStorage.removeItem("convocatoria_jogo_id");
       localStorage.setItem("convocatoria_jogo", data);
+      localStorage.setItem("convocatoria_jogo_id", this.idJogo.toString());
       const modalRef = this.modalService.open(JogadorSeleccaoComponent, { size: 'lg' });
       modalRef.componentInstance.idEscalao = Number(localStorage.getItem("idequipa_escalao"));
       modalRef.componentInstance.idjogo = this.idJogo;

@@ -177,6 +177,7 @@ export class LoginServiceService {
     localStorage.removeItem('token'); // Limpa o token do localStorage
     localStorage.removeItem("jogadores_selecionados");
     localStorage.removeItem("convocatoria_jogo");
+    localStorage.removeItem("convocatoria_jogo_id");
     this.loginData = {} as loginData; // Limpa os dados em memória
     this.equipaService.clear(); // Limpa os dados da equipa
     this.presencaService.clear(); // Limpa os dados de presença
