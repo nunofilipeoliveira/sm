@@ -116,7 +116,7 @@
             <div class="compact-field toggle-field">
               <label>GR</label>
               <div class="toggle-container small-toggle">
-                <input type="checkbox" [(ngModel)]="jogador.gr" name="isGR-{{jogador.id_jogador}}"
+                <input type="checkbox" [(ngModel)]="jogador.gr" (change)="jogador.isGR = jogador.gr" name="isGR-{{jogador.id_jogador}}"
                   id="isGR-{{jogador.id_jogador}}" class="toggle-input" />
                 <label for="isGR-{{jogador.id_jogador}}" class="toggle-label">
                   <span class="toggle-slider"></span>

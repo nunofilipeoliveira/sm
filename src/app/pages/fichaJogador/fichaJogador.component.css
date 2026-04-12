@@ -811,6 +811,19 @@ button[aria-expanded="true"] i.nc-icon {
   box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
 }
 
+.goals-sofridos-display {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #a72828, #c92020);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.85em;
+  gap: 4px;
+  box-shadow: 0 2px 6px rgba(40, 167, 69, 0.3);
+}
+
 .goal-ball {
   display: flex;
   align-items: center;

@@ -459,6 +459,12 @@
                       </div>
                       <span class="goal-count">{{ calcularGolosJogo(jogo) }}</span>
                     </div>
+                    <div class="goals-sofridos-display" *ngIf="calcularGolosSofridosJogo(jogo) > 0">
+                      <div class="goal-ball">
+                      <img src="assets/img/jogo/GOLO_S.png" class="item-goal">
+                      </div>
+                      <span class="goal-count">{{ calcularGolosSofridosJogo(jogo) }}</span>
+                    </div>
                     <div class="result-only">
                       <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
                         'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
@@ -491,7 +497,8 @@
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="me-1">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
             </svg>
-            {{ totalGeralGolos }} golos
+            <span *ngIf="totalGeralGolosSofridos===0">{{ totalGeralGolos }} golos</span>
+            <span *ngIf="totalGeralGolosSofridos>0">{{ totalGeralGolosSofridos }} golos sofridos</span>
           </div>
         </div>
       </div>
