@@ -70,6 +70,7 @@ export class JogoComponent implements OnInit {
   mostrarRegisto: boolean = false;
   mostrarLicencasView: boolean = false;
   modoEdicaoLicencas: boolean = false;
+  guardandoLicencas: boolean = false;
   alteracoesFeitasLicencas: boolean = false;
   indiceJogadorAtual: number = 0;
 
@@ -693,6 +694,7 @@ export class JogoComponent implements OnInit {
   }
 
   guardarAlteracoesLicencas(): void {
+    this.guardandoLicencas = true;
     this.jogoService.atualizarJogo(this.jogo).subscribe({
       next: (data) => {
         console.log('Jogo atualizado com sucesso:', data);
@@ -712,10 +714,12 @@ export class JogoComponent implements OnInit {
         });
         this.alteracoesFeitasLicencas = false;
         this.modoEdicaoLicencas = false;
-        alert('Alterações guardadas com sucesso!');
+        this.guardandoLicencas = false;
+
       },
       error: (error) => {
         console.error('Erro ao atualizar o jogo:', error);
+        this.guardandoLicencas = false;
         alert('Erro ao guardar as alterações.');
       }
     });

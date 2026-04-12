@@ -537,8 +537,8 @@
             <button *ngIf="!modoEdicaoLicencas" class="btn btn-warning btn-edit-mode" (click)="toggleModoEdicaoLicencas()" title="Modo Edição">
               <i class="nc-icon nc-ruler-pencil"></i> Editar
             </button>
-            <button *ngIf="modoEdicaoLicencas" class="btn btn-success btn-save-mode" (click)="guardarAlteracoesLicencas()" title="Guardar Alterações">
-              <i class="nc-icon nc-check-2"></i> Guardar
+            <button *ngIf="modoEdicaoLicencas" class="btn btn-success btn-save-mode" (click)="guardarAlteracoesLicencas()" [disabled]="guardandoLicencas" title="Guardar Alterações">
+              <i class="nc-icon nc-check-2"></i> {{ guardandoLicencas ? 'Guardando...' : 'Guardar' }}
             </button>
             <button class="btn-close-modal" (click)="fecharLicencas()">
               <i class="nc-icon nc-simple-remove"></i>
