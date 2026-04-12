@@ -68,11 +68,23 @@
 
 @media all {
   .sidebar .active-pro {
-    position: absolute;
+    position: relative;
     width: 100%;
-    bottom: 15%;
+    margin-top: 30px;
   }
 
+  .sidebar .sidebar-wrapper::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .sidebar .sidebar-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .sidebar .sidebar-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
   
 }
 

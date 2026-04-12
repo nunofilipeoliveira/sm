@@ -19,14 +19,6 @@ export const ROUTES: RouteInfo[] = [
   { path: '/estatisticas', title: 'Estatísticas', icon: 'nc-chart-bar-32', class: '' },
   { path: '/gestao-clubes', title: 'Clubes', icon: 'nc-html5', class: '' },
 
-  //{ path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' }, // Nova entrada para administração
-  //{ path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' },
-  { path: '/', title: 'Sair', icon: 'nc-key-25', class: 'active-pro' },
-  //{ path: '/notifications', title: 'Experiência -2-',   icon:'nc-minimal-right',    class: '' },
-  //{ path: '/user',          title: 'Experiência -3-',   icon:'nc-minimal-right',  class: '' },
-  //{ path: '/table',         title: 'Experiência -4-',   icon:'nc-minimal-right',    class: '' },
-  //{ path: '/typography',    title: 'Experiência -5-',   icon:'nc-minimal-right', class: '' },
-
 ];
 
 
@@ -47,6 +39,7 @@ export class SidebarComponent implements OnInit {
   jogosMenu: RouteInfo = { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' };
   adminMenu: RouteInfo = { path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' };
   gestaoClubesMenu: RouteInfo = { path: '/gestao-clubes', title: 'Clubes', icon: 'nc-html5', class: '' };
+  sairMenu: RouteInfo = { path: '/', title: 'Sair', icon: 'nc-key-25', class: 'active-pro' };
 
 
 
@@ -67,6 +60,8 @@ export class SidebarComponent implements OnInit {
     if (this.loginws.getLoginData().perfil == "ADMIN") {
       this.menuItems.push(this.adminMenu)
     }
+
+    this.menuItems.push(this.sairMenu);
 
     // Defina o caminho da imagem aqui, pode ser condicional ou vir de um serviço
     if (environment.tenant_id === 1) {
@@ -106,6 +101,11 @@ export class SidebarComponent implements OnInit {
       if (!allMenusPresent) {
         this.menuItems = [...this.menuItems, this.historicologinsMenu];
       }
+
+      if (this.menuItems[this.menuItems.length - 1]?.title !== 'Sair') {
+        this.menuItems = this.menuItems.filter(item => item.title !== 'Sair');
+        this.menuItems.push(this.sairMenu);
+      }
     }
 
 
@@ -124,6 +124,11 @@ export class SidebarComponent implements OnInit {
       // Se algum menu estiver faltando, adiciona-o
       if (!allMenusPresent) {
         this.menuItems.push(this.adminMenu);
+      }
+
+      if (this.menuItems[this.menuItems.length - 1]?.title !== 'Sair') {
+        this.menuItems = this.menuItems.filter(item => item.title !== 'Sair');
+        this.menuItems.push(this.sairMenu);
       }
     }
 

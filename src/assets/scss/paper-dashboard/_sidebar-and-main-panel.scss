@@ -24,7 +24,7 @@
         position: relative;
         background-color: #ffffff;
         height: calc(100vh - 75px);
-        overflow: auto;
+        overflow-y: auto;
         width: 260px;
         z-index: 4;
         padding-bottom: 100px;
