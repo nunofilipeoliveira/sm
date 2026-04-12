@@ -73,6 +73,7 @@ export class JogoComponent implements OnInit {
   guardandoLicencas: boolean = false;
   alteracoesFeitasLicencas: boolean = false;
   indiceJogadorAtual: number = 0;
+  modoVisualizacaoLicencas: 'slide' | 'lista' = 'slide';
 
   tiposGolo = [
     { key: 'normal', label: 'Normal' },
@@ -659,6 +660,11 @@ export class JogoComponent implements OnInit {
     img.src = 'assets/img/jogadores/default_avatar.jpg';
   }
 
+  alternarModoVisualizacaoLicencas(): void {
+    this.modoVisualizacaoLicencas = this.modoVisualizacaoLicencas === 'slide' ? 'lista' : 'slide';
+    this.indiceJogadorAtual = 0;
+  }
+
   toggleModoEdicaoLicencas(): void {
     this.modoEdicaoLicencas = !this.modoEdicaoLicencas;
     if (!this.modoEdicaoLicencas && this.alteracoesFeitasLicencas) {
@@ -708,7 +714,7 @@ export class JogoComponent implements OnInit {
         };
         this.jogo.jogadores = this.jogo.jogadores.filter(j => j.estado === 'CONVOCADO');
         this.jogo.jogadores.forEach(j => {
-          if(j.golos_s_normal>0 || j.golos_s_p>0 || j.golos_s_ld>0 || j.golos_s_up>0 || j.golos_s_pp>0){
+          if(j.gr) {
             j.isGR = true;
           }
         });

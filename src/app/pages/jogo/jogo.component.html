@@ -534,6 +534,10 @@
         <div class="modal-header">
           <h3>📋 Licenças</h3>
           <div class="modal-header-actions">
+            <button class="btn btn-info btn-view-mode" (click)="alternarModoVisualizacaoLicencas()" [title]="modoVisualizacaoLicencas === 'slide' ? 'Modo Lista' : 'Modo Slide'">
+              <span *ngIf="modoVisualizacaoLicencas === 'slide'">☰</span>
+              <span *ngIf="modoVisualizacaoLicencas === 'lista'">▦</span>
+            </button>
             <button *ngIf="!modoEdicaoLicencas" class="btn btn-warning btn-edit-mode" (click)="toggleModoEdicaoLicencas()" title="Modo Edição">
               <i class="nc-icon nc-ruler-pencil"></i> Editar
             </button>
@@ -547,7 +551,8 @@
         </div>
 
         <div class="modal-body">
-          <div class="slide-container" *ngIf="jogo.jogadores && jogo.jogadores.length > 0" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+          <!-- Modo Slide -->
+          <div class="slide-container" *ngIf="modoVisualizacaoLicencas === 'slide' && jogo.jogadores && jogo.jogadores.length > 0" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
         <button class="slide-btn slide-btn-left" (click)="anteriorJogador()" [disabled]="indiceJogadorAtual === 0">
           <i class="nc-icon nc-minimal-left"></i>
         </button>
@@ -564,7 +569,6 @@
                 <span class="badge-capitao" *ngIf="jogo.jogadores[indiceJogadorAtual].capitao">C</span>
                 <span class="badge-gr" *ngIf="jogo.jogadores[indiceJogadorAtual].isGR">GR</span>
               </div>
-              <!-- Edição de badges -->
               <div class="jogador-badges-edit" *ngIf="modoEdicaoLicencas">
                 <div class="edit-badges-row">
                   <div class="edit-badge-item" [class.active]="jogo.jogadores[indiceJogadorAtual].capitao">
@@ -611,7 +615,7 @@
         </button>
       </div>
 
-      <div class="slide-indicators-wrapper" *ngIf="jogo.jogadores && jogo.jogadores.length > 0">
+      <div class="slide-indicators-wrapper" *ngIf="modoVisualizacaoLicencas === 'slide' && jogo.jogadores && jogo.jogadores.length > 0">
         <div class="slide-indicators">
           <span class="indicator" *ngFor="let j of jogo.jogadores; let i = index"
                 [class.active]="i === indiceJogadorAtual"
@@ -620,6 +624,60 @@
         </div>
         <div class="slide-counter">
           {{indiceJogadorAtual + 1}} / {{jogo.jogadores.length}}
+        </div>
+      </div>
+
+      <!-- Modo Lista -->
+      <div class="lista-container" *ngIf="modoVisualizacaoLicencas === 'lista' && jogo.jogadores && jogo.jogadores.length > 0">
+        <div class="lista-header-row" [class.modo-edicao]="modoEdicaoLicencas">
+          <span class="lista-col foto-col"></span>
+          <span class="lista-col nome-col">Nome</span>
+          <span class="lista-col numero-col">Nº</span>
+          <span class="lista-col licenca-col">Licença</span>
+          <span class="lista-col badges-col">Badges</span>
+        </div>
+        <div class="lista-body">
+          <div class="lista-row" *ngFor="let jogador of jogo.jogadores; let i = index" 
+               [class.modo-edicao]="modoEdicaoLicencas"
+               (click)="indiceJogadorAtual = i">
+            <span class="lista-col foto-col">
+              <img [src]="getJogadorImage(jogador.id_jogador)" 
+                   (error)="onImageError($event)" 
+                   alt="Foto" class="lista-foto" />
+            </span>
+            <span class="lista-col nome-col">{{jogador.nome}}</span>
+            <span class="lista-col numero-col" *ngIf="!modoEdicaoLicencas">{{jogador.numero || '--'}}</span>
+            <span class="lista-col numero-col edit-numero-col" *ngIf="modoEdicaoLicencas">
+              <input type="number" [(ngModel)]="jogador.numero" 
+                     (change)="onAlteracaoNumeroOuBadge()"
+                     min="1" max="99" class="input-numero-lista" placeholder="--" />
+            </span>
+            <span class="lista-col licenca-col">{{jogador.licenca || '--'}}</span>
+            <span class="lista-col badges-col" *ngIf="!modoEdicaoLicencas">
+              <span class="badge-capitao" *ngIf="jogador.capitao">C</span>
+              <span class="badge-gr" *ngIf="jogador.gr">GR</span>
+            </span>
+            <span class="lista-col badges-col edit-badges-col" *ngIf="modoEdicaoLicencas">
+              <div class="edit-badges-row-lista">
+                <div class="edit-badge-item-lista" [class.active]="jogador.capitao">
+                  <input type="checkbox" [(ngModel)]="jogador.capitao" 
+                         (change)="onAlteracaoNumeroOuBadge(); definirCapitao(jogador)" 
+                         [id]="'capitao-lista-' + i" class="edit-badge-checkbox" />
+                  <label [for]="'capitao-lista-' + i" class="edit-badge-content-lista">
+                    <span class="badge-capitao">C</span>
+                  </label>
+                </div>
+                <div class="edit-badge-item-lista" [class.active]="jogador.gr">
+                  <input type="checkbox" [(ngModel)]="jogador.gr" 
+                         (change)="onAlteracaoNumeroOuBadge()"
+                         [id]="'gr-lista-' + i" class="edit-badge-checkbox" />
+                  <label [for]="'gr-lista-' + i" class="edit-badge-content-lista">
+                    <span class="badge-gr">GR</span>
+                  </label>
+                </div>
+              </div>
+            </span>
+          </div>
         </div>
       </div>
 
