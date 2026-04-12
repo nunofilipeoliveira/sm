@@ -77,6 +77,15 @@ body {
   flex-shrink: 0;
 }
 
+.jogo-hora-mobile {
+  min-width: 45px;
+  text-align: center;
+  flex-shrink: 0;
+  font-size: 0.85em;
+  color: #6c757d;
+  font-weight: 500;
+}
+
 .date-main {
   font-size: 0.9em;
   font-weight: 600;

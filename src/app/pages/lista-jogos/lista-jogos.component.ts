@@ -31,9 +31,20 @@ export class ListaJogosComponent implements OnInit {
     private jogoService: JogoService,
     private equipaService: EquipaService,
     private modalService: NgbModal,
-    private clubeService: ClubeService,
+    private ClubeService: ClubeService,
     private loginService: LoginServiceService
   ) { }
+
+  mostrarHora: boolean = false;
+
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize() {
+    this.mostrarHora = window.innerWidth >= 768 || window.innerWidth > window.innerHeight;
+  }
 
   clubes: ClubeData[] = [];
   clubeCasa: ClubeData | undefined;
@@ -58,6 +69,7 @@ export class ListaJogosComponent implements OnInit {
   showClubeDropdown: boolean = false;
 
   ngOnInit(): void {
+    this.checkScreenSize();
     this.loading = true;
     this.tmpEquipa = this.equipaService.getEquipa();
     if (this.tmpEquipa === undefined || this.tmpEquipa.id === 0) {
@@ -68,7 +80,7 @@ export class ListaJogosComponent implements OnInit {
           this.loadJogos();
           this.loadCompeticoes();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error fetching equipa:', error);
           this.loading = false;
         }
@@ -176,7 +188,7 @@ export class ListaJogosComponent implements OnInit {
           this.filtrarEquipas();
           this.loading = false;
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error fetching games:', error);
           this.loading = false;
         }
@@ -192,20 +204,20 @@ export class ListaJogosComponent implements OnInit {
       next: (data: CompeticaoData[]) => {
         this.competicoes = data;
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Erro ao carregar competições:', error);
       }
     });
   }
 
   private loadClubes(): void {
-    this.clubeService.getAllClubes().subscribe({
+    this.ClubeService.getAllClubes().subscribe({
       next: (data: ClubeData[]) => {
         this.clubes = data;
         // Prepara os primeiros 20 resultados para quando o utilizador abrir o campo
         this.clubesFiltrados = data.slice(0, 20);
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Erro ao carregar clubes:', error);
       }
     });
@@ -258,7 +270,7 @@ export class ListaJogosComponent implements OnInit {
         console.log('Jogo criado com sucesso:', response);
         this.loadJogos();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Erro ao criar jogo:', error);
         alert('Erro ao criar jogo. Verifique os dados e tente novamente.');
       }
@@ -302,14 +314,14 @@ export class ListaJogosComponent implements OnInit {
   }
 
   getClubeCasa(): void {
-    this.clubeService.getClube(environment.clube_id).subscribe({
-      next: (clube) => {
+    this.ClubeService.getClube(environment.clube_id).subscribe({
+      next: (clube: ClubeData) => {
         this.clubeCasa = clube;
         if (this.novoJogo.tipo_local === 'Casa') {
           this.novoJogo.local = this.clubeCasa?.pav_nome || '';
         }
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Error fetching clube:', error);
       }
     });
@@ -379,7 +391,7 @@ export class ListaJogosComponent implements OnInit {
         console.log('Jogo editado com sucesso:', response);
         this.loadJogos();
       },
-      error: (error) => {
+      error: (error: any) => {
         console.error('Erro ao editar jogo:', error);
         alert('Erro ao editar jogo. Verifique os dados e tente novamente.');
       }
@@ -394,7 +406,7 @@ export class ListaJogosComponent implements OnInit {
           console.log('Jogo apagado com sucesso:', response);
           this.loadJogos();
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Erro ao apagar jogo:', error);
           alert('Erro ao apagar jogo. Tente novamente.');
         }

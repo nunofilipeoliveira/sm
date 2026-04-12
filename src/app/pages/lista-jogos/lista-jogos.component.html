@@ -32,6 +32,10 @@
               <small class="text-muted d-none d-md-inline">{{ jogo.data | date:'yyyy' }}</small>
             </div>
 
+            <div *ngIf="mostrarHora" class="jogo-hora-mobile">
+              {{ jogo.hora }}
+            </div>
+
             <div class="jogo-opponent-mobile">
               <div class="opponent-logo-container">
                 <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
