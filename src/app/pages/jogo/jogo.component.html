@@ -566,7 +566,7 @@
             </div>
             <div class="jogador-info-slide">
               <div class="jogador-badges" *ngIf="!modoEdicaoLicencas && (jogo.jogadores[indiceJogadorAtual].capitao || jogo.jogadores[indiceJogadorAtual].isGR)">
-                <span class="badge-capitao" *ngIf="jogo.jogadores[indiceJogadorAtual].capitao">C</span>
+                <span class="badge-capitao" *ngIf="jogo.jogadores[indiceJogadorAtual].capitao">Capitão</span>
                 <span class="badge-gr" *ngIf="jogo.jogadores[indiceJogadorAtual].isGR">GR</span>
               </div>
               <div class="jogador-badges-edit" *ngIf="modoEdicaoLicencas">
@@ -591,20 +591,26 @@
                   </div>
                 </div>
               </div>
+              <div class="info-item-slide info-licenca" *ngIf="!modoEdicaoLicencas">
+                <span class="label">Licença</span>
+                <span class="value">{{jogo.jogadores[indiceJogadorAtual].licenca || '--'}}</span>
+              </div>
+              <div class="info-item-slide edit-numero" *ngIf="modoEdicaoLicencas">
+                <span class="label">Nº Licença:</span>
+                <input type="number" [(ngModel)]="jogo.jogadores[indiceJogadorAtual].licenca" 
+                       (change)="onAlteracaoNumeroOuBadge()"
+                       class="input-numero-edit" placeholder="--" />
+              </div>
               <h4 class="nome-completo">{{jogo.jogadores[indiceJogadorAtual].nome}}</h4>
               <div class="info-item-slide" *ngIf="!modoEdicaoLicencas">
-                <span class="label">Nº Camisola:</span>
-                <span class="value">{{jogo.jogadores[indiceJogadorAtual].numero || '--'}}</span>
+                <span class="label">Nº Camisola</span>
+                <span class="value numero-destaque">{{jogo.jogadores[indiceJogadorAtual].numero || '--'}}</span>
               </div>
               <div class="info-item-slide edit-numero" *ngIf="modoEdicaoLicencas">
                 <span class="label">Nº Camisola:</span>
                 <input type="number" [(ngModel)]="jogo.jogadores[indiceJogadorAtual].numero" 
                        (change)="onAlteracaoNumeroOuBadge()"
                        min="1" max="99" class="input-numero-edit" placeholder="--" />
-              </div>
-              <div class="info-item-slide">
-                <span class="label">Nº Licença:</span>
-                <span class="value">{{jogo.jogadores[indiceJogadorAtual].licenca || '--'}}</span>
               </div>
             </div>
           </div>
@@ -627,24 +633,44 @@
         </div>
       </div>
 
+      <!-- Staff Slide Section -->
+      <div class="staff-slide-section" *ngIf="modoVisualizacaoLicencas === 'slide' && staffLicencas && staffLicencas.length > 0">
+        <div class="staff-slide-header">
+          <span>Staff</span>
+        </div>
+        <div class="staff-slide-list">
+          <div class="staff-slide-card" *ngFor="let staff of staffLicencas">
+            <div class="staff-slide-info">
+              <div class="staff-slide-item">
+                <span class="label">Licença</span>
+                <span class="value">{{staff.licenca || '--'}}</span>
+              </div>
+              <div class="staff-slide-item">
+                <span class="label">Nome</span>
+                <span class="value">{{staff.nome}}</span>
+              </div>
+              <div class="staff-slide-item staff-funcao">
+                <span class="label">Função</span>
+                <span class="value">{{staff.funcao}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Modo Lista -->
       <div class="lista-container" *ngIf="modoVisualizacaoLicencas === 'lista' && jogo.jogadores && jogo.jogadores.length > 0">
         <div class="lista-header-row" [class.modo-edicao]="modoEdicaoLicencas">
-          <span class="lista-col foto-col"></span>
+          <span class="lista-col licenca-col-header">Licença</span>
           <span class="lista-col nome-col">Nome</span>
           <span class="lista-col numero-col">Nº</span>
-          <span class="lista-col licenca-col">Licença</span>
           <span class="lista-col badges-col">   </span>
         </div>
         <div class="lista-body">
           <div class="lista-row" *ngFor="let jogador of jogo.jogadores; let i = index" 
                [class.modo-edicao]="modoEdicaoLicencas"
                (click)="indiceJogadorAtual = i">
-            <span class="lista-col foto-col">
-              <img [src]="getJogadorImage(jogador.id_jogador)" 
-                   (error)="onImageError($event)" 
-                   alt="Foto" class="lista-foto" />
-            </span>
+            <span class="lista-col licenca-col">{{jogador.licenca || '--'}}</span>
             <span class="lista-col nome-col">{{jogador.nome}}</span>
             <span class="lista-col numero-col" *ngIf="!modoEdicaoLicencas">{{jogador.numero || '--'}}</span>
             <span class="lista-col numero-col edit-numero-col" *ngIf="modoEdicaoLicencas">
@@ -652,9 +678,8 @@
                      (change)="onAlteracaoNumeroOuBadge()"
                      min="1" max="99" class="input-numero-lista" placeholder="--" />
             </span>
-            <span class="lista-col licenca-col">{{jogador.licenca || '--'}}</span>
             <span class="lista-col badges-col" *ngIf="!modoEdicaoLicencas">
-              <span class="badge-capitao" *ngIf="jogador.capitao">C</span>
+              <span class="badge-capitao" *ngIf="jogador.capitao">Capitão</span>
               <span class="badge-gr" *ngIf="jogador.gr">GR</span>
             </span>
             <span class="lista-col badges-col edit-badges-col" *ngIf="modoEdicaoLicencas">
@@ -677,6 +702,20 @@
                 </div>
               </div>
             </span>
+          </div>
+        </div>
+
+        <!-- Staff Section -->
+        <div class="staff-section" *ngIf="staffLicencas && staffLicencas.length > 0">
+          <div class="staff-header-row">
+            <span class="staff-col">Staff</span>
+          </div>
+          <div class="staff-list">
+            <div class="staff-row" *ngFor="let staff of staffLicencas">
+              <span class="staff-col licenca">{{staff.licenca || '--'}}</span>
+              <span class="staff-col nome">{{staff.nome}}</span>
+              <span class="staff-col funcao">{{staff.funcao}}</span>
+            </div>
           </div>
         </div>
       </div>

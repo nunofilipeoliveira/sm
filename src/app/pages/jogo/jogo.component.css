@@ -2863,3 +2863,74 @@
     font-size: 1.1rem;
   }
 }
+
+/* Staff Slide Section */
+.staff-slide-section {
+  margin-top: 25px;
+  width: 100%;
+}
+
+.staff-slide-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #6c757d, #495057);
+  color: white;
+  font-weight: 700;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+.staff-slide-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.staff-slide-card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #e9ecef;
+}
+
+.staff-slide-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.staff-slide-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.staff-slide-item .label {
+  color: #6c757d;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.staff-slide-item .value {
+  color: #2c3e50;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.staff-slide-item.staff-funcao {
+  background: #e9ecef;
+}
+
+.staff-slide-item.staff-funcao .value {
+  color: #495057;
+  font-weight: 500;
+  font-size: 0.9rem;
+}

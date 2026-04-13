@@ -74,6 +74,7 @@ export class JogoComponent implements OnInit {
   alteracoesFeitasLicencas: boolean = false;
   indiceJogadorAtual: number = 0;
   modoVisualizacaoLicencas: 'slide' | 'lista' = 'slide';
+  staffLicencas: any[] = [];
 
   tiposGolo = [
     { key: 'normal', label: 'Normal' },
@@ -126,6 +127,23 @@ export class JogoComponent implements OnInit {
             j.isGR = true;
           }
         })
+
+        // Carregar staff para licenças
+        this.equipaService.ensureEquipaLoaded().subscribe({
+          next: (equipa: any) => {
+            if (equipa && equipa.staff) {
+              // Sort by funcao alphabetically
+              const sortedStaff = [...equipa.staff].sort((a: any, b: any) => 
+                (a.tipo || 'Staff').localeCompare(b.tipo || 'Staff')
+              );
+              this.staffLicencas = sortedStaff.map((s: any) => ({
+                licenca: s.id,
+                nome: s.nome,
+                funcao: s.tipo || 'Staff'
+              }));
+            }
+          }
+        });
 
         this.loading = false;
         console.log('Jogo Componente | Dados do jogo:', this.jogo);
