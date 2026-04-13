@@ -1,28 +1,27 @@
-/* Navbar responsive fixes */
+.navbar-mobile-flex {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.navbar-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  flex-shrink: 0 !important;
+}
+
+.navbar-toggle {
+  display: flex !important;
+}
+
+.navbar-equipa {
+  flex-shrink: 0 !important;
+}
+
 @media (max-width: 991px) {
-  .navbar .container-fluid {
-    padding: 10px 15px;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .navbar-wrapper {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    margin-right: 10px;
-  }
-
-  .navbar > .container-fluid > div:last-child {
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  .navbar .navbar-brand {
-    margin-left: 10px;
+  .navbar-mobile-flex {
+    padding: 10px 15px !important;
+    flex-wrap: nowrap !important;
   }
 
   .navbar-brand {
