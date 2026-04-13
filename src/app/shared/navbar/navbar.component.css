@@ -1,0 +1,31 @@
+/* Navbar responsive fixes */
+@media (max-width: 991px) {
+  .navbar .container-fluid {
+    padding: 10px 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .navbar-wrapper {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    margin-right: 10px;
+  }
+
+  .navbar > .container-fluid > div:last-child {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .navbar .navbar-brand {
+    margin-left: 10px;
+  }
+
+  .navbar-brand {
+    font-size: 16px !important;
+  }
+}
