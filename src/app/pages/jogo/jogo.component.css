@@ -2083,6 +2083,47 @@
   margin: 0 auto;
 }
 
+.jogador-slide-card.staff-card {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-color: #6c757d;
+}
+
+.staff-foto {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6c757d, #495057);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 25px;
+  border: 4px solid #6c757d;
+}
+
+.staff-foto i {
+  font-size: 4rem;
+  color: white;
+}
+
+.staff-funcao-item {
+  background: #e9ecef;
+}
+
+.staff-funcao-item .label {
+  color: #6c757d;
+  font-weight: 600;
+}
+
+.staff-funcao-item .funcao-value {
+  color: #495057;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.indicator-staff {
+  background: #6c757d;
+}
+
 .jogador-foto {
   text-align: center;
   margin-bottom: 25px;
@@ -2329,6 +2370,25 @@
   justify-content: center;
   display: flex;
   gap: 4px;
+}
+
+.funcao-col {
+  width: 100px;
+  justify-content: center;
+  font-weight: 500;
+  color: #6c757d;
+  background: #e9ecef;
+  padding: 4px 8px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+}
+
+.lista-row-staff {
+  background: #f8f9fa;
+}
+
+.lista-row-staff:hover {
+  background: #e9ecef;
 }
 
 .lista-foto {

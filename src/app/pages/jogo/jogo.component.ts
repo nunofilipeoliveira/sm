@@ -75,6 +75,7 @@ export class JogoComponent implements OnInit {
   indiceJogadorAtual: number = 0;
   modoVisualizacaoLicencas: 'slide' | 'lista' = 'slide';
   staffLicencas: any[] = [];
+  licencasSlide: any[] = [];
 
   tiposGolo = [
     { key: 'normal', label: 'Normal' },
@@ -141,6 +142,11 @@ export class JogoComponent implements OnInit {
                 nome: s.nome,
                 funcao: s.tipo || 'Staff'
               }));
+              // Combine jogadores and staff for slide navigation
+              this.licencasSlide = [
+                ...this.jogo.jogadores.map(j => ({ ...j, tipo: 'jogador' })),
+                ...this.staffLicencas.map(s => ({ ...s, tipo: 'staff' }))
+              ];
             }
           }
         });
@@ -181,7 +187,7 @@ export class JogoComponent implements OnInit {
   }
 
   proximoJogador(): void {
-    if (this.jogo.jogadores && this.indiceJogadorAtual < this.jogo.jogadores.length - 1) {
+    if (this.licencasSlide && this.indiceJogadorAtual < this.licencasSlide.length - 1) {
       this.indiceJogadorAtual++;
     }
   }

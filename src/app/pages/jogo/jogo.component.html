@@ -552,36 +552,37 @@
 
         <div class="modal-body">
           <!-- Modo Slide -->
-          <div class="slide-container" *ngIf="modoVisualizacaoLicencas === 'slide' && jogo.jogadores && jogo.jogadores.length > 0" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
+          <div class="slide-container" *ngIf="modoVisualizacaoLicencas === 'slide' && licencasSlide && licencasSlide.length > 0" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
         <button class="slide-btn slide-btn-left" (click)="anteriorJogador()" [disabled]="indiceJogadorAtual === 0">
           <i class="nc-icon nc-minimal-left"></i>
         </button>
 
         <div class="slide-content">
-          <div class="jogador-slide-card" [class.modo-edicao]="modoEdicaoLicencas">
+          <!-- Jogador Card -->
+          <div class="jogador-slide-card" *ngIf="licencasSlide[indiceJogadorAtual].tipo === 'jogador'" [class.modo-edicao]="modoEdicaoLicencas">
             <div class="jogador-foto">
-              <img [src]="getJogadorImage(jogo.jogadores[indiceJogadorAtual].id_jogador)"
+              <img [src]="getJogadorImage(licencasSlide[indiceJogadorAtual].id_jogador)"
                    (error)="onImageError($event)"
                    alt="Foto do Jogador" />
             </div>
             <div class="jogador-info-slide">
-              <div class="jogador-badges" *ngIf="!modoEdicaoLicencas && (jogo.jogadores[indiceJogadorAtual].capitao || jogo.jogadores[indiceJogadorAtual].isGR)">
-                <span class="badge-capitao" *ngIf="jogo.jogadores[indiceJogadorAtual].capitao">Capitão</span>
-                <span class="badge-gr" *ngIf="jogo.jogadores[indiceJogadorAtual].isGR">GR</span>
+              <div class="jogador-badges" *ngIf="!modoEdicaoLicencas && (licencasSlide[indiceJogadorAtual].capitao || licencasSlide[indiceJogadorAtual].isGR)">
+                <span class="badge-capitao" *ngIf="licencasSlide[indiceJogadorAtual].capitao">Capitão</span>
+                <span class="badge-gr" *ngIf="licencasSlide[indiceJogadorAtual].isGR">GR</span>
               </div>
               <div class="jogador-badges-edit" *ngIf="modoEdicaoLicencas">
                 <div class="edit-badges-row">
-                  <div class="edit-badge-item" [class.active]="jogo.jogadores[indiceJogadorAtual].capitao">
-                    <input type="checkbox" [(ngModel)]="jogo.jogadores[indiceJogadorAtual].capitao" 
-                           (change)="onAlteracaoNumeroOuBadge(); definirCapitao(jogo.jogadores[indiceJogadorAtual])" 
+                  <div class="edit-badge-item" [class.active]="licencasSlide[indiceJogadorAtual].capitao">
+                    <input type="checkbox" [(ngModel)]="licencasSlide[indiceJogadorAtual].capitao" 
+                           (change)="onAlteracaoNumeroOuBadge(); definirCapitao(licencasSlide[indiceJogadorAtual])" 
                            id="capitao-edit-{{indiceJogadorAtual}}" class="edit-badge-checkbox" />
                     <label for="capitao-edit-{{indiceJogadorAtual}}" class="edit-badge-content">
                       <span class="edit-badge-icon badge-capitao">C</span>
                       <span class="edit-badge-text">Capitão</span>
                     </label>
                   </div>
-                  <div class="edit-badge-item" [class.active]="jogo.jogadores[indiceJogadorAtual].gr">
-                    <input type="checkbox" [(ngModel)]="jogo.jogadores[indiceJogadorAtual].gr" 
+                  <div class="edit-badge-item" [class.active]="licencasSlide[indiceJogadorAtual].gr">
+                    <input type="checkbox" [(ngModel)]="licencasSlide[indiceJogadorAtual].gr" 
                            (change)="onAlteracaoNumeroOuBadge()"
                            id="gr-edit-{{indiceJogadorAtual}}" class="edit-badge-checkbox" />
                     <label for="gr-edit-{{indiceJogadorAtual}}" class="edit-badge-content">
@@ -593,73 +594,73 @@
               </div>
               <div class="info-item-slide info-licenca" *ngIf="!modoEdicaoLicencas">
                 <span class="label">Licença</span>
-                <span class="value">{{jogo.jogadores[indiceJogadorAtual].licenca || '--'}}</span>
+                <span class="value">{{licencasSlide[indiceJogadorAtual].licenca || '--'}}</span>
               </div>
               <div class="info-item-slide edit-numero" *ngIf="modoEdicaoLicencas">
                 <span class="label">Nº Licença:</span>
-                <input type="number" [(ngModel)]="jogo.jogadores[indiceJogadorAtual].licenca" 
+                <input type="number" [(ngModel)]="licencasSlide[indiceJogadorAtual].licenca" 
                        (change)="onAlteracaoNumeroOuBadge()"
                        class="input-numero-edit" placeholder="--" />
               </div>
-              <h4 class="nome-completo">{{jogo.jogadores[indiceJogadorAtual].nome}}</h4>
+              <h4 class="nome-completo">{{licencasSlide[indiceJogadorAtual].nome}}</h4>
               <div class="info-item-slide" *ngIf="!modoEdicaoLicencas">
                 <span class="label">Nº Camisola</span>
-                <span class="value numero-destaque">{{jogo.jogadores[indiceJogadorAtual].numero || '--'}}</span>
+                <span class="value numero-destaque">{{licencasSlide[indiceJogadorAtual].numero || '--'}}</span>
               </div>
               <div class="info-item-slide edit-numero" *ngIf="modoEdicaoLicencas">
                 <span class="label">Nº Camisola:</span>
-                <input type="number" [(ngModel)]="jogo.jogadores[indiceJogadorAtual].numero" 
+                <input type="number" [(ngModel)]="licencasSlide[indiceJogadorAtual].numero" 
                        (change)="onAlteracaoNumeroOuBadge()"
                        min="1" max="99" class="input-numero-edit" placeholder="--" />
               </div>
             </div>
           </div>
-        </div>
 
-        <button class="slide-btn slide-btn-right" (click)="proximoJogador()" [disabled]="indiceJogadorAtual >= jogo.jogadores.length - 1">
-          <i class="nc-icon nc-minimal-right"></i>
-        </button>
-      </div>
-
-      <div class="slide-indicators-wrapper" *ngIf="modoVisualizacaoLicencas === 'slide' && jogo.jogadores && jogo.jogadores.length > 0">
-        <div class="slide-indicators">
-          <span class="indicator" *ngFor="let j of jogo.jogadores; let i = index"
-                [class.active]="i === indiceJogadorAtual"
-                (click)="indiceJogadorAtual = i">
-          </span>
-        </div>
-        <div class="slide-counter">
-          {{indiceJogadorAtual + 1}} / {{jogo.jogadores.length}}
-        </div>
-      </div>
-
-      <!-- Staff Slide Section -->
-      <div class="staff-slide-section" *ngIf="modoVisualizacaoLicencas === 'slide' && staffLicencas && staffLicencas.length > 0">
-        <div class="staff-slide-header">
-          <span>Staff</span>
-        </div>
-        <div class="staff-slide-list">
-          <div class="staff-slide-card" *ngFor="let staff of staffLicencas">
-            <div class="staff-slide-info">
-              <div class="staff-slide-item">
+          <!-- Staff Card -->
+          <div class="jogador-slide-card staff-card" *ngIf="licencasSlide[indiceJogadorAtual].tipo === 'staff'" [class.modo-edicao]="modoEdicaoLicencas">
+            <div class="jogador-foto staff-foto">
+              <i class="nc-icon nc-single-02"></i>
+            </div>
+            <div class="jogador-info-slide">
+              <div class="info-item-slide info-licenca" *ngIf="!modoEdicaoLicencas">
                 <span class="label">Licença</span>
-                <span class="value">{{staff.licenca || '--'}}</span>
+                <span class="value">{{licencasSlide[indiceJogadorAtual].licenca || '--'}}</span>
               </div>
-              <div class="staff-slide-item">
-                <span class="label">Nome</span>
-                <span class="value">{{staff.nome}}</span>
+              <div class="info-item-slide edit-numero" *ngIf="modoEdicaoLicencas">
+                <span class="label">Nº Licença:</span>
+                <input type="number" [(ngModel)]="licencasSlide[indiceJogadorAtual].licenca" 
+                       (change)="onAlteracaoNumeroOuBadge()"
+                       class="input-numero-edit" placeholder="--" />
               </div>
-              <div class="staff-slide-item staff-funcao">
+              <h4 class="nome-completo">{{licencasSlide[indiceJogadorAtual].nome}}</h4>
+              <div class="info-item-slide staff-funcao-item">
                 <span class="label">Função</span>
-                <span class="value">{{staff.funcao}}</span>
+                <span class="value funcao-value">{{licencasSlide[indiceJogadorAtual].funcao}}</span>
               </div>
             </div>
           </div>
         </div>
+
+        <button class="slide-btn slide-btn-right" (click)="proximoJogador()" [disabled]="indiceJogadorAtual >= licencasSlide.length - 1">
+          <i class="nc-icon nc-minimal-right"></i>
+        </button>
+      </div>
+
+      <div class="slide-indicators-wrapper" *ngIf="modoVisualizacaoLicencas === 'slide' && licencasSlide && licencasSlide.length > 0">
+        <div class="slide-indicators">
+          <span class="indicator" *ngFor="let item of licencasSlide; let i = index"
+                [class.active]="i === indiceJogadorAtual"
+                [class.indicator-staff]="item.tipo === 'staff'"
+                (click)="indiceJogadorAtual = i">
+          </span>
+        </div>
+        <div class="slide-counter">
+          {{indiceJogadorAtual + 1}} / {{licencasSlide.length}}
+        </div>
       </div>
 
       <!-- Modo Lista -->
-      <div class="lista-container" *ngIf="modoVisualizacaoLicencas === 'lista' && jogo.jogadores && jogo.jogadores.length > 0">
+      <div class="lista-container" *ngIf="modoVisualizacaoLicencas === 'lista' && licencasSlide && licencasSlide.length > 0">
         <div class="lista-header-row" [class.modo-edicao]="modoEdicaoLicencas">
           <span class="lista-col licenca-col-header">Licença</span>
           <span class="lista-col nome-col">Nome</span>
@@ -667,60 +668,59 @@
           <span class="lista-col badges-col">   </span>
         </div>
         <div class="lista-body">
-          <div class="lista-row" *ngFor="let jogador of jogo.jogadores; let i = index" 
-               [class.modo-edicao]="modoEdicaoLicencas"
-               (click)="indiceJogadorAtual = i">
-            <span class="lista-col licenca-col">{{jogador.licenca || '--'}}</span>
-            <span class="lista-col nome-col">{{jogador.nome}}</span>
-            <span class="lista-col numero-col" *ngIf="!modoEdicaoLicencas">{{jogador.numero || '--'}}</span>
-            <span class="lista-col numero-col edit-numero-col" *ngIf="modoEdicaoLicencas">
-              <input type="number" [(ngModel)]="jogador.numero" 
-                     (change)="onAlteracaoNumeroOuBadge()"
-                     min="1" max="99" class="input-numero-lista" placeholder="--" />
-            </span>
-            <span class="lista-col badges-col" *ngIf="!modoEdicaoLicencas">
-              <span class="badge-capitao" *ngIf="jogador.capitao">Capitão</span>
-              <span class="badge-gr" *ngIf="jogador.gr">GR</span>
-            </span>
-            <span class="lista-col badges-col edit-badges-col" *ngIf="modoEdicaoLicencas">
-              <div class="edit-badges-row-lista">
-                <div class="edit-badge-item-lista" [class.active]="jogador.capitao">
-                  <input type="checkbox" [(ngModel)]="jogador.capitao" 
-                         (change)="onAlteracaoNumeroOuBadge(); definirCapitao(jogador)" 
-                         [id]="'capitao-lista-' + i" class="edit-badge-checkbox" />
-                  <label [for]="'capitao-lista-' + i" class="edit-badge-content-lista">
-                    <span class="badge-capitao">C</span>
-                  </label>
+          <!-- Lista com jogadores e staff -->
+          <ng-container *ngFor="let item of licencasSlide; let i = index">
+            <!-- Jogador -->
+            <div class="lista-row" *ngIf="item.tipo === 'jogador'"
+                 [class.modo-edicao]="modoEdicaoLicencas"
+                 [class.lista-row-staff]="item.tipo === 'staff'"
+                 (click)="indiceJogadorAtual = i">
+              <span class="lista-col licenca-col">{{item.licenca || '--'}}</span>
+              <span class="lista-col nome-col">{{item.nome}}</span>
+              <span class="lista-col numero-col" *ngIf="!modoEdicaoLicencas">{{item.numero || '--'}}</span>
+              <span class="lista-col numero-col edit-numero-col" *ngIf="modoEdicaoLicencas">
+                <input type="number" [(ngModel)]="item.numero" 
+                       (change)="onAlteracaoNumeroOuBadge()"
+                       min="1" max="99" class="input-numero-lista" placeholder="--" />
+              </span>
+              <span class="lista-col badges-col" *ngIf="!modoEdicaoLicencas">
+                <span class="badge-capitao" *ngIf="item.capitao">Capitão</span>
+                <span class="badge-gr" *ngIf="item.gr">GR</span>
+              </span>
+              <span class="lista-col badges-col edit-badges-col" *ngIf="modoEdicaoLicencas">
+                <div class="edit-badges-row-lista">
+                  <div class="edit-badge-item-lista" [class.active]="item.capitao">
+                    <input type="checkbox" [(ngModel)]="item.capitao" 
+                           (change)="onAlteracaoNumeroOuBadge(); definirCapitao(item)" 
+                           [id]="'capitao-lista-' + i" class="edit-badge-checkbox" />
+                    <label [for]="'capitao-lista-' + i" class="edit-badge-content-lista">
+                      <span class="badge-capitao">C</span>
+                    </label>
+                  </div>
+                  <div class="edit-badge-item-lista" [class.active]="item.gr">
+                    <input type="checkbox" [(ngModel)]="item.gr" 
+                           (change)="onAlteracaoNumeroOuBadge()"
+                           [id]="'gr-lista-' + i" class="edit-badge-checkbox" />
+                    <label [for]="'gr-lista-' + i" class="edit-badge-content-lista">
+                      <span class="badge-gr">GR</span>
+                    </label>
+                  </div>
                 </div>
-                <div class="edit-badge-item-lista" [class.active]="jogador.gr">
-                  <input type="checkbox" [(ngModel)]="jogador.gr" 
-                         (change)="onAlteracaoNumeroOuBadge()"
-                         [id]="'gr-lista-' + i" class="edit-badge-checkbox" />
-                  <label [for]="'gr-lista-' + i" class="edit-badge-content-lista">
-                    <span class="badge-gr">GR</span>
-                  </label>
-                </div>
-              </div>
-            </span>
-          </div>
-        </div>
-
-        <!-- Staff Section -->
-        <div class="staff-section" *ngIf="staffLicencas && staffLicencas.length > 0">
-          <div class="staff-header-row">
-            <span class="staff-col">Staff</span>
-          </div>
-          <div class="staff-list">
-            <div class="staff-row" *ngFor="let staff of staffLicencas">
-              <span class="staff-col licenca">{{staff.licenca || '--'}}</span>
-              <span class="staff-col nome">{{staff.nome}}</span>
-              <span class="staff-col funcao">{{staff.funcao}}</span>
+              </span>
             </div>
-          </div>
+            <!-- Staff -->
+            <div class="lista-row lista-row-staff" *ngIf="item.tipo === 'staff'"
+                 [class.modo-edicao]="modoEdicaoLicencas"
+                 (click)="indiceJogadorAtual = i">
+              <span class="lista-col licenca-col">{{item.licenca || '--'}}</span>
+              <span class="lista-col nome-col">{{item.nome}}</span>
+              <span class="lista-col funcao-col">{{item.funcao}}</span>
+            </div>
+          </ng-container>
         </div>
       </div>
 
-      <div class="no-jogadores" *ngIf="!jogo.jogadores || jogo.jogadores.length === 0">
+      <div class="no-jogadores" *ngIf="!licencasSlide || licencasSlide.length === 0">
         <p>Não há jogadores associados a este jogo.</p>
       </div>
 
