@@ -659,15 +659,15 @@
         </div>
       </div>
 
-      <!-- Modo Lista -->
-      <div class="lista-container" *ngIf="modoVisualizacaoLicencas === 'lista' && licencasSlide && licencasSlide.length > 0">
+<!-- Modo Lista -->
+      <div class="lista-container" *ngIf="modoVisualizacaoLicencas === 'lista'">
         <div class="lista-header-row" [class.modo-edicao]="modoEdicaoLicencas">
           <span class="lista-col licenca-col-header">Licença</span>
           <span class="lista-col nome-col">Nome</span>
           <span class="lista-col numero-col">Nº</span>
           <span class="lista-col badges-col">   </span>
         </div>
-        <div class="lista-body">
+        <div class="lista-body" *ngIf="licencasSlide && licencasSlide.length > 0">
           <!-- Lista com jogadores e staff -->
           <ng-container *ngFor="let item of licencasSlide; let i = index">
             <!-- Jogador -->
@@ -720,7 +720,7 @@
         </div>
       </div>
 
-      <div class="no-jogadores" *ngIf="!licencasSlide || licencasSlide.length === 0">
+      <div class="no-jogadores" *ngIf="modoVisualizacaoLicencas === 'lista' && (!licencasSlide || licencasSlide.length === 0)">
         <p>Não há jogadores associados a este jogo.</p>
       </div>
 

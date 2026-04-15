@@ -129,30 +129,29 @@ export class JogoComponent implements OnInit {
           }
         })
 
-        // Carregar staff para licenças
-        this.equipaService.ensureEquipaLoaded().subscribe({
-          next: (equipa: any) => {
-            if (equipa && equipa.staff) {
-              // Sort by funcao alphabetically
-              const sortedStaff = [...equipa.staff].sort((a: any, b: any) => 
-                (a.tipo || 'Staff').localeCompare(b.tipo || 'Staff')
-              );
-              this.staffLicencas = sortedStaff.map((s: any) => ({
-                licenca: s.id,
-                nome: s.nome,
-                funcao: s.tipo || 'Staff'
-              }));
-              // Combine jogadores and staff for slide navigation
-              this.licencasSlide = [
-                ...this.jogo.jogadores.map(j => ({ ...j, tipo: 'jogador' })),
-                ...this.staffLicencas.map(s => ({ ...s, tipo: 'staff' }))
-              ];
-            }
+        // Initialize licencasSlide with jogadores immediately
+        this.licencasSlide = this.jogo.jogadores.map(j => ({ ...j, tipo: 'jogador' }));
+
+        // Carregar staff for licenças - try different approaches
+        const equip = this.equipaService.getEquipa();
+        if (equip && equip.staff && equip.staff.length > 0) {
+          this.processStaff(equip.staff);
+        } else {
+          // Try loading from localStorage or API
+          const equipaId = localStorage.getItem("idequipa_escalao");
+          if (equipaId) {
+            this.equipaService.getEquipabyID(equipaId).subscribe({
+              next: (equipaData: any) => {
+                if (equipaData && equipaData.staff && equipaData.staff.length > 0) {
+                  this.processStaff(equipaData.staff);
+                }
+              }
+            });
           }
-        });
+        }
 
         this.loading = false;
-        console.log('Jogo Componente | Dados do jogo:', this.jogo);
+
       }});
 
     this.clubeService.getClube(this.meuClubeid).subscribe({
@@ -224,6 +223,25 @@ export class JogoComponent implements OnInit {
         this.proximoJogador();
       }
     }
+  }
+
+  private processStaff(staffList: any[]): void {
+    // Sort by funcao alphabetically
+    const sortedStaff = [...staffList].sort((a: any, b: any) => 
+      (a.tipo || 'Staff').localeCompare(b.tipo || 'Staff')
+    );
+    this.staffLicencas = sortedStaff.map((s: any) => ({
+      licenca: s.id,
+      nome: s.nome,
+      funcao: s.tipo || 'Staff'
+    }));
+    // Combine jogadores and staff
+    this.licencasSlide = [
+      ...this.jogo.jogadores.map(j => ({ ...j, tipo: 'jogador' })),
+      ...this.staffLicencas.map(s => ({ ...s, tipo: 'staff' }))
+    ];
+    console.log('Staff loaded:', this.staffLicencas);
+    console.log('Total licencasSlide:', this.licencasSlide.length);
   }
 
   registarInformacaoJogo() {
