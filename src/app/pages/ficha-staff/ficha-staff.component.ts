@@ -50,7 +50,8 @@ export class FichaStaffComponent implements OnInit {
       morada: "",
       codigo_postal: "",
       id_jogador: 0,
-      tipo: ""
+      tipo: "",
+      licenca: ""
     };
   }
 

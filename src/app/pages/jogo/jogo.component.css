@@ -1936,7 +1936,7 @@
   max-height: 95vh;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   animation: slideIn 0.3s ease;
-  overflow: hidden;
+  overflow: visible;
   display: flex;
   flex-direction: column;
 }
@@ -1987,7 +1987,7 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   padding: 10px 15px 15px;
   box-sizing: border-box;
   flex: 1;
@@ -2033,12 +2033,14 @@
 .modal-body {
   scrollbar-width: thin;
   scrollbar-color: #3b76e1 #f0f0f0;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .slide-container::-webkit-scrollbar,
 .lista-container::-webkit-scrollbar,
 .modal-body::-webkit-scrollbar {
-  width: 6px;
+  display: none;
 }
 
 .slide-container::-webkit-scrollbar-track,
@@ -2334,6 +2336,11 @@
 
 .lista-container {
   width: 100%;
+  min-height: 300px;
+  max-height: calc(95vh - 180px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .lista-header-row {
@@ -2348,6 +2355,7 @@
   position: sticky;
   top: 0;
   z-index: 10;
+  flex-shrink: 0;
 }
 
 .lista-header-row.modo-edicao {
@@ -2357,6 +2365,11 @@
 .lista-body {
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  flex: 1;
+  min-height: 0;
 }
 
 .lista-row {

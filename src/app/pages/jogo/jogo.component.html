@@ -660,7 +660,7 @@
       </div>
 
 <!-- Modo Lista -->
-      <div class="lista-container" *ngIf="modoVisualizacaoLicencas === 'lista'">
+      <div class="lista-container" *ngIf="modoVisualizacaoLicencas === 'lista'" (touchstart)="onTouchStart($event)" (touchend)="onTouchEnd($event)">
         <div class="lista-header-row" [class.modo-edicao]="modoEdicaoLicencas">
           <span class="lista-col licenca-col-header">Licença</span>
           <span class="lista-col nome-col">Nome</span>

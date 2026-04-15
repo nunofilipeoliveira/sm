@@ -134,18 +134,26 @@ export class JogoComponent implements OnInit {
 
         // Carregar staff for licenças - try different approaches
         const equip = this.equipaService.getEquipa();
+        console.log('Equipa from service:', equip);
         if (equip && equip.staff && equip.staff.length > 0) {
+          console.log('Staff from getEquipa:', equip.staff);
           this.processStaff(equip.staff);
         } else {
           // Try loading from localStorage or API
           const equipaId = localStorage.getItem("idequipa_escalao");
+          console.log('Equipa ID from localStorage:', equipaId);
           if (equipaId) {
             this.equipaService.getEquipabyID(equipaId).subscribe({
               next: (equipaData: any) => {
+                console.log('Equipa data from API:', equipaData);
                 if (equipaData && equipaData.staff && equipaData.staff.length > 0) {
+                  console.log('Staff from API:', equipaData.staff);
                   this.processStaff(equipaData.staff);
+                } else {
+                  console.log('No staff found in API response');
                 }
-              }
+              },
+              error: (err) => console.error('Error loading equipa:', err)
             });
           }
         }
@@ -231,7 +239,7 @@ export class JogoComponent implements OnInit {
       (a.tipo || 'Staff').localeCompare(b.tipo || 'Staff')
     );
     this.staffLicencas = sortedStaff.map((s: any) => ({
-      licenca: s.id,
+      licenca: s.licenca,
       nome: s.nome,
       funcao: s.tipo || 'Staff'
     }));

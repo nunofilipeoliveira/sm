@@ -132,6 +132,7 @@ export class EquipaService {
       + '"email" :\"' + parmStaffData.email + '\",'
       + '"telemovel" :\"' + parmStaffData.telemovel + '\",'
       + '"morada" :\"' + parmStaffData.morada + '\",'
+      + '"licenca" :\"' + parmStaffData.licenca + '\",'
       + '"codigo_postal" :\"' + parmStaffData.codigo_postal + '\"}'
 
     console.log("updateStaff | Json:", this.body_json);

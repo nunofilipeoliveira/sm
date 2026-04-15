@@ -112,7 +112,8 @@ export class StaffSeleccaoComponent implements OnInit {
         morada: '',
         codigo_postal: '',
         id_jogador: 0,
-        tipo: tipoSelecionado // Usa o valor selecionado da combobox
+        tipo: tipoSelecionado,
+        licenca: ''
       };
 
       this.spinner = true;

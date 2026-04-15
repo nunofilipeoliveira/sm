@@ -47,7 +47,8 @@ export class NovoStaffComponent implements OnInit {
       morada: "",
       codigo_postal: "",
       id_jogador: 0,
-      tipo: ""
+      tipo: "",
+      licenca: ""
     };
   }
 
