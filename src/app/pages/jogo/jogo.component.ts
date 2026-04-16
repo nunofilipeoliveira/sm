@@ -143,7 +143,7 @@ export class JogoComponent implements OnInit {
           const equipaId = localStorage.getItem("idequipa_escalao");
           console.log('Equipa ID from localStorage:', equipaId);
           if (equipaId) {
-            this.equipaService.getEquipabyID(equipaId).subscribe({
+            this.equipaService.getEquipabyIDLight(equipaId).subscribe({
               next: (equipaData: any) => {
                 console.log('Equipa data from API:', equipaData);
                 if (equipaData && equipaData.staff && equipaData.staff.length > 0) {
@@ -241,7 +241,8 @@ export class JogoComponent implements OnInit {
     this.staffLicencas = sortedStaff.map((s: any) => ({
       licenca: s.licenca,
       nome: s.nome,
-      funcao: s.tipo || 'Staff'
+      funcao: s.tipo || 'Staff',
+      id: s.id
     }));
     // Combine jogadores and staff
     this.licencasSlide = [
@@ -702,6 +703,12 @@ export class JogoComponent implements OnInit {
   // Get player image URL
   getJogadorImage(idJogador: number): string {
     return `assets/img/jogadores/${idJogador}_avatar.jpg`;
+  }
+
+    // Get staff image URL
+  getStaffImage(idJogador: number): string {
+      console.log("Avatar staff "+idJogador)
+      return `assets/img/jogadores/${idJogador}_avatar_staff.jpg`;
   }
 
   // Handle image error - replace with default

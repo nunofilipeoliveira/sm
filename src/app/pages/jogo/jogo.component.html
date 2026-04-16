@@ -618,8 +618,10 @@
 
           <!-- Staff Card -->
           <div class="jogador-slide-card staff-card" *ngIf="licencasSlide[indiceJogadorAtual].tipo === 'staff'" [class.modo-edicao]="modoEdicaoLicencas">
-            <div class="jogador-foto staff-foto">
-              <i class="nc-icon nc-single-02"></i>
+            <div class="jogador-foto">
+              <img [src]="getStaffImage(licencasSlide[indiceJogadorAtual].id)"
+                   (error)="onImageError($event)"
+                   alt="Foto do Jogador" />
             </div>
             <div class="jogador-info-slide">
               <div class="info-item-slide info-licenca" *ngIf="!modoEdicaoLicencas">
