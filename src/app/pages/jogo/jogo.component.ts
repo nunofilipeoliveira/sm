@@ -11,6 +11,8 @@ import { JogoData, JogadorJogo } from "../lista-jogos/jogoData";
 import { EquipaData } from "../equipa/equipaData";
 import { JogadorConvocado } from "../convocatoria/convocatoriaData";
 import { EquipaService } from "../../services/equipa.service";
+import { LoginServiceService } from "../../services/login-service.service";
+
 
 
 // Estenda a interface JogadorJogo para incluir a propriedade 'expanded'
@@ -93,7 +95,7 @@ export class JogoComponent implements OnInit {
 
   atletasIndisponiveis: JogadorConvocado[] = [];
 
-  constructor(private route: ActivatedRoute, private jogoService: JogoService, private clubeService: ClubeService, private pdfService: PdfService, private router: Router, private equipaService: EquipaService) { }
+  constructor(private route: ActivatedRoute, private jogoService: JogoService, private clubeService: ClubeService, private pdfService: PdfService, private router: Router, private equipaService: EquipaService, private loginservice: LoginServiceService) { }
 
   ngOnInit() {
     this.loading = true;
@@ -758,6 +760,56 @@ export class JogoComponent implements OnInit {
 
   guardarAlteracoesLicencas(): void {
     this.guardandoLicencas = true;
+    
+    //atualizar os valores das licenças slide, nos jogadores do jogo.
+    let tmpJogador: jogadorData;
+    this.licencasSlide.forEach(licenca => {
+      const jogador = this.jogo.jogadores.find(j => j.id_jogador === licenca.id_jogador && licenca.tipo=='jogador');
+      if (jogador) {
+        jogador.numero = licenca.numero;
+        if (jogador.licenca != licenca.licenca) {
+          this.equipaService.loadJogadorbyId(jogador.id_jogador).subscribe(
+            {
+              next: data => {
+                console.log("FichaJogadorComponent | loadJogadorbyId", data);
+                if (data != null) {
+                  tmpJogador = data;
+                  tmpJogador.licenca = licenca.licenca
+                  this.equipaService.updateJogador(this.loginservice.getLoginData().id, tmpJogador).subscribe();
+                }
+              }
+            }
+          );
+        }
+      }
+    });
+
+    //atualizar licença Staff
+
+    //atualizar os valores das licenças slide, nos jogadores do jogo.
+    let tmpStaff: staffData;
+    this.licencasSlide.forEach(licenca => {
+      const staff = this.equipaService.getEquipa().staff.find(j => j.id === licenca.id && licenca.tipo=='staff');
+      if (staff) {
+        
+        if (staff.licenca != licenca.licenca) {
+          this.equipaService.loadStaffbyId(staff.id).subscribe(
+            {
+              next: data => {
+                console.log("FichaJogadorComponent | loadStaffbyId", data);
+                if (data != null) {
+                  tmpStaff = data;
+                  tmpStaff.licenca = licenca.licenca
+                  this.equipaService.updateStaff(this.loginservice.getLoginData().id, tmpStaff).subscribe();
+                }
+              }
+            }
+          );
+        }
+      }
+    });
+
+
     this.jogoService.atualizarJogo(this.jogo).subscribe({
       next: (data) => {
         console.log('Jogo atualizado com sucesso:', data);

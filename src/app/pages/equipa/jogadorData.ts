@@ -19,5 +19,6 @@ interface jogadorData {
   cc: string;
   nif: number;
   licenca:number;
+  tenant_id:number;
 
 }

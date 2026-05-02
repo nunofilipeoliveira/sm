@@ -10,6 +10,8 @@ import { DataPipe } from './DataPipe'; // Seu DataPipe personalizado
 import { JogoService } from '../../services/jogo.service';
 import { JogoData } from '../lista-jogos/jogoData';
 import { EquipaData } from '../equipa/equipaData';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'user-cmp',
@@ -86,6 +88,7 @@ export class FichaJogadorComponent implements OnInit {
       cc: "",
       nif: 0,
       licenca: 0,
+      tenant_id:0,
     };
   }
 
@@ -96,16 +99,26 @@ export class FichaJogadorComponent implements OnInit {
     this.sbmSuccess = false;
     const routeParams = this.route.snapshot.paramMap;
     const idJogador = Number(routeParams.get('id'));
+    // Validate tenant access for this equipa
+    const currentTenantId = +environment.tenant_id;
 
     console.log('FichaJogadorComoponent | idJogador:', idJogador);
     this.loadJogadorImages(idJogador);
 
-    this.equipaService.loadJogadorbyId(idJogador).subscribe(
-      {
-        next: data => {
-          console.log("FichaJogadorComponent | loadJogadorbyId", data);
-          if (data != null) {
-            this.jogadorData = data;
+      this.equipaService.loadJogadorbyId(idJogador).subscribe(
+        {
+          next: data => {
+            console.log("FichaJogadorComponent | loadJogadorbyId", data);
+            if (data != null) {
+              this.jogadorData = data;
+
+          if (  this.jogadorData.tenant_id !== currentTenantId) {
+          console.warn('FichaJogadorComponent | - Acesso nao autorizado - equipa pertence a outro tenant');
+          this.router.navigate(['/erro-acesso']);
+          return;
+        }
+
+
             console.log("FichaJogadorComponent | loadJogadorbyId 2 ", this.jogadorData);
 
             // CONVERSÃO DO NÚMERO AAAAMMDD PARA STRING AAAA-MM-DD PARA EXIBIÇÃO NO INPUT

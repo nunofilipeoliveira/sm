@@ -6,6 +6,7 @@ import moment, { Moment } from 'moment';
 import { IdadePipe } from './idadePipe';
 import { EpocaData } from '../administracao/EpocaData';
 import { EquipaData } from './equipaData';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -52,29 +53,10 @@ export class EquipaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-
-    this.equipaData = this.equipaService.getEquipa();
-
-    console.log("LoginComponent | equipa1", this.equipaData);
-
-    this.equipaService.getEscalaoByEquipa(parseInt(this.idEquipa!)).subscribe((retorno: string) => {
-      this.idadeEscalao = retorno;
-      this.idadeEscalao = this.idadeEscalao.replace('Sub-', '');
-
-      if (!isNaN(Number(this.idadeEscalao))) {
-
-        this.equipaService.getEpocaAtual().subscribe((data: EpocaData) => {
-          this.epocaAtual = data;
-          this.modoApresentarIdadeEscalao = true;
-        });
-
-
-      }
-
-
-
-    });
+    // Validate tenant access for this equipa
+    const currentTenantId = +environment.tenant_id;
+    
+    
 
     if (this.equipaData == undefined || this.equipaData.id == 0) {
       console.log("LoginComponent | equipa3", this.equipaData);
@@ -88,6 +70,17 @@ export class EquipaComponent implements OnInit {
             console.log("LoginComponent | spinner", this.spinner);
             this.equipaService.setEquipa(this.equipaData);
             this.spinner = false;
+
+
+          if (  this.equipaData.jogadores[1].tenant_id !== currentTenantId) {
+          console.warn('EquipaComponent | - Acesso nao autorizado - equipa pertence a outro tenant');
+          console.warn('EquipaComponent | - equipa:', this.equipaData);
+          console.warn('EquipaComponent | - jogador tenant_id:', this.equipaData.jogadores[1].tenant_id  );
+          this.router.navigate(['/erro-acesso']);
+          return;
+        }
+
+
             if (data != null) {
 
             } else {

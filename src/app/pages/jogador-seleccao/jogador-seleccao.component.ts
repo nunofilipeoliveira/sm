@@ -152,7 +152,8 @@ export class JogadorSeleccaoComponent implements OnInit {
             numero: '',
             cc: '',
             nif: 0,
-            licenca: 0
+            licenca: 0,
+            tenant_id:0
           });
         }
       }
