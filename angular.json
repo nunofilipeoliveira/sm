@@ -114,7 +114,7 @@
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.hcmaia.ts"
+                  "with": "src/environments/environment.ts"
                 }
               ]
             }

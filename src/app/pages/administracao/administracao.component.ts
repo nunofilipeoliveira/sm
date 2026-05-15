@@ -145,18 +145,53 @@ export class AdministracaoComponent implements OnInit {
     });
   }
 
-  copiarLink(): void {
-    if (this.linkAtivacao) {
-      navigator.clipboard.writeText(this.linkAtivacao)
-        .then(() => {
-          alert('Link copiado para a área de transferência!');
-        })
-        .catch(err => {
-          console.error('Erro ao copiar o link: ', err);
-          alert('Não foi possível copiar o link. Por favor, copie manualmente.');
-        });
-    }
+copiarLink(): void {
+  if (!this.linkAtivacao) return;
+
+  // Tenta usar a Clipboard API moderna (requer HTTPS ou localhost)
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(this.linkAtivacao)
+      .then(() => {
+        alert('Link copiado para a área de transferência!');
+      })
+      .catch(err => {
+        console.error('Erro ao copiar (Clipboard API): ', err);
+        this.copiarLinkFallback(this.linkAtivacao);
+      });
+  } else {
+    // Fallback para HTTP / contextos não seguros
+    this.copiarLinkFallback(this.linkAtivacao);
   }
+}
+
+private copiarLinkFallback(texto: string): void {
+  const textArea = document.createElement('textarea');
+  textArea.value = texto;
+
+  // Evitar scroll indesejado na página
+  textArea.style.position = 'fixed';
+  textArea.style.top = '0';
+  textArea.style.left = '0';
+  textArea.style.opacity = '0';
+
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    const sucesso = document.execCommand('copy');
+    if (sucesso) {
+      alert('Link copiado para a área de transferência!');
+    } else {
+      alert('Não foi possível copiar o link. Por favor, copie manualmente.');
+    }
+  } catch (err) {
+    console.error('Erro ao copiar (fallback): ', err);
+    alert('Não foi possível copiar o link. Por favor, copie manualmente.');
+  } finally {
+    document.body.removeChild(textArea);
+  }
+}
 
 
 
