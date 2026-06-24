@@ -24,7 +24,7 @@ export class NgbdDropdownBasic { }
   selector: 'icons-cmp',
   standalone: true,
   imports: [NgbDatepickerModule, NgbAlertModule, FormsModule, CommonModule, NgbDropdownModule, NgbAccordionModule, NgbTimepickerModule],
-  templateUrl: 'marcar_presenca.component.html',
+  templateUrl: './marcar_presenca.component.html',
   styleUrl: './marcar_presenca.component.css'
 })
 

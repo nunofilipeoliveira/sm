@@ -15,7 +15,7 @@ import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'equipa-cmp',
-  templateUrl: 'equipa.component.html',
+  templateUrl: './equipa.component.html',
   styleUrl: './equipa.component.css',
   standalone: true,
   imports: [IdadePipe, CommonModule]

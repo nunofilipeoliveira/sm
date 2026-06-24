@@ -15,14 +15,6 @@ export interface AtletasDados {
 
 }
 
-export interface TreinosDados {
-  dia: string;
-  presenca: string;
-  motivo: string
-  estilo_presenca: string;
-}
-
-
 
 
 export interface LinhaQuadro {

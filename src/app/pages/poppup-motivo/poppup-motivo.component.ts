@@ -10,8 +10,8 @@ export interface DialogData {
 
 @Component({
   selector: 'dialog-overview-example-dialog',
-  templateUrl: 'poppup-motivo.component.html',
-  styleUrl: 'poppup-motivo.component.css',
+  templateUrl: './poppup-motivo.component.html',
+  styleUrl: './poppup-motivo.component.css',
   standalone: true,
   imports: [CommonModule, FormsModule],
 })

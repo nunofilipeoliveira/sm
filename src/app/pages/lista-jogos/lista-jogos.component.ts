@@ -37,7 +37,7 @@ export class ListaJogosComponent implements OnInit {
 
   mostrarHora: boolean = false;
 
-  @HostListener('window:resize', ['$event'])
+  @HostListener('window:resize')
   onResize() {
     this.checkScreenSize();
   }

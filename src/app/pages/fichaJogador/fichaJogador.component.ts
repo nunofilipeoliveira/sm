@@ -15,10 +15,10 @@ import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'user-cmp',
-  templateUrl: 'fichaJogador.component.html',
+  templateUrl: './fichaJogador.component.html',
   styleUrl: './fichaJogador.component.css',
   standalone: true,
-  imports: [NgbProgressbarModule, CommonModule, FormsModule, CommonModule, NgbAlertModule, DataPipe, NgbCollapseModule]
+  imports: [NgbProgressbarModule, CommonModule, FormsModule, NgbAlertModule, DataPipe, NgbCollapseModule]
 })
 
 export class FichaJogadorComponent implements OnInit {

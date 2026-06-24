@@ -12,10 +12,10 @@ import { EquipaData } from '../equipa/equipaData';
 
 @Component({
   selector: 'user-cmp',
-  templateUrl: 'novo-jogador.component.html',
+  templateUrl: './novo-jogador.component.html',
   styleUrl: './novo-jogador.component.css',
   standalone: true,
-  imports: [NgbProgressbarModule, CommonModule, FormsModule, CommonModule, NgbAlertModule, NgbCollapseModule]
+  imports: [NgbProgressbarModule, CommonModule, FormsModule, NgbAlertModule, NgbCollapseModule]
 })
 
 export class NovoJogadorComponent implements OnInit {
