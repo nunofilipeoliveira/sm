@@ -350,109 +350,268 @@ body {
   height: 2rem;
 }
 
-/* Responsive Design */
+/* Mobile-First Responsive Design */
 @media (max-width: 768px) {
-  .dashboard-title {
-    font-size: 2rem;
+  .container {
+    margin-top: 20px;
+    padding: 0 10px;
   }
 
-  .section-title {
-    font-size: 1.5rem;
+  .card-header-modern {
+    padding: 15px;
   }
 
-  .metric-card {
-    padding: 1.25rem;
-  }
-
-  .metric-content h4 {
-    font-size: 1.75rem;
-  }
-
-  .metric-icon {
-    font-size: 2.25rem;
-  }
-
-  .competition-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .btn-group-toggle .btn {
-    padding: 0.5rem 1rem;
+  .icon-circle {
+    width: 40px;
+    height: 40px;
     font-size: 0.9rem;
-    margin: 0.125rem;
   }
 
-  .results-stats {
-    flex-direction: column;
-    gap: 0.5rem;
+  .icon-circle i {
+    font-size: 1.2rem;
   }
 
-  .result-item {
-    margin: 0.125rem 0;
+  .card-header-modern h5 {
+    font-size: 1.1rem;
   }
 
-  .result-number {
-    font-size: 1.5rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .dashboard-container {
-    padding: 10px 0;
+  .card-header-modern small {
+    font-size: 0.75rem;
   }
 
-  .metric-card {
-    padding: 1rem;
+  .card-body-modern {
+    padding: 15px;
+  }
+
+  .section-title-modern {
+    font-size: 1.1rem;
     margin-bottom: 1rem;
+    padding-bottom: 0.4rem;
   }
 
-  .metric-content h4 {
+  /* Team Filter - Mais compacto */
+  .btn-group-toggle .btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    margin: 0.125rem;
+    border-radius: 20px;
+  }
+
+  /* Metric Cards - Mais compactos */
+  .metric-card-modern {
+    padding: 15px;
+    margin-bottom: 12px;
+  }
+
+  .metric-icon-modern {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .metric-content-modern h4 {
     font-size: 1.5rem;
     margin-bottom: 0.25rem;
   }
 
-  .metric-icon {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .metric-label {
-    font-size: 0.9rem;
+  .metric-label-modern {
+    font-size: 0.85rem;
     margin-bottom: 0.125rem;
+    letter-spacing: 0.3px;
   }
 
-  .metric-description {
-    font-size: 0.8rem;
+  .metric-description-modern {
+    font-size: 0.75rem;
   }
 
-  .competition-item {
-    padding: 1rem;
+  /* Results Section */
+  .results-header-modern {
+    font-size: 1rem;
+    margin-bottom: 1rem;
   }
 
-  .competition-stats {
+  .results-header-modern i {
+    font-size: 1rem;
+  }
+
+  .results-stats-modern {
     flex-direction: column;
     gap: 0.5rem;
   }
 
-  .results-header {
-    font-size: 0.9rem;
+  .result-item-modern {
+    margin: 0.125rem 0;
+    padding: 0.5rem;
+  }
+
+  .result-number-modern {
+    font-size: 1.5rem;
+  }
+
+  .result-label-modern {
+    font-size: 0.75rem;
+  }
+
+  /* Competition Grid - Garantir 1 coluna em mobile */
+  .competition-grid-modern {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .competition-card-modern {
+    padding: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  .competition-title-modern {
+    font-size: 1.1rem;
     margin-bottom: 1rem;
   }
 
-  .results-header i {
+  .competition-item-modern {
+    padding: 1rem;
+  }
+
+  .competition-name-modern {
     font-size: 1rem;
   }
 
-  .result-item {
-    padding: 0.375rem;
-    margin: 0.125rem;
+  .competition-stats-modern {
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: 0.85rem;
   }
 
-  .result-number {
-    font-size: 1.25rem;
+  .stat-modern {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
   }
 
-  .result-label {
+  /* Spinners */
+  .spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .container {
+    margin-top: 10px;
+    padding: 0 5px;
+  }
+
+  .card-header-modern {
+    padding: 12px;
+  }
+
+  .icon-circle {
+    width: 36px;
+    height: 36px;
+  }
+
+  .icon-circle i {
+    font-size: 1rem;
+  }
+
+  .card-header-modern h5 {
+    font-size: 1rem;
+  }
+
+  .card-header-modern small {
+    font-size: 0.7rem;
+  }
+
+  .card-body-modern {
+    padding: 12px;
+  }
+
+  .section-title-modern {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Metric Cards - Ultra compacto */
+  .metric-card-modern {
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+
+  .metric-icon-modern {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .metric-content-modern h4 {
+    font-size: 1.3rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .metric-label-modern {
+    font-size: 0.8rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .metric-description-modern {
+    font-size: 0.7rem;
+  }
+
+  /* Team Filter */
+  .btn-group-toggle .btn {
+    padding: 0.35rem 0.7rem;
     font-size: 0.75rem;
+    margin: 0.1rem;
+  }
+
+  /* Results */
+  .results-header-modern {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .result-item-modern {
+    padding: 0.4rem;
+    margin: 0.1rem 0;
+  }
+
+  .result-number-modern {
+    font-size: 1.3rem;
+  }
+
+  .result-label-modern {
+    font-size: 0.7rem;
+  }
+
+  /* Competition */
+  .competition-card-modern {
+    padding: 1rem;
+    margin-top: 0.75rem;
+  }
+
+  .competition-title-modern {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .competition-item-modern {
+    padding: 0.875rem;
+  }
+
+  .competition-name-modern {
+    font-size: 0.95rem;
+  }
+
+  .competition-stats-modern {
+    font-size: 0.8rem;
+    gap: 0.4rem;
+  }
+
+  .stat-modern {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+  }
+
+  /* Spinner */
+  .spinner-border {
+    width: 1.2rem;
+    height: 1.2rem;
   }
 }
