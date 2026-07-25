@@ -98,3 +98,125 @@ body {
     margin-top: 50px;
   }
 }
+
+/* ============================================================
+   CALENDÁRIO - DATA DE NASCIMENTO
+   ============================================================ */
+
+.date-field-wrapper {
+  position: relative;
+}
+
+.date-input-group input.form-control[readonly] {
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.date-toggle-btn {
+  border: 1px solid #ced4da;
+  background: #ffffff;
+  color: #1f78d1;
+  border-radius: 0 10px 10px 0;
+}
+
+.date-toggle-btn:hover,
+.date-toggle-btn:focus {
+  background: #1f78d1;
+  color: #ffffff;
+  border-color: #1f78d1;
+}
+
+/* Camada invisível para fechar o calendário ao clicar fora */
+.datepicker-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1040;
+  background: transparent;
+}
+
+/* Painel flutuante do calendário */
+.datepicker-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 1050;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  padding: 10px;
+  animation: datepickerFadeIn 0.16s ease-out;
+}
+
+@keyframes datepickerFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilização do componente ngb-datepicker para combinar com o tema azul da página */
+::ng-deep .datepicker-popover ngb-datepicker {
+  border: none !important;
+  font-family: inherit;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 10px 10px 0 0;
+  padding-top: 6px;
+  padding-bottom: 4px;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-navigation-select select {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #333;
+  padding: 2px 6px;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-arrow .btn {
+  color: #1f78d1;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-arrow .btn:hover {
+  background-color: rgba(31, 120, 209, 0.1);
+  border-radius: 50%;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-weekday {
+  color: #1f78d1;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 0.78rem;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-day .btn-light {
+  border-radius: 8px;
+  transition: background-color 0.12s ease;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-day .btn-light:hover {
+  background-color: #eaf3fc;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-today .btn-light {
+  border: 1px solid #1f78d1;
+  font-weight: 700;
+}
+
+::ng-deep .datepicker-popover .bg-primary,
+::ng-deep .datepicker-popover .btn-light.bg-primary,
+::ng-deep .datepicker-popover .ngb-dp-day .bg-primary {
+  background-color: #1f78d1 !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+}
+
+@media (max-width: 480px) {
+  .datepicker-popover {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

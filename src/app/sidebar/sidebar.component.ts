@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginServiceService } from '../services/login-service.service';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment';
+import { ClubConfigService } from '../services/club-config.service';
 
 export interface RouteInfo {
   path: string;
@@ -44,7 +44,7 @@ export class SidebarComponent implements OnInit {
 
 
 
-  constructor(private loginws: LoginServiceService, private router: Router) { }
+  constructor(private loginws: LoginServiceService, private router: Router, private clubConfigService: ClubConfigService) { }
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.tmpUser = this.loginws.getLoginData().user;
@@ -63,20 +63,10 @@ export class SidebarComponent implements OnInit {
 
     this.menuItems.push(this.sairMenu);
 
-    // Defina o caminho da imagem aqui, pode ser condicional ou vir de um serviço
-    if (environment.tenant_id === 1) {
-      this.logoPath = 'assets/img/hcMaia_logo.png'; // Caminho para o logo do HC Maia
-      this.titleText = 'HC Maia'; // Texto do título para HC Maia
-    } else if (environment.tenant_id === 2) {
-      this.logoPath = 'assets/img/ADValongo_logo.png'; // Caminho para o logo do AD Valongo
-      this.titleText = 'AD Valongo'; // Texto do título para AD Valongo
-    }else if (environment.tenant_id === 3) {
-      this.logoPath = 'assets/img/CIS_logo.png'; // Caminho para o logo do CIS
-      this.titleText = 'CIS'; // Texto do título para CIS
-    }
-    else {
-      this.logoPath = 'assets/img/default_logo.png'; // Logo padrão se necessário
-    }
+    // Obtém a configuração do clube atual
+    const clubConfig = this.clubConfigService.getCurrentClubConfig();
+    this.logoPath = clubConfig.logoPath;
+    this.titleText = clubConfig.name;
 
   }
 

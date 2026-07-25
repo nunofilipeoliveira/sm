@@ -78,9 +78,15 @@ export class GestaoEquipaComponent implements OnInit {
   // Método para recarregar a equipa após mudanças
   recarregarEquipa() {
     if (this.idEquipa > 0) {
-      this.equipaService.getEquipabyIDLight(this.idEquipa.toString()).subscribe((data: EquipaData) => {
-        this.equipa = data;
-        console.log('GestaoEquipaComponent | Equipa recarregada:', this.equipa);
+      this.equipaService.getEquipabyIDLight(this.idEquipa.toString()).subscribe({
+        next: (data: EquipaData) => {
+          this.equipa = data;
+          console.log('GestaoEquipaComponent | Equipa recarregada:', this.equipa);
+        },
+        error: (error) => {
+          console.error('GestaoEquipaComponent | Erro ao recarregar equipa:', error);
+          alert('Erro ao atualizar dados da equipa. Por favor, recarregue a página.');
+        }
       });
     }
   }
@@ -102,6 +108,8 @@ export class GestaoEquipaComponent implements OnInit {
           const total = result.data.length;
           console.log('GestaoEquipaComponent | Total de jogadores a adicionar:', total);
 
+          let erros = 0;
+          
           for (const jogador of result.data) {
             console.log('GestaoEquipaComponent | Processando jogador:', jogador);
             // Verificar se o jogador já não está na equipa
@@ -121,8 +129,8 @@ export class GestaoEquipaComponent implements OnInit {
                   adicionados++;
                   console.log('GestaoEquipaComponent | Jogador adicionado com sucesso:', jogador.nome, 'Total adicionados:', adicionados);
 
-                  // Quando todos os jogadores forem adicionados, recarregar a equipa
-                  if (adicionados === total) {
+                  // Quando todos os jogadores forem processados (adicionados + erros + já existentes), recarregar a equipa
+                  if (adicionados + erros === total) {
                     console.log('GestaoEquipaComponent | Todos os jogadores processados, recarregando equipa');
                     this.recarregarEquipa();
                   }
@@ -130,12 +138,21 @@ export class GestaoEquipaComponent implements OnInit {
                 error: (error) => {
                   console.error('GestaoEquipaComponent | Erro ao adicionar jogador:', error);
                   alert('Erro ao adicionar jogador: ' + jogador.nome);
+                  erros++;
+                  adicionados++; // Contar como processado
+                  
+                  // Quando todos os jogadores forem processados, recarregar a equipa
+                  if (adicionados + erros === total) {
+                    console.log('GestaoEquipaComponent | Todos os jogadores processados (com erros), recarregando equipa');
+                    this.recarregarEquipa();
+                  }
                 }
               });
             } else {
               adicionados++;
+              erros++; // Contar como processado mesmo já existindo
               console.log('GestaoEquipaComponent | Jogador já existe, pulando. Total processados:', adicionados);
-              if (adicionados === total) {
+              if (adicionados + erros === total) {
                 console.log('GestaoEquipaComponent | Todos os jogadores processados (alguns já existiam), recarregando equipa');
                 this.recarregarEquipa();
               }

@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { EquipaService } from '../../services/equipa.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbAlertModule, NgbCollapseModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbCollapseModule, NgbProgressbarModule, NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoginServiceService } from '../../services/login-service.service';
@@ -11,12 +12,13 @@ import { FicheirosService } from '../../services/ficheiros.service';
 @Component({
   selector: 'novo-staff',
   standalone: true,
-  imports: [FormsModule, CommonModule, NgbAlertModule, NgbCollapseModule],
+  imports: [FormsModule, CommonModule, NgbAlertModule, NgbCollapseModule, NgbDatepickerModule],
   templateUrl: './novo-staff.component.html',
   styleUrl: './novo-staff.component.css'
 })
 
 export class NovoStaffComponent implements OnInit {
+  @ViewChild('dp') dp?: NgbDatepicker;
 
   staff: staffData;
   public sbmSuccess: boolean = false;
@@ -34,6 +36,8 @@ export class NovoStaffComponent implements OnInit {
 
    // Propriedade para a data de nascimento formatada (AAAA-MM-DD)
   public dataNascimentoDisplay: string = '';
+  public dataNascimento: NgbDateStruct | null = null;
+  public showDatepicker: boolean = false;
 
   constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private ficheirosService: FicheirosService, private router: Router) {
 
@@ -60,9 +64,37 @@ export class NovoStaffComponent implements OnInit {
     this.origem = String(routeParams.get('origem'));
     this.idEquipa = Number(routeParams.get('idEquipa'));
 
-    this.dataNascimentoDisplay="AAAAA-MM-DD"; // Inicializa com um valor padrão
+    this.dataNascimentoDisplay = ''; // Inicializa vazio
     this.spinner = false;
     this.isCollapsed= false;
+  }
+
+  toggleDatepicker() {
+    this.showDatepicker = !this.showDatepicker;
+
+    if (this.showDatepicker) {
+      // Garante que o calendário abre sempre no mês/ano da data já preenchida
+      // (ou no mês atual, caso ainda não exista data). É necessário aguardar
+      // um ciclo, pois o *ngIf só cria o <ngb-datepicker> depois de showDatepicker mudar.
+      setTimeout(() => {
+        this.dp?.navigateTo(this.dataNascimento ?? undefined);
+      });
+    }
+  }
+
+  onDateChange(date: NgbDateStruct | null) {
+    console.log("NovoStaffComponent | onDateChange | date:", date);
+    if (date) {
+      // Converter NgbDateStruct para string AAAA-MM-DD
+      const year = date.year;
+      const month = String(date.month).padStart(2, '0');
+      const day = String(date.day).padStart(2, '0');
+      this.dataNascimentoDisplay = `${year}-${month}-${day}`;
+      console.log("NovoStaffComponent | onDateChange | dataNascimentoDisplay:", this.dataNascimentoDisplay);
+    } else {
+      this.dataNascimentoDisplay = '';
+    }
+    this.showDatepicker = false; // Fechar calendário após selecionar
   }
 
   gravarFichaStaff() {
@@ -86,30 +118,60 @@ export class NovoStaffComponent implements OnInit {
       this.staff.data_nascimento = 0; // Ou 0 se o campo estiver vazio
     }
 
-    this.router.navigate(['/'+this.origem+'/' + this.idEquipa+'/'+this.staff.nome]);
-
-
     this.equipaService.addStaff(this.staff, this.loginservice.getLoginData().id).subscribe(
       {
         next: data => {
-          console.log("FichaStaffComponent | addStaff", data);
+          console.log("NovoStaffComponent | addStaff", data);
           if (data != null) {
             this.spinner = false;
-            if (data == false) {
+            if (data == false || data === 0) {
               this.sbmError = true;
-
+              alert('Erro ao criar staff. Por favor, tente novamente.');
             }
-            if (data == true) {
+            if (data == true || data > 0) {
               this.sbmSuccess = true;
-              this.router.navigate(['/'+this.origem+'/' + this.idEquipa+'/'+this.staff.nome]);
-
+              
+              // Se veio da gestão de equipa, adicionar o staff à equipa e navegar para gestão-equipa
+              if (this.origem === 'staffSeleccao') {
+                const idEquipaCorrigido = Math.abs(this.idEquipa);
+                console.log("NovoStaffComponent | Adicionando staff à equipa:", idEquipaCorrigido);
+                
+                // O backend deve retornar o ID do staff criado
+                const staffId = (data > 0) ? data : this.staff.id;
+                
+                if (staffId > 0) {
+                  this.staff.id = staffId;
+                  this.equipaService.addStaffEquipa(this.staff, idEquipaCorrigido).subscribe({
+                    next: (addResult) => {
+                      console.log("NovoStaffComponent | Staff adicionado à equipa com sucesso");
+                      this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
+                    },
+                    error: (error) => {
+                      console.error("NovoStaffComponent | Erro ao adicionar staff à equipa:", error);
+                      // Mesmo com erro, navegar para gestão-equipa
+                      this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
+                    }
+                  });
+                } else {
+                  // Se não temos o ID, navegar assim mesmo
+                  this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
+                }
+              } else {
+                // Navegação padrão para outras origens
+                this.router.navigate(['/'+this.origem+'/' + this.idEquipa+'/'+this.staff.nome]);
+              }
             }
           } else {
+            this.spinner = false;
+            this.sbmError = true;
+            alert('Erro ao criar staff. Por favor, tente novamente.');
           }
         },
         error: error => {
-          console.log("FichaStaffComponent | Serviço addStaff Erro!!");
+          console.log("NovoStaffComponent | Serviço addStaff Erro!!", error);
           this.sbmError = true;
+          this.spinner = false;
+          alert('Erro ao criar staff. Por favor, tente novamente.');
         }
       });
 

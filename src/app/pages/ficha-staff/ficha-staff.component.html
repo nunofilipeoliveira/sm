@@ -1,5 +1,61 @@
 <div class="main-content mt-4">
 
+  <!-- ===== MODAL DE CROP MANUAL DA FOTO (Perfil 3:4 / Avatar 1:1) ===== -->
+  <div class="crop-modal-overlay" *ngIf="showCropModal">
+    <div class="crop-modal">
+      <div class="crop-modal-header">
+        <h5 class="mb-0">
+          {{ cropTargetType === 'avatar' ? 'Cortar Foto Avatar (1:1)' : 'Cortar Foto de Perfil (3:4)' }}
+        </h5>
+        <button type="button" class="crop-close-btn" (click)="cancelCrop()" [disabled]="cropUploading"
+          aria-label="Fechar">&times;</button>
+      </div>
+
+      <div class="crop-modal-body">
+        <div class="crop-viewport" [style.width.px]="cropViewportWidth" [style.height.px]="cropViewportHeight"
+          (mousedown)="startDrag($event)" (touchstart)="startDrag($event)" (wheel)="onWheelZoom($event)">
+
+          <img #cropImgEl *ngIf="cropImageSrc" [src]="cropImageSrc" (load)="onCropImageLoad()"
+            [style.transform]="cropImgTransform" class="crop-image" draggable="false"
+            alt="Pré-visualização para corte">
+
+          <div class="crop-grid">
+            <div class="crop-grid-line crop-grid-v1"></div>
+            <div class="crop-grid-line crop-grid-v2"></div>
+            <div class="crop-grid-line crop-grid-h1"></div>
+            <div class="crop-grid-line crop-grid-h2"></div>
+          </div>
+          <div class="crop-frame-border"></div>
+        </div>
+
+        <div class="crop-controls">
+          <button type="button" class="crop-zoom-btn" (click)="zoomOut()" [disabled]="cropUploading"
+            aria-label="Diminuir zoom">
+            <i class="nc-icon nc-simple-remove"></i>
+          </button>
+          <input type="range" min="1" max="4" step="0.05" class="crop-zoom-slider" [value]="cropUserScale"
+            (input)="onZoomSliderChange($any($event.target).value)" [disabled]="cropUploading">
+          <button type="button" class="crop-zoom-btn" (click)="zoomIn()" [disabled]="cropUploading"
+            aria-label="Aumentar zoom">
+            <i class="nc-icon nc-simple-add"></i>
+          </button>
+        </div>
+        <p class="crop-hint">Arraste a foto para posicionar e utilize o zoom para ajustar o enquadramento.</p>
+      </div>
+
+      <div class="crop-modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" (click)="cancelCrop()"
+          [disabled]="cropUploading">Cancelar</button>
+        <button type="button" class="btn btn-success btn-sm" (click)="confirmCrop()" [disabled]="cropUploading">
+          <span *ngIf="cropUploading" class="spinner-border spinner-border-sm mr-1" role="status"></span>
+          {{ cropUploading ? 'A enviar...' : 'Confirmar e Enviar' }}
+        </button>
+      </div>
+
+      <canvas #cropCanvasEl style="display:none;"></canvas>
+    </div>
+  </div>
+
 
     <!-- Conteúdo principal: Detalhes do Staff -->
     <div class="row">
@@ -49,8 +105,28 @@
                 <div class="col-md-5">
                   <div class="form-group">
                     <label>Data Nascimento</label>
-                    <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="dataNascimentoDisplay"
-                      [readonly]="!isEditing" [class.readonly]="!isEditing" />
+                    <div *ngIf="isEditing" class="date-field-wrapper">
+                      <div class="input-group date-input-group">
+                        <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="dataNascimentoDisplay" placeholder="Selecionar data" readonly (click)="toggleDatepicker()">
+                        <div class="input-group-append">
+                          <button type="button" class="btn btn-outline-secondary date-toggle-btn" (click)="toggleDatepicker()">
+                            <i class="nc-icon nc-calendar-60"></i>
+                          </button>
+                        </div>
+                      </div>
+
+                      <ng-container *ngIf="showDatepicker">
+                        <div class="datepicker-backdrop" (click)="toggleDatepicker()"></div>
+                        <div class="datepicker-popover" (click)="$event.stopPropagation()">
+                          <ngb-datepicker #dp [(ngModel)]="dataNascimento" (dateSelect)="onDateChange($event)"
+                            navigation="select"
+                            [minDate]="{year: 1900, month: 1, day: 1}" [maxDate]="{year: 2099, month: 12, day: 31}">
+                          </ngb-datepicker>
+                        </div>
+                      </ng-container>
+                    </div>
+                    <input type="text" class="form-control" name="data_nascimento_display" [(ngModel)]="dataNascimentoDisplay"
+                      [readonly]="!isEditing" [class.readonly]="!isEditing" *ngIf="!isEditing" />
                   </div>
                 </div>
               </div>
@@ -124,12 +200,12 @@
                   <i class="nc-icon nc-simple-remove"></i> Cancelar
                 </button>
 
-                <button *ngIf="isEditing" type="button" class="btn btn-info btn-sm" (click)="modoCarregarFicheiro()">
-                  <i class="nc-icon nc-image<"></i> Alterar Foto Perfil
+                <button *ngIf="isEditing" type="button" class="btn btn-info btn-sm" (click)="triggerFileInput('perfil')">
+                  <i class="nc-icon nc-image"></i> Alterar Foto Perfil
                 </button>
 
                 <button *ngIf="isEditing" type="button" class="btn btn-info btn-sm"
-                  (click)="modoCarregarFicheiro_avatar()">
+                  (click)="triggerFileInput('avatar')">
                   <i class="nc-icon nc-camera-20"></i> Alterar Foto Avatar
                 </button>
 
@@ -140,11 +216,17 @@
                 -->
               </div>
               <div *ngIf="isUploadFoto">
-                <input type="file" (change)="onFileSelected($event)" class="form-control-file mb-2">
+                <input type="file" (change)="onCropFileSelected($event)" class="form-control-file mb-2">
               </div>
               <div *ngIf="isUploadFoto_avatar">
-                <input type="file" (change)="onFileSelected($event)" class="form-control-file mb-2">
+                <input type="file" (change)="onCropFileSelected($event)" class="form-control-file mb-2">
               </div>
+
+              <!-- Inputs de ficheiro escondidos: o clique é despoletado pelos botões acima -->
+              <input #fileInputPerfil type="file" accept="image/*" style="display:none;"
+                (change)="onCropFileSelected($event)">
+              <input #fileInputAvatar type="file" accept="image/*" style="display:none;"
+                (change)="onCropFileSelected($event)">
             </form>
 
           </div>

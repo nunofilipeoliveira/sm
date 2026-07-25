@@ -35,8 +35,26 @@
             <div class="col-md-5">
               <div class="form-group">
                 <label>Data Nascimento</label>
-                <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="dataNascimentoDisplay"
-                  (input)="handleInput($event)" required>
+                <div class="date-field-wrapper">
+                  <div class="input-group date-input-group">
+                    <input type="text" class="form-control" name="data_nascimento_display" [(ngModel)]="dataNascimentoDisplay" placeholder="Selecionar data" readonly (click)="toggleDatepicker()">
+                    <div class="input-group-append">
+                      <button type="button" class="btn btn-outline-secondary date-toggle-btn" (click)="toggleDatepicker()">
+                        <i class="nc-icon nc-calendar-60"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <ng-container *ngIf="showDatepicker">
+                    <div class="datepicker-backdrop" (click)="toggleDatepicker()"></div>
+                    <div class="datepicker-popover" (click)="$event.stopPropagation()">
+                      <ngb-datepicker #dp [(ngModel)]="dataNascimento" (dateSelect)="onDateChange($event)"
+                        navigation="select"
+                        [minDate]="{year: 1900, month: 1, day: 1}" [maxDate]="{year: 2099, month: 12, day: 31}">
+                      </ngb-datepicker>
+                    </div>
+                  </ng-container>
+                </div>
               </div>
             </div>
           </div>

@@ -1,4 +1,3 @@
-import { environment } from './../../../environments/environment';
 import { PoppupEscalaoComponent } from './../poppup-escalao/poppup-escalao.component';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
@@ -8,6 +7,7 @@ import { Router } from '@angular/router';
 import { LoginServiceService } from '../../services/login-service.service';
 import { EquipaService } from '../../services/equipa.service';
 import { ActivatedRoute } from '@angular/router';
+import { ClubConfigService } from '../../services/club-config.service';
 
 
 @Component({
@@ -25,14 +25,29 @@ export class LoginComponent implements OnInit{
   srvIndisponivel: boolean = false;
   spinner: boolean = false;
   showSessionExpiredMessage = false;
-  variation: number = 0; // 0=padrão, 1=var1, 2=var2
+  // Propriedades para as cores do login
+  loginBackgroundColor: string = '#f3f3f3';
+  loginGradient: string = '';
+  loginButtonColor: string = '#273890';
+  loginButtonHoverColor: string = '#b52732';
+  loginInputPlaceholderColor: string = '#273890';
+  // Imagem de fundo do login
+  loginBackgroundImage: string = '';
 
-  constructor(private router: Router, private dialog: MatDialog, private loginws: LoginServiceService, private equipaservice:EquipaService, private route: ActivatedRoute) { }
+  constructor(private router: Router, private dialog: MatDialog, private loginws: LoginServiceService, private equipaservice:EquipaService, private route: ActivatedRoute, public clubConfigService: ClubConfigService) { }
 
   ngOnInit(){
 
-    this.variation = environment.tenant_id
-    console.log('LoginComponent | ngOnInit | variation:', this.variation);  
+    console.log('LoginComponent | ngOnInit');
+    
+    // Carrega as cores do clube atual
+    this.loginBackgroundColor = this.clubConfigService.getCurrentLoginBackgroundColor();
+    this.loginGradient = this.clubConfigService.getCurrentLoginGradient();
+    this.loginButtonColor = this.clubConfigService.getCurrentLoginButtonColor();
+    this.loginButtonHoverColor = this.clubConfigService.getCurrentLoginButtonHoverColor();
+    this.loginInputPlaceholderColor = this.clubConfigService.getCurrentLoginInputPlaceholderColor();
+    // Carrega a imagem de fundo do clube atual
+    this.loginBackgroundImage = this.clubConfigService.getCurrentLoginBackgroundImage();
     
 
     //Apaga elementos da equipa da sessão anterior

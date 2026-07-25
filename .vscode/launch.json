@@ -27,6 +27,22 @@
         "-c=advalongo"
       ],
       "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "SM - FRONTEND SuperPatins",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "ng",
+        "serve",
+        "--open",
+        "--host=0.0.0.0",
+        "--port",
+        "80",
+        "-c=superpatins"
+      ],
+      "console": "integratedTerminal"
     }
     ,
     {

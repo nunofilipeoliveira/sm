@@ -1,7 +1,8 @@
 import { FicheirosService } from './../../services/ficheiros.service';
 import { AfterViewInit, Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgbAlertModule, NgbCollapseModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbCollapseModule, NgbProgressbarModule, NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { EquipaService } from './../../services/equipa.service';
 import { CommonModule } from '@angular/common';
 import { LoginServiceService } from '../../services/login-service.service';
@@ -15,10 +16,12 @@ import { EquipaData } from '../equipa/equipaData';
   templateUrl: './novo-jogador.component.html',
   styleUrl: './novo-jogador.component.css',
   standalone: true,
-  imports: [NgbProgressbarModule, CommonModule, FormsModule, NgbAlertModule, NgbCollapseModule]
+  imports: [NgbProgressbarModule, CommonModule, FormsModule, NgbAlertModule, NgbCollapseModule, NgbDatepickerModule]
 })
 
 export class NovoJogadorComponent implements OnInit {
+  @ViewChild('dp') dp?: NgbDatepicker;
+  
   equipaData: EquipaData | undefined;
   jogadorData: jogadorData;
 
@@ -40,7 +43,9 @@ export class NovoJogadorComponent implements OnInit {
   public mensagemErro: string = "";
 
   // Propriedade para a data de nascimento formatada (AAAA-MM-DD)
-  public dataNascimentoDisplay: string = 'AAAA-MM-DD';
+  public dataNascimentoDisplay: string = '';
+  public dataNascimento: NgbDateStruct | null = null;
+  public showDatepicker: boolean = false;
 
   constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private router: Router, private ficheirosService: FicheirosService) {
     this.jogadorData = {
@@ -79,6 +84,8 @@ export class NovoJogadorComponent implements OnInit {
     console.log('NovoJogadorComponent | origem:', this.origem);
     console.log('NovoJogadorComponent | idEquipa:', this.idEquipa);
 
+    // Inicializar dataNascimentoDisplay vazio
+    this.dataNascimentoDisplay = '';
 
   }
 
@@ -182,6 +189,34 @@ export class NovoJogadorComponent implements OnInit {
     }
   }
 
+  toggleDatepicker() {
+    this.showDatepicker = !this.showDatepicker;
+
+    if (this.showDatepicker) {
+      // Garante que o calendário abre sempre no mês/ano da data já preenchida
+      // (ou no mês atual, caso ainda não exista data). É necessário aguardar
+      // um ciclo, pois o *ngIf só cria o <ngb-datepicker> depois de showDatepicker mudar.
+      setTimeout(() => {
+        this.dp?.navigateTo(this.dataNascimento ?? undefined);
+      });
+    }
+  }
+
+  onDateChange(date: NgbDateStruct | null) {
+    console.log("NovoJogadorComponent | onDateChange | date:", date);
+    if (date) {
+      // Converter NgbDateStruct para string AAAA-MM-DD
+      const year = date.year;
+      const month = String(date.month).padStart(2, '0');
+      const day = String(date.day).padStart(2, '0');
+      this.dataNascimentoDisplay = `${year}-${month}-${day}`;
+      console.log("NovoJogadorComponent | onDateChange | dataNascimentoDisplay:", this.dataNascimentoDisplay);
+    } else {
+      this.dataNascimentoDisplay = '';
+    }
+    this.showDatepicker = false; // Fechar calendário após selecionar
+  }
+
   handleInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const start = input.selectionStart !== null ? input.selectionStart : 0;
@@ -195,7 +230,7 @@ export class NovoJogadorComponent implements OnInit {
 
     if (input.value.length == 0) {
       console.log("NovoJogadorComponent | handleInput | dataNascimentoDisplay: AAAA-MM-DD");
-      this.dataNascimentoDisplay = 'AAAA-MM-DD';
+      this.dataNascimentoDisplay = '';
       input.setSelectionRange(0, 0);
     }
     console.log("NovoJogadorComponent | handleInput | dataNascimentoDisplay:", this.dataNascimentoDisplay);

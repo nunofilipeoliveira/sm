@@ -872,3 +872,319 @@ button[aria-expanded="true"] i.nc-icon {
   height: 18px;
   border-radius: 50%;
 }
+
+/* ============================================================
+   CROPPER DE IMAGEM (Foto Perfil 4:3 / Avatar 1:1)
+   ============================================================ */
+
+.crop-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 20, 25, 0.72);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  animation: cropFadeIn 0.18s ease-out;
+}
+
+@keyframes cropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.crop-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: cropSlideUp 0.2s ease-out;
+}
+
+@keyframes cropSlideUp {
+  from { transform: translateY(16px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.crop-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+.crop-modal-header h5 {
+  color: #1f78d1;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.crop-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #6c757d;
+  cursor: pointer;
+  padding: 0 4px;
+  transition: color 0.15s ease;
+}
+
+.crop-close-btn:hover {
+  color: #dc3545;
+}
+
+.crop-modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.crop-viewport {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #1a1a1a repeating-conic-gradient(#2a2a2a 0% 25%, #1f1f1f 0% 50%) 0 0 / 20px 20px;
+  cursor: grab;
+  touch-action: none;
+  box-shadow: 0 0 0 3px rgba(31, 120, 209, 0.25), 0 8px 24px rgba(0, 0, 0, 0.25);
+  user-select: none;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crop-viewport:active {
+  cursor: grabbing;
+}
+
+.crop-image {
+  transform-origin: center center;
+  max-width: none;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.crop-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.crop-grid-line {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.crop-grid-v1 { left: 33.333%; top: 0; bottom: 0; width: 1px; }
+.crop-grid-v2 { left: 66.666%; top: 0; bottom: 0; width: 1px; }
+.crop-grid-h1 { top: 33.333%; left: 0; right: 0; height: 1px; }
+.crop-grid-h2 { top: 66.666%; left: 0; right: 0; height: 1px; }
+
+.crop-frame-border {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  border-radius: 10px;
+  pointer-events: none;
+}
+
+.crop-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 300px;
+  margin-top: 18px;
+}
+
+.crop-zoom-btn {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #1f78d1;
+  background: #ffffff;
+  color: #1f78d1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  font-size: 0.9rem;
+}
+
+.crop-zoom-btn:hover {
+  background: #1f78d1;
+  color: #fff;
+}
+
+.crop-zoom-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.crop-zoom-slider {
+  flex: 1;
+  accent-color: #1f78d1;
+  cursor: pointer;
+}
+
+.crop-hint {
+  margin-top: 12px;
+  margin-bottom: 0;
+  font-size: 0.8rem;
+  color: #6c757d;
+  text-align: center;
+}
+
+.crop-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 20px;
+  border-top: 1px solid #e9ecef;
+  background: #f8f9fa;
+}
+
+@media (max-width: 480px) {
+  .crop-modal {
+    max-width: 100%;
+  }
+
+  .crop-modal-body {
+    padding: 16px;
+  }
+}
+
+/* ============================================================
+   CALENDÁRIO - DATA DE NASCIMENTO
+   ============================================================ */
+
+.date-field-wrapper {
+  position: relative;
+}
+
+.date-input-group input.form-control[readonly] {
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+.date-toggle-btn {
+  border: 1px solid #ced4da;
+  background: #ffffff;
+  color: #1f78d1;
+  border-radius: 0 10px 10px 0;
+}
+
+.date-toggle-btn:hover,
+.date-toggle-btn:focus {
+  background: #1f78d1;
+  color: #ffffff;
+  border-color: #1f78d1;
+}
+
+/* Camada invisível para fechar o calendário ao clicar fora */
+.datepicker-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1040;
+  background: transparent;
+}
+
+/* Painel flutuante do calendário */
+.datepicker-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 1050;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  padding: 10px;
+  animation: datepickerFadeIn 0.16s ease-out;
+}
+
+@keyframes datepickerFadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilização do componente ngb-datepicker para combinar com o tema azul da página */
+::ng-deep .datepicker-popover ngb-datepicker {
+  border: none !important;
+  font-family: inherit;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  border-radius: 10px 10px 0 0;
+  padding-top: 6px;
+  padding-bottom: 4px;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-navigation-select select {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #333;
+  padding: 2px 6px;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-arrow .btn {
+  color: #1f78d1;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-arrow .btn:hover {
+  background-color: rgba(31, 120, 209, 0.1);
+  border-radius: 50%;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-weekday {
+  color: #1f78d1;
+  font-weight: 700;
+  font-style: normal;
+  font-size: 0.78rem;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-day .btn-light {
+  border-radius: 8px;
+  transition: background-color 0.12s ease;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-day .btn-light:hover {
+  background-color: #eaf3fc;
+}
+
+::ng-deep .datepicker-popover .ngb-dp-today .btn-light {
+  border: 1px solid #1f78d1;
+  font-weight: 700;
+}
+
+::ng-deep .datepicker-popover .bg-primary,
+::ng-deep .datepicker-popover .btn-light.bg-primary,
+::ng-deep .datepicker-popover .ngb-dp-day .bg-primary {
+  background-color: #1f78d1 !important;
+  color: #ffffff !important;
+  border-radius: 8px;
+}
+
+@media (max-width: 480px) {
+  .datepicker-popover {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

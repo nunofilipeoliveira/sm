@@ -2,30 +2,15 @@
 .parent {
 	position: relative;
 	min-height: 100vh;
-  background-color: #f3f3f3;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-   
+    
    background-repeat: no-repeat;
    background-size: cover;
-
-    &.color-variation-hcmaia{
-    background-image: linear-gradient(to bottom, #273890, #b52732);;
-	}
-
-	 &.color-variation-advalongo{
-    background-image: linear-gradient(to bottom, #008B6C, #003D2F);;
-	}
-
-	&.color-variation-cis{
-    background-image: linear-gradient(to bottom, #ffffff, #b52732);;
-	}
-
-
 }
 
 .form-structor {
@@ -36,31 +21,9 @@
   position: relative;
 	overflow: hidden;
   align-self: center;
-
-	&::after {
-		content: '';
-		opacity: .80;
-		position: absolute;
-		top: 30px;right:0;bottom:0;left:0;
-		background-repeat: no-repeat;
-		background-position: center top;
-		background-size: 350px;
-		
-	}
-
-	 &.image-variation-hcmaia::after {
-    background-image: url('assets/img/MaiaFundo.png');
-  }
-  &.image-variation-advalongo::after {
-    background-image: url('assets/img/ADValongo_fundo.png');
-	background-size: 250px;
-	top: 40px;
-  }
-    &.image-variation-cis::after {
-    background-image: url('assets/img/cis_fundo.png');
-	background-size: 250px;
-	top: 40px;
-  }
+	background-repeat: no-repeat;
+	background-position: center 25%;
+	background-size: contain;
 
 	.signup {
 		position: absolute;
@@ -117,14 +80,13 @@
        	&:last-child {
 					border-bottom: 0;
 				}
-				&::-webkit-input-placeholder {
-					color: #273890;
+				&::placeholder {
+					color: var(--placeholder-color, #273890);
 				}
 			}
 		}
 
 		.submit-btn {
-			background-color: #273890;
 			color: rgba(256,256,256,0.7);
 			border:0;
 			border-radius: 15px;
@@ -137,13 +99,18 @@
 			opacity: 1;
 			visibility: visible;
 			-webkit-transition: all .3s ease;
+		}
 
-			&:hover {
-				transition: all .3s ease;
-				background-color:#b52732;
-			}
+		.btn-hover-hcmaia:hover {
+			background-color: #b52732 !important;
+		}
 
+		.btn-hover-advalongo:hover {
+			background-color: #003D2F !important;
+		}
 
+		.btn-hover-cis:hover {
+			background-color: #b52732 !important;
 		}
 	}
 

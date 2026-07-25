@@ -111,7 +111,7 @@ export class StaffSeleccaoComponent implements OnInit {
         telemovel: '',
         morada: '',
         codigo_postal: '',
-        id_jogador: 0,
+        id_jogador: this.staffs[posicao].id_Jogador,
         tipo: tipoSelecionado,
         licenca: ''
       };
@@ -120,15 +120,15 @@ export class StaffSeleccaoComponent implements OnInit {
       this.equipaService.addStaffEquipa(tmpStaff, this.idEscalao).subscribe({
         next: (response) => {
           console.log('Staff adicionado com sucesso:', response);
-  
-          this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
           this.spinner = false;
+          alert('Staff adicionado com sucesso!');
+          this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
         },
         error: (error) => {
           console.error('Erro ao adicionar staff à equipa:', error);
+          this.spinner = false;
           alert('Ocorreu um erro ao adicionar o staff à equipa');
           this.router.navigate(['/gestao-equipa/' + this.idEscalao]);
-          this.spinner = false;
         }
       });
 
