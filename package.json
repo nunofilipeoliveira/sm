@@ -11,7 +11,8 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "build:hcmaia": "ng build --configuration=hcmaia",
     "build:advalongo": "ng build --configuration=advalongo",
-    "build:cis": "ng build --configuration=cis"
+    "build:cis": "ng build --configuration=cis",
+    "build:superpatins": "ng build --configuration=superpatins"
   },
   "private": true,
   "dependencies": {
