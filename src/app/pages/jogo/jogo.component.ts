@@ -40,6 +40,8 @@ export class JogoComponent implements OnInit {
 
   loading: boolean = false;
   idJogo: number=0;
+  // Controla a visualização de estatísticas completas ou simplificadas
+  mostrarEstatisticasCompletas: boolean = false;
   // Use a nova interface para o objeto jogo
   jogo: JogoDataWithExpandablePlayers = {
     id: 0,

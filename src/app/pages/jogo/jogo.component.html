@@ -73,6 +73,15 @@
     <div *ngIf="mostrarRegisto" class="registo-container">
       <h3 class="titulo-registo">Registar Informação do Jogo</h3>
 
+      <!-- Botão toggle para alternar entre visualização simplificada e completa -->
+      <div class="toggle-estatisticas-wrapper">
+        <label class="toggle-estatisticas-label">
+          <input type="checkbox" [(ngModel)]="mostrarEstatisticasCompletas" class="toggle-estatisticas-input">
+          <span class="toggle-estatisticas-slider"></span>
+          <span class="toggle-estatisticas-text">Estatísticas Completas</span>
+        </label>
+      </div>
+
       <!-- Compact Stats Summary Row - Quick access to all players -->
       <div class="compact-stats-summary">
         <div class="summary-item" *ngFor="let jogador of jogo.jogadores"
@@ -175,7 +184,7 @@
             </div>
 
             <!-- Nova seção para estatísticas adicionais -->
-            <div class="grupo-eventos">
+            <div *ngIf="mostrarEstatisticasCompletas" class="grupo-eventos">
               <h4>📊 Outras Estatísticas</h4>
               <div class="controles">
                 <div class="linha-controle">
@@ -219,7 +228,7 @@
             </div>
 
             <!-- Nova seção para Guarda-Redes - Defesas de Penalty e Livre Direto -->
-            <div *ngIf="jogador.isGR" class="grupo-eventos">
+            <div *ngIf="jogador.isGR && mostrarEstatisticasCompletas" class="grupo-eventos">
               <h4>🥅 Defesas (Guarda-Redes)</h4>
               <div class="controles">
                 <div class="linha-controle">
@@ -241,7 +250,7 @@
             </div>
 
             <!-- Nova seção para Jogadores de Campo - Penalties e Livres Diretos Falhados -->
-            <div *ngIf="!jogador.isGR" class="grupo-eventos">
+            <div *ngIf="!jogador.isGR && mostrarEstatisticasCompletas" class="grupo-eventos">
               <h4>❌ Falhas (Jogadores de Campo)</h4>
               <div class="controles">
                 <div class="linha-controle">
