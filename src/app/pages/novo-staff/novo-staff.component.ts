@@ -128,34 +128,16 @@ export class NovoStaffComponent implements OnInit {
               this.sbmError = true;
               alert('Erro ao criar staff. Por favor, tente novamente.');
             }
-            if (data == true || data > 0) {
+              if (data == true || data > 0) {
               this.sbmSuccess = true;
               
-              // Se veio da gestão de equipa, adicionar o staff à equipa e navegar para gestão-equipa
+              // Se veio da gestão de equipa, navegar para a lista de staff para adicionar à equipa
               if (this.origem === 'staffSeleccao') {
                 const idEquipaCorrigido = Math.abs(this.idEquipa);
-                console.log("NovoStaffComponent | Adicionando staff à equipa:", idEquipaCorrigido);
+                console.log("NovoStaffComponent | Navegando para staffSeleccao após criar staff:", idEquipaCorrigido);
                 
-                // O backend deve retornar o ID do staff criado
-                const staffId = (data > 0) ? data : this.staff.id;
-                
-                if (staffId > 0) {
-                  this.staff.id = staffId;
-                  this.equipaService.addStaffEquipa(this.staff, idEquipaCorrigido).subscribe({
-                    next: (addResult) => {
-                      console.log("NovoStaffComponent | Staff adicionado à equipa com sucesso");
-                      this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
-                    },
-                    error: (error) => {
-                      console.error("NovoStaffComponent | Erro ao adicionar staff à equipa:", error);
-                      // Mesmo com erro, navegar para gestão-equipa
-                      this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
-                    }
-                  });
-                } else {
-                  // Se não temos o ID, navegar assim mesmo
-                  this.router.navigate(['/gestao-equipa/' + idEquipaCorrigido]);
-                }
+                // Navegar para a lista de staff com o nome do novo staff pré-filtrado
+                this.router.navigate(['/staffSeleccao/-' + idEquipaCorrigido + '/' + this.staff.nome]);
               } else {
                 // Navegação padrão para outras origens
                 this.router.navigate(['/'+this.origem+'/' + this.idEquipa+'/'+this.staff.nome]);

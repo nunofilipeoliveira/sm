@@ -62,15 +62,41 @@ export class GestaoEquipaComponent implements OnInit {
 
   carregarEquipa(idEquipa: number) {
     if (idEquipa > 0) {
-      this.equipaService.getEquipabyIDLight(idEquipa.toString()).subscribe((data: EquipaData) => {
-        this.equipa = data;
-        console.log('GestaoEquipaComponent | Equipa (ID > 0):', this.equipa);
-         this.loading = false;
+      this.equipaService.getEquipabyIDLight(idEquipa.toString()).subscribe({
+        next: (data: EquipaData) => {
+          console.log('GestaoEquipaComponent | Dados recebidos:', data);
+          // Garantir que jogadores e staff nunca sejam null para evitar erros no *ngFor
+          if (data) {
+            if (!data.jogadores) {
+              data.jogadores = [];
+            }
+            if (!data.staff) {
+              data.staff = [];
+            }
+            this.equipa = data;
+          }
+          console.log('GestaoEquipaComponent | Equipa (ID > 0):', this.equipa);
+          this.loading = false;
+        },
+        error: (error) => {
+          console.error('GestaoEquipaComponent | Erro ao carregar equipa:', error);
+          alert('Erro ao carregar dados da equipa. Por favor, tente novamente.');
+          this.loading = false;
+        }
       });
     } else {
       this.equipa = this.equipaService.getEquipa();
+      // Garantir que jogadores e staff nunca sejam null
+      if (this.equipa) {
+        if (!this.equipa.jogadores) {
+          this.equipa.jogadores = [];
+        }
+        if (!this.equipa.staff) {
+          this.equipa.staff = [];
+        }
+      }
       console.log('GestaoEquipaComponent | Equipa (ID <= 0):', this.equipa);
-       this.loading = false;
+      this.loading = false;
     }
     console.log('GestaoEquipaComponent | Equipa:', this.equipa);
   }
@@ -80,7 +106,16 @@ export class GestaoEquipaComponent implements OnInit {
     if (this.idEquipa > 0) {
       this.equipaService.getEquipabyIDLight(this.idEquipa.toString()).subscribe({
         next: (data: EquipaData) => {
-          this.equipa = data;
+          console.log('GestaoEquipaComponent | Equipa recarregada:', data);
+          if (data) {
+            if (!data.jogadores) {
+              data.jogadores = [];
+            }
+            if (!data.staff) {
+              data.staff = [];
+            }
+            this.equipa = data;
+          }
           console.log('GestaoEquipaComponent | Equipa recarregada:', this.equipa);
         },
         error: (error) => {

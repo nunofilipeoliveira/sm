@@ -20,6 +20,28 @@ body{
     background-color:#b52732;
   }
 
+  select.badge {
+    font-size: 14px;
+    background-color: #f8f9fa;
+    color: #333;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    padding: 6px 8px;
+    max-width: 140px;
+    width: 100%;
+    white-space: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    cursor: pointer;
+  }
+
+  select.badge option {
+    font-size: 13px;
+    padding: 4px;
+    white-space: normal;
+    word-wrap: break-word;
+  }
+
   .table-responsive {
     overflow: auto;
     padding-bottom: 10px;
@@ -37,7 +59,6 @@ body{
   .table-nowrap td, .table-nowrap th {
       white-space: nowrap;
   }
-
 
   .table-nowrap td-r {
       text-align: right;
@@ -102,4 +123,96 @@ body{
   }
   .bg-soft-primary {
       background-color: rgba(59,118,225,.25)!important;
+  }
+
+  /* ============================================================
+     MOBILE RESPONSIVENESS
+     ============================================================ */
+  @media (max-width: 768px) {
+    .table-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .project-list-table {
+      border-spacing: 0 8px;
+      min-width: auto;
+    }
+
+    .table-nowrap td, .table-nowrap th {
+      white-space: normal;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+    td.td-total, th.td-total {
+      width: auto;
+      min-width: 120px;
+      text-align: left;
+      padding: 8px 4px;
+      vertical-align: top;
+    }
+
+    .project-list-table thead {
+      display: none;
+    }
+
+    .project-list-table tr {
+      display: block;
+      padding: 12px;
+      margin-bottom: 12px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .project-list-table td {
+      display: block;
+      text-align: left;
+      padding: 6px 0;
+      border: none !important;
+    }
+
+    .project-list-table td:first-child {
+      font-weight: 600;
+      font-size: 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee !important;
+      margin-bottom: 8px;
+    }
+
+    select.badge {
+      max-width: 100%;
+      font-size: 15px;
+      padding: 8px 10px;
+    }
+
+    .project-list-table td:last-child {
+      padding-top: 8px;
+      border-top: 1px solid #eee !important;
+      margin-top: 8px;
+    }
+
+    .btn {
+      width: 100%;
+      margin-bottom: 8px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .project-list-table td:first-child {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .avatar-sm {
+      height: 1.5rem;
+      width: 1.5rem;
+    }
+
+    select.badge {
+      font-size: 14px;
+      padding: 10px;
+    }
   }
