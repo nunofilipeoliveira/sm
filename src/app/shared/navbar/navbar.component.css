@@ -16,6 +16,19 @@
 
 .navbar-equipa {
   flex-shrink: 0 !important;
+  max-width: 40%;
+}
+
+.navbar-equipa > div {
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.navbar-equipa b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 100%;
 }
 
 @media (max-width: 991px) {
@@ -26,5 +39,9 @@
 
   .navbar-brand {
     font-size: 16px !important;
+  }
+
+  .navbar-equipa {
+    max-width: 50%;
   }
 }
