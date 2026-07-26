@@ -150,6 +150,14 @@
                   </div>
                 </ng-container>
               </div>
+              <div class="linha-controle">
+                  <label>🎯 Assistências</label>
+                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'assistencias', -1)"
+                    [disabled]="getEstatisticaCount(jogador, 'assistencias') === 0">−</button>
+                  <span class="contador">{{ getEstatisticaCount(jogador, 'assistencias') }}</span>
+                  <button class="btn-outline-success"
+                    (click)="alterarEstatistica(jogador, 'assistencias', 1)">+</button>
+                </div>
 
             </div>
 
@@ -187,14 +195,7 @@
             <div *ngIf="mostrarEstatisticasCompletas" class="grupo-eventos">
               <h4>📊 Outras Estatísticas</h4>
               <div class="controles">
-                <div class="linha-controle">
-                  <label>🎯 Assistências</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'assistencias', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'assistencias') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'assistencias') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'assistencias', 1)">+</button>
-                </div>
+                
                 <div class="linha-controle">
                   <label>🛡️ Recuperações</label>
                   <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'recuperacoes_bola', -1)"
