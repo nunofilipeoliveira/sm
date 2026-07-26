@@ -3265,3 +3265,394 @@
   font-weight: 500;
   font-size: 0.9rem;
 }
+
+/* ============================================================
+   Registo de Jogo v2 — seletor de jogadores + painel por separadores
+   Substitui o antigo acordeão (.jogador-item / .grupo-eventos) na
+   secção de registo. As classes antigas ficam intocadas porque
+   continuam a ser usadas na vista "concluído" mais abaixo.
+   ============================================================ */
+
+.registo-v2 {
+  padding: 12px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.registo-v2 .titulo-registo {
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 12px;
+  color: #212529;
+}
+
+/* Mini placar fixo, para contexto durante o registo em direto */
+.v2-placar-mini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f0f6ff;
+  border: 1px solid #d7e6ff;
+  border-radius: 12px;
+  padding: 8px 14px;
+  margin-bottom: 12px;
+}
+
+.v2-placar-equipa {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #495057;
+  max-width: 38%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.v2-placar-numero {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1d4ed8;
+}
+
+/* Fila horizontal de jogadores (seletor por avatares) */
+.v2-chip-row {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.v2-chip-row::-webkit-scrollbar {
+  display: none;
+}
+
+.v2-chip {
+  flex: 0 0 auto;
+  width: 64px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.v2-chip-avatar {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: #f1f3f5;
+  border: 2px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #495057;
+  transition: background-color .15s, border-color .15s, color .15s;
+}
+
+.v2-chip-ativo .v2-chip-avatar {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #fff;
+}
+
+.v2-chip-nome {
+  display: block;
+  font-size: 0.72rem;
+  color: #6c757d;
+  margin-top: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.v2-chip-ativo .v2-chip-nome {
+  color: #212529;
+  font-weight: 600;
+}
+
+.v2-chip-badges {
+  display: flex;
+  gap: 3px;
+  justify-content: center;
+  margin-top: 3px;
+  min-height: 16px;
+}
+
+.v2-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0 5px;
+  line-height: 1.4;
+}
+
+.v2-badge-golo {
+  background: #d3f9d8;
+  color: #2b8a3e;
+}
+
+.v2-badge-cartao {
+  background: #fff3bf;
+  color: #e67700;
+}
+
+/* Painel do jogador selecionado */
+.v2-painel {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+.v2-painel-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.v2-painel-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #e9ecef;
+  flex-shrink: 0;
+}
+
+.v2-painel-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.v2-painel-nome {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #212529;
+  margin: 0 0 6px;
+}
+
+.v2-icon-capitao {
+  color: #f59f00;
+  font-size: 0.85rem;
+  margin-left: 4px;
+}
+
+.v2-painel-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.v2-mini-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.v2-mini-field label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.v2-input-numero {
+  width: 44px;
+  height: 30px;
+  text-align: center;
+  border: 1px solid #ced4da;
+  border-radius: 8px;
+  font-size: 0.85rem;
+}
+
+.v2-mini-toggle {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: #495057;
+  margin: 0;
+  cursor: pointer;
+}
+
+.v2-mini-toggle input {
+  width: 15px;
+  height: 15px;
+}
+
+/* Separadores Golos / Cartões / Outras */
+.v2-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.v2-tab {
+  flex: 1;
+  height: 36px;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  background: #f8f9fa;
+  color: #6c757d;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.v2-tab-ativo {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  color: #fff;
+}
+
+/* Grelha de cartões de ação (Golos / Cartões / Outras) */
+.v2-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.v2-card {
+  position: relative;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  min-height: 84px;
+}
+
+.v2-card-conteudo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 10px 6px;
+  cursor: pointer;
+  height: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.v2-card-conteudo:active {
+  background: #e9ecef;
+  border-radius: 12px;
+}
+
+.v2-card-icone {
+  font-size: 1.1rem;
+  color: #495057;
+}
+
+.v2-card-label {
+  font-size: 0.72rem;
+  color: #6c757d;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.v2-card-valor {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.v2-card-menos {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid #dee2e6;
+  color: #6c757d;
+  font-size: 0.95rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.v2-card-cor {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  display: block;
+}
+
+.v2-cor-amarelo {
+  background: #ffd43b;
+}
+
+.v2-cor-azul {
+  background: #4dabf7;
+}
+
+.v2-cor-vermelho {
+  background: #ff6b6b;
+}
+
+/* Histórico de eventos com desfazer */
+.v2-historico {
+  margin-bottom: 14px;
+}
+
+.v2-historico-titulo {
+  font-size: 0.8rem;
+  color: #6c757d;
+  margin: 0 0 6px;
+}
+
+.v2-historico-vazio {
+  font-size: 0.78rem;
+  color: #adb5bd;
+  margin: 0;
+}
+
+.v2-historico-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  font-size: 0.8rem;
+  color: #212529;
+}
+
+.v2-historico-desfazer {
+  border: none;
+  background: none;
+  color: #6c757d;
+  font-size: 0.72rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+}
+
+.v2-historico-desfazer:hover {
+  color: #1d4ed8;
+}
+
+/* Telemóveis pequenos: garante que os botões continuam confortáveis ao toque */
+@media (max-width: 380px) {
+  .v2-chip {
+    width: 56px;
+  }
+
+  .v2-card {
+    min-height: 76px;
+  }
+
+  .v2-card-icone {
+    font-size: 1rem;
+  }
+}

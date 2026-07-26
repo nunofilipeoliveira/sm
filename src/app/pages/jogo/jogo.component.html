@@ -70,8 +70,15 @@
     </div>
 
     <!-- Seção de Registro de Informações do Jogo (Expandível por Jogador) -->
-    <div *ngIf="mostrarRegisto" class="registo-container">
+    <div *ngIf="mostrarRegisto" class="registo-v2">
       <h3 class="titulo-registo">Registar Informação do Jogo</h3>
+
+      <!-- Mini placar fixo, para contexto durante o registo ao vivo -->
+      <div class="v2-placar-mini">
+        <span class="v2-placar-equipa">{{ nomeClube }}</span>
+        <span class="v2-placar-numero">{{ jogo.golos_equipa }} - {{ jogo.golos_equipa_adv }}</span>
+        <span class="v2-placar-equipa">{{ jogo.equipa_adv_nome }}</span>
+      </div>
 
       <!-- Botão toggle para alternar entre visualização simplificada e completa -->
       <div class="toggle-estatisticas-wrapper">
@@ -82,196 +89,133 @@
         </label>
       </div>
 
-      <!-- Compact Stats Summary Row - Quick access to all players -->
-      <div class="compact-stats-summary">
-        <div class="summary-item" *ngFor="let jogador of jogo.jogadores"
-             (click)="toggleJogadorExpand(jogador.id_jogador); scrollToJogador(jogador.id_jogador)"
-             [class.expanded]="jogador.expanded">
-          <span class="summary-number">{{jogador.numero || '-'}}</span>
-          <span class="summary-name">{{jogador.nome.split(' ')[0]}}</span>
-          <span class="summary-icons">
-            <span *ngIf="getTotalGolos(jogador) > 0" class="stat-badge goal">{{getTotalGolos(jogador)}}⚽</span>
-            <span *ngIf="getTotalCartoes(jogador) > 0" class="stat-badge card">{{getTotalCartoes(jogador)}}🟨</span>
-          </span>
+      <!-- Seletor de jogadores: fila horizontal de avatares, sempre visível -->
+      <div class="v2-chip-row">
+        <div *ngFor="let jogador of jogo.jogadores" class="v2-chip"
+             [class.v2-chip-ativo]="jogador.id_jogador === activeJogadorId"
+             (click)="selecionarJogadorAtivo(jogador.id_jogador)">
+          <div class="v2-chip-avatar">{{ jogador.numero || '-' }}</div>
+          <span class="v2-chip-nome">{{ jogador.nome.split(' ')[0] }}</span>
+          <div class="v2-chip-badges">
+            <span *ngIf="getTotalGolos(jogador) > 0" class="v2-badge v2-badge-golo">{{ getTotalGolos(jogador) }}</span>
+            <span *ngIf="getTotalCartoes(jogador) > 0" class="v2-badge v2-badge-cartao">{{ getTotalCartoes(jogador) }}</span>
+          </div>
         </div>
       </div>
 
-      <div *ngFor="let jogador of jogo.jogadores" class="jogador-item" id="jogador-{{jogador.id_jogador}}">
-        <div class="jogador-header" (click)="toggleJogadorExpand(jogador.id_jogador)">
+      <!-- Painel do jogador selecionado -->
+      <div class="v2-painel" *ngIf="getJogadorAtivo() as jogador">
+        <div class="v2-painel-header">
           <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
-            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" class="avatar-img me-2" />
-          <span class="nome-jogador">{{ jogador.nome }}</span>
-          <i class="nc-icon" [ngClass]="{'nc-minimal-down': !jogador.expanded, 'nc-minimal-up': jogador.expanded}"></i>
+            onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" class="v2-painel-avatar" />
+          <div class="v2-painel-info">
+            <p class="v2-painel-nome">
+              {{ jogador.nome }}
+              <i class="fas fa-crown v2-icon-capitao" *ngIf="jogador.capitao" title="Capitão"></i>
+            </p>
+            <div class="v2-painel-toggles">
+              <div class="v2-mini-field">
+                <label>Nº</label>
+                <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1"
+                  max="99" class="v2-input-numero" placeholder="--" />
+              </div>
+              <label class="v2-mini-toggle">
+                <input type="checkbox" [(ngModel)]="jogador.capitao" (change)="definirCapitao(jogador)"
+                  name="capitao-{{jogador.id_jogador}}" />
+                Capitão
+              </label>
+              <label class="v2-mini-toggle">
+                <input type="checkbox" [(ngModel)]="jogador.gr" (change)="jogador.isGR = jogador.gr"
+                  name="isGR-{{jogador.id_jogador}}" />
+                Guarda-redes
+              </label>
+            </div>
+          </div>
         </div>
 
-        <div *ngIf="jogador.expanded" class="jogador-details">
-          <!-- Basic Info - Compact Row for Mobile -->
-          <div class="info-basica-compact">
-            <div class="compact-field">
-              <label>Nº</label>
-              <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1"
-                max="99" class="input-compact-numero" placeholder="--" />
-            </div>
-            <div class="compact-field toggle-field">
-              <label>Cap</label>
-              <div class="toggle-container small-toggle">
-                <input type="checkbox" [(ngModel)]="jogador.capitao" name="capitao-{{jogador.id_jogador}}"
-                  id="capitao-{{jogador.id_jogador}}" class="toggle-input" />
-                <label for="capitao-{{jogador.id_jogador}}" class="toggle-label">
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
-            </div>
-            <div class="compact-field toggle-field">
-              <label>GR</label>
-              <div class="toggle-container small-toggle">
-                <input type="checkbox" [(ngModel)]="jogador.gr" (change)="jogador.isGR = jogador.gr" name="isGR-{{jogador.id_jogador}}"
-                  id="isGR-{{jogador.id_jogador}}" class="toggle-input" />
-                <label for="isGR-{{jogador.id_jogador}}" class="toggle-label">
-                  <span class="toggle-slider"></span>
-                </label>
-              </div>
+        <!-- Separadores: Golos / Cartões / Outras -->
+        <div class="v2-tabs">
+          <button type="button" class="v2-tab" [class.v2-tab-ativo]="activeCategoria==='golos'"
+            (click)="definirCategoria('golos')">
+            {{ jogador.isGR ? 'Golos sofridos' : 'Golos' }}
+          </button>
+          <button type="button" class="v2-tab" [class.v2-tab-ativo]="activeCategoria==='cartoes'"
+            (click)="definirCategoria('cartoes')">Cartões</button>
+          <button type="button" class="v2-tab" *ngIf="mostrarEstatisticasCompletas"
+            [class.v2-tab-ativo]="activeCategoria==='mais'" (click)="definirCategoria('mais')">Outras</button>
+        </div>
+
+        <!-- Grelha de ações: Golos (marcados ou sofridos, dependendo do jogador) -->
+        <div class="v2-grid" *ngIf="activeCategoria==='golos'">
+          <div *ngFor="let tipo of tiposGolo" class="v2-card">
+            <span *ngIf="getGoloCount(jogador, tipo.key, !jogador.isGR) > 0" class="v2-card-menos"
+              (click)="registarAcao(jogador, 'golos', tipo.key, -1, tipo.label)">−</span>
+            <div class="v2-card-conteudo" (click)="registarAcao(jogador, 'golos', tipo.key, 1, tipo.label)">
+              <i class="fas fa-futbol v2-card-icone"></i>
+              <span class="v2-card-label">{{ tipo.label }}</span>
+              <span class="v2-card-valor">{{ getGoloCount(jogador, tipo.key, !jogador.isGR) }}</span>
             </div>
           </div>
-
-          <hr class="separador" />
-
-          <div class="eventos-jogador">
-            <div *ngIf="!jogador.isGR" class="grupo-eventos">
-              <h4>⚽ Golos Marcados</h4>
-              <div class="controles">
-                <ng-container *ngFor="let tipo of tiposGolo">
-                  <div class="linha-controle">
-                    <label>{{ tipo.label }}</label>
-                    <button class="btn-outline-danger" (click)="alterarGolo(jogador, tipo.key, true, -1)"
-                      [disabled]="getGoloCount(jogador, tipo.key, true) === 0">−</button>
-                    <span class="contador">{{ getGoloCount(jogador, tipo.key, true) }}</span>
-                    <button class="btn-outline-success" (click)="alterarGolo(jogador, tipo.key, true, 1)">+</button>
-                  </div>
-                </ng-container>
-              </div>
-              <div class="linha-controle">
-                  <label>🎯 Assistências</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'assistencias', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'assistencias') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'assistencias') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'assistencias', 1)">+</button>
-                </div>
-
-            </div>
-
-            <div *ngIf="jogador.isGR" class="grupo-eventos">
-              <h4>🥅 Golos Sofridos</h4>
-              <div class="controles">
-                <ng-container *ngFor="let tipo of tiposGolo">
-                  <div class="linha-controle">
-                    <label>{{ tipo.label }}</label>
-                    <button class="btn-outline-danger" (click)="alterarGolo(jogador, tipo.key, false, -1)"
-                      [disabled]="getGoloCount(jogador, tipo.key, false) === 0">−</button>
-                    <span class="contador">{{ getGoloCount(jogador, tipo.key, false) }}</span>
-                    <button class="btn-outline-success" (click)="alterarGolo(jogador, tipo.key, false, 1)">+</button>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
-
-            <div class="grupo-eventos">
-              <h4>🟨🟥 Cartões</h4>
-              <div class="controles">
-                <ng-container *ngFor="let tipo of tiposCartao">
-                  <div class="linha-controle">
-                    <label>{{ tipo.label }}</label>
-                    <button class="btn-outline-danger" (click)="alterarCartao(jogador, tipo.key, -1)"
-                      [disabled]="getCartaoCount(jogador, tipo.key) === 0">−</button>
-                    <span class="contador">{{ getCartaoCount(jogador, tipo.key) }}</span>
-                    <button class="btn-outline-success" (click)="alterarCartao(jogador, tipo.key, 1)">+</button>
-                  </div>
-                </ng-container>
-              </div>
-            </div>
-
-            <!-- Nova seção para estatísticas adicionais -->
-            <div *ngIf="mostrarEstatisticasCompletas" class="grupo-eventos">
-              <h4>📊 Outras Estatísticas</h4>
-              <div class="controles">
-                
-                <div class="linha-controle">
-                  <label>🛡️ Recuperações</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'recuperacoes_bola', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'recuperacoes_bola') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'recuperacoes_bola') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'recuperacoes_bola', 1)">+</button>
-                </div>
-                <div class="linha-controle">
-                  <label>⚠️ Perdas</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'perdas_bola', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'perdas_bola') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'perdas_bola') }}</span>
-                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'perdas_bola', 1)">+</button>
-                </div>
-                <div class="linha-controle">
-                  <label>🥅 Remates</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'remates', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'remates') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'remates') }}</span>
-                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'remates', 1)">+</button>
-                </div>
-                <div class="linha-controle">
-                  <label>🙋 Faltas</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'faltas', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'faltas') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'faltas') }}</span>
-                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'faltas', 1)">+</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Nova seção para Guarda-Redes - Defesas de Penalty e Livre Direto -->
-            <div *ngIf="jogador.isGR && mostrarEstatisticasCompletas" class="grupo-eventos">
-              <h4>🥅 Defesas (Guarda-Redes)</h4>
-              <div class="controles">
-                <div class="linha-controle">
-                  <label>🚫 Penalty Defendido</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'penalty_defesa', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'penalty_defesa') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'penalty_defesa') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'penalty_defesa', 1)">+</button>
-                </div>
-                <div class="linha-controle">
-                  <label>🚫 Livre Direto Defendido</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'ld_defesa', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'ld_defesa') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'ld_defesa') }}</span>
-                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'ld_defesa', 1)">+</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Nova seção para Jogadores de Campo - Penalties e Livres Diretos Falhados -->
-            <div *ngIf="!jogador.isGR && mostrarEstatisticasCompletas" class="grupo-eventos">
-              <h4>❌ Falhas (Jogadores de Campo)</h4>
-              <div class="controles">
-                <div class="linha-controle">
-                  <label>❌ Penalty Falhado</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'penalty_falhado', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'penalty_falhado') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'penalty_falhado') }}</span>
-                  <button class="btn-outline-success"
-                    (click)="alterarEstatistica(jogador, 'penalty_falhado', 1)">+</button>
-                </div>
-                <div class="linha-controle">
-                  <label>❌ Livre Direto Falhado</label>
-                  <button class="btn-outline-danger" (click)="alterarEstatistica(jogador, 'ld_falhado', -1)"
-                    [disabled]="getEstatisticaCount(jogador, 'ld_falhado') === 0">−</button>
-                  <span class="contador">{{ getEstatisticaCount(jogador, 'ld_falhado') }}</span>
-                  <button class="btn-outline-success" (click)="alterarEstatistica(jogador, 'ld_falhado', 1)">+</button>
-                </div>
-              </div>
+          <div *ngIf="!jogador.isGR" class="v2-card">
+            <span *ngIf="getEstatisticaCount(jogador, 'assistencias') > 0" class="v2-card-menos"
+              (click)="registarAcao(jogador, 'mais', 'assistencias', -1, 'Assistência')">−</span>
+            <div class="v2-card-conteudo" (click)="registarAcao(jogador, 'mais', 'assistencias', 1, 'Assistência')">
+              <i class="fas fa-star v2-card-icone"></i>
+              <span class="v2-card-label">Assistência</span>
+              <span class="v2-card-valor">{{ getEstatisticaCount(jogador, 'assistencias') }}</span>
             </div>
           </div>
+        </div>
+
+        <!-- Grelha de ações: Cartões -->
+        <div class="v2-grid" *ngIf="activeCategoria==='cartoes'">
+          <div *ngFor="let tipo of tiposCartao" class="v2-card">
+            <span *ngIf="getCartaoCount(jogador, tipo.key) > 0" class="v2-card-menos"
+              (click)="registarAcao(jogador, 'cartoes', tipo.key, -1, tipo.label)">−</span>
+            <div class="v2-card-conteudo" (click)="registarAcao(jogador, 'cartoes', tipo.key, 1, tipo.label)">
+              <span class="v2-card-cor" [ngClass]="'v2-cor-' + tipo.key"></span>
+              <span class="v2-card-label">{{ tipo.label }}</span>
+              <span class="v2-card-valor">{{ getCartaoCount(jogador, tipo.key) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grelha de ações: Outras estatísticas (só quando "Estatísticas Completas" está ativo) -->
+        <div class="v2-grid" *ngIf="activeCategoria==='mais' && mostrarEstatisticasCompletas">
+          <ng-container *ngIf="!jogador.isGR">
+            <div *ngFor="let tipo of tiposEstatisticasCampo" class="v2-card">
+              <span *ngIf="getEstatisticaCount(jogador, tipo.key) > 0" class="v2-card-menos"
+                (click)="registarAcao(jogador, 'mais', tipo.key, -1, tipo.label)">−</span>
+              <div class="v2-card-conteudo" (click)="registarAcao(jogador, 'mais', tipo.key, 1, tipo.label)">
+                <i class="fas {{ tipo.icon }} v2-card-icone"></i>
+                <span class="v2-card-label">{{ tipo.label }}</span>
+                <span class="v2-card-valor">{{ getEstatisticaCount(jogador, tipo.key) }}</span>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="jogador.isGR">
+            <div *ngFor="let tipo of tiposEstatisticasGR" class="v2-card">
+              <span *ngIf="getEstatisticaCount(jogador, tipo.key) > 0" class="v2-card-menos"
+                (click)="registarAcao(jogador, 'mais', tipo.key, -1, tipo.label)">−</span>
+              <div class="v2-card-conteudo" (click)="registarAcao(jogador, 'mais', tipo.key, 1, tipo.label)">
+                <i class="fas {{ tipo.icon }} v2-card-icone"></i>
+                <span class="v2-card-label">{{ tipo.label }}</span>
+                <span class="v2-card-valor">{{ getEstatisticaCount(jogador, tipo.key) }}</span>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Histórico de eventos, com desfazer -->
+      <div class="v2-historico">
+        <p class="v2-historico-titulo">Últimos eventos</p>
+        <p *ngIf="historicoRegisto.length === 0" class="v2-historico-vazio">Sem eventos registados ainda.</p>
+        <div *ngFor="let evento of historicoRegisto" class="v2-historico-item">
+          <span>{{ evento.label }}</span>
+          <button type="button" class="v2-historico-desfazer" (click)="desfazerAcao(evento.id)">
+            <i class="fas fa-rotate-left"></i> desfazer
+          </button>
         </div>
       </div>
 

@@ -26,6 +26,16 @@ interface JogoDataWithExpandablePlayers extends JogoData {
   jogadores: JogadorJogoExpandable[];
 }
 
+// Representa uma ação registada no histórico do novo painel de registo (permite desfazer)
+interface HistoricoEvento {
+  id: number;
+  idJogador: number;
+  categoria: 'golos' | 'cartoes' | 'mais';
+  key: string;
+  delta: number;
+  label: string;
+}
+
 
 @Component({
   selector: 'jogo',
@@ -96,6 +106,26 @@ export class JogoComponent implements OnInit {
   ];
 
   atletasIndisponiveis: JogadorConvocado[] = [];
+
+  // --- Novo painel de registo (seletor de jogadores + separadores + histórico) ---
+  activeJogadorId: number | null = null;
+  activeCategoria: 'golos' | 'cartoes' | 'mais' = 'golos';
+  historicoRegisto: HistoricoEvento[] = [];
+  private historicoSeq: number = 0;
+
+  tiposEstatisticasCampo = [
+    { key: 'assistencias', label: 'Assistência', icon: 'fa-star' },
+    { key: 'recuperacoes_bola', label: 'Recuperação', icon: 'fa-shield-halved' },
+    { key: 'perdas_bola', label: 'Perda de bola', icon: 'fa-rotate' },
+    { key: 'remates', label: 'Remate', icon: 'fa-bullseye' },
+    { key: 'faltas', label: 'Falta', icon: 'fa-flag' },
+    { key: 'penalty_falhado', label: 'Penalty falhado', icon: 'fa-xmark' },
+    { key: 'ld_falhado', label: 'Livre falhado', icon: 'fa-xmark' }
+  ];
+  tiposEstatisticasGR = [
+    { key: 'penalty_defesa', label: 'Defesa de penalty', icon: 'fa-hand' },
+    { key: 'ld_defesa', label: 'Defesa de livre direto', icon: 'fa-hand' }
+  ];
 
   constructor(private route: ActivatedRoute, private jogoService: JogoService, private clubeService: ClubeService, private pdfService: PdfService, private router: Router, private equipaService: EquipaService, private loginservice: LoginServiceService) { }
 
@@ -259,6 +289,83 @@ export class JogoComponent implements OnInit {
 
   registarInformacaoJogo() {
     this.mostrarRegisto = true;
+    this.garantirJogadorAtivo();
+  }
+
+  // Garante que há sempre um jogador selecionado no painel (o primeiro convocado, por defeito)
+  private garantirJogadorAtivo(): void {
+    if (this.activeJogadorId === null || !this.jogo.jogadores.some(j => j.id_jogador === this.activeJogadorId)) {
+      this.activeJogadorId = this.jogo.jogadores.length > 0 ? this.jogo.jogadores[0].id_jogador : null;
+    }
+  }
+
+  // Seleciona o jogador ativo na fila de avatares
+  selecionarJogadorAtivo(idJogador: number): void {
+    this.activeJogadorId = idJogador;
+    this.activeCategoria = 'golos';
+  }
+
+  // Devolve o jogador atualmente selecionado no painel
+  getJogadorAtivo(): JogadorJogoExpandable | undefined {
+    return this.jogo.jogadores.find(j => j.id_jogador === this.activeJogadorId);
+  }
+
+  // Troca o separador ativo (Golos / Cartões / Outras)
+  definirCategoria(categoria: 'golos' | 'cartoes' | 'mais'): void {
+    this.activeCategoria = categoria;
+  }
+
+  // Ponto único de entrada para registar uma ação a partir do novo painel.
+  // Reaproveita a lógica de negócio já existente (alterarGolo / alterarCartao / alterarEstatistica)
+  // e regista a ação no histórico para permitir desfazer.
+  registarAcao(jogador: JogadorJogoExpandable, categoria: 'golos' | 'cartoes' | 'mais', key: string, delta: number, label: string): void {
+    switch (categoria) {
+      case 'golos':
+        this.alterarGolo(jogador, key, !jogador.isGR, delta);
+        break;
+      case 'cartoes':
+        this.alterarCartao(jogador, key, delta);
+        break;
+      case 'mais':
+        this.alterarEstatistica(jogador, key, delta);
+        break;
+    }
+
+    if (delta > 0) {
+      this.historicoSeq++;
+      this.historicoRegisto.unshift({
+        id: this.historicoSeq,
+        idJogador: jogador.id_jogador,
+        categoria,
+        key,
+        delta,
+        label: `${label} — ${jogador.nome.split(' ')[0]}`
+      });
+      this.historicoRegisto = this.historicoRegisto.slice(0, 8);
+    }
+  }
+
+  // Desfaz uma ação do histórico, revertendo o valor no jogador correspondente
+  desfazerAcao(idEvento: number): void {
+    const indice = this.historicoRegisto.findIndex(e => e.id === idEvento);
+    if (indice === -1) return;
+
+    const evento = this.historicoRegisto[indice];
+    const jogador = this.jogo.jogadores.find(j => j.id_jogador === evento.idJogador);
+    if (jogador) {
+      switch (evento.categoria) {
+        case 'golos':
+          this.alterarGolo(jogador, evento.key, !jogador.isGR, -evento.delta);
+          break;
+        case 'cartoes':
+          this.alterarCartao(jogador, evento.key, -evento.delta);
+          break;
+        case 'mais':
+          this.alterarEstatistica(jogador, evento.key, -evento.delta);
+          break;
+      }
+    }
+    this.historicoRegisto.splice(indice, 1);
   }
 
   // Novo método para alternar a expansão de um jogador
@@ -476,6 +583,7 @@ export class JogoComponent implements OnInit {
   editarJogo(): void {
     // Define mostrarRegisto como true para exibir a seção de registro
     this.mostrarRegisto = true;
+    this.garantirJogadorAtivo();
     // O estado do jogo pode ser alterado para 'INICIADO' ou mantido como 'CONCLUIDO'
     // dependendo da sua lógica de negócio para edição de jogos já concluídos.
     // Por exemplo, se você quiser que a edição de um jogo concluído o coloque de volta em 'INICIADO':
