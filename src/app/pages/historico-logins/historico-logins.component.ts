@@ -24,7 +24,7 @@ export class HistoricoLoginsComponent implements OnInit {
   public currentDate: Date = new Date();
   public dataInicial: string = "";
   public dataFinal: string = "";
-  public viewMode: string = 'table';
+  public viewMode: string = 'list';
   public pageSize: number = 20;
   public currentPage: number = 0;
 
@@ -155,6 +155,13 @@ export class HistoricoLoginsComponent implements OnInit {
         return itemDate <= endDate;
       });
     }
+
+    // Sort by date in descending order (most recent first)
+    filtered = filtered.sort((a, b) => {
+      const dateA = new Date(a.dataHistorico);
+      const dateB = new Date(b.dataHistorico);
+      return dateB.getTime() - dateA.getTime();
+    });
 
     return filtered;
   }
