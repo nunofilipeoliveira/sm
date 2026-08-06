@@ -272,7 +272,6 @@ ngb-alert {
   overflow: hidden;
   background: white;
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  min-height: 200px;
   margin-bottom: 28px;
 }
 
@@ -282,6 +281,12 @@ ngb-alert {
   border: none;
   border-bottom: 1px solid #e9ecef;
   min-height: 90px;
+}
+
+/* Quando o cartão está colapsado, o cabeçalho é o único filho:
+   remove-se o traço divisor para não sobrar um risco sem conteúdo abaixo */
+.card-header-modern:only-child {
+  border-bottom: none;
 }
 
 .icon-circle {
@@ -660,7 +665,6 @@ ngb-alert {
 @media (max-width: 768px) {
   .modern-card {
     border-radius: 14px;
-    min-height: 150px;
     margin-bottom: 20px !important;
   }
 
