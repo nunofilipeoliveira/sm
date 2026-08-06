@@ -17,8 +17,10 @@ body {
 .profile-card {
   background-color: white;
   padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  min-height: 200px;
+  margin-bottom: 24px;
 }
 
 .profile-card .profile-pic {
@@ -61,8 +63,10 @@ body {
 .info-card, .faltas-card {
   background-color: white;
   padding: 30px;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  min-height: 200px;
+  margin-bottom: 24px;
 }
 
 .info-card .info-title, .faltas-card .info-title {
@@ -102,6 +106,11 @@ body {
 @media (max-width: 768px) {
   .profile-card {
     margin-top: 50px;
+    margin-bottom: 16px;
+  }
+
+  .info-card, .faltas-card {
+    margin-bottom: 16px;
   }
 }
 
@@ -258,11 +267,13 @@ ngb-alert {
 
 /* Modern Card Styles */
 .modern-card {
-  border: none;
+  border: 1px solid #eef0f2;
   border-radius: 16px;
   overflow: hidden;
   background: white;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  min-height: 200px;
+  margin-bottom: 28px;
 }
 
 .card-header-modern {
@@ -270,6 +281,7 @@ ngb-alert {
   padding: 20px;
   border: none;
   border-bottom: 1px solid #e9ecef;
+  min-height: 90px;
 }
 
 .icon-circle {
@@ -281,6 +293,20 @@ ngb-alert {
   align-items: center;
   justify-content: center;
   color: white;
+  flex-shrink: 0;
+}
+
+/* Variante do ícone circular para cartões cujo "ícone" é uma foto (ex: Informações Pessoais) */
+.icon-circle-avatar {
+  padding: 0;
+  overflow: hidden;
+}
+
+.icon-circle-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .btn-toggle-modern {
@@ -290,6 +316,13 @@ ngb-alert {
   border-radius: 8px;
   padding: 8px 12px;
   transition: all 0.3s ease;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }
 
 .btn-toggle-modern:hover {
@@ -301,6 +334,20 @@ ngb-alert {
 .card-body-modern {
   background: white;
   padding: 24px;
+}
+
+/* Tipografia unificada do cabeçalho dos cartões (Informações Pessoais, Faltas,
+   Presenças, Jogos por Escalão, Histórico) para garantir alinhamento consistente */
+.card-title-modern {
+  color: #495057;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.card-subtitle-modern {
+  color: #6c757d;
+  font-size: 0.85rem;
+  line-height: 1.3;
 }
 
 .spinner-modern {
@@ -375,10 +422,10 @@ ngb-alert {
 }
 
 .jogo-content-linear {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(46px, auto) 1fr minmax(64px, auto);
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
 }
 
 .jogo-date {
@@ -389,22 +436,24 @@ ngb-alert {
 .jogo-opponent-compact {
   display: flex;
   align-items: center;
-  gap: 6px;
-  flex: 1;
+  gap: 8px;
   min-width: 0;
 }
 
 .opponent-logo-small {
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
   flex-shrink: 0;
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  object-fit: contain;
 }
 
 .opponent-name-compact {
-  font-size: 0.85em;
-  font-weight: 500;
-  color: #495057;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #343a40;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -419,27 +468,27 @@ ngb-alert {
 .result-win {
   background: #d4edda;
   color: #155724;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 700;
   font-size: 0.85em;
 }
 
 .result-loss {
   background: #f8d7da;
   color: #721c24;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 700;
   font-size: 0.85em;
 }
 
 .result-draw {
   background: #fff3cd;
   color: #856404;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 700;
   font-size: 0.85em;
 }
 
@@ -610,17 +659,24 @@ ngb-alert {
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
   .modern-card {
-    margin: 0 -15px;
-    border-radius: 0;
+    border-radius: 14px;
+    min-height: 150px;
+    margin-bottom: 20px !important;
   }
 
   .card-header-modern {
     padding: 16px;
+    min-height: 80px;
   }
 
   .icon-circle {
     width: 40px;
     height: 40px;
+  }
+
+  .btn-toggle-modern {
+    width: 34px;
+    height: 34px;
   }
 
   .jogo-content {
@@ -794,6 +850,7 @@ button[aria-expanded="true"] i.nc-icon {
 .jogo-result-with-goals {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 8px;
   min-width: 70px;
 }
@@ -999,6 +1056,374 @@ button[aria-expanded="true"] i.nc-icon {
   pointer-events: none;
 }
 
+/* ============================================================
+   ESTILOS PARA A SECÇÃO DE HISTÓRICO DO JOGADOR
+   ============================================================ */
+
+.escalao-jogos-group {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.escalao-header-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e9ecef;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.escalao-header-summary:hover {
+  background: #f1f3f5;
+}
+
+.summary-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.summary-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+}
+
+.games-summary {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.goals-summary {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+}
+
+.competicao-group {
+  margin-bottom: 12px;
+  padding-left: 12px;
+  border-left: 3px solid #6c757d;
+}
+
+.competicao-header-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.competicao-header-summary:hover {
+  background: #f1f3f5;
+}
+
+.competicao-title {
+  color: #495057;
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.epocas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.epoca-card {
+  background: #f8f9fa;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #e9ecef;
+}
+
+.epoca-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.epoca-header {
+  padding: 16px 20px;
+  background: white;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.epoca-header:hover {
+  background: #f1f3f5;
+}
+
+.epoca-info h6 {
+  color: #495057;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.epoca-info small {
+  color: #6c757d;
+  font-size: 0.85em;
+}
+
+.epoca-expanded {
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  padding: 20px;
+}
+
+.epoca-expanded h6 {
+  color: #495057;
+  font-weight: 600;
+  margin-bottom: 12px;
+  font-size: 0.95em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.jogos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.jogo-card-compact {
+  background: white;
+  border-radius: 10px;
+  padding: 10px 14px;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.jogo-card-compact:hover {
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-color: #d7dce1;
+}
+
+.jogo-date-compact {
+  text-align: center;
+  background: #eef2f7;
+  border-radius: 8px;
+  padding: 6px 8px;
+}
+
+.jogo-date-compact small {
+  color: #1f78d1;
+  font-weight: 700;
+  font-size: 0.78em;
+  letter-spacing: 0.2px;
+}
+
+.jogo-info-compact {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.opponent-name {
+  font-weight: 500;
+  color: #495057;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.jogo-result-compact {
+  min-width: 60px;
+  text-align: center;
+}
+
+.jogo-result-compact span {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85em;
+  display: inline-block;
+  min-width: 50px;
+}
+
+.treinos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.treino-card-compact {
+  background: white;
+  border-radius: 8px;
+  padding: 12px 16px;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.treino-card-compact:hover {
+  transform: translateX(2px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.treino-date-compact {
+  min-width: 100px;
+  text-align: center;
+}
+
+.treino-info-compact {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.treino-hora {
+  font-weight: 600;
+  color: #495057;
+  font-size: 0.9em;
+}
+
+.treino-equipa {
+  color: #6c757d;
+  font-size: 0.85em;
+}
+
+.treino-status-compact {
+  min-width: 80px;
+  text-align: center;
+}
+
+.treino-status-compact .badge {
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.85em;
+  display: inline-block;
+  min-width: 80px;
+}
+
+.badge-success {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge-warning {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-danger {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Mobile Responsiveness para Histórico */
+@media (max-width: 768px) {
+  .epoca-header {
+    padding: 12px 16px;
+  }
+
+  .epoca-expanded {
+    padding: 16px;
+  }
+
+  .jogo-card-compact,
+  .treino-card-compact {
+    padding: 10px 12px;
+  }
+
+  .jogo-date-compact,
+  .treino-date-compact {
+    min-width: 80px;
+  }
+
+  .jogo-content-linear {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .jogo-info-compact {
+    flex: 1 1 100%;
+    order: 3;
+  }
+
+  .jogo-result-compact {
+    order: 2;
+  }
+
+  .jogo-date-compact {
+    order: 1;
+  }
+}
+
+/* Afinação do novo layout em grid das linhas de jogo (partilhado por
+   "Jogos por Escalão" e "Histórico"). Garante a ordem visual correta
+   (data | adversário | resultado) e anula o "order" legado acima. */
+.jogo-date-compact,
+.jogo-opponent-compact,
+.jogo-result-with-goals {
+  order: 0;
+}
+
+@media (max-width: 768px) {
+  .jogo-content-linear {
+    grid-template-columns: minmax(40px, auto) 1fr minmax(56px, auto);
+    gap: 8px;
+  }
+
+  .jogo-date-compact {
+    min-width: 0;
+    padding: 5px 6px;
+  }
+
+  .opponent-logo-small {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .epoca-info h6 {
+    font-size: 0.95em;
+  }
+
+  .epoca-info small {
+    font-size: 0.8em;
+  }
+
+  .jogo-card-compact,
+  .treino-card-compact {
+    padding: 10px;
+  }
+
+  .opponent-name {
+    font-size: 0.85em;
+  }
+
+  .treino-hora {
+    font-size: 0.85em;
+  }
+
+  .treino-equipa {
+    font-size: 0.8em;
+  }
+}
+
 .crop-controls {
   display: flex;
   align-items: center;
@@ -1186,5 +1611,24 @@ button[aria-expanded="true"] i.nc-icon {
   .datepicker-popover {
     left: 50%;
     transform: translateX(-50%);
+  }
+}
+
+/* ============================================================
+   PROTECAO DE LAYOUT EM ECRAS MUITO ESTREITAS PARA OS CABECALHOS
+   DE ESCALAO / EPOCA (evita sobreposicao entre titulo, badges e
+   icone de expansao)
+   ============================================================ */
+
+@media (max-width: 480px) {
+  .escalao-header .d-flex.justify-content-between,
+  .epoca-header .d-flex.justify-content-between {
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+
+  .escalao-info,
+  .epoca-info {
+    min-width: 0;
   }
 }

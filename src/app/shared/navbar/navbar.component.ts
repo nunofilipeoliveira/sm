@@ -108,6 +108,15 @@ export class NavbarComponent implements OnInit{
 
         const longids = this.loginws.getLoginData();
 
+        
+        
+        //guarda o idescalao e descritivo em variaveis locais
+        const tmpIdEscalao = localStorage.getItem("idequipa_escalao");
+        const tmpDescritivoEscalao = localStorage.getItem("descritivo_escalao");
+        console.log('NavbarComponent | showPopEscaloes | tmpIdEscalao', tmpIdEscalao);
+        console.log('NavbarComponent | showPopEscaloes | tmpDescritivoEscalao', tmpDescritivoEscalao);
+       
+
         this.loginws.clearEquipa();
         console.log('NavbarComponent | showPopEscaloes | clearEquipa');
         this.equipaWS.clear();
@@ -118,6 +127,15 @@ export class NavbarComponent implements OnInit{
                 height: '200px',
                 data:longids.escalaoEpoca
               });
+
+        if(localStorage.getItem("idequipa_escalao") == null || localStorage.getItem("descritivo_escalao") == null){
+          //repor os valores que estavam guardados antes de abrir o popup
+          localStorage.setItem("idequipa_escalao", tmpIdEscalao!);
+          localStorage.setItem("descritivo_escalao", tmpDescritivoEscalao!);
+          console.log('NavbarComponent | showPopEscaloes | after setItem tmpIdEscalao', tmpIdEscalao);
+          console.log('NavbarComponent | showPopEscaloes | after setItem tmpDescritivoEscalao', tmpDescritivoEscalao);
+        }
+            
       }
 
 }

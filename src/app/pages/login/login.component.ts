@@ -128,10 +128,20 @@ this.route.queryParams.subscribe(params => {
 
   redirect(longids: loginData) {
     if (longids.escalaoEpoca && longids.escalaoEpoca.length > 1) {
-      this.dialog.open(PoppupEscalaoComponent, {
+      const dialogRef = this.dialog.open(PoppupEscalaoComponent, {
         width: '250px',
         height: '200px',
-        data:longids.escalaoEpoca
+        data: longids.escalaoEpoca,
+        disableClose: false // Permite fechar clicando fora ou com ESC
+      });
+
+      // Subscribe to afterClosed event to handle navigation after dialog closes
+      dialogRef.afterClosed().subscribe(result => {
+        // Navega para o dashboard independentemente do resultado
+        // O componente do dialog já tratou de manter ou atualizar o localStorage
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/dashboard']);
+        });
       });
     } else if (longids.escalaoEpoca && longids.escalaoEpoca.length === 1) {
       localStorage.setItem('descritivo_escalao', longids.escalaoEpoca[0].descritivo_escalao);

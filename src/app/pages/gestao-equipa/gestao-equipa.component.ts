@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { EquipaService } from '../../services/equipa.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JogadorSeleccaoComponent } from '../jogador-seleccao/jogador-seleccao.component';
 import { EquipaData } from '../equipa/equipaData';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'gestao-equipa-cmp',
@@ -28,6 +29,7 @@ export class GestaoEquipaComponent implements OnInit {
   mostrarModalJogadores = false;
   jogadoresDisponiveis: any[] = [];
   idEquipa = 0;
+  private routeSub!: Subscription;
 
   constructor(
     private equipaService: EquipaService,
@@ -57,7 +59,23 @@ export class GestaoEquipaComponent implements OnInit {
 
     this.carregarEquipa(this.idEquipa);
 
+    // Subscrever a mudanças de parâmetros de rota para recarregar a equipa
+    // quando se regressa de staff-seleccao ou jogador-seleccao
+    this.routeSub = this.route.params.subscribe(params => {
+      const newIdEquipa = Number(params['idEquipa']);
+      if (newIdEquipa > 0 && newIdEquipa !== this.idEquipa) {
+        this.idEquipa = newIdEquipa;
+        this.carregarEquipa(this.idEquipa);
+      }
+    });
+
     console.log('GestaoEquipaComponent | ID da equipa _final:', this.equipa);
+  }
+
+  ngOnDestroy() {
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
   }
 
   carregarEquipa(idEquipa: number) {

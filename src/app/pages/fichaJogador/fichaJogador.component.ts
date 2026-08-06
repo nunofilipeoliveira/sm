@@ -56,12 +56,19 @@ export class FichaJogadorComponent implements OnInit {
   selectedEscalao: string = '';
   selectedJogos: JogoData[] = [];
   expandedEscalao: string = '';
+  expandedCompeticaoJogos: string = '';
 
   // Nova propriedade para controlar a visibilidade da tabela de faltas
   public showFaltas: boolean = false; // Inicialmente oculta
   public showPresencas: boolean = false; // Inicialmente oculta
   public showInfo: boolean = false; // Inicialmente visível
   public showJogos: boolean = false;
+  public showHistorico: boolean = false; // Inicialmente oculta
+  public loadingHistorico: boolean = false;
+  public historicoJogador: any;
+  public expandedEpoca: number = 0;
+  public expandedEscalaoHistorico: string = '';
+  public expandedCompeticaoHistorico: string = '';
 
   // Propriedade para a data de nascimento formatada (AAAA-MM-DD)
   public dataNascimentoDisplay: string = '';
@@ -212,69 +219,89 @@ export class FichaJogadorComponent implements OnInit {
                 }
               });
 
-            // SUBSCRIBE CORRIGIDO PARA JOGOS (com cálculo do total geral)
-            this.loadingJogos = true;
-
-            this.jogoService.getJogosByJogadorId(idJogador).subscribe({
-              next: (jogos: JogoData[]) => {
-
-                //carregar as equipas possiveis
-
-
-                this.equipaService.getEquipasPorEpoca().subscribe({
-                  next: (data) => {
-                    data.forEach((esc: any) => {
-                      this.escaloes.push({ idescalao: esc.id, nomeEscalao: esc.escalao });
-                    });
-
-                    console.log('Escalões carregados:', this.escaloes);
-
-                    // Agora processa os jogos
-                    console.log('Jogos do jogador:', jogos);
-
-                    // Agrupamento por escalão (agora com arrays de jogos)
-                    const agrupamento = new Map<string, JogoData[]>();
-                    jogos.forEach(jogo => {
-                      const escalao = this.escaloes.find(e => e.idescalao === jogo.equipa_id)?.nomeEscalao || 'Desconhecido';
-                      const chave = (jogo.tipoEquipa.trim() !== '' && !this.escaloes.find(e => e.nomeEscalao === jogo.tipoEquipa))
-                        ? escalao + ' (' + jogo.tipoEquipa + ')'
-                        : escalao;
-                      if (!agrupamento.has(chave)) {
-                        agrupamento.set(chave, []);
-                      }
-                      agrupamento.get(chave)!.push(jogo);
-                    });
-
-                    // Converta para array ordenado
-                    this.jogosPorEscalao = Array.from(agrupamento.entries())
-                      .map(([escalao, jogos]) => ({ escalao, jogos }))
-                      .sort((a, b) => a.escalao.localeCompare(b.escalao));
-
-                    // NOVA: Calcule o total geral aqui (simples e eficiente)
-                    this.totalGeralJogos = jogos.length;
-
-                    // Calcular total de golos do jogador
-                    this.totalGeralGolos = jogos.reduce((total, jogo) => total + this.calcularGolosJogo(jogo), 0);
-                    this.totalGeralGolosSofridos = jogos.reduce((total, jogo) => total + this.calcularGolosSofridosJogo(jogo), 0);
-
-                    this.loadingJogos = false;
-                    console.log('Jogos por escalão:', this.jogosPorEscalao);
-                    console.log('Total geral de jogos:', this.totalGeralJogos);
-
-                    console.log('Escalões carregados:', this.escaloes);
-
-
-                    console.log('Equipa do jogador:', this.equipaData);
-                  }
-
+            // Carregar escalões primeiro
+            this.equipaService.getEquipasPorEpoca().subscribe({
+              next: (data) => {
+                data.forEach((esc: any) => {
+                  this.escaloes.push({ idescalao: esc.id, nomeEscalao: esc.escalao });
                 });
 
+                console.log('Escalões carregados:', this.escaloes);
 
+                // Obter a época atual
+                this.equipaService.getEpocaAtual().subscribe({
+                  next: (epocaAtual: any) => {
+                    const epocaAtivaId = epocaAtual?.id || epocaAtual?.epoca_id || 0;
+                    console.log('Época atual:', epocaAtual, '| ID:', epocaAtivaId);
+
+                    // Agora carregar os jogos
+                    this.jogoService.getJogosByJogadorId(idJogador).subscribe({
+                      next: (jogos: JogoData[]) => {
+                        // Filtrar apenas os jogos da época atual
+                        const jogosEpocaAtual = epocaAtivaId > 0
+                          ? jogos.filter(jogo => jogo.epoca_id === epocaAtivaId)
+                          : jogos;
+                        
+                        console.log('Jogos do jogador (época atual):', jogosEpocaAtual);
+
+                        // Agrupamento por escalão (agora com arrays de jogos)
+                        const agrupamento = new Map<string, JogoData[]>();
+                        jogosEpocaAtual.forEach(jogo => {
+                          // Tentar encontrar o escalão pelo equipa_id
+                          let escalao = this.escaloes.find(e => e.idescalao === jogo.equipa_id)?.nomeEscalao;
+                          
+                          // Debug: verificar se encontrou o escalão
+                          if (!escalao) {
+                            console.warn(`Escalão não encontrado para equipa_id: ${jogo.equipa_id}, jogo.id: ${jogo.id}`);
+                            console.warn('Escalões disponíveis:', this.escaloes);
+                          }
+                          
+                          // Fallback para 'Sem escalão' em vez de 'Desconhecido'
+                          if (!escalao) {
+                            escalao = 'Sem escalão';
+                          }
+                          
+                          const chave = (jogo.tipoEquipa && jogo.tipoEquipa.trim() !== '' && !this.escaloes.find(e => e.nomeEscalao === jogo.tipoEquipa))
+                            ? escalao + ' (' + jogo.tipoEquipa + ')'
+                            : escalao;
+                          if (!agrupamento.has(chave)) {
+                            agrupamento.set(chave, []);
+                          }
+                          agrupamento.get(chave)!.push(jogo);
+                        });
+
+                        // Converta para array ordenado
+                        this.jogosPorEscalao = Array.from(agrupamento.entries())
+                          .map(([escalao, jogos]) => ({ escalao, jogos }))
+                          .sort((a, b) => a.escalao.localeCompare(b.escalao));
+
+                        // Calcule o total geral aqui (simples e eficiente)
+                        this.totalGeralJogos = jogosEpocaAtual.length;
+
+                        // Calcular total de golos do jogador
+                        this.totalGeralGolos = jogosEpocaAtual.reduce((total, jogo) => total + this.calcularGolosJogo(jogo), 0);
+                        this.totalGeralGolosSofridos = jogosEpocaAtual.reduce((total, jogo) => total + this.calcularGolosSofridosJogo(jogo), 0);
+
+                        this.loadingJogos = false;
+                        console.log('Jogos por escalão:', this.jogosPorEscalao);
+                        console.log('Total geral de jogos:', this.totalGeralJogos);
+                      },
+                      error: (error) => {
+                        console.error('Erro ao carregar jogos do jogador:', error);
+                        this.jogosPorEscalao = [];
+                        this.totalGeralJogos = 0;
+                        this.loadingJogos = false;
+                      }
+                    });
+                  },
+                  error: (error) => {
+                    console.error('Erro ao carregar época atual:', error);
+                    this.loadingJogos = false;
+                  }
+                });
               },
               error: (error) => {
-                console.error('Erro ao carregar jogos do jogador:', error);
-                this.jogosPorEscalao = [];
-                this.totalGeralJogos = 0; // Reset em erro
+                console.error('Erro ao carregar escalões:', error);
                 this.loadingJogos = false;
               }
             });
@@ -635,6 +662,101 @@ export class FichaJogadorComponent implements OnInit {
     }
   }
 
+  trackByCompeticao(index: number, competicao: any): string {
+    return competicao.nomeCompeticao || index;
+  }
+
+  toggleJogosDetail(item: { escalao: string; jogos: JogoData[] }) {
+    console.log('🚀 toggleJogosDetail | escalao:', item.escalao);
+    if (this.expandedEscalao === item.escalao) {
+      this.expandedEscalao = '';
+    } else {
+      this.expandedEscalao = item.escalao;
+    }
+  }
+
+  toggleCompeticaoJogos(escalao: string, competicao: string) {
+    console.log('🚀 toggleCompeticaoJogos | escalao:', escalao, '| competicao:', competicao);
+    const key = escalao + '_' + competicao;
+    if (this.expandedCompeticaoJogos === key) {
+      this.expandedCompeticaoJogos = '';
+    } else {
+      this.expandedCompeticaoJogos = key;
+    }
+    console.log('🚀 toggleCompeticaoJogos | expandedCompeticaoJogos:', this.expandedCompeticaoJogos);
+  }
+
+  getJogosPorCompeticao(jogos: JogoData[]): any[] {
+    console.log('getJogosPorCompeticao | jogos recebidos:', jogos.length);
+    const grupos = new Map<string, any[]>();
+    
+    jogos.forEach(jogo => {
+      const competicao = jogo.competicao_nome || 'Sem competição';
+      if (!grupos.has(competicao)) {
+        grupos.set(competicao, []);
+      }
+      grupos.get(competicao)!.push(jogo);
+    });
+
+    const resultado = Array.from(grupos.entries()).map(([nomeCompeticao, jogos]) => ({
+      nomeCompeticao,
+      jogos
+    }));
+    
+    console.log('getJogosPorCompeticao | resultado:', resultado);
+    return resultado;
+  }
+
+  getTotalGolosCompeticaoJogos(competicaoGroup: any): number {
+    if (!competicaoGroup || !competicaoGroup.jogos) {
+      return 0;
+    }
+    return competicaoGroup.jogos.reduce((total: number, jogo: JogoData) => {
+      return total + this.calcularGolosJogo(jogo);
+    }, 0);
+  }
+
+  getTotalGolosSofridosCompeticaoJogos(competicaoGroup: any): number {
+    if (!competicaoGroup || !competicaoGroup.jogos) {
+      return 0;
+    }
+    return competicaoGroup.jogos.reduce((total: number, jogo: JogoData) => {
+      return total + this.calcularGolosSofridosJogo(jogo);
+    }, 0);
+  }
+
+  getTotalGolosEscalaoJogos(jogos: JogoData[]): number {
+    if (!jogos) {
+      return 0;
+    }
+    return jogos.reduce((total: number, jogo: JogoData) => {
+      return total + this.calcularGolosJogo(jogo);
+    }, 0);
+  }
+
+  getTotalGolosSofridosEscalaoJogos(jogos: JogoData[]): number {
+    if (!jogos) {
+      return 0;
+    }
+    return jogos.reduce((total: number, jogo: JogoData) => {
+      return total + this.calcularGolosSofridosJogo(jogo);
+    }, 0);
+  }
+
+  isJogadorGR(): boolean {
+    const idJogador = this.jogadorData.id;
+    // Verificar em todos os jogos se o jogador é GR
+    for (const item of this.jogosPorEscalao) {
+      for (const jogo of item.jogos) {
+        const jogador = jogo.jogadores?.find(j => j.id_jogador === idJogador);
+        if (jogador && (jogador.isGR || jogador.gr)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   onDateChange(date: NgbDateStruct | null) {
     console.log("FichaJogadorComponent | onDateChange | date:", date);
     if (date) {
@@ -712,16 +834,8 @@ export class FichaJogadorComponent implements OnInit {
     this.showPresencas = !this.showPresencas;
   }
 
-    toggleJogosVisibility() {
+  toggleJogosVisibility() {
     this.showJogos = !this.showJogos;
-  }
-
-  toggleJogosDetail(item: { escalao: string; jogos: JogoData[] }) {
-    if (this.expandedEscalao === item.escalao) {
-      this.expandedEscalao = '';
-    } else {
-      this.expandedEscalao = item.escalao;
-    }
   }
 
   navigateToJogo(jogoId: number) {
@@ -740,7 +854,7 @@ export class FichaJogadorComponent implements OnInit {
            (jogador.golos_normal || 0);
   }
 
-    calcularGolosSofridosJogo(jogo: JogoData): number {
+  calcularGolosSofridosJogo(jogo: JogoData): number {
     const idJogador = this.jogadorData.id;
     const jogador = jogo.jogadores?.find(j => j.id_jogador === idJogador);
     if (!jogador) return 0;
@@ -749,5 +863,235 @@ export class FichaJogadorComponent implements OnInit {
            (jogador.golos_s_up || 0) +
            (jogador.golos_s_pp || 0) +
            (jogador.golos_s_normal || 0);
+  }
+
+  toggleHistoricoVisibility() {
+    this.showHistorico = !this.showHistorico;
+    
+    // Carregar histórico apenas quando a secção é aberta pela primeira vez
+    if (this.showHistorico && !this.historicoJogador) {
+      this.loadHistorico();
+    }
+  }
+
+  toggleEpocaDetail(epocaId: number) {
+    if (this.expandedEpoca === epocaId) {
+      this.expandedEpoca = 0;
+    } else {
+      this.expandedEpoca = epocaId;
+    }
+  }
+
+  toggleEscalaoHistorico(epocaId: number, escalaoName: string) {
+    const key = epocaId + '_' + escalaoName;
+    if (this.expandedEscalaoHistorico === key) {
+      this.expandedEscalaoHistorico = '';
+    } else {
+      this.expandedEscalaoHistorico = key;
+    }
+  }
+
+  toggleCompeticaoHistorico(epocaId: number, escalaoName: string, competicaoName: string) {
+    const key = epocaId + '_' + escalaoName + '_' + competicaoName;
+    if (this.expandedCompeticaoHistorico === key) {
+      this.expandedCompeticaoHistorico = '';
+    } else {
+      this.expandedCompeticaoHistorico = key;
+    }
+  }
+
+  loadHistorico() {
+    this.loadingHistorico = true;
+    const idJogador = this.jogadorData.id;
+    
+    this.equipaService.getHistoricoByJogador(idJogador).subscribe({
+      next: (data: any) => {
+        console.log('FichaJogadorComponent | loadHistorico', data);
+        if (data && data.epocas) {
+          // Filter out seasons with no games and no training
+          data.epocas = data.epocas.filter((epoca: any) => {
+            const hasGames = epoca.jogos && epoca.jogos.length > 0;
+            const hasTreinos = epoca.treinos && epoca.treinos.length > 0;
+            return hasGames || hasTreinos;
+          });
+          
+          data.epocas.forEach((epoca: any) => {
+            // Pre-compute and store the groupings for each época
+            epoca.gruposEscaloes = this.getJogosPorEscalaoCompeticao(epoca.jogos, epoca);
+          });
+        }
+        this.historicoJogador = data;
+        this.loadingHistorico = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar histórico do jogador:', error);
+        this.historicoJogador = null;
+        this.loadingHistorico = false;
+      }
+    });
+  }
+
+
+
+  getResumoPresencasPorEscalao(treinos: any[], epoca?: any): any[] {
+    const meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+    const grupos = new Map<string, any>();
+    
+    console.log('getResumoPresencasPorEscalao | Total treinos:', treinos.length);
+    console.log('getResumoPresencasPorEscalao | Exemplo de treino:', treinos[0]);
+    
+    // Filtrar apenas treinos onde o jogador atual está presente
+    const idJogadorAtual = this.jogadorData?.id;
+    const treinosFiltrados = treinos.filter(treino => {
+      if (!treino.jogadoresPresenca || !Array.isArray(treino.jogadoresPresenca)) {
+        return false;
+      }
+      // Procurar o jogador atual no array de presenças
+      const presencaJogador = treino.jogadoresPresenca.find(
+        (jp: any) => jp.id_jogador === idJogadorAtual
+      );
+      // Verificar se o estado é "Presente"
+      return presencaJogador && presencaJogador.estado === 'Presente';
+    });
+    
+    console.log('getResumoPresencasPorEscalao | Treinos filtrados (jogador presente):', treinosFiltrados.length);
+    
+    treinosFiltrados.forEach(treino => {
+      // Usar o atributo escalao_descricao do JSON
+      let nomeEscalao = treino.escalao_descricao;
+      
+      // Fallback para outros campos se escalao_descricao não existir
+      if (!nomeEscalao) {
+        nomeEscalao = treino.nomeequipa || treino.escalao || treino.nomeEscalao || treino.equipa_nome || treino.nome_equipa;
+      }
+      
+      // If not found, try to look it up from the escaloes array using equipa_id or similar
+      if (!nomeEscalao) {
+        const equipaId = treino.equipa_id || treino.idequipa || treino.id_escalao;
+        if (equipaId) {
+          const escalaoObj = this.escaloes.find(e => e.idescalao === equipaId);
+          nomeEscalao = escalaoObj?.nomeEscalao;
+        }
+      }
+      
+      // Fallback to the season's escalão name if available
+      if (!nomeEscalao && epoca && epoca.nomeEscalao) {
+        nomeEscalao = epoca.nomeEscalao;
+      }
+      
+      // Final fallback
+      nomeEscalao = nomeEscalao || 'Sem escalão';
+      
+      if (!grupos.has(nomeEscalao)) {
+        const novoGrupo: any = { escalao: nomeEscalao };
+        meses.forEach(m => novoGrupo[m] = 0);
+        grupos.set(nomeEscalao, novoGrupo);
+      }
+      const grupo = grupos.get(nomeEscalao);
+      
+      // Parse date from AAAAMMDD format
+      const dataStr = treino.data.toString();
+      const ano = dataStr.substring(0, 4);
+      const mes = dataStr.substring(4, 6);
+      const dia = dataStr.substring(6, 8);
+      const data = new Date(Number(ano), Number(mes) - 1, Number(dia));
+      const mesIndex = data.getMonth(); // 0-11
+      const mesKey = meses[Number(mes) - 1];
+      if (grupo && mesKey) {
+        grupo[mesKey]++;
+      }
+    });
+    
+    return Array.from(grupos.values());
+  }
+
+  getTotalPresencasResumo(resumo: any): number {
+    const meses = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+    return meses.reduce((total, m) => total + (resumo[m] || 0), 0);
+  }
+
+  getTotalTreinosPresente(treinos: any[]): number {
+    if (!treinos || treinos.length === 0) return 0;
+    
+    const idJogadorAtual = this.jogadorData?.id;
+    const treinosPresentes = treinos.filter(treino => {
+      if (!treino.jogadoresPresenca || !Array.isArray(treino.jogadoresPresenca)) {
+        return false;
+      }
+      const presencaJogador = treino.jogadoresPresenca.find(
+        (jp: any) => jp.id_jogador === idJogadorAtual
+      );
+      return presencaJogador && presencaJogador.estado === 'Presente';
+    });
+    
+    return treinosPresentes.length;
+  }
+
+  getTotalJogosEscalao(escalaoGroup: any): number {
+    let total = 0;
+    escalaoGroup.competicaoGroups.forEach((group: any) => {
+      total += group.jogos.length;
+    });
+    return total;
+  }
+
+  getTotalGolosEscalao(escalaoGroup: any): number {
+    let total = 0;
+    const isGR = this.isJogadorGR();
+    escalaoGroup.competicaoGroups.forEach((group: any) => {
+      group.jogos.forEach((jogo: any) => {
+        total += isGR ? this.calcularGolosSofridosJogo(jogo) : this.calcularGolosJogo(jogo);
+      });
+    });
+    return total;
+  }
+
+  getTotalGolosCompeticao(competicaoGroup: any): number {
+    let total = 0;
+    const isGR = this.isJogadorGR();
+    competicaoGroup.jogos.forEach((jogo: any) => {
+      total += isGR ? this.calcularGolosSofridosJogo(jogo) : this.calcularGolosJogo(jogo);
+    });
+    return total;
+  }
+
+  getJogosPorEscalaoCompeticao(jogos: any[], epoca: any): any[] {
+    const escalaoGroups = new Map<string, any[]>();
+    
+    jogos.forEach(jogo => {
+      // Resolve escalão name from equipa_id using the escaloes array,
+      // fallback to the season's escalão name
+      const escalao = this.escaloes.find(e => e.idescalao === jogo.equipa_id)?.nomeEscalao 
+        || (epoca && epoca.nomeEscalao) 
+        || 'Sem escalão';
+      const chave = (jogo.tipoEquipa && jogo.tipoEquipa.trim() !== '' && !this.escaloes.find(e => e.nomeEscalao === jogo.tipoEquipa))
+        ? escalao + ' (' + jogo.tipoEquipa + ')'
+        : escalao;
+      
+      if (!escalaoGroups.has(chave)) {
+        escalaoGroups.set(chave, []);
+      }
+      escalaoGroups.get(chave)!.push(jogo);
+    });
+    
+    return Array.from(escalaoGroups.entries()).map(([nomeEscalao, jogos]) => {
+      const competicaoGroups = new Map<string, any[]>();
+      
+      jogos.forEach(jogo => {
+        const nomeCompeticao = jogo.competicao_nome || 'Sem competição';
+        if (!competicaoGroups.has(nomeCompeticao)) {
+          competicaoGroups.set(nomeCompeticao, []);
+        }
+        competicaoGroups.get(nomeCompeticao)!.push(jogo);
+      });
+      
+      return {
+        nomeEscalao,
+        competicaoGroups: Array.from(competicaoGroups.entries()).map(([nomeCompeticao, jogos]) => ({
+          nomeCompeticao,
+          jogos
+        }))
+      };
+    });
   }
 }

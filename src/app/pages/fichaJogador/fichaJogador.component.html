@@ -13,12 +13,11 @@
 
       <div class="crop-modal-body">
         <div class="crop-viewport" [class.crop-viewport-square]="cropTargetType === 'avatar'"
-          [style.width.px]="cropViewportWidth" [style.height.px]="cropViewportHeight"
-          (mousedown)="startDrag($event)" (touchstart)="startDrag($event)" (wheel)="onWheelZoom($event)">
+          [style.width.px]="cropViewportWidth" [style.height.px]="cropViewportHeight" (mousedown)="startDrag($event)"
+          (touchstart)="startDrag($event)" (wheel)="onWheelZoom($event)">
 
           <img #cropImgEl *ngIf="cropImageSrc" [src]="cropImageSrc" (load)="onCropImageLoad()"
-            [style.transform]="cropImgTransform" class="crop-image" draggable="false"
-            alt="Pré-visualização para corte">
+            [style.transform]="cropImgTransform" class="crop-image" draggable="false" alt="Pré-visualização para corte">
 
           <!-- Grelha de apoio (regra dos terços) para ajudar no enquadramento -->
           <div class="crop-grid">
@@ -59,7 +58,7 @@
   </div>
 
   <div class="d-flex justify-content-center" style="vertical-align:middle;">
-    <div class="spinner-border text-danger" *ngIf="spinner" styrole="status">
+    <div class="spinner-border text-danger" *ngIf="spinner" role="status">
       <span class="sr-only"></span>
     </div>
   </div>
@@ -90,19 +89,21 @@
         <div class="card-header-modern">
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-              <div class="icon-circle me-3">
-                <img [src]="avatarUrl" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt=""
-                     class="rounded-circle" style="width: 30px; height: 30px;" />
+              <div class="icon-circle icon-circle-avatar me-3">
+                <img [src]="avatarUrl" onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'"
+                  alt="" class="icon-circle-avatar-img" />
               </div>
               <div>
-                <h5 class="mb-0 fw-bold" style="color: #495057;">Informações Pessoais</h5>
-                <small style="color: #6c757d;">Dados do jogador</small>
+                <h5 class="card-title-modern mb-0 fw-bold">Informações Pessoais</h5>
+                <small class="card-subtitle-modern">Dados do jogador</small>
               </div>
             </div>
             <button type="button" class="btn-toggle-modern" (click)="toggleInfoVisibility()">
               <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path *ngIf="!showInfo" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-                <path *ngIf="showInfo" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="!showInfo"
+                  d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="showInfo"
+                  d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
               </svg>
             </button>
           </div>
@@ -110,205 +111,209 @@
 
         <div class="card-body-modern" *ngIf="showInfo">
           <form #staffForm="ngForm">
-          <div class="form-row">
-            <div class="col-md-7">
-              <div class="form-group">
-                <label>Nome completo</label>
-                <input type="text" class="form-control" name="nome_completo" [(ngModel)]="jogadorData.nome_completo"
-                  [readonly]="!isEditing" [class.readonly]="!isEditing">
+            <div class="form-row">
+              <div class="col-md-7">
+                <div class="form-group">
+                  <label>Nome completo</label>
+                  <input type="text" class="form-control" name="nome_completo" [(ngModel)]="jogadorData.nome_completo"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing">
+                </div>
               </div>
-            </div>
-            <div class="col-md-5 pr-1">
-              <div class="form-group">
-                <label>Nome curto</label>
-                <input type="text" class="form-control" name="nome" [(ngModel)]="jogadorData.nome"
-                  [readonly]="!isEditing" [class.readonly]="!isEditing">
+              <div class="col-md-5 pr-1">
+                <div class="form-group">
+                  <label>Nome curto</label>
+                  <input type="text" class="form-control" name="nome" [(ngModel)]="jogadorData.nome"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing">
 
+                </div>
               </div>
-            </div>
-            <div class="col-md-2 pl-1">
-              <div class="form-group">
-                <label>Nº Camisola</label>
-                <input type="text" class="form-control" name="numero" [(ngModel)]="jogadorData.numero"
-                  [readonly]="!isEditing" [class.readonly]="!isEditing">
+              <div class="col-md-2 pl-1">
+                <div class="form-group">
+                  <label>Nº Camisola</label>
+                  <input type="text" class="form-control" name="numero" [(ngModel)]="jogadorData.numero"
+                    [readonly]="!isEditing" [class.readonly]="!isEditing">
+                </div>
               </div>
-            </div>
-            <div class="col-md-5">
-              <div class="form-group">
-                <label>Data Nascimento</label>
-                <div *ngIf="isEditing" class="date-field-wrapper">
-                  <div class="input-group date-input-group">
-                    <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="dataNascimentoDisplay" placeholder="Selecionar data" readonly (click)="toggleDatepicker()">
-                    <div class="input-group-append">
-                      <button type="button" class="btn btn-outline-secondary date-toggle-btn" (click)="toggleDatepicker()">
-                        <i class="nc-icon nc-calendar-60"></i>
-                      </button>
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label>Data Nascimento</label>
+                  <div *ngIf="isEditing" class="date-field-wrapper">
+                    <div class="input-group date-input-group">
+                      <input type="text" class="form-control" name="data_nascimento" [(ngModel)]="dataNascimentoDisplay"
+                        placeholder="Selecionar data" readonly (click)="toggleDatepicker()">
+                      <div class="input-group-append">
+                        <button type="button" class="btn btn-outline-secondary date-toggle-btn"
+                          (click)="toggleDatepicker()">
+                          <i class="nc-icon nc-calendar-60"></i>
+                        </button>
+                      </div>
                     </div>
+
+                    <ng-container *ngIf="showDatepicker">
+                      <div class="datepicker-backdrop" (click)="toggleDatepicker()"></div>
+                      <div class="datepicker-popover" (click)="$event.stopPropagation()">
+                        <ngb-datepicker #dp name="dataNascimento" [(ngModel)]="dataNascimento" (dateSelect)="onDateChange($event)"
+                          navigation="select" [minDate]="{year: 1900, month: 1, day: 1}"
+                          [maxDate]="{year: 2099, month: 12, day: 31}">
+                        </ngb-datepicker>
+                      </div>
+                    </ng-container>
                   </div>
-
-                  <ng-container *ngIf="showDatepicker">
-                    <div class="datepicker-backdrop" (click)="toggleDatepicker()"></div>
-                    <div class="datepicker-popover" (click)="$event.stopPropagation()">
-                      <ngb-datepicker #dp [(ngModel)]="dataNascimento" (dateSelect)="onDateChange($event)"
-                        navigation="select"
-                        [minDate]="{year: 1900, month: 1, day: 1}" [maxDate]="{year: 2099, month: 12, day: 31}">
-                      </ngb-datepicker>
-                    </div>
-                  </ng-container>
-                </div>
-                <input type="text" class="form-control" name="data_nascimento_display" [(ngModel)]="dataNascimentoDisplay"
-                  [readonly]="!isEditing" [class.readonly]="!isEditing" *ngIf="!isEditing">
-              </div>
-            </div>
-          </div>
-          <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
-            <div class="row">
-              <div class="col-md-4 pr-1">
-                <div class="form-group">
-                  <label>Cartão Cidadão</label>
-                  <input type="text" class="form-control" placeholder="" name="cc" [(ngModel)]="jogadorData.cc"
-                    [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-              <div class="col-md-4 px-1">
-                <div class="form-group">
-                  <label>Contribuinte</label>
-                  <input type="text" class="form-control" placeholder="" name="nif" [(ngModel)]="jogadorData.nif"
-                    [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-              <div class="col-md-4 pl-1">
-                <div class="form-group">
-                  <label>Nº Licença</label>
-                  <input type="text" class="form-control" placeholder="" name="licenca"
-                    [(ngModel)]="jogadorData.licenca" [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="pl-1 ml-auto mr-auto">
-                <div class="form-group">
-                  <label>Email</label>
-                  <input type="text" class="form-control" placeholder="" name="email" [(ngModel)]="jogadorData.email"
-                    [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 pr-1">
-                <div class="form-group">
-                  <label>Pai</label>
-                  <input type="text" class="form-control" placeholder="" name="pai_nome"
-                    [(ngModel)]="jogadorData.pai_nome" [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-              <div class="col-md-6 pl-1">
-                <div class="form-group">
-                  <label>Mãe</label>
-                  <input type="text" class="form-control" placeholder="" name="mae_nome"
-                    [(ngModel)]="jogadorData.mae_nome" [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 pr-1">
-                <div class="form-group">
-                  <label>Telefone (Pai)</label>
-                  <input type="text" class="form-control" placeholder="" name="pai_telemovel"
-                    [(ngModel)]="jogadorData.pai_telemovel" [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-              <div class="col-md-6 pl-1">
-                <div class="form-group">
-                  <label>Telefone (Mãe)</label>
-                  <input type="text" class="form-control" placeholder="" name="mae_telemovel"
-                    [(ngModel)]="jogadorData.mae_telemovel" [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 pr-1">
-                <div class="form-group">
-                  <label>email (Pai)</label>
-                  <input type="text" class="form-control" placeholder="" name="pai_email"
-                    [(ngModel)]="jogadorData.pai_email" [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-              <div class="col-md-6 pl-1">
-                <div class="form-group">
-                  <label>email (Mãe)</label>
-                  <input type="text" class="form-control" placeholder="" name="mae_email"
-                    [(ngModel)]="jogadorData.mae_email" [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label>Morada</label>
-                  <input type="text" class="form-control" placeholder="" name="morada" [(ngModel)]="jogadorData.morada"
-                    [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4 pr-1">
-                <div class="form-group">
-                  <label>Cidade</label>
-                  <input type="text" class="form-control" placeholder="" name="cidade" [(ngModel)]="jogadorData.cidade"
-                    [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-
-              <div class="col-md-4 pl-1">
-                <div class="form-group">
-                  <label>Código Postal</label>
-                  <input type="text" class="form-control" name="codigo_postal" [(ngModel)]="jogadorData.codigo_postal"
-                    [readonly]="!isEditing" [class.readonly]="!isEditing">
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <label>Observações</label>
-                  <textarea class="form-control textarea" name="observacoes" [(ngModel)]="jogadorData.observacoes"
-                    [readonly]="!isEditing" [class.readonly]="!isEditing"></textarea>
+                  <input type="text" class="form-control" name="data_nascimento_display"
+                    [(ngModel)]="dataNascimentoDisplay" [readonly]="!isEditing" [class.readonly]="!isEditing"
+                    *ngIf="!isEditing">
                 </div>
               </div>
             </div>
 
-          </div>
+        <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed">
+              <div class="row">
+                <div class="col-md-4 pr-1">
+                  <div class="form-group">
+                    <label>Cartão Cidadão</label>
+                    <input type="text" class="form-control" placeholder="" name="cc" [(ngModel)]="jogadorData.cc"
+                      [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+                <div class="col-md-4 px-1">
+                  <div class="form-group">
+                    <label>Contribuinte</label>
+                    <input type="text" class="form-control" placeholder="" name="nif" [(ngModel)]="jogadorData.nif"
+                      [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+                <div class="col-md-4 pl-1">
+                  <div class="form-group">
+                    <label>Nº Licença</label>
+                    <input type="text" class="form-control" placeholder="" name="licenca"
+                      [(ngModel)]="jogadorData.licenca" [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="pl-1 ml-auto mr-auto">
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" class="form-control" placeholder="" name="email" [(ngModel)]="jogadorData.email"
+                      [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 pr-1">
+                  <div class="form-group">
+                    <label>Pai</label>
+                    <input type="text" class="form-control" placeholder="" name="pai_nome"
+                      [(ngModel)]="jogadorData.pai_nome" [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+                <div class="col-md-6 pl-1">
+                  <div class="form-group">
+                    <label>Mãe</label>
+                    <input type="text" class="form-control" placeholder="" name="mae_nome"
+                      [(ngModel)]="jogadorData.mae_nome" [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 pr-1">
+                  <div class="form-group">
+                    <label>Telefone (Pai)</label>
+                    <input type="text" class="form-control" placeholder="" name="pai_telemovel"
+                      [(ngModel)]="jogadorData.pai_telemovel" [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+                <div class="col-md-6 pl-1">
+                  <div class="form-group">
+                    <label>Telefone (Mãe)</label>
+                    <input type="text" class="form-control" placeholder="" name="mae_telemovel"
+                      [(ngModel)]="jogadorData.mae_telemovel" [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 pr-1">
+                  <div class="form-group">
+                    <label>email (Pai)</label>
+                    <input type="text" class="form-control" placeholder="" name="pai_email"
+                      [(ngModel)]="jogadorData.pai_email" [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+                <div class="col-md-6 pl-1">
+                  <div class="form-group">
+                    <label>email (Mãe)</label>
+                    <input type="text" class="form-control" placeholder="" name="mae_email"
+                      [(ngModel)]="jogadorData.mae_email" [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Morada</label>
+                    <input type="text" class="form-control" placeholder="" name="morada"
+                      [(ngModel)]="jogadorData.morada" [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4 pr-1">
+                  <div class="form-group">
+                    <label>Cidade</label>
+                    <input type="text" class="form-control" placeholder="" name="cidade"
+                      [(ngModel)]="jogadorData.cidade" [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
 
-          <!-- Botões -->
-          <div class="mt-4">
-            <button *ngIf="!isEditing" type="button" class="btn btn-info btn-sm mr-1" (click)="startEditing()">
-              <i class="nc-icon nc-ruler-pencil"></i> Editar
-            </button>
+                <div class="col-md-4 pl-1">
+                  <div class="form-group">
+                    <label>Código Postal</label>
+                    <input type="text" class="form-control" name="codigo_postal" [(ngModel)]="jogadorData.codigo_postal"
+                      [readonly]="!isEditing" [class.readonly]="!isEditing">
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label>Observações</label>
+                    <textarea class="form-control textarea" name="observacoes" [(ngModel)]="jogadorData.observacoes"
+                      [readonly]="!isEditing" [class.readonly]="!isEditing"></textarea>
+                  </div>
+                </div>
+              </div>
 
-            <button *ngIf="isEditing" type="button" class="btn btn-success btn-sm mr-1" (click)="gravarFichaJogador()"
-              [disabled]="staffForm.invalid">
-              <i class="nc-icon nc-check-2"></i> Gravar
-            </button>
+            </div>
 
-            <button *ngIf="isEditing" type="button" class="btn btn-secondary btn-sm" (click)="cancelEditing()">
-              <i class="nc-icon nc-simple-remove"></i> Cancelar
-            </button>
+            <!-- Botões -->
+            <div class="mt-4">
+              <button *ngIf="!isEditing" type="button" class="btn btn-info btn-sm mr-1" (click)="startEditing()">
+                <i class="nc-icon nc-ruler-pencil"></i> Editar
+              </button>
 
-            <button *ngIf="isEditing" type="button" class="btn btn-info btn-sm" (click)="triggerFileInput('perfil')">
-              <i class="nc-icon nc-image"></i> Alterar Foto Perfil
-            </button>
+              <button *ngIf="isEditing" type="button" class="btn btn-success btn-sm mr-1" (click)="gravarFichaJogador()"
+                [disabled]="staffForm.invalid">
+                <i class="nc-icon nc-check-2"></i> Gravar
+              </button>
 
-            <button *ngIf="isEditing" type="button" class="btn btn-info btn-sm" (click)="triggerFileInput('avatar')">
-              <i class="nc-icon nc-camera-20"></i> Alterar Foto Avatar
-            </button>
-          </div>
+              <button *ngIf="isEditing" type="button" class="btn btn-secondary btn-sm" (click)="cancelEditing()">
+                <i class="nc-icon nc-simple-remove"></i> Cancelar
+              </button>
 
-          <!-- Inputs de ficheiro escondidos: o clique é despoletado pelos botões acima -->
-          <input #fileInputPerfil type="file" accept="image/*" style="display:none;"
-            (change)="onCropFileSelected($event)">
-          <input #fileInputAvatar type="file" accept="image/*" style="display:none;"
-            (change)="onCropFileSelected($event)">
+              <button *ngIf="isEditing" type="button" class="btn btn-info btn-sm" (click)="triggerFileInput('perfil')">
+                <i class="nc-icon nc-image"></i> Alterar Foto Perfil
+              </button>
+
+              <button *ngIf="isEditing" type="button" class="btn btn-info btn-sm" (click)="triggerFileInput('avatar')">
+                <i class="nc-icon nc-camera-20"></i> Alterar Foto Avatar
+              </button>
+            </div>
+
+            <!-- Inputs de ficheiro escondidos: o clique é despoletado pelos botões acima -->
+            <input #fileInputPerfil type="file" accept="image/*" style="display:none;"
+              (change)="onCropFileSelected($event)">
+            <input #fileInputAvatar type="file" accept="image/*" style="display:none;"
+              (change)="onCropFileSelected($event)">
 
           </form>
         </div>
@@ -322,14 +327,16 @@
                 <i class="nc-icon nc-alert-circle-i text-white"></i>
               </div>
               <div>
-                <h5 class="mb-0 fw-bold" style="color: #495057;">{{total_faltas}} Faltas</h5>
-                <small style="color: #6c757d;">Registo disciplinar</small>
+                <h5 class="card-title-modern mb-0 fw-bold">{{total_faltas}} Faltas</h5>
+                <small class="card-subtitle-modern">Registo disciplinar</small>
               </div>
             </div>
             <button type="button" class="btn-toggle-modern" (click)="toggleFaltasVisibility()">
               <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path *ngIf="!showFaltas" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-                <path *ngIf="showFaltas" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="!showFaltas"
+                  d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="showFaltas"
+                  d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
               </svg>
             </button>
           </div>
@@ -350,10 +357,9 @@
                     <div class="falta-info">
                       <div class="falta-tipo">{{falta.estado}}</div>
                       <div class="falta-motivo">{{falta.motivo}}</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    </div>
+  </div>
+</div>
             </div>
           </div>
           <div *ngIf="!hasFaltas" class="empty-state">
@@ -363,6 +369,7 @@
             <p class="mb-0 text-muted">Sem registos de faltas</p>
           </div>
         </div>
+      </div>
       </div>
 
 
@@ -377,14 +384,16 @@
                 <i class="nc-icon nc-calendar-60 text-white"></i>
               </div>
               <div>
-                <h5 class="mb-0 fw-bold" style="color: #495057;">{{total_presencas}} Presenças</h5>
-                <small style="color: #6c757d;">Assiduidade nos treinos</small>
+                <h5 class="card-title-modern mb-0 fw-bold">{{total_presencas}} Presenças</h5>
+                <small class="card-subtitle-modern">Assiduidade nos treinos</small>
               </div>
             </div>
             <button type="button" class="btn-toggle-modern" (click)="togglePresencasVisibility()">
               <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path *ngIf="!showPresencas" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-                <path *ngIf="showPresencas" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="!showPresencas"
+                  d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="showPresencas"
+                  d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
               </svg>
             </button>
           </div>
@@ -406,7 +415,8 @@
                 <div class="presenca-header">
                   <h6 class="mb-0 fw-bold">{{presenca.escalao}}</h6>
                   <div class="total-badge">
-                    Total: {{presenca.set + presenca.out + presenca.nov + presenca.dez + presenca.jan + presenca.fev + presenca.mar + presenca.abr + presenca.mai + presenca.jun + presenca.jul}}
+                    Total: {{presenca.set + presenca.out + presenca.nov + presenca.dez + presenca.jan + presenca.fev +
+                    presenca.mar + presenca.abr + presenca.mai + presenca.jun + presenca.jul}}
                   </div>
                 </div>
                 <div class="presenca-months">
@@ -463,7 +473,7 @@
 
 
       <!-- NOVO CARD SIMPLIFICADO: Jogos Participados (após o card de Presenças) -->
-            <!-- NOVO CARD CORRIGIDO: Jogos por Escalão -->
+      <!-- NOVO CARD CORRIGIDO: Jogos por Escalão -->
       <div class="modern-card shadow mt-4">
         <div class="card-header-modern">
           <div class="d-flex justify-content-between align-items-center">
@@ -472,88 +482,338 @@
                 <i class="nc-icon nc-trophy text-white"></i>
               </div>
               <div>
-                <h5 class="mb-0 fw-bold" style="color: #495057;">Jogos por Escalão</h5>
-                <small style="color: #6c757d;">Histórico de participações</small>
+                <h5 class="card-title-modern mb-0 fw-bold">Jogos por Escalão</h5>
+                <small class="card-subtitle-modern">Histórico de participações</small>
               </div>
             </div>
             <button type="button" class="btn-toggle-modern" (click)="toggleJogosVisibility()">
               <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                <path *ngIf="!showJogos" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
-                <path *ngIf="showJogos" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="!showJogos"
+                  d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                <path *ngIf="showJogos"
+                  d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
               </svg>
             </button>
           </div>
         </div>
 
-  <!-- Conteúdo com Spinner e Controle de Visibilidade -->
-  <div class="card-body-modern" *ngIf="showJogos">
-    <div *ngIf="loadingJogos" class="text-center py-4">
+        <!-- Conteúdo com Spinner e Controle de Visibilidade -->
+        <div class="card-body-modern" *ngIf="showJogos">
+          <div *ngIf="loadingJogos" class="text-center py-4">
+            <div class="spinner-modern">
+              <div class="spinner-border text-primary" role="status">
+                <span class="sr-only"></span>
+              </div>
+              <p class="mt-2 text-muted small">Carregando jogos...</p>
+            </div>
+          </div>
+
+          <div *ngIf="!loadingJogos">
+            <!-- Lista de Escalões com Design Moderno -->
+            <div class="escalao-list">
+              <div *ngFor="let item of jogosPorEscalao" class="escalao-item" (click)="toggleJogosDetail(item)">
+                <div class="escalao-header">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="escalao-info">
+                      <h6 class="mb-0 fw-bold">{{ item.escalao }}</h6>
+                      
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="summary-badges">
+                        <span class="summary-badge games-summary">{{ item.jogos.length }} jogos</span>
+                        <span *ngIf="!isJogadorGR()" class="summary-badge goals-summary">{{ getTotalGolosEscalaoJogos(item.jogos) }} golos</span>
+                        <span *ngIf="isJogadorGR()" class="summary-badge goals-summary">{{ getTotalGolosSofridosEscalaoJogos(item.jogos) }} golos sofridos</span>
+                      </div>
+                      <div class="expand-icon">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                          [class.rotated]="expandedEscalao === item.escalao">
+                          <path
+                            d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Jogos expandidos (agrupados por competição) -->
+                <div class="jogos-expanded" *ngIf="expandedEscalao === item.escalao">
+                  <div *ngFor="let competicaoGroup of getJogosPorCompeticao(item.jogos); trackBy: trackByCompeticao" class="competicao-group">
+                    <div class="d-flex justify-content-between align-items-center" style="cursor: pointer;"
+                      (click)="$event.stopPropagation(); toggleCompeticaoJogos(item.escalao, competicaoGroup.nomeCompeticao)">
+                      <h6 class="competicao-title mb-0">{{ competicaoGroup.nomeCompeticao }}</h6>
+                      <div class="d-flex align-items-center gap-2">
+                        <div class="summary-badges">
+                          <span class="summary-badge games-summary">{{ competicaoGroup.jogos.length }} jogos</span>
+                          <span *ngIf="!isJogadorGR()" class="summary-badge goals-summary">{{ getTotalGolosCompeticaoJogos(competicaoGroup) }}
+                            golos</span>
+                          <span *ngIf="isJogadorGR()" class="summary-badge goals-summary">{{ getTotalGolosSofridosCompeticaoJogos(competicaoGroup) }}
+                            golos sofridos</span>
+                        </div>
+                        <div class="expand-icon">
+                          <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"
+                            [class.rotated]="expandedCompeticaoJogos === (item.escalao + '_' + competicaoGroup.nomeCompeticao)">
+                            <path
+                              d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="jogos-list"
+                      *ngIf="expandedCompeticaoJogos === (item.escalao + '_' + competicaoGroup.nomeCompeticao)">
+                      <div *ngIf="competicaoGroup.jogos.length === 0" style="color: red; padding: 10px;">
+                        ⚠️ Nenhum jogo encontrado para esta competição
+                      </div>
+                      <div *ngFor="let jogo of competicaoGroup.jogos" class="jogo-card-compact"
+                        (click)="navigateToJogo(jogo.id)">
+                        <div class="jogo-content-linear">
+                          <div class="jogo-date-compact">
+                            <small class="text-muted">{{ jogo.data | date:'dd/MM' }}</small>
+                          </div>
+                          <div class="jogo-opponent-compact">
+                            <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
+                              onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
+                              class="opponent-logo-small" />
+                            <span class="opponent-name-compact">{{ jogo.equipa_adv_nome }}</span>
+                            <small *ngIf="jogo.tipoEquipa_adv==='B'" class="text-muted">({{jogo.tipoEquipa_adv}})</small>
+                          </div>
+                          <div class="jogo-result-with-goals">
+                            <div class="goals-display" *ngIf="calcularGolosJogo(jogo) > 0">
+                              <div class="goal-ball">
+                                <img src="assets/img/jogo/GOLO.png" class="item-goal">
+                              </div>
+                              <span class="goal-count">{{ calcularGolosJogo(jogo) }}</span>
+                            </div>
+                            <div class="goals-sofridos-display" *ngIf="calcularGolosSofridosJogo(jogo) > 0">
+                              <div class="goal-ball">
+                                <img src="assets/img/jogo/GOLO_S.png" class="item-goal">
+                              </div>
+                              <span class="goal-count">{{ calcularGolosSofridosJogo(jogo) }}</span>
+                            </div>
+                            <div class="result-only">
+                              <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
+                          'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                          'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                          'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                        }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
+                              <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'" [ngClass]="{
+                          'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                          'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                          'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                        }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Mensagem quando não há jogos -->
+                <div *ngIf="jogosPorEscalao.length === 0" class="empty-state">
+                  <div class="empty-icon">
+                    <i class="nc-icon nc-trophy"></i>
+                  </div>
+                  <p class="mb-0 text-muted">Nenhum jogo encontrado para este jogador.</p>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <!-- NOVA SECÇÃO: HISTÓRICO DO JOGADOR -->
+      <div class="modern-card shadow mt-4">
+  <div class="card-header-modern">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center">
+        <div class="icon-circle me-3">
+          <i class="nc-icon nc-time-alarm text-white"></i>
+        </div>
+        <div>
+          <h5 class="card-title-modern mb-0 fw-bold">Histórico</h5>
+          <small class="card-subtitle-modern">Temporadas anteriores</small>
+        </div>
+      </div>
+      <button type="button" class="btn-toggle-modern" (click)="toggleHistoricoVisibility()">
+        <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+          <path *ngIf="!showHistorico" d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+          <path *ngIf="showHistorico" d="M3.646 9.146a.5.5 0 0 1 .708 0L8 12.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body-modern" *ngIf="showHistorico">
+    <div *ngIf="loadingHistorico" class="text-center py-4">
       <div class="spinner-modern">
         <div class="spinner-border text-primary" role="status">
           <span class="sr-only"></span>
         </div>
-        <p class="mt-2 text-muted small">Carregando jogos...</p>
+        <p class="mt-2 text-muted small">Carregando histórico...</p>
       </div>
     </div>
 
-    <div *ngIf="!loadingJogos">
-      <!-- Lista de Escalões com Design Moderno -->
-      <div class="escalao-list">
-        <div *ngFor="let item of jogosPorEscalao" class="escalao-item" (click)="toggleJogosDetail(item)">
-          <div class="escalao-header">
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="escalao-info">
-                <h6 class="mb-0 fw-bold">{{ item.escalao }}</h6>
-                <small class="text-muted">{{ item.jogos.length }} jogos</small>
-              </div>
-              <div class="expand-icon">
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" [class.rotated]="expandedEscalao === item.escalao">
-                  <path d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"/>
-                </svg>
+    <div *ngIf="!loadingHistorico">
+      <div *ngIf="historicoJogador && historicoJogador.epocas && historicoJogador.epocas.length > 0">
+        <div class="epocas-list">
+          <div *ngFor="let epoca of historicoJogador.epocas" class="epoca-card">
+            <div class="epoca-header" (click)="toggleEpocaDetail(epoca.id)">
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="epoca-info">
+                  <h6 class="mb-0 fw-bold">{{ epoca.descritivo }}</h6>
+                  <small class="text-muted">{{ epoca.nomeEscalao }} • {{ epoca.jogos.length }} jogos • {{ getTotalTreinosPresente(epoca.treinos) }} treinos</small>
+                </div>
+                <div class="expand-icon">
+                  <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" [class.rotated]="expandedEpoca === epoca.id">
+                    <path d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"/>
+                  </svg>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Jogos expandidos -->
-          <div class="jogos-expanded" *ngIf="expandedEscalao === item.escalao">
-            <div class="jogos-list">
-              <div *ngFor="let jogo of item.jogos" class="jogo-card" (click)="navigateToJogo(jogo.id)">
-                <div class="jogo-content-linear">
-                  <div class="jogo-date">
-                    <small class="text-muted">{{ jogo.data | date:'dd/MM' }}</small>
-                  </div>
-                  <div class="jogo-opponent-compact">
-                    <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
-                         onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
-                         class="opponent-logo-small" />
-                    <span class="opponent-name-compact">{{ jogo.equipa_adv_nome }}</span>
-                    <small *ngIf="jogo.tipoEquipa_adv==='B'" class="text-muted">({{jogo.tipoEquipa_adv}})</small>
-                  </div>
-                  <div class="jogo-result-with-goals">
-                    <div class="goals-display" *ngIf="calcularGolosJogo(jogo) > 0">
-                      <div class="goal-ball">
-                      <img src="assets/img/jogo/GOLO.png" class="item-goal">
+            <!-- Conteúdo expandido da época -->
+            <div class="epoca-expanded" *ngIf="expandedEpoca === epoca.id">
+              <!-- Jogos da época (agrupados por escalão e competição) -->
+                <div *ngIf="epoca.jogos.length > 0" class="mb-3">
+                <h6 class="fw-bold mb-2">Jogos</h6>
+                <div *ngFor="let escalaoGroup of epoca.gruposEscaloes" class="escalao-jogos-group">
+                  <div class="escalao-header-summary" (click)="toggleEscalaoHistorico(epoca.id, escalaoGroup.nomeEscalao)">
+                    <h6 class="escalao-treino-title mb-0">{{ escalaoGroup.nomeEscalao }}</h6>
+                    <div class="d-flex align-items-center gap-2">
+                      <div class="summary-badges">
+                        <span class="summary-badge games-summary">{{ getTotalJogosEscalao(escalaoGroup) }} jogos</span>
+                        <span *ngIf="!isJogadorGR()" class="summary-badge goals-summary">{{ getTotalGolosEscalao(escalaoGroup) }} golos</span>
+                        <span *ngIf="isJogadorGR()" class="summary-badge goals-summary">{{ getTotalGolosEscalao(escalaoGroup) }} golos sofridos</span>
                       </div>
-                      <span class="goal-count">{{ calcularGolosJogo(jogo) }}</span>
-                    </div>
-                    <div class="goals-sofridos-display" *ngIf="calcularGolosSofridosJogo(jogo) > 0">
-                      <div class="goal-ball">
-                      <img src="assets/img/jogo/GOLO_S.png" class="item-goal">
+                      <div class="expand-icon">
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" [class.rotated]="expandedEscalaoHistorico === (epoca.id + '_' + escalaoGroup.nomeEscalao)">
+                          <path d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"/>
+                        </svg>
                       </div>
-                      <span class="goal-count">{{ calcularGolosSofridosJogo(jogo) }}</span>
                     </div>
-                    <div class="result-only">
-                      <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
-                        'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
-                        'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
-                        'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
-                      }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
-                      <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'" [ngClass]="{
-                        'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
-                        'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
-                        'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
-                      }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
-                      <span *ngIf="jogo.estado !== 'CONCLUIDO'" class="text-muted small"></span>
+                  </div>
+                  <div *ngIf="expandedEscalaoHistorico === (epoca.id + '_' + escalaoGroup.nomeEscalao)">
+                    <div *ngFor="let competicaoGroup of escalaoGroup.competicaoGroups" class="competicao-group">
+                      <div class="competicao-header-summary" (click)="toggleCompeticaoHistorico(epoca.id, escalaoGroup.nomeEscalao, competicaoGroup.nomeCompeticao)">
+                        <h6 class="competicao-title mb-0">{{ competicaoGroup.nomeCompeticao }}</h6>
+                        <div class="d-flex align-items-center gap-2">
+                          <div class="summary-badges">
+                            <span class="summary-badge games-summary">{{ competicaoGroup.jogos.length }} jogos</span>
+                            <span *ngIf="!isJogadorGR()" class="summary-badge goals-summary">{{ getTotalGolosCompeticao(competicaoGroup) }} golos</span>
+                            <span *ngIf="isJogadorGR()" class="summary-badge goals-summary">{{ getTotalGolosCompeticao(competicaoGroup) }} golos sofridos</span>
+                          </div>
+                          <div class="expand-icon">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16" [class.rotated]="expandedCompeticaoHistorico === (epoca.id + '_' + escalaoGroup.nomeEscalao + '_' + competicaoGroup.nomeCompeticao)">
+                              <path d="M3.646 6.146a.5.5 0 0 1 .708 0L8 9.793l3.646-3.647a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 0-.708z"/>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="jogos-list" *ngIf="expandedCompeticaoHistorico === (epoca.id + '_' + escalaoGroup.nomeEscalao + '_' + competicaoGroup.nomeCompeticao)">
+                        <div *ngFor="let jogo of competicaoGroup.jogos" class="jogo-card-compact">
+                        <div class="jogo-content-linear">
+                          <div class="jogo-date-compact">
+                            <small class="text-muted">{{ jogo.data | date:'dd/MM' }}</small>
+                          </div>
+                          <div class="jogo-opponent-compact">
+                            <img src="assets/img/clubes/clube_{{ jogo.equipa_adv_id }}.png"
+                                 onerror="this.onerror=null; this.src='assets/img/clubes/default_clube.png'"
+                                 class="opponent-logo-small" />
+                            <span class="opponent-name-compact">{{ jogo.equipa_adv_nome }}</span>
+                            <small *ngIf="jogo.tipoEquipa_adv==='B'" class="text-muted">({{jogo.tipoEquipa_adv}})</small>
+                          </div>
+                          <div class="jogo-result-with-goals">
+                            <div class="goals-display" *ngIf="calcularGolosJogo(jogo) > 0">
+                              <div class="goal-ball">
+                                <img src="assets/img/jogo/GOLO.png" class="item-goal">
+                              </div>
+                              <span class="goal-count">{{ calcularGolosJogo(jogo) }}</span>
+                            </div>
+                            <div class="goals-sofridos-display" *ngIf="calcularGolosSofridosJogo(jogo) > 0">
+                              <div class="goal-ball">
+                                <img src="assets/img/jogo/GOLO_S.png" class="item-goal">
+                              </div>
+                              <span class="goal-count">{{ calcularGolosSofridosJogo(jogo) }}</span>
+                            </div>
+                            <div class="result-only">
+                              <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='C'" [ngClass]="{
+                                'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                                'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                                'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                              }">{{jogo.golos_equipa}} - {{jogo.golos_equipa_adv}}</span>
+                              <span *ngIf="jogo.estado === 'CONCLUIDO' && jogo.tipo_local==='F'" [ngClass]="{
+                                'result-win': jogo.golos_equipa_adv < jogo.golos_equipa,
+                                'result-loss': jogo.golos_equipa_adv > jogo.golos_equipa,
+                                'result-draw': jogo.golos_equipa_adv === jogo.golos_equipa
+                              }">{{jogo.golos_equipa_adv}} - {{jogo.golos_equipa}}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </div>
+
+              <!-- Treinos da época (resumo por escalão e mês) -->
+              <div *ngIf="epoca.treinos.length > 0">
+                <h6 class="fw-bold mb-2">Treinos </h6>
+                <div class="presencas-grid">
+                  <div *ngFor="let resumo of getResumoPresencasPorEscalao(epoca.treinos, epoca)" class="presenca-card">
+                    <div class="presenca-header">
+                      <h6 class="mb-0 fw-bold">{{resumo.escalao}}</h6>
+                      <div class="total-badge">
+                        Total: {{getTotalPresencasResumo(resumo)}}
+                      </div>
+                    </div>
+                    <div class="presenca-months">
+                      <div class="month-item">
+                        <span class="month-label">Set</span>
+                        <span class="month-value">{{resumo.set}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Out</span>
+                        <span class="month-value">{{resumo.out}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Nov</span>
+                        <span class="month-value">{{resumo.nov}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Dez</span>
+                        <span class="month-value">{{resumo.dez}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Jan</span>
+                        <span class="month-value">{{resumo.jan}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Fev</span>
+                        <span class="month-value">{{resumo.fev}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Mar</span>
+                        <span class="month-value">{{resumo.mar}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Abr</span>
+                        <span class="month-value">{{resumo.abr}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Mai</span>
+                        <span class="month-value">{{resumo.mai}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Jun</span>
+                        <span class="month-value">{{resumo.jun}}</span>
+                      </div>
+                      <div class="month-item">
+                        <span class="month-label">Jul</span>
+                        <span class="month-value">{{resumo.jul}}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -563,37 +823,15 @@
         </div>
       </div>
 
-      <!-- Total Geral Moderno -->
-      <div *ngIf="jogosPorEscalao.length > 0" class="total-summary">
-        <div class="total-badges">
-          <div class="total-badge games-badge">
-            <i class="nc-icon nc-trophy me-2"></i>
-            {{ totalGeralJogos }} jogos
-          </div>
-          <div class="total-badge goals-badge">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="me-1">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-            </svg>
-            <span *ngIf="totalGeralGolosSofridos===0">{{ totalGeralGolos }} golos</span>
-            <span *ngIf="totalGeralGolosSofridos>0">{{ totalGeralGolosSofridos }} golos sofridos</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Mensagem quando não há jogos -->
-      <div *ngIf="jogosPorEscalao.length === 0" class="empty-state">
+      <div *ngIf="!historicoJogador || !historicoJogador.epocas || historicoJogador.epocas.length === 0" class="empty-state">
         <div class="empty-icon">
-          <i class="nc-icon nc-trophy"></i>
+          <i class="nc-icon nc-time-alarm"></i>
         </div>
-        <p class="mb-0 text-muted">Nenhum jogo encontrado para este jogador.</p>
+        <p class="mb-0 text-muted">Nenhum histórico disponível para este jogador.</p>
       </div>
+    </div>
+  </div>
     </div>
   </div>
 </div>
-
-
-
-
-    </div>
-  </div>
 </div>

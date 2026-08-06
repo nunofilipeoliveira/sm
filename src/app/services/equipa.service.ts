@@ -36,6 +36,7 @@ export class EquipaService {
   URLcreateEscalaoEpoca = environment.apiUrl + "/sm/createEscalaoEpoca/";
   URLdeleteEscalaoEpoca = environment.apiUrl + "/sm/deleteEscalaoEpoca/";
   URLGetEscalaoByEquipa = environment.apiUrl + "/sm/getEscalaoByEquipa/";
+  URLGetHistoricoByJogador = environment.apiUrl + "/sm/getHistoricobyJogador/";
 
   parmJson: string = ""
   errows: boolean = false;
@@ -363,6 +364,13 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
     const urltmp = this.URLGetEscalaoByEquipa  + idEquipa;
     console.log('EquipaService | getEscalaoByEquipa | url:', urltmp);
     return this.http.put<any>(urltmp, this.body_json, { headers });
+  }
+
+  getHistoricoByJogador(idJogador: number): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLGetHistoricoByJogador + idJogador + '/' + environment.tenant_id;
+    console.log('EquipaService | getHistoricoByJogador | url:', urltmp);
+    return this.http.put<any>(urltmp, { headers });
   }
 
 }
