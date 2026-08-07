@@ -117,12 +117,34 @@
       <div class="col-12">
         <div class="card shadow-sm">
           <div class="card-header bg-light">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
               <h5 class="mb-0">
                 <i class="fas fa-table me-2"></i>Quadro de Presenças
               </h5>
-              <button class="btn btn-outline-secondary btn-sm" (click)="toggleFiltroNomes()">
-                <i class="fas fa-search me-1"></i>Filtrar Nomes
+              <button type="button" class="name-filter-toggle-btn" [class.active]="flagFiltroNomes" (click)="toggleFiltroNomes()">
+                <i class="fas fa-search"></i>
+                <span>Filtrar Nomes</span>
+                <span class="filter-count-badge" *ngIf="flagFiltroNomes && filtroNomes.length > 1">{{filtroNomes.length}}</span>
+              </button>
+            </div>
+
+            <!-- Barra de filtro por nome (chips), fora da tabela -->
+            <div class="name-filter-bar" *ngIf="flagFiltroNomes">
+              <i class="fas fa-filter name-filter-bar-icon"></i>
+
+              <div class="name-filter-chip" *ngFor="let filtro of filtroNomes; index as i; trackBy: trackByIndex">
+                <i class="fas fa-user chip-icon"></i>
+                <input type="text" class="name-filter-input" placeholder="Nome do jogador..."
+                  [(ngModel)]="filtroNomes[i]" (input)="filtrarTabela()" />
+                <button type="button" class="chip-remove-btn"
+                  (click)="i === 0 ? toggleFiltroNomes() : removeFiltro(i)"
+                  [title]="i === 0 ? 'Fechar filtro de nomes' : 'Remover este filtro'">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+
+              <button type="button" class="name-filter-add-btn" (click)="addFiltro()" title="Adicionar outro filtro">
+                <i class="fas fa-plus"></i>Adicionar
               </button>
             </div>
           </div>
@@ -191,40 +213,6 @@
                 </thead>
 
                 <tbody>
-                  <!-- Filter Rows -->
-                  <ng-container *ngIf="flagFiltroNomes">
-                    <tr class="table-light">
-                      <td class="border-0" style="width: 140px; min-width: 140px; max-width: 140px;">
-                        <div class="d-flex gap-1">
-                          <input type="text" class="form-control form-control-sm flex-grow-1" placeholder="Filtrar por nome" [(ngModel)]="filtroNomes[0]" (input)="filtrarTabela()" />
-                          <button class="btn btn-outline-success btn-sm" type="button" (click)="addFiltro()" title="Adicionar filtro">
-                            <i class="fas fa-plus"></i>
-                          </button>
-                                            <button class="btn btn-outline-danger btn-sm" type="button" (click)="toggleFiltroNomes()" title="Remover este filtro">
-                            <i class="fas fa-minus"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td *ngIf="!modoResumo" [attr.colspan]="presencas.length + 1" class="border-0"></td>
-                      <td *ngIf="modoResumo" colspan="5" class="border-0"></td>
-                    </tr>
-                    <tr *ngFor="let filtro of filtroNomes.slice(1); index as i; trackBy: trackByIndex" class="table-light">
-                      <td class="border-0" style="width: 140px; min-width: 140px; max-width: 140px;">
-                        <div class="d-flex gap-1">
-                          <input type="text" class="form-control form-control-sm flex-grow-1" placeholder="Filtrar por nome" [(ngModel)]="filtroNomes[i+1]" (input)="filtrarTabela()" />
-                          <button class="btn btn-outline-success btn-sm" type="button" (click)="addFiltro()" title="Adicionar outro filtro">
-                            <i class="fas fa-plus"></i>
-                          </button>
-                          <button class="btn btn-outline-danger btn-sm" type="button" (click)="removeFiltro(i+1)" title="Remover este filtro">
-                            <i class="fas fa-minus"></i>
-                          </button>
-                        </div>
-                      </td>
-                      <td *ngIf="!modoResumo" [attr.colspan]="presencas.length + 1" class="border-0"></td>
-                      <td *ngIf="modoResumo" colspan="5" class="border-0"></td>
-                    </tr>
-                  </ng-container>
-
                   <!-- Hours Row (Detailed Mode) -->
                   <ng-container *ngIf="!modoResumo">
                     <tr class="table-light">
