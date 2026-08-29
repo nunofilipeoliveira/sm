@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { JogoData } from '../pages/lista-jogos/jogoData';
+import { JogoData, JogoConfigData, JogoEventoData, AtualizarTempoJogoRequest } from '../pages/lista-jogos/jogoData';
 import { ConvocatoriaDataWS, JogadorConvocado } from '../pages/convocatoria/convocatoriaData';
 
 @Injectable({
@@ -92,6 +92,70 @@ export class JogoService {
     const urltmp = environment.apiUrl + "/sm/getJogosByJogadorId/" + jogadorId;
       console.log('JogoService | url:', this, urltmp);
       return this.http.put<JogoData[]>(urltmp, { headers });
+  }
+
+  // ------------------------------------------------------------------
+  // Modo Cronómetro / Timeline de Eventos
+  // ------------------------------------------------------------------
+
+  getConfigJogo(idJogo: number): Observable<JogoConfigData> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/getConfigJogo/" + idJogo;
+    return this.http.put<JogoConfigData>(urltmp, { headers });
+  }
+
+  guardarConfigJogo(config: JogoConfigData): Observable<boolean> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/guardarConfigJogo";
+    return this.http.put<boolean>(urltmp, config, { headers });
+  }
+
+  registarEvento(evento: JogoEventoData): Observable<JogoEventoData> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/registarEvento";
+    return this.http.put<JogoEventoData>(urltmp, evento, { headers });
+  }
+
+  marcarSubstituicao(evento: JogoEventoData): Observable<JogoEventoData> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/marcarSubstituicao";
+    return this.http.put<JogoEventoData>(urltmp, evento, { headers });
+  }
+
+  getTimeline(idJogo: number): Observable<JogoEventoData[]> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/getTimeline/" + idJogo;
+    return this.http.put<JogoEventoData[]>(urltmp, { headers });
+  }
+
+  editarEvento(evento: JogoEventoData): Observable<boolean> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/editarEvento";
+    return this.http.put<boolean>(urltmp, evento, { headers });
+  }
+
+  eliminarEvento(idEvento: number): Observable<boolean> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/eliminarEvento/" + idEvento;
+    return this.http.put<boolean>(urltmp, { headers });
+  }
+
+  getTemposJogo(idJogo: number): Observable<JogoData['jogadores']> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/getTemposJogo/" + idJogo;
+    return this.http.put<JogoData['jogadores']>(urltmp, { headers });
+  }
+
+  atualizarTempoJogo(req: AtualizarTempoJogoRequest): Observable<boolean> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/atualizarTempoJogo";
+    return this.http.put<boolean>(urltmp, req, { headers });
+  }
+
+  atualizarTempoAtual(req: AtualizarTempoJogoRequest): Observable<boolean> {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = environment.apiUrl + "/sm/atualizarTempoAtual";
+    return this.http.put<boolean>(urltmp, req, { headers });
   }
 
 

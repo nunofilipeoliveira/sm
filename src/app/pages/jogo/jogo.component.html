@@ -55,6 +55,13 @@
     </div>
 
 
+    <!-- Indicador "EM DIRETO", visível sempre que o jogo está a ser registado em
+         modo cronómetro e ainda não terminou — mesmo fora do painel de registo. -->
+    <div class="jc-live-row" *ngIf="jogoEmDireto()">
+      <span class="jc-live-badge"><span class="jc-live-dot"></span>EM DIRETO</span>
+      <span class="jc-live-info">Parte {{ cronoParteAtual }}/{{ cronoNumeroPartes }} · {{ cronoTempoDisplay }}</span>
+    </div>
+
     <!-- Game Info -->
     <div class="game-header">
       <p class="game-league"><img src="assets/img/competicoes/c_{{ jogo.competicao_id }}.png"
@@ -64,14 +71,354 @@
       <p class="game-venue">📍 {{jogo.local}}</p>
     </div>
 
-    <div *ngIf="jogo.estado==='INICIADO' && !mostrarRegisto" class="team-staff">
+    <div *ngIf="jogo.estado==='INICIADO' && !mostrarRegisto && !mostrarTimelineVisualizacao" class="team-staff">
       <!-- colocar mensagem forte de jogo por registar -->
       <h2>O jogo está por registar a informação</h2>
+    </div>
+
+    <!-- Indicador de Timeline, apenas em modo de visualização (fora do painel de registo)
+         e só para jogos registados via cronómetro. Por defeito a timeline está escondida
+         e mostra-se a vista normal dos jogadores; ao carregar, troca-se uma pela outra. -->
+    <div class="jc-vista-cards" *ngIf="!mostrarRegisto && modoRegisto==='CRONOMETRO' && cronoConfigSalva && timeline.length">
+      <button type="button" class="jc-vista-card" [class.jc-vista-card-ativo]="mostrarTimelineVisualizacao" (click)="mostrarTimelineVisualizacao = !mostrarTimelineVisualizacao">
+        <span class="jc-vista-card-icon"><i class="fas" [ngClass]="mostrarTimelineVisualizacao ? 'fa-users' : 'fa-timeline'"></i></span>
+        <span class="jc-vista-card-label">{{ mostrarTimelineVisualizacao ? 'Jogadores' : 'Timeline' }}</span>
+      </button>
+      <button type="button" class="jc-vista-card" (click)="mostrarModalTemposJogo = true">
+        <span class="jc-vista-card-icon"><i class="fas fa-stopwatch"></i></span>
+        <span class="jc-vista-card-label">Tempos</span>
+      </button>
+    </div>
+
+    <!-- Timeline do jogo: em modo de registo está sempre visível; em modo de
+         visualização só aparece quando o indicador acima é ativado. -->
+    <div class="jc-timeline" *ngIf="modoRegisto==='CRONOMETRO' && cronoConfigSalva && timeline.length && (mostrarRegisto || mostrarTimelineVisualizacao)">
+      <div class="jc-secao-titulo">
+        <h4><i class="fas fa-timeline"></i> Timeline do jogo</h4>
+        <div class="jc-secao-acoes">
+          <button type="button" class="jc-icon-btn jc-icon-btn-add" *ngIf="mostrarRegisto" (click)="abrirNovoEvento()" title="Adicionar evento">
+            <i class="fas fa-plus"></i>
+          </button>
+          <button type="button" class="jc-icon-btn" (click)="recarregarTimeline()" title="Atualizar">
+            <i class="fas fa-rotate"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="jc-filtro-row">
+        <button type="button" class="jc-filtro-btn" [class.jc-filtro-btn-ativo]="!timelineFiltroTodos" (click)="timelineFiltroTodos=false">
+          Golos, assistências e cartões
+        </button>
+        <button type="button" class="jc-filtro-btn" [class.jc-filtro-btn-ativo]="timelineFiltroTodos" (click)="timelineFiltroTodos=true">
+          Ver todos os eventos
+        </button>
+      </div>
+
+      <div class="jc-vazio-estado" *ngIf="eventosTimelineVisiveis().length===0">
+        <div class="jc-vazio-icon"><i class="fas fa-filter-circle-xmark"></i></div>
+        <p class="jc-vazio">Sem eventos deste tipo até agora.</p>
+      </div>
+      <div class="jc-tl" *ngIf="eventosTimelineVisiveis().length">
+        <div *ngFor="let ev of eventosTimelineVisiveis()" class="jc-tl-item">
+          <div class="jc-tl-marcador">{{ iconeEvento(ev.tipo_evento) }}</div>
+          <div class="jc-tl-corpo">
+            <span class="jc-tl-tempo">{{ ev.tempo_evento }}</span>
+            <span class="jc-tl-texto">{{ descreverEvento(ev) }}</span>
+            <div class="jc-tl-titulares" *ngIf="ev.tipo_evento==='INICIO_JOGO'">
+              <span class="jc-tl-titular-chip" *ngFor="let j of jogadoresTitulares()">
+                <span class="jc-tl-titular-num">{{ j.numero || '-' }}</span>{{ j.nome.split(' ')[0] }}
+              </span>
+            </div>
+          </div>
+          <div class="jc-tl-acoes" *ngIf="mostrarRegisto">
+            <button type="button" class="jc-tl-btn" (click)="abrirEditarEvento(ev)" title="Editar evento">
+              <i class="fas fa-pen"></i>
+            </button>
+            <button type="button" class="jc-tl-btn" (click)="eliminarEventoTimeline(ev)" title="Eliminar evento">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Seção de Registro de Informações do Jogo (Expandível por Jogador) -->
     <div *ngIf="mostrarRegisto" class="registo-v2">
       <h3 class="titulo-registo">Registar Informação do Jogo</h3>
+
+      <!-- Escolha do modo de registo: Normal vs Cronómetro -->
+      <div class="crono-modo-selector">
+        <div class="crono-modo-card" [class.crono-modo-ativo]="modoRegisto==='NORMAL'"
+          (click)="definirModoRegisto('NORMAL')">
+          <i class="fas fa-list-ol"></i>
+          <span>Modo Normal</span>
+        </div>
+        <div class="crono-modo-card" [class.crono-modo-ativo]="modoRegisto==='CRONOMETRO'"
+          (click)="definirModoRegisto('CRONOMETRO')">
+          <i class="fas fa-stopwatch"></i>
+          <span>Modo Cronômetro</span>
+        </div>
+      </div>
+
+      <!-- Painel do modo cronómetro -->
+      <div *ngIf="modoRegisto==='CRONOMETRO'" class="jc-painel">
+
+        <!-- Bloco de configuração: duração, partes e titulares. Esconde-se depois de guardado. -->
+        <div class="jc-config" *ngIf="mostrarConfigCrono">
+          <div class="jc-config-row">
+            <div class="jc-field">
+              <label>Minutos por parte</label>
+              <input type="number" [(ngModel)]="cronoDuracaoParteMin" name="cronoDura" min="1" max="60"
+                class="jc-input" />
+            </div>
+            <div class="jc-field">
+              <label>Nº de partes</label>
+              <input type="number" [(ngModel)]="cronoNumeroPartes" name="cronoPartes" min="1" max="4"
+                class="jc-input" />
+            </div>
+          </div>
+
+          <div class="jc-titulares">
+            <p class="jc-titulares-titulo">
+              Escolhe os titulares
+              <span class="jc-contador" [class.jc-contador-ok]="contarTitulares() === cronoMaxIniciais">
+                {{ contarTitulares() }}/{{ cronoMaxIniciais }}
+              </span>
+            </p>
+            <div class="jc-titulares-grid">
+              <button type="button" *ngFor="let j of jogo.jogadores" class="jc-titular-chip"
+                [class.jc-titular-ativo]="j.titular" (click)="alternarTitular(j)">
+                <span class="jc-titular-num">{{ j.numero || '-' }}</span>
+                <span class="jc-titular-nome">{{ j.nome.split(' ')[0] }}</span>
+                <i class="fas fa-check jc-titular-check" *ngIf="j.titular"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="jc-config-acoes">
+            <button type="button" class="jc-btn jc-btn-primary" (click)="guardarConfigCronometro()"
+              [disabled]="cronoConfigGuardar">
+              <i class="fas" [ngClass]="cronoConfigGuardar ? 'fa-spinner fa-spin' : 'fa-check'"></i>
+              {{ cronoConfigSalva ? 'Guardar alterações' : 'Confirmar e preparar jogo' }}
+            </button>
+            <button type="button" class="jc-btn jc-btn-ghost" *ngIf="cronoConfigSalva"
+              (click)="cancelarEdicaoConfigCronometro()">
+              Cancelar
+            </button>
+          </div>
+        </div>
+
+        <!-- Resumo compacto da configuração, quando já está guardada -->
+        <div class="jc-config-resumo" *ngIf="cronoConfigSalva && !cronoConfigEditando">
+          <div class="jc-config-resumo-info">
+            <i class="fas fa-circle-check"></i>
+            <span>{{ cronoDuracaoParteMin }} min por parte · {{ cronoNumeroPartes }} partes · {{ contarTitulares() }} titulares</span>
+          </div>
+          <button type="button" class="jc-link-btn" (click)="editarConfigCronometro()">
+            <i class="fas fa-pen"></i> Editar
+          </button>
+        </div>
+
+        <!-- Relógio -->
+        <div class="jc-relogio" *ngIf="cronoConfigSalva && !cronoConfigEditando">
+          <div class="jc-relogio-topo">
+            <span class="jc-parte-badge">Parte {{ cronoParteAtual }}/{{ cronoNumeroPartes }}</span>
+            <span class="jc-status-badge" [class.jc-status-a-correr]="cronometroEmExecucao">
+              <span class="jc-status-dot"></span>
+              {{ cronometroEmExecucao ? 'A decorrer' : 'Parado' }}
+            </span>
+          </div>
+
+          <div class="jc-tempo-display" *ngIf="!cronoTempoEdicaoAtiva">
+            <span class="jc-tempo" [class.jc-tempo-a-correr]="cronometroEmExecucao">{{ cronoTempoDisplay }}</span>
+          </div>
+
+          <div class="jc-tempo-edicao" *ngIf="cronoTempoEdicaoAtiva">
+            <input type="text" [(ngModel)]="cronoTempoEdicaoValor" name="cronoEdicaoTempo" class="jc-input jc-input-tempo"
+              placeholder="MM:SS" />
+            <button type="button" class="jc-icon-btn jc-icon-btn-ok" (click)="guardarEdicaoTempoCronometro()" title="Guardar">
+              <i class="fas fa-check"></i>
+            </button>
+            <button type="button" class="jc-icon-btn" (click)="cancelarEdicaoTempoCronometro()" title="Cancelar">
+              <i class="fas fa-xmark"></i>
+            </button>
+          </div>
+
+          <div class="jc-controles">
+            <button type="button" class="jc-ctrl-btn jc-ctrl-principal" (click)="iniciarPararCronometro()"
+              [title]="cronometroEmExecucao ? 'Parar' : 'Iniciar'">
+              <i class="fas" [ngClass]="cronometroEmExecucao ? 'fa-pause' : 'fa-play'"></i>
+              <span>{{ cronometroEmExecucao ? 'Parar' : 'Iniciar' }}</span>
+            </button>
+            <button type="button" class="jc-ctrl-btn" (click)="abrirEdicaoTempoCronometro()" *ngIf="!cronoTempoEdicaoAtiva">
+              <i class="fas fa-pen"></i><span>Editar</span>
+            </button>
+            <button type="button" class="jc-ctrl-btn" (click)="terminarParteAtual()">
+              <i class="fas fa-forward-step"></i><span>Avançar parte</span>
+            </button>
+            <button type="button" class="jc-ctrl-btn" (click)="abrirModalSubstituicao()">
+              <i class="fas fa-arrows-rotate"></i><span>Substituição</span>
+            </button>
+            <button type="button" class="jc-ctrl-btn" (click)="mostrarModalTemposJogo = true">
+              <i class="fas fa-stopwatch"></i><span>Tempos de jogo</span>
+            </button>
+            <button type="button" class="jc-ctrl-btn jc-ctrl-fim" (click)="terminarJogo()">
+              <i class="fas fa-flag-checkered"></i><span>Terminar jogo</span>
+            </button>
+          </div>
+
+          <!-- Jogadores excluídos (cartão azul) -->
+          <div class="jc-excluidos" *ngIf="getJogadoresExcluidos().length > 0">
+            <span class="jc-excluidos-titulo">🟦 Excluídos</span>
+            <span class="jc-excluido-badge" *ngFor="let j of getJogadoresExcluidos()">
+              {{ j.nome.split(' ')[0] }} · {{ tempoExclusaoRestante(j) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal: Substituição (permite selecionar várias substituições de uma vez) -->
+      <div *ngIf="mostrarModalSubstituicao" class="jc-modal-overlay" (click)="mostrarModalSubstituicao=false">
+        <div class="jc-modal" (click)="$event.stopPropagation()">
+          <div class="jc-modal-header">
+            <h4><i class="fas fa-arrows-rotate"></i> Substituição</h4>
+          </div>
+          <p class="jc-sub-ajuda">Podes selecionar vários jogadores de cada lado para fazer várias substituições ao mesmo tempo.</p>
+
+          <div class="jc-sub-secao">
+            <p class="jc-sub-titulo jc-sub-titulo-sai">
+              <i class="fas fa-arrow-right-from-bracket"></i> Quem sai
+              <span class="jc-sub-contador" *ngIf="substituicaoSaiSelecionados.length">{{ substituicaoSaiSelecionados.length }}</span>
+            </p>
+            <div class="jc-sub-grid" *ngIf="jogadoresEmCampo().length">
+              <button type="button" *ngFor="let j of jogadoresEmCampo()" class="jc-sub-chip jc-sub-chip-sai"
+                [class.jc-sub-chip-selecionada]="substituicaoSaiSelecionados.includes(j.id_jogador)"
+                (click)="toggleSelecaoSai(j.id_jogador)">
+                <span class="jc-sub-chip-num">{{ j.numero || '-' }}</span>
+                <span class="jc-sub-chip-nome">{{ j.nome.split(' ')[0] }}</span>
+                <i class="fas fa-check jc-sub-chip-check" *ngIf="substituicaoSaiSelecionados.includes(j.id_jogador)"></i>
+              </button>
+            </div>
+            <div class="jc-vazio-estado jc-vazio-estado-compacta" *ngIf="jogadoresEmCampo().length===0">
+              <div class="jc-vazio-icon"><i class="fas fa-user-slash"></i></div>
+              <p class="jc-vazio">Ninguém em campo.</p>
+            </div>
+          </div>
+
+          <div class="jc-sub-seta"><i class="fas fa-arrow-down"></i></div>
+
+          <div class="jc-sub-secao">
+            <p class="jc-sub-titulo jc-sub-titulo-entra">
+              <i class="fas fa-arrow-right-to-bracket"></i> Quem entra
+              <span class="jc-sub-contador" *ngIf="substituicaoEntraSelecionados.length">{{ substituicaoEntraSelecionados.length }}</span>
+            </p>
+            <div class="jc-sub-grid" *ngIf="jogadoresBanco().length">
+              <button type="button" *ngFor="let j of jogadoresBanco()" class="jc-sub-chip jc-sub-chip-entra"
+                [class.jc-sub-chip-selecionada]="substituicaoEntraSelecionados.includes(j.id_jogador)"
+                (click)="toggleSelecaoEntra(j.id_jogador)">
+                <span class="jc-sub-chip-num">{{ j.numero || '-' }}</span>
+                <span class="jc-sub-chip-nome">{{ j.nome.split(' ')[0] }}</span>
+                <i class="fas fa-check jc-sub-chip-check" *ngIf="substituicaoEntraSelecionados.includes(j.id_jogador)"></i>
+              </button>
+            </div>
+            <div class="jc-vazio-estado jc-vazio-estado-compacta" *ngIf="jogadoresBanco().length===0">
+              <div class="jc-vazio-icon"><i class="fas fa-couch"></i></div>
+              <p class="jc-vazio">Não há jogadores no banco.</p>
+            </div>
+          </div>
+
+          <p class="jc-sub-aviso" *ngIf="substituicaoSaiSelecionados.length !== substituicaoEntraSelecionados.length">
+            <i class="fas fa-triangle-exclamation"></i> O número de jogadores que saem tem de ser igual ao que entram.
+          </p>
+
+          <div class="jc-modal-acoes">
+            <button type="button" class="jc-btn jc-btn-primary"
+              [disabled]="!substituicaoSaiSelecionados.length || substituicaoSaiSelecionados.length !== substituicaoEntraSelecionados.length"
+              (click)="confirmarSubstituicao()">
+              <i class="fas fa-check"></i> Confirmar
+            </button>
+            <button type="button" class="jc-btn jc-btn-ghost" (click)="mostrarModalSubstituicao=false">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Template partilhado para o formulário de evento (usado ao editar e ao adicionar) -->
+      <ng-template #formEventoTemplate let-evento="evento" let-prefixo="prefixo">
+        <div class="jc-form">
+          <div class="jc-form-linha">
+            <label>Tempo (MM:SS)</label>
+            <input [(ngModel)]="evento.tempo_evento" name="{{prefixo}}Tempo" class="jc-input" placeholder="00:00" />
+          </div>
+          <div class="jc-form-linha">
+            <label>Parte</label>
+            <input type="number" min="1" [(ngModel)]="evento.id_parte" name="{{prefixo}}Parte" class="jc-input" />
+          </div>
+          <div class="jc-form-linha">
+            <label>Tipo de evento</label>
+            <select [(ngModel)]="evento.tipo_evento" name="{{prefixo}}Tipo" class="jc-input">
+              <option *ngFor="let t of tiposEventoDisponiveis" [value]="t">{{ t }}</option>
+            </select>
+          </div>
+          <div class="jc-form-linha">
+            <label>{{ evento.tipo_evento==='SUBSTITUICAO' ? 'Jogador que entra' : 'Jogador' }}</label>
+            <select [(ngModel)]="evento.id_jogador" name="{{prefixo}}Jog" class="jc-input">
+              <option [ngValue]="0">—</option>
+              <option *ngFor="let j of jogo.jogadores" [ngValue]="j.id_jogador">{{ j.nome }}</option>
+            </select>
+          </div>
+          <div class="jc-form-linha" *ngIf="evento.tipo_evento==='SUBSTITUICAO'">
+            <label>Jogador que sai</label>
+            <select [(ngModel)]="evento.id_jogador_secundario" name="{{prefixo}}JogSai" class="jc-input">
+              <option [ngValue]="0">—</option>
+              <option *ngFor="let j of jogo.jogadores" [ngValue]="j.id_jogador">{{ j.nome }}</option>
+            </select>
+          </div>
+          <div class="jc-form-linha">
+            <label>Detalhe (opcional)</label>
+            <input [(ngModel)]="evento.detalhe" name="{{prefixo}}Det" class="jc-input" placeholder="ex: normal, p, ld..." />
+          </div>
+          <div class="jc-form-linha" *ngIf="evento.tipo_evento==='GOLO' || evento.tipo_evento==='GOLO_SOFRIDO'">
+            <label>Equipa</label>
+            <select [(ngModel)]="evento.id_equipa" name="{{prefixo}}Equipa" class="jc-input">
+              <option [ngValue]="0">Nossa equipa</option>
+              <option [ngValue]="1">Equipa adversária</option>
+            </select>
+          </div>
+        </div>
+      </ng-template>
+
+      <!-- Modal: Editar evento -->
+      <div *ngIf="mostrarModalEvento && eventoEmEdicao" class="jc-modal-overlay" (click)="mostrarModalEvento=false">
+        <div class="jc-modal" (click)="$event.stopPropagation()">
+          <div class="jc-modal-header">
+            <h4><i class="fas fa-pen"></i> Editar evento</h4>
+          </div>
+          <ng-container *ngTemplateOutlet="formEventoTemplate; context: { evento: eventoEmEdicao, prefixo: 'edEv' }"></ng-container>
+          <div class="jc-modal-acoes">
+            <button type="button" class="jc-btn jc-btn-primary" (click)="guardarEdicaoEvento()">
+              <i class="fas fa-check"></i> Guardar
+            </button>
+            <button type="button" class="jc-btn jc-btn-ghost" (click)="mostrarModalEvento=false">Cancelar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal: Adicionar evento -->
+      <div *ngIf="mostrarModalNovoEvento && novoEvento" class="jc-modal-overlay" (click)="cancelarNovoEvento()">
+        <div class="jc-modal" (click)="$event.stopPropagation()">
+          <div class="jc-modal-header">
+            <h4><i class="fas fa-circle-plus"></i> Adicionar evento</h4>
+          </div>
+          <ng-container *ngTemplateOutlet="formEventoTemplate; context: { evento: novoEvento, prefixo: 'novEv' }"></ng-container>
+          <div class="jc-modal-acoes">
+            <button type="button" class="jc-btn jc-btn-primary" (click)="guardarNovoEvento()">
+              <i class="fas fa-check"></i> Adicionar
+            </button>
+            <button type="button" class="jc-btn jc-btn-ghost" (click)="cancelarNovoEvento()">Cancelar</button>
+          </div>
+        </div>
+      </div>
 
       <!-- Mini placar fixo, para contexto durante o registo ao vivo -->
       <div class="v2-placar-mini">
@@ -89,12 +436,23 @@
         </label>
       </div>
 
+      <!-- Legenda em campo / banco, apenas relevante em modo cronómetro -->
+      <div class="jc-legenda" *ngIf="modoRegisto==='CRONOMETRO' && cronoConfigSalva">
+        <span class="jc-legenda-item"><span class="jc-legenda-dot jc-legenda-dot-campo"></span>Em campo</span>
+        <span class="jc-legenda-item"><span class="jc-legenda-dot jc-legenda-dot-banco"></span>Banco</span>
+      </div>
+
       <!-- Seletor de jogadores: fila horizontal de avatares, sempre visível -->
       <div class="v2-chip-row">
-        <div *ngFor="let jogador of jogo.jogadores" class="v2-chip"
+        <div *ngFor="let jogador of jogadoresParaRegisto()" class="v2-chip"
              [class.v2-chip-ativo]="jogador.id_jogador === activeJogadorId"
+             [class.v2-chip-em-campo]="modoRegisto==='CRONOMETRO' && cronoConfigSalva && jogador.emCampo"
+             [class.v2-chip-banco]="modoRegisto==='CRONOMETRO' && cronoConfigSalva && !jogador.emCampo"
              (click)="selecionarJogadorAtivo(jogador.id_jogador)">
-          <div class="v2-chip-avatar">{{ jogador.numero || '-' }}</div>
+          <div class="v2-chip-avatar">
+            {{ jogador.numero || '-' }}
+            <span class="v2-chip-em-campo-dot" *ngIf="modoRegisto==='CRONOMETRO' && cronoConfigSalva && jogador.emCampo"></span>
+          </div>
           <span class="v2-chip-nome">{{ jogador.nome.split(' ')[0] }}</span>
           <div class="v2-chip-badges">
             <span *ngIf="getTotalGolos(jogador) > 0" class="v2-badge v2-badge-golo">{{ getTotalGolos(jogador) }}</span>
@@ -117,15 +475,15 @@
               <div class="v2-mini-field">
                 <label>Nº</label>
                 <input type="number" [(ngModel)]="jogador.numero" name="numero-{{jogador.id_jogador}}" min="1"
-                  max="99" class="v2-input-numero" placeholder="--" />
+                  max="99" class="v2-input-numero" placeholder="--" (change)="guardarAlteracaoFichaCronometro()" />
               </div>
               <label class="v2-mini-toggle">
-                <input type="checkbox" [(ngModel)]="jogador.capitao" (change)="definirCapitao(jogador)"
+                <input type="checkbox" [(ngModel)]="jogador.capitao" (change)="definirCapitao(jogador); guardarAlteracaoFichaCronometro()"
                   name="capitao-{{jogador.id_jogador}}" />
                 Capitão
               </label>
               <label class="v2-mini-toggle">
-                <input type="checkbox" [(ngModel)]="jogador.gr" (change)="jogador.isGR = jogador.gr"
+                <input type="checkbox" [(ngModel)]="jogador.gr" (change)="jogador.isGR = jogador.gr; guardarAlteracaoFichaCronometro()"
                   name="isGR-{{jogador.id_jogador}}" />
                 Guarda-redes
               </label>
@@ -207,8 +565,8 @@
         </div>
       </div>
 
-      <!-- Histórico de eventos, com desfazer -->
-      <div class="v2-historico">
+      <!-- Histórico de eventos, com desfazer. Em modo cronómetro a timeline substitui esta função. -->
+      <div class="v2-historico" *ngIf="modoRegisto!=='CRONOMETRO'">
         <p class="v2-historico-titulo">Últimos eventos</p>
         <p *ngIf="historicoRegisto.length === 0" class="v2-historico-vazio">Sem eventos registados ainda.</p>
         <div *ngFor="let evento of historicoRegisto" class="v2-historico-item">
@@ -219,7 +577,7 @@
         </div>
       </div>
 
-      <div class="text-center mt-3">
+      <div class="text-center mt-3" *ngIf="modoRegisto!=='CRONOMETRO'">
         <button class="btn btn-success btn-lg" (click)="salvarRegisto()">
           <i class="fas fa-save me-2"></i>Salvar Registo
         </button>
@@ -227,7 +585,7 @@
     </div>
 
     <!-- Players -->
-    <div *ngIf="jogo.estado==='CONCLUIDO' && !mostrarRegisto" class="team-staff">
+    <div *ngIf="jogo.estado==='CONCLUIDO' && !mostrarRegisto && !mostrarTimelineVisualizacao" class="team-staff">
       <h2>👥 Jogadores</h2>
       <ul>
         <li *ngFor="let jogador of jogo.jogadores">
@@ -688,3 +1046,58 @@
     </div>
   </div>
 </div>
+
+<!-- Modal: Visualizar Tempos de Jogo (em tempo real enquanto o cronómetro está a correr) -->
+<div *ngIf="mostrarModalTemposJogo" class="jc-modal-overlay" (click)="mostrarModalTemposJogo = false">
+  <div class="jc-modal jc-modal-grande" (click)="$event.stopPropagation()">
+    <div class="jc-modal-header">
+      <div>
+        <h4><i class="fas fa-stopwatch"></i> Tempos de jogo</h4>
+        <p class="jc-modal-subtitulo">Parte {{ cronoParteAtual }}/{{ cronoNumeroPartes }} · {{ cronoDuracaoParteMin }} min por parte</p>
+      </div>
+      <span class="jc-modal-live" *ngIf="cronometroEmExecucao"><span class="jc-status-dot"></span>Em direto</span>
+    </div>
+
+    <!-- Jogadores em campo -->
+    <div *ngIf="jogadoresEmCampo().length" class="jc-tempo-grupo">
+      <div class="jc-tempo-grupo-titulo jc-tempo-grupo-campo">Em campo</div>
+      <div *ngFor="let j of jogadoresEmCampo()" class="jc-tempo-linha jc-tempo-linha-campo">
+        <div class="jc-tempo-linha-topo">
+          <span class="jc-tempo-nome">{{ j.nome }}</span>
+          <span class="jc-tempo-valor" [class.jc-tempo-valor-vivo]="cronometroEmExecucao">{{ formatarTempoSegundos(j.tempoJogoSegundos || 0) }}</span>
+          <button type="button" class="jc-tempo-corrigir" *ngIf="mostrarRegisto" title="Corrigir tempo de jogo" (click)="abrirCorrecaoTempoJogador(j)"><i class="fas fa-pen"></i></button>
+          <span class="jc-tempo-excl" *ngIf="j.excluidoAteSegundos">{{ tempoExclusaoRestante(j) }}</span>
+        </div>
+        <div class="jc-tempo-barra">
+          <div class="jc-tempo-barra-preenchida jc-tempo-barra-campo" [style.width.%]="percentagemTempoJogado(j)"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suplentes / banco -->
+    <div *ngIf="jogadoresBanco().length" class="jc-tempo-grupo">
+      <div class="jc-tempo-grupo-titulo jc-tempo-grupo-banco">Banco / suplentes</div>
+      <div *ngFor="let j of jogadoresBanco()" class="jc-tempo-linha">
+        <div class="jc-tempo-linha-topo">
+          <span class="jc-tempo-nome">{{ j.nome }}</span>
+          <span class="jc-tempo-valor">{{ formatarTempoSegundos(j.tempoJogoSegundos || 0) }}</span>
+          <button type="button" class="jc-tempo-corrigir" *ngIf="mostrarRegisto" title="Corrigir tempo de jogo" (click)="abrirCorrecaoTempoJogador(j)"><i class="fas fa-pen"></i></button>
+          <span class="jc-tempo-excl" *ngIf="j.excluidoAteSegundos">{{ tempoExclusaoRestante(j) }}</span>
+        </div>
+        <div class="jc-tempo-barra">
+          <div class="jc-tempo-barra-preenchida" [style.width.%]="percentagemTempoJogado(j)"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="jc-vazio-estado" *ngIf="!jogadoresEmCampo().length && !jogadoresBanco().length">
+      <div class="jc-vazio-icon"><i class="fas fa-stopwatch"></i></div>
+      <p class="jc-vazio">Sem dados de tempos.</p>
+    </div>
+
+    <div class="jc-modal-acoes">
+      <button type="button" class="jc-btn jc-btn-ghost" (click)="mostrarModalTemposJogo = false">Fechar</button>
+    </div>
+  </div>
+</div>
+

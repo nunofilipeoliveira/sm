@@ -22,6 +22,7 @@ export interface JogoData {
     obs: string;
     numeroJogo: String;
     jogadores: JogadorJogo[];
+    config?: JogoConfigData; // Modo de registo do jogo (NORMAL | CRONOMETRO)
 }
 
 export interface JogadorJogo {
@@ -60,4 +61,47 @@ export interface JogadorJogo {
     estado: string; // Ex: "Convocado", "Lesionado", "Suspenso", "Indisponível"
     obs: string; // Observações adicionais sobre o jogador na convocatória
     licenca?: string; // Número da licença do jogador
+    // Campos do modo cronómetro / timeline
+    titular?: boolean; // Pertence ao 5 inicial
+    emCampo?: boolean; // Está em campo neste momento
+    excluidoAteSegundos?: number | null; // Tempo absoluto de jogo até ao qual está excluído (cartão azul)
+    tempoJogoSegundos?: number; // Tempo de jogo (corrigido manualmente se tempoManual)
+    tempoManual?: boolean;
+    isTitular?: boolean; // Conveniência de UI
+}
+
+export interface JogoConfigData {
+    id?: number;
+    id_jogo: number;
+    modo_registo: string; // 'NORMAL' | 'CRONOMETRO'
+    duracao_parte_minutos: number;
+    numero_partes: number;
+    num_jogadores_iniciais: number;
+    duracao_exclusao_azul_segundos: number;
+    tempo_atual_segundos: number;
+    jogadores?: JogadorJogo[];
+}
+
+export interface JogoEventoData {
+    id?: number;
+    id_jogo: number;
+    id_parte: number;
+    tempo_evento: string;
+    tempo_segundos: number;
+    tipo_evento: string;
+    id_jogador?: number;
+    id_jogador_secundario?: number;
+    detalhe?: string | null;
+    obs?: string | null;
+    id_equipa?: number; // 0 = nossa equipa, 1 = equipa adversária
+    nome_jogador?: string | null;
+    nome_jogador_secundario?: string | null;
+}
+
+export interface AtualizarTempoJogoRequest {
+    id_jogo: number;
+    id_jogador: number;
+    tempo_correcao_segundos: number;
+    tempo_atual_segundos: number;
+    tempo_atual_display?: string;
 }
