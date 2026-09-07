@@ -38,6 +38,9 @@
                 <button type="button" class="btn btn-warning" (click)="alterarFicha()" *ngIf="!editMode">
                   <i class="fas fa-edit me-2"></i>Alterar Ficha
                 </button>
+                <button type="button" class="btn btn-danger me-2" (click)="eliminarFicha()" *ngIf="!editMode && isAdmin">
+                  <i class="fas fa-trash-alt me-2"></i>Eliminar Ficha
+                </button>
 
                   <button type="button" class="btn btn-outline-secondary me-2" (click)="cancelEdit()" *ngIf="editMode">
                     <i class="fas fa-times me-2"></i>Cancelar

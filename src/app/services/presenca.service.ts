@@ -17,6 +17,7 @@ export class PresencaService {
   URLGetPresencabyID = environment.apiUrl + "/sm/getPresencaById/";
   URLGetHistoricobyID = environment.apiUrl + "/sm/getHistoricoById/";
   URLisPresencabyEquipaDataHora = environment.apiUrl + "/sm/isPresencabyEquipaDataHora/";
+  URLDeletePresenca = environment.apiUrl + "/sm/eliminarPresenca/";
   URL_TOTAL_TRAININGS = environment.apiUrl + "/sm/dashboard/getTotalTrainings";
   URL_AVG_ATHLETES = environment.apiUrl + "/sm/dashboard/getAverageAthletes";
   URL_ABSENCE_PERCENTAGE = environment.apiUrl + "/sm/dashboard/getAbsencePercentage";
@@ -212,6 +213,14 @@ export class PresencaService {
     const headers = { 'Content-Type': 'application/json' };
     const urltmp = this.URLGetHistoricobyID + parmId;
     console.log('EquipaService | utl:', this, urltmp);
+    return this.http.put<any>(urltmp, { headers });
+
+  }
+
+  eliminarPresenca(parmIdPresenca: number, parmIDutilizador: number, parmTenantId: number) {
+    const headers = { 'Content-Type': 'application/json' };
+    const urltmp = this.URLDeletePresenca + parmIdPresenca + '_' + parmIDutilizador + '_' + parmTenantId;
+    console.log('PresencaService | eliminarPresenca | url:', urltmp);
     return this.http.put<any>(urltmp, { headers });
 
   }

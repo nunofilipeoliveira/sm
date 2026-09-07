@@ -10,6 +10,7 @@ import { PoppupMotivoComponent } from '../poppup-motivo/poppup-motivo.component'
 import { JogadorSeleccaoComponent } from '../jogador-seleccao/jogador-seleccao.component';
 import { EquipaService } from '../../services/equipa.service';
 import { LoginServiceService } from '../../services/login-service.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'presenca',
@@ -26,6 +27,7 @@ export class PresencaComponent implements OnInit {
   public editMode: boolean = false;
   public dataTreino: any;
   public time: any;
+  public isAdmin: boolean = false;
 
   getRowStyle(estado: string): string {
     switch (estado) {
@@ -78,6 +80,9 @@ export class PresencaComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.loginws.getLoginData().perfil === 'ADMIN' ? this.isAdmin = true : this.isAdmin = false;
+    console.log('PresencaComponent | ngOnInit | isAdmin:', this.isAdmin);
 
     const routeParams = this.route.snapshot.paramMap;
     const idFichaPresenca = Number(routeParams.get('id'));
@@ -158,6 +163,31 @@ export class PresencaComponent implements OnInit {
   alterarFicha() {
     // Enable edit mode in the same page
     this.editMode = true;
+  }
+
+  eliminarFicha() {
+    // Elimina a ficha de presenças (apenas utilizadores com perfil ADMIN)
+    if (confirm('Tem a certeza que deseja eliminar esta ficha de presenças? Esta operação não pode ser revertida.')) {
+      console.log('PresencaComponent | eliminarFicha | idFicha:', this.presencaData.id);
+      this.spinner = true;
+      this.presencaService.eliminarPresenca(this.presencaData.id, this.loginws.getLoginData().id, environment.tenant_id)
+        .subscribe({
+          next: (result) => {
+            if (result) {
+              console.log('PresencaComponent | eliminarFicha | ficha eliminada com sucesso');
+              this.spinner = false;
+              this.router.navigate(['/presencas']);
+            } else {
+              this.spinner = false;
+              console.error('PresencaComponent | eliminarFicha | não foi possível eliminar a ficha');
+            }
+          },
+          error: (error) => {
+            this.spinner = false;
+            console.error('PresencaComponent | eliminarFicha | erro ao eliminar a ficha:', error);
+          }
+        });
+    }
   }
 
   voltarParaPresencas() {
