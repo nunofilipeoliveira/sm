@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoginServiceService } from '../services/login-service.service';
 import { Router } from '@angular/router';
 import { ClubConfigService } from '../services/club-config.service';
+import { EquipaService } from '../services/equipa.service';
+import { PerformanceConfigService } from '../services/performance-config.service';
+import { Subscription } from 'rxjs';
 
 export interface RouteInfo {
   path: string;
@@ -29,29 +32,35 @@ export const ROUTES: RouteInfo[] = [
   templateUrl: 'sidebar.component.html',
 })
 
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
   public menuItems: any[] = [];
   public logoPath: string = ''; // Adicione esta propriedade
   public titleText: string = 'HC Maia'; // Nova propriedade para controlar o texto
   private tmpUser: string = '';
+  private perfConfigSub?: Subscription;
 
   historicologinsMenu: RouteInfo = { path: '/historicologins', title: 'Historico_Logins', icon: 'nc-bullet-list-67', class: '' };
   jogosMenu: RouteInfo = { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' };
   adminMenu: RouteInfo = { path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' };
   gestaoClubesMenu: RouteInfo = { path: '/gestao-clubes', title: 'Clubes', icon: 'nc-html5', class: '' };
-  performanceMenu: RouteInfo = { path: '/performance', title: 'Performance', icon: 'nc-chart-bar-32', class: '' };
+  performanceMenu: RouteInfo = { path: '/performance', title: 'Performance', icon: 'nc-favourite-28', class: '' };
   sairMenu: RouteInfo = { path: '/', title: 'Sair', icon: 'nc-key-25', class: 'active-pro' };
 
 
 
 
-  constructor(private loginws: LoginServiceService, private router: Router, private clubConfigService: ClubConfigService) { }
+  constructor(private loginws: LoginServiceService, private router: Router, private clubConfigService: ClubConfigService,
+    private equipaService: EquipaService, private perfConfigService: PerformanceConfigService) { }
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.tmpUser = this.loginws.getLoginData().user;
     console.log('Utilizador atual no sidebar:', this.tmpUser);
     console.log('Perfil do utilizador:', this.loginws.getLoginData().perfil);
 
+    
+    if (this.loginws.getLoginData().perfil == "ADMIN" || this.loginws.getLoginData().perfil == "TREINADOR") {
+      this.addPerformanceMenu();
+    }
 
     if (this.tmpUser == "Nuno") {
       this.menuItems.push(this.historicologinsMenu)
@@ -62,9 +71,6 @@ export class SidebarComponent implements OnInit {
       this.menuItems.push(this.adminMenu)
     }
 
-    if (this.loginws.getLoginData().perfil == "ADMIN" || this.loginws.getLoginData().perfil == "TREINADOR") {
-      this.menuItems.push(this.performanceMenu)
-    }
 
     this.menuItems.push(this.sairMenu);
 
@@ -73,6 +79,41 @@ export class SidebarComponent implements OnInit {
     this.logoPath = clubConfig.logoPath;
     this.titleText = clubConfig.name;
 
+    // Sincroniza o item "Performance" com a configuração da equipa atual
+    this.perfConfigSub = this.perfConfigService.config$.subscribe(() => this.syncPerformanceMenu());
+    const idEquipaAtual = this.equipaService.getEquipa()?.id
+      ?? Number(localStorage.getItem('idequipa_escalao') ?? 0);
+    if (idEquipaAtual > 0) {
+      this.perfConfigService.carregarConfig(idEquipaAtual);
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.perfConfigSub?.unsubscribe();
+  }
+
+  /** Adiciona o item do menu Performance (apenas se permitido por perfil). */
+  private addPerformanceMenu(): void {
+    const perfil = this.loginws.getLoginData().perfil;
+    if (perfil !== 'ADMIN' && perfil !== 'TREINADOR') { return; }
+    if (!this.menuItems.some(item => item.title === this.performanceMenu.title)) {
+      this.menuItems.push(this.performanceMenu);
+    }
+  }
+
+  /**
+   * Mantém o item "Performance" alinhado com a configuração da equipa:
+   * quando a funcionalidade de performance está desativada, o item é removido
+   * (é como se não existisse).
+   */
+  private syncPerformanceMenu(): void {
+    const perfAtiva = this.perfConfigService.performanceAtiva;
+    const idx = this.menuItems.findIndex(item => item.title === this.performanceMenu.title);
+    if (perfAtiva) {
+      this.addPerformanceMenu();
+    } else if (idx !== -1) {
+      this.menuItems.splice(idx, 1);
+    }
   }
 
   ngDoCheck() {

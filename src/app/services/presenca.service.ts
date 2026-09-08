@@ -133,7 +133,8 @@ export class PresencaService {
         id_jogador: j.id_jogador,
         nome_jogador: j.nome_jogador,
         estado: j.estado,
-        motivo: j.motivo
+        motivo: j.motivo,
+        classificacao: j.classificacao ?? null
       })),
       staffPresenca: parmPresenca.staffPresenca.map(s => ({
         id_staff: s.id_staff,
@@ -166,7 +167,8 @@ export class PresencaService {
         id_jogador: j.id_jogador,
         nome_jogador: j.nome_jogador,
         estado: j.estado,
-        motivo: j.motivo
+        motivo: j.motivo,
+        classificacao: j.classificacao ?? null
       })),
       staffPresenca: parmPresenca.staffPresenca.map(s => ({
         id_staff: s.id_staff,

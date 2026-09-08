@@ -156,7 +156,7 @@
                 <tbody>
                   <!-- Players Section -->
                   <tr class="table-secondary">
-                    <td colspan="4" class="border-0 fw-bold text-primary">
+                    <td [attr.colspan]="canRatePerformance ? 5 : 4" class="border-0 fw-bold text-primary">
                       <i class="fas fa-futbol me-2"></i>Jogadores
                     </td>
                   </tr>
@@ -207,7 +207,7 @@
 
                   <!-- Staff Section -->
                   <tr *ngIf="presencaStaff && presencaStaff.length > 0" class="table-secondary">
-                    <td colspan="4" class="border-0 fw-bold text-primary">
+                    <td [attr.colspan]="canRatePerformance ? 5 : 4" class="border-0 fw-bold text-primary">
                       <i class="fas fa-user-tie me-2"></i>Staff
                     </td>
                   </tr>

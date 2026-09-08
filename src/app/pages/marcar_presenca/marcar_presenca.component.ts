@@ -15,6 +15,7 @@ import { LoginServiceService } from '../../services/login-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EquipaData } from '../equipa/equipaData';
 import { StarRatingComponent } from '../../shared/star-rating/star-rating.component';
+import { PerformanceService } from '../../services/performance.service';
 
 
 
@@ -92,7 +93,7 @@ export class Marcar_presencaComponent implements OnInit {
   public sbmvalidacao = false;
   public sbmErroDia = false;
 
-  constructor(private router: Router, private modalService: NgbModal, private equipaService: EquipaService, private presencaService: PresencaService, private loginws: LoginServiceService, private route: ActivatedRoute) {
+  constructor(private router: Router, private modalService: NgbModal, private equipaService: EquipaService, private presencaService: PresencaService, private loginws: LoginServiceService, private route: ActivatedRoute, private performanceService: PerformanceService) {
 
     this.equipaData = {
       id: 0,
@@ -126,7 +127,29 @@ export class Marcar_presencaComponent implements OnInit {
     // If editing existing attendance, load team data and show the form
     if (this.idFicha > 0) {
       this.loadTeamDataAndInitialize();
+    } else {
+      // Nova presença: aplica a configuração de performance da equipa ativa
+      const idEquipaAtiva = this.equipaService.getEquipa()?.id ?? 0;
+      this.aplicarConfigPerformance(idEquipaAtiva);
     }
+  }
+
+  /**
+   * Configuração da equipa: se a funcionalidade de performance estiver
+   * desativada (registo OU visualização bloqueados), esconde as estrelas.
+   */
+  private aplicarConfigPerformance(parmIdEquipa: number): void {
+    if (parmIdEquipa <= 0) { return; }
+    this.performanceService.getPerformanceConfig(parmIdEquipa).subscribe({
+      next: (config) => {
+        const perfil = this.loginws.getLoginData().perfil;
+        const perfilPermite = (perfil === 'ADMIN' || perfil === 'TREINADOR');
+        this.canRatePerformance = perfilPermite && !!config?.permitir_registo && !!config?.permitir_visualizacao;
+      },
+      error: (error) => {
+        console.error('Marcar_presencaComponent | aplicarConfigPerformance | erro', error);
+      }
+    });
   }
 
   private loadTeamDataAndInitialize() {
@@ -139,6 +162,9 @@ export class Marcar_presencaComponent implements OnInit {
           console.log("Marcar_presencaComponent | equipa loaded", this.equipaData);
           console.log("Marcar_presencaComponent | equipa staff", this.equipaData.staff);
           console.log("Marcar_presencaComponent | staff length", this.equipaData.staff?.length || 0);
+
+          // Aplica a configuração de performance da equipa (esconde as estrelas se desativada)
+          this.aplicarConfigPerformance(this.equipaData.id);
 
           // After loading team data, validate date and show team members
           this.validateDateAndShowTeam();
@@ -295,6 +321,9 @@ export class Marcar_presencaComponent implements OnInit {
             this.presenca = data;
             let tmphora = this.presenca.hora.split(':')
             this.time = { hour: Number(tmphora[0]), minute: Number(tmphora[1]) };
+
+            // Aplica a configuração de performance da equipa da ficha
+            this.aplicarConfigPerformance(this.presenca.id_escalao);
 
             console.log("dia:", this.presenca.data - ((this.presenca.data / 10000 | 0) * 10000 + ((((this.presenca.data) - ((this.presenca.data / 10000 | 0) * 10000)) / 100 | 0)) * 100));
 

@@ -1,0 +1,170 @@
+/* Performance dos atletas — layout responsivo (mobile first) */
+
+/* ===== Cabeçalho ===== */
+.perf-titulo {
+  font-size: 1.15rem;
+}
+
+@media (min-width: 768px) {
+  .perf-titulo {
+    font-size: 1.5rem;
+  }
+}
+
+/* ===== Filtros ===== */
+.perf-filtros .btn-group {
+  flex-wrap: wrap;
+}
+
+.perf-data {
+  max-width: 9.5rem;
+}
+
+/* ===== Cartões de resumo ===== */
+.perf-card {
+  background: #fff;
+  border: 1px solid #eef0f3;
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.perf-card-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0d6efd;
+  line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+  .perf-card {
+    padding: 1rem;
+  }
+
+  .perf-card-value {
+    font-size: 1.6rem;
+  }
+}
+
+/* ===== Lista de atletas ===== */
+.perf-lista {
+  background: #fff;
+  border-radius: 0 0 calc(0.375rem - 1px) calc(0.375rem - 1px);
+  overflow: hidden;
+}
+
+.perf-item + .perf-item {
+  border-top: 1px solid #eef0f3;
+}
+
+.perf-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: 3rem; /* alvo de toque confortável em mobile */
+  padding: 0.5rem 0.75rem;
+  background: none;
+  border: 0;
+  text-align: left;
+}
+
+.perf-item-header:hover,
+.perf-item-header:focus {
+  background: #f8f9fa;
+  outline: none;
+}
+
+.perf-item-nome {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #212529;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.perf-item-dados {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.perf-item-media {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0d6efd;
+  min-width: 2.2rem;
+  text-align: right;
+}
+
+.perf-chev {
+  color: #6c757d;
+  font-size: 0.8rem;
+  transition: transform 0.2s ease-in-out;
+}
+
+.perf-chev-aberto {
+  transform: rotate(180deg);
+}
+
+/* ===== Corpo expandido ===== */
+.perf-item-body {
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-top: 1px dashed #e3e6ea;
+}
+
+.perf-mini-stat {
+  background: #fff;
+  border: 1px solid #eef0f3;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.perf-mini-stat span {
+  font-size: 1.05rem;
+}
+
+/* ===== Gráfico ===== */
+.perf-chart-box {
+  position: relative;
+  height: 220px;
+}
+
+@media (max-width: 575.98px) {
+  .perf-chart-box {
+    height: 180px;
+  }
+}
+
+/* ===== Controles do cabeçalho da lista ===== */
+.perf-pesquisa {
+  max-width: 14rem;
+}
+
+.perf-ordenacao {
+  max-width: 8rem;
+}
+
+@media (max-width: 575.98px) {
+  .perf-header-controles {
+    width: 100%;
+  }
+
+  .perf-pesquisa {
+    max-width: none;
+    flex: 1 1 8rem;
+  }
+}
+
+.table > :not(caption) > * > * {
+  border-color: #eef0f3;
+}

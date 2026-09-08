@@ -7,6 +7,8 @@ import { RouterModule } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { JogadorSeleccaoComponent } from '../jogador-seleccao/jogador-seleccao.component';
 import { EquipaData } from '../equipa/equipaData';
+import { PerformanceConfigData, PerformanceService } from '../../services/performance.service';
+import { PerformanceConfigService } from '../../services/performance-config.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -31,12 +33,39 @@ export class GestaoEquipaComponent implements OnInit {
   idEquipa = 0;
   private routeSub!: Subscription;
 
+  // Configuração de performance da equipa (registo e visualização)
+  performanceConfig: PerformanceConfigData = { id_equipa: 0, permitir_registo: true, permitir_visualizacao: true };
+  loadingPerformanceConfig = false;
+  aGravarPerformanceConfig = false;
+  sbmPerformanceSuccess = false;
+  sbmPerformanceError = false;
+
   constructor(
     private equipaService: EquipaService,
     private router: Router,
     private route: ActivatedRoute,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private performanceService: PerformanceService,
+    private perfConfigService: PerformanceConfigService
   ) { }
+
+  /** A funcionalidade de performance considera-se ativa quando registo E visualização estão permitidos. */
+  get performanceAtiva(): boolean {
+    return this.performanceConfig.permitir_registo && this.performanceConfig.permitir_visualizacao;
+  }
+
+  set performanceAtiva(ativa: boolean) {
+    this.performanceConfig.permitir_registo = ativa;
+    this.performanceConfig.permitir_visualizacao = ativa;
+  }
+
+  /** Altera o estado (liga/desliga) da funcionalidade de performance da equipa. */
+  togglePerformance(): void {
+    this.performanceAtiva = !this.performanceAtiva;
+    this.gravarPerformanceConfig();
+    // Propaga o novo estado aos restantes componentes (sidebar, presenças, etc.)
+    this.perfConfigService.setConfig({ ...this.performanceConfig });
+  }
 
   ngOnInit() {
 
@@ -59,6 +88,12 @@ export class GestaoEquipaComponent implements OnInit {
 
     this.carregarEquipa(this.idEquipa);
 
+    // Carregar a configuração de performance da equipa
+    const idEquipaConfig = this.idEquipa > 0 ? this.idEquipa : (this.equipaService.getEquipa()?.id ?? 0);
+    if (idEquipaConfig > 0) {
+      this.carregarPerformanceConfig(idEquipaConfig);
+    }
+
     // Subscrever a mudanças de parâmetros de rota para recarregar a equipa
     // quando se regressa de staff-seleccao ou jogador-seleccao
     this.routeSub = this.route.params.subscribe(params => {
@@ -66,6 +101,7 @@ export class GestaoEquipaComponent implements OnInit {
       if (newIdEquipa > 0 && newIdEquipa !== this.idEquipa) {
         this.idEquipa = newIdEquipa;
         this.carregarEquipa(this.idEquipa);
+        this.carregarPerformanceConfig(newIdEquipa);
       }
     });
 
@@ -288,5 +324,53 @@ export class GestaoEquipaComponent implements OnInit {
         }
       });
     }
+  }
+
+  // ==================== CONFIGURAÇÃO DE PERFORMANCE ====================
+
+  /** Carrega a configuração de performance da equipa (por omissão: tudo permitido). */
+  carregarPerformanceConfig(idEquipa: number) {
+    this.loadingPerformanceConfig = true;
+    this.performanceService.getPerformanceConfig(idEquipa).subscribe({
+      next: (config) => {
+        this.performanceConfig = {
+          id_equipa: idEquipa,
+          permitir_registo: config?.permitir_registo ?? true,
+          permitir_visualizacao: config?.permitir_visualizacao ?? true
+        };
+        this.perfConfigService.setConfig({ ...this.performanceConfig });
+        this.loadingPerformanceConfig = false;
+      },
+      error: (error) => {
+        console.error('GestaoEquipaComponent | carregarPerformanceConfig | erro', error);
+        this.performanceConfig = { id_equipa: idEquipa, permitir_registo: true, permitir_visualizacao: true };
+        this.loadingPerformanceConfig = false;
+      }
+    });
+  }
+
+  /** Grava a configuração de performance da equipa no backend. */
+  gravarPerformanceConfig() {
+    if (!this.performanceConfig.id_equipa) {
+      return;
+    }
+    this.aGravarPerformanceConfig = true;
+    this.sbmPerformanceSuccess = false;
+    this.sbmPerformanceError = false;
+
+    this.performanceService.gravarPerformanceConfig(this.performanceConfig).subscribe({
+      next: () => {
+        this.aGravarPerformanceConfig = false;
+        this.sbmPerformanceSuccess = true;
+        this.perfConfigService.setConfig({ ...this.performanceConfig });
+        setTimeout(() => { this.sbmPerformanceSuccess = false; }, 4000);
+      },
+      error: (error) => {
+        console.error('GestaoEquipaComponent | gravarPerformanceConfig | erro', error);
+        this.aGravarPerformanceConfig = false;
+        this.sbmPerformanceError = true;
+        setTimeout(() => { this.sbmPerformanceError = false; }, 5000);
+      }
+    });
   }
 }

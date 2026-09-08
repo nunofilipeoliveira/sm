@@ -1,0 +1,184 @@
+<div class="container-fluid mt-3 mt-md-4 perf-page">
+
+  <!-- Cabeçalho -->
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+    <div>
+      <h4 class="fw-bold mb-0 perf-titulo"><i class="fas fa-chart-line me-2 text-primary"></i>Performance dos Atletas</h4>
+      <small class="text-muted">Evolução do desempenho nos treinos</small>
+    </div>
+    <button type="button" class="btn btn-outline-primary btn-sm" (click)="carregarPerformance()" [disabled]="loading">
+      <i class="fas fa-rotate-right me-1"></i><span class="d-none d-sm-inline">Atualizar</span>
+    </button>
+  </div>
+
+  <!-- Filtros: período + datas específicas -->
+  <div class="card shadow-sm perf-filtros mb-3">
+    <div class="card-body py-2">
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <div class="btn-group flex-wrap" role="group" aria-label="Período">
+          <button type="button" [class]="classeModo('epoca')" (click)="setFiltroModo('epoca')">Época</button>
+          <button type="button" [class]="classeModo('semana')" (click)="setFiltroModo('semana')">Semana</button>
+          <button type="button" [class]="classeModo('mes')" (click)="setFiltroModo('mes')">Mês</button>
+          <button type="button" [class]="classeModo('custom')" (click)="setFiltroModo('custom')">Datas</button>
+        </div>
+
+        <div class="d-flex align-items-center gap-1 gap-md-2" *ngIf="filtroModo === 'custom'">
+          <input type="date" class="form-control form-control-sm perf-data" [(ngModel)]="dataInicioInput"
+                 (change)="aplicarFiltroCustom()" aria-label="Data inicial">
+          <span class="text-muted">–</span>
+          <input type="date" class="form-control form-control-sm perf-data" [(ngModel)]="dataFimInput"
+                 (change)="aplicarFiltroCustom()" aria-label="Data final">
+        </div>
+
+        <small class="text-muted ms-md-auto" *ngIf="descritivoFiltro">{{ descritivoFiltro }}</small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spinner -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">A carregar...</span>
+    </div>
+    <p class="text-muted mt-2 mb-0">A carregar performance...</p>
+  </div>
+
+  <!-- Erro -->
+  <div class="alert alert-danger" *ngIf="sbmError && !loading && !performanceDesativado">
+    <i class="fas fa-triangle-exclamation me-2"></i>Erro ao carregar os dados de performance. Tente novamente.
+  </div>
+
+  <ng-container *ngIf="!loading && !performanceDesativado">
+    <ng-container *ngIf="performanceEquipa as equipa">
+
+      <!-- Cartões de resumo -->
+      <div class="row g-2 g-md-3 mb-3">
+        <div class="col-6 col-md-3">
+          <div class="perf-card">
+            <div class="perf-card-value">{{ equipa.total_treinos }}</div>
+            <small class="text-muted">Treinos</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="perf-card">
+            <div class="perf-card-value">{{ equipa.percentagem_presencas | number: '1.0-0' }}%</div>
+            <small class="text-muted">Presenças</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="perf-card">
+            <div class="perf-card-value">{{ equipa.media_classificacao ? (equipa.media_classificacao | number: '1.1-2') : '-' }}</div>
+            <small class="text-muted">Média de Classificação</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="perf-card">
+            <div class="perf-card-value">{{ equipa.num_jogadores }}</div>
+            <small class="text-muted">Atletas</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lista de atletas (expansível) -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <h6 class="mb-0 fw-bold"><i class="fas fa-users me-2 text-primary"></i>{{ equipa.nome_equipa }}</h6>
+          <div class="d-flex align-items-center gap-2 perf-header-controles">
+            <input type="text" class="form-control form-control-sm perf-pesquisa" placeholder="Pesquisar atleta..."
+                   [(ngModel)]="filtroNome" aria-label="Pesquisar atleta">
+            <select class="form-select form-select-sm perf-ordenacao" [(ngModel)]="ordenacao" aria-label="Ordenar por">
+              <option value="media">Média</option>
+              <option value="presencas">Presenças</option>
+              <option value="nome">Nome</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="perf-lista" *ngIf="getJogadores().length > 0; else semJogadores">
+          <div class="perf-item" *ngFor="let jogador of getJogadores()">
+            <button type="button" class="perf-item-header"
+                    (click)="toggleJogador(jogador.id_jogador)"
+                    [attr.aria-expanded]="jogadorExpandidoId === jogador.id_jogador">
+              <span class="perf-item-nome">
+                <i class="fas fa-user me-2 text-secondary"></i>{{ jogador.nome_jogador }}
+              </span>
+              <span class="perf-item-dados">
+                <span class="d-none d-md-inline text-muted small">
+                  {{ jogador.total_presencas }}/{{ jogador.total_treinos }} treinos
+                </span>
+                <star-rating [value]="jogador.media_classificacao" [readonly]="true" size="sm"></star-rating>
+                <span class="perf-item-media">{{ jogador.media_classificacao ? (jogador.media_classificacao | number: '1.1-2') : '-' }}</span>
+                <i class="fas fa-chevron-down perf-chev" [class.perf-chev-aberto]="jogadorExpandidoId === jogador.id_jogador"></i>
+              </span>
+            </button>
+
+            <div class="perf-item-body" *ngIf="jogadorExpandidoId === jogador.id_jogador">
+              <div *ngIf="detalheLoading" class="text-center py-4">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">A carregar...</span>
+                </div>
+                <span class="text-muted ms-2">A carregar histórico...</span>
+              </div>
+
+              <div class="alert alert-danger py-2" *ngIf="detalheErro && !detalheLoading">
+                <i class="fas fa-triangle-exclamation me-2"></i>Erro ao carregar o histórico do atleta.
+              </div>
+
+              <div *ngIf="!detalheLoading && !detalheErro && jogadorDetalhe">
+                <!-- Mini estatísticas do atleta -->
+                <div class="row g-2 mb-3">
+                  <div class="col-6 col-md-3">
+                    <div class="perf-mini-stat">
+                      <span class="fw-bold">{{ jogadorDetalhe.total_treinos }}</span>
+                      <small class="text-muted">Treinos</small>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="perf-mini-stat">
+                      <span class="fw-bold">{{ jogadorDetalhe.percentagem_presencas | number: '1.0-0' }}%</span>
+                      <small class="text-muted">Presenças</small>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="perf-mini-stat">
+                      <span class="fw-bold">{{ jogadorDetalhe.treinos_avaliados }}</span>
+                      <small class="text-muted">Avaliações</small>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-3">
+                    <div class="perf-mini-stat">
+                      <span class="fw-bold">{{ jogadorDetalhe.media_classificacao ? (jogadorDetalhe.media_classificacao | number: '1.1-2') : '-' }}</span>
+                      <small class="text-muted">Média</small>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Gráfico de evolução das classificações -->
+                <div *ngIf="jogadorDetalhe.evolucao.length > 0; else semAvaliacoes">
+                  <h6 class="fw-bold small text-uppercase text-muted mb-2">
+                    <i class="fas fa-arrow-trend-up me-2"></i>Evolução das classificações nos treinos
+                  </h6>
+                  <div class="perf-chart-box">
+                    <canvas #evolucaoCanvas></canvas>
+                  </div>
+                </div>
+                <ng-template #semAvaliacoes>
+                  <p class="text-muted mb-0">
+                    <i class="fas fa-circle-info me-2"></i>Sem classificações registadas no período selecionado.
+                  </p>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #semJogadores>
+          <div class="card-body text-center text-muted py-4">
+            <i class="fas fa-circle-info me-2"></i>Sem dados de performance para esta equipa.
+          </div>
+        </ng-template>
+      </div>
+
+    </ng-container>
+  </ng-container>
+
+</div>

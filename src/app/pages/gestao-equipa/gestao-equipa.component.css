@@ -98,3 +98,231 @@ body{
       background-color: rgba(59,118,225,.25)!important;
   }
 
+  /* ============ Configuração de Performance ============ */
+  .perf-config-card {
+    border: 1px solid #e3e6ed;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    box-shadow: 0 0.15rem 0.5rem rgba(0, 0, 0, 0.04);
+  }
+
+  .perf-config-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    background: linear-gradient(135deg, #fdf6e3 0%, #fffbe8 100%);
+    border-bottom: 1px solid #f0e8c8;
+    flex-wrap: wrap;
+  }
+
+  .perf-config-icon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, #f6b73c 0%, #e2a01f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    box-shadow: 0 0.25rem 0.6rem rgba(230, 160, 31, 0.35);
+  }
+
+  .perf-config-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #6b5000;
+  }
+
+  .perf-config-subtitle {
+    color: #9a7d2e;
+  }
+
+  .perf-config-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 1rem;
+    border-radius: 2rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .perf-config-badge-on {
+    background-color: #d9f4e3;
+    color: #137a45;
+    border: 1px solid #a5dbbd;
+  }
+
+  .perf-config-badge-off {
+    background-color: #fbe1e1;
+    color: #b33737;
+    border: 1px solid #eeb9b9;
+  }
+
+  .perf-config-desc {
+    color: #63708c;
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .perf-config-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .perf-config-item {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e3e6ed;
+    border-radius: 0.6rem;
+    background-color: #fafbff;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .perf-config-item-off {
+    opacity: 0.55;
+    background-color: #f6f7f9;
+  }
+
+  .perf-config-item-icon {
+    color: #3b76e1;
+    font-size: 1.1rem;
+    width: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .perf-config-item-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .perf-config-item-text small {
+    color: #8a96ad;
+  }
+
+  .perf-config-check {
+    flex-shrink: 0;
+    font-size: 1.1rem;
+  }
+
+  .perf-config-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 0.6rem;
+    background-color: #f4f6fb;
+    border: 1px dashed #cfd6e4;
+    flex-wrap: wrap;
+  }
+
+  .perf-config-toggle-info {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .perf-config-toggle-info small {
+    margin-top: 0.2rem;
+  }
+
+  /* Switch grande (efeito iOS) com alvo de toque confortável para mobile */
+  .perf-config-switch {
+    width: 4.5rem;
+    height: 2.6rem;
+    min-width: 4.5rem;
+    min-height: 2.6rem;
+    border-radius: 2rem;
+    border: 2px solid #c3cad6;
+    background-color: #d9dde5;
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+    transition: background-color 0.25s ease, border-color 0.25s ease;
+    flex-shrink: 0;
+  }
+
+  .perf-config-switch:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .perf-config-switch-thumb {
+    position: absolute;
+    top: 50%;
+    left: 0.2rem;
+    transform: translateY(-50%);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background-color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8894a8;
+    font-size: 0.9rem;
+    box-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.2);
+    transition: left 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+  }
+
+  .perf-config-switch-on {
+    background-color: #1a9e5c;
+    border-color: #1a9e5c;
+  }
+
+  .perf-config-switch-on .perf-config-switch-thumb {
+    left: calc(100% - 2.2rem);
+    color: #1a9e5c;
+  }
+
+  /* Mobile: empilhar a informação e garantir área de toque confortável */
+  @media (max-width: 575.98px) {
+    .perf-config-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+
+    .perf-config-badge {
+      padding: 0.55rem 1.1rem;
+      font-size: 0.9rem;
+    }
+
+    .perf-config-toggle-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 1rem;
+    }
+
+    .perf-config-switch {
+      align-self: flex-end;
+      width: 5rem;
+      height: 2.9rem;
+      min-width: 5rem;
+      min-height: 2.9rem;
+    }
+
+    .perf-config-switch-thumb {
+      width: 2.3rem;
+      height: 2.3rem;
+    }
+
+    .perf-config-switch-on .perf-config-switch-thumb {
+      left: calc(100% - 2.5rem);
+    }
+  }
+

@@ -12,6 +12,7 @@ import { EquipaService } from '../../services/equipa.service';
 import { LoginServiceService } from '../../services/login-service.service';
 import { environment } from '../../../environments/environment';
 import { StarRatingComponent } from '../../shared/star-rating/star-rating.component';
+import { PerformanceService } from '../../services/performance.service';
 
 @Component({
   selector: 'presenca',
@@ -65,7 +66,7 @@ export class PresencaComponent implements OnInit {
     }
   }
 
-  constructor(private route: ActivatedRoute, private presencaService: PresencaService, private router: Router, private modalService: NgbModal, private equipaService: EquipaService, private loginws: LoginServiceService) {
+  constructor(private route: ActivatedRoute, private presencaService: PresencaService, private router: Router, private modalService: NgbModal, private equipaService: EquipaService, private loginws: LoginServiceService, private performanceService: PerformanceService) {
 
     this.presencaData = {
       id: 0,
@@ -97,6 +98,8 @@ export class PresencaComponent implements OnInit {
       next: (equipaData) => {
         if (equipaData) {
           console.log("PresencaComponent | equipa loaded", equipaData);
+          // Configuração da equipa para o registo de classificações
+          this.aplicarConfigPerformance(equipaData.id);
         } else {
           console.error("PresencaComponent | No equipa data available");
         }
@@ -347,6 +350,26 @@ export class PresencaComponent implements OnInit {
       default:
         return 'btn-outline-secondary';
     }
+  }
+
+  /**
+   * Configuração da equipa: se a funcionalidade de performance estiver
+   * desativada (registo OU visualização bloqueados), a coluna de classificações
+   * é completamente escondida (como se a funcionalidade não existisse) — o
+   * backend também ignora os valores ao gravar.
+   */
+  aplicarConfigPerformance(parmIdEquipa: number): void {
+    if (parmIdEquipa <= 0) { return; }
+    this.performanceService.getPerformanceConfig(parmIdEquipa).subscribe({
+      next: (config) => {
+        const perfil = this.loginws.getLoginData().perfil;
+        const perfilPermite = (perfil === 'ADMIN' || perfil === 'TREINADOR');
+        this.canRatePerformance = perfilPermite && !!config?.permitir_registo && !!config?.permitir_visualizacao;
+      },
+      error: (error) => {
+        console.error('PresencaComponent | aplicarConfigPerformance | erro', error);
+      }
+    });
   }
 
 }

@@ -12,6 +12,7 @@ import { JogoData } from '../lista-jogos/jogoData';
 import { EquipaData } from '../equipa/equipaData';
 import { environment } from '../../../environments/environment';
 import { PerformanceService, PerformanceResumoJogadorData } from '../../services/performance.service';
+import { PerformanceConfigService } from '../../services/performance-config.service';
 
 
 @Component({
@@ -110,7 +111,7 @@ export class FichaJogadorComponent implements OnInit {
   private pinchStartDistance: number = 0;
   private pinchStartUserScale: number = 1;
 
-  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private router: Router, private ficheirosService: FicheirosService, private jogoService: JogoService, private performanceService: PerformanceService) {
+  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private router: Router, private ficheirosService: FicheirosService, private jogoService: JogoService, private performanceService: PerformanceService, private perfConfigService: PerformanceConfigService) {
     this.jogadorData = {
       id: 0,
       nome: "",
@@ -149,7 +150,7 @@ export class FichaJogadorComponent implements OnInit {
     const perfilAtual = this.loginservice.getLoginData()?.perfil;
     this.canViewPerformance = (perfilAtual === 'ADMIN' || perfilAtual === 'TREINADOR');
     if (this.canViewPerformance) {
-      this.carregarPerformance(idJogador);
+      this.aplicarConfigPerformanceParaFicha(idJogador);
     }
 
     console.log('FichaJogadorComoponent | idJogador:', idJogador);
@@ -1036,6 +1037,38 @@ export class FichaJogadorComponent implements OnInit {
     });
 
     return treinosPresentes.length;
+  }
+
+  /**
+   * Verifica a configuração de performance da equipa atual: se a funcionalidade
+   * estiver desativada, a secção de performance da ficha não é apresentada
+   * (é como se não existisse). Só avança para o carregamento se estiver ativa.
+   */
+  aplicarConfigPerformanceParaFicha(idJogador: number): void {
+    const idEquipaAtual = this.equipaService.getEquipa()?.id
+      ?? Number(localStorage.getItem('idequipa_escalao') ?? 0);
+    if (idEquipaAtual <= 0) {
+      this.carregarPerformance(idJogador);
+      return;
+    }
+    this.performanceService.getPerformanceConfig(idEquipaAtual).subscribe({
+      next: (config) => {
+        const perfil = this.loginservice.getLoginData()?.perfil;
+        const perfilPermite = (perfil === 'ADMIN' || perfil === 'TREINADOR');
+        this.canViewPerformance = perfilPermite && !!config?.permitir_registo && !!config?.permitir_visualizacao;
+        if (this.canViewPerformance) {
+          this.carregarPerformance(idJogador);
+        } else {
+          this.performanceData = null;
+          this.showPerformance = false;
+        }
+      },
+      error: (error) => {
+        console.error('FichaJogadorComponent | aplicarConfigPerformanceParaFicha | erro', error);
+        // Em caso de erro, mantém o comportamento atual (carrega performance)
+        this.carregarPerformance(idJogador);
+      }
+    });
   }
 
   carregarPerformance(idJogador: number) {

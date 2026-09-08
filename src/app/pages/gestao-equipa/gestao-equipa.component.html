@@ -83,4 +83,94 @@
       </div>
     </div>
   </div>
+
+  <!-- Configuração de Performance da equipa -->
+  <div class="row" *ngIf="!loading && performanceConfig.id_equipa > 0">
+    <div class="col-12">
+      <div class="card perf-config-card">
+        <div class="card-header perf-config-header">
+          <div class="d-flex align-items-center gap-3">
+            <div class="perf-config-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <div>
+              <h4 class="card-title perf-config-title mb-0">Performance dos Atletas</h4>
+              <small class="perf-config-subtitle">Registo e consulta de classificações (1 a 5) nos treinos</small>
+            </div>
+          </div>
+
+          <span class="perf-config-badge" [ngClass]="performanceAtiva ? 'perf-config-badge-on' : 'perf-config-badge-off'">
+            <i class="fas me-1" [ngClass]="performanceAtiva ? 'fa-circle-check' : 'fa-circle-xmark'"></i>
+            {{ performanceAtiva ? 'ATIVADA' : 'DESATIVADA' }}
+          </span>
+        </div>
+
+        <div class="card-body">
+          <p class="perf-config-desc">
+            A funcionalidade de <strong>performance de jogadores</strong> controla todo o registo de
+            classificações (estrelas 1 a 5) e a consulta dos indicadores de desempenho desta equipa.
+          </p>
+
+          <div class="perf-config-list">
+            <div class="perf-config-item" [class.perf-config-item-off]="!performanceAtiva">
+              <i class="fas fa-star perf-config-item-icon"></i>
+              <div class="perf-config-item-text">
+                <strong>Registo de classificações</strong>
+                <small>Avaliar os atletas com estrelas ao marcar as presenças</small>
+              </div>
+              <span class="perf-config-check">
+                <i class="fas" [ngClass]="performanceAtiva ? 'fa-check text-success' : 'fa-ban text-danger'"></i>
+              </span>
+            </div>
+
+            <div class="perf-config-item" [class.perf-config-item-off]="!performanceAtiva">
+              <i class="fas fa-chart-line perf-config-item-icon"></i>
+              <div class="perf-config-item-text">
+                <strong>Indicadores de performance</strong>
+                <small>Menu e página com a evolução das classificações da equipa</small>
+              </div>
+              <span class="perf-config-check">
+                <i class="fas" [ngClass]="performanceAtiva ? 'fa-check text-success' : 'fa-ban text-danger'"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="perf-config-toggle-row">
+            <div class="perf-config-toggle-info">
+              <strong>{{ performanceAtiva ? 'Performance ativa' : 'Performance desativada' }}</strong>
+              <small *ngIf="performanceAtiva" class="text-success">
+                <i class="fas fa-circle-info me-1"></i>Os atletas podem ser avaliados e os indicadores ficam visíveis.
+              </small>
+              <small *ngIf="!performanceAtiva" class="text-danger">
+                <i class="fas fa-circle-info me-1"></i>Nada relacionado com performance será apresentado nesta equipa.
+              </small>
+            </div>
+
+            <button type="button" class="perf-config-switch"
+                    [class.perf-config-switch-on]="performanceAtiva"
+                    [attr.aria-pressed]="performanceAtiva"
+                    (click)="togglePerformance()"
+                    [disabled]="aGravarPerformanceConfig"
+                    aria-label="Ativar ou desativar a funcionalidade de performance">
+              <span class="perf-config-switch-thumb">
+                <i class="fas" [ngClass]="performanceAtiva ? 'fa-check' : 'fa-times'"></i>
+              </span>
+            </button>
+          </div>
+
+          <div class="d-flex align-items-center gap-2 mt-2">
+            <span class="spinner-border spinner-border-sm" *ngIf="aGravarPerformanceConfig"></span>
+            <span class="text-muted small" *ngIf="aGravarPerformanceConfig">A guardar configuração...</span>
+          </div>
+
+          <div class="alert alert-success py-2 mb-0" *ngIf="sbmPerformanceSuccess">
+            <i class="fas fa-check me-2"></i>Configuração gravada com sucesso.
+          </div>
+          <div class="alert alert-danger py-2 mb-0" *ngIf="sbmPerformanceError">
+            <i class="fas fa-triangle-exclamation me-2"></i>Erro ao gravar a configuração. Tente novamente.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
