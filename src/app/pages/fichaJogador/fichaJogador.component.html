@@ -415,11 +415,15 @@
                 <div class="presenca-header">
                   <h6 class="mb-0 fw-bold">{{presenca.escalao}}</h6>
                   <div class="total-badge">
-                    Total: {{presenca.set + presenca.out + presenca.nov + presenca.dez + presenca.jan + presenca.fev +
-                    presenca.mar + presenca.abr + presenca.mai + presenca.jun + presenca.jul}}
+                    Total: {{presenca.ago + presenca.set + presenca.out + presenca.nov + presenca.dez + presenca.jan +
+                    presenca.fev + presenca.mar + presenca.abr + presenca.mai + presenca.jun + presenca.jul}}
                   </div>
                 </div>
                 <div class="presenca-months">
+                  <div class="month-item">
+                    <span class="month-label">Ago</span>
+                    <span class="month-value">{{presenca.ago}}</span>
+                  </div>
                   <div class="month-item">
                     <span class="month-label">Set</span>
                     <span class="month-value">{{presenca.set}}</span>
@@ -770,6 +774,10 @@
                       </div>
                     </div>
                     <div class="presenca-months">
+                      <div class="month-item">
+                        <span class="month-label">Ago</span>
+                        <span class="month-value">{{resumo.ago}}</span>
+                      </div>
                       <div class="month-item">
                         <span class="month-label">Set</span>
                         <span class="month-value">{{resumo.set}}</span>

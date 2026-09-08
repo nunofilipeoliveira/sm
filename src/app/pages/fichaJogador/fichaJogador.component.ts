@@ -199,7 +199,7 @@ export class FichaJogadorComponent implements OnInit {
                           this.spinner = false;
                           this.count_presencas = data;
                           for (let i = 0; i < this.count_presencas.length; i++) {
-                            this.total_presencas += this.count_presencas[i].set + this.count_presencas[i].out + this.count_presencas[i].nov + this.count_presencas[i].dez + this.count_presencas[i].jan + this.count_presencas[i].fev + this.count_presencas[i].mar + this.count_presencas[i].abr + this.count_presencas[i].mai + this.count_presencas[i].jun + this.count_presencas[i].jul;
+                            this.total_presencas += this.count_presencas[i].ago + this.count_presencas[i].set + this.count_presencas[i].out + this.count_presencas[i].nov + this.count_presencas[i].dez + this.count_presencas[i].jan + this.count_presencas[i].fev + this.count_presencas[i].mar + this.count_presencas[i].abr + this.count_presencas[i].mai + this.count_presencas[i].jun + this.count_presencas[i].jul;
                           }
                           this.load_presencas = false;
 
