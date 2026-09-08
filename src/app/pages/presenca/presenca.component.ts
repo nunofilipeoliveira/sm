@@ -11,11 +11,12 @@ import { JogadorSeleccaoComponent } from '../jogador-seleccao/jogador-seleccao.c
 import { EquipaService } from '../../services/equipa.service';
 import { LoginServiceService } from '../../services/login-service.service';
 import { environment } from '../../../environments/environment';
+import { StarRatingComponent } from '../../shared/star-rating/star-rating.component';
 
 @Component({
   selector: 'presenca',
   standalone: true,
-  imports: [CommonModule, DataPipe, NgbDropdownModule, JogadorSeleccaoComponent],
+  imports: [CommonModule, DataPipe, NgbDropdownModule, JogadorSeleccaoComponent, StarRatingComponent],
   templateUrl: './presenca.component.html',
   styleUrl: './presenca.component.css'
 })
@@ -28,6 +29,7 @@ export class PresencaComponent implements OnInit {
   public dataTreino: any;
   public time: any;
   public isAdmin: boolean = false;
+  public canRatePerformance: boolean = false;
 
   getRowStyle(estado: string): string {
     switch (estado) {
@@ -82,6 +84,8 @@ export class PresencaComponent implements OnInit {
   ngOnInit() {
 
     this.loginws.getLoginData().perfil === 'ADMIN' ? this.isAdmin = true : this.isAdmin = false;
+    const perfilAtual = this.loginws.getLoginData().perfil;
+    this.canRatePerformance = (perfilAtual === 'ADMIN' || perfilAtual === 'TREINADOR');
     console.log('PresencaComponent | ngOnInit | isAdmin:', this.isAdmin);
 
     const routeParams = this.route.snapshot.paramMap;
@@ -249,6 +253,10 @@ export class PresencaComponent implements OnInit {
     } else {
       this.presencaData.jogadoresPresenca[posicao].motivo = "";
     }
+  }
+
+  onClassificacaoChange(posicao: number, valor: number) {
+    this.presencaData.jogadoresPresenca[posicao].classificacao = valor || null;
   }
 
   ngDropDwonClick_staff(posicao: any, value: any) {

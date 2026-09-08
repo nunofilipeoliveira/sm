@@ -76,12 +76,15 @@
                     <th class="border-0 fw-bold text-muted text-center" style="width: 20%; min-width: 120px;">
                       <i class="fas fa-comment me-1"></i>Motivo
                     </th>
+                    <th class="border-0 fw-bold text-muted text-center" style="width: 20%; min-width: 130px;">
+                      <i class="fas fa-star me-1"></i>Performance
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   <!-- Players Section -->
                   <tr class="table-secondary">
-                    <td colspan="3" class="border-0 fw-bold text-primary">
+                    <td colspan="4" class="border-0 fw-bold text-primary">
                       <i class="fas fa-futbol me-2"></i>Jogadores
                     </td>
                   </tr>
@@ -107,6 +110,9 @@
                       <ng-template #noMotivo>
                         <span class="text-muted">-</span>
                       </ng-template>
+                    </td>
+                    <td class="border-0 text-center">
+                      <star-rating [value]="jogador.classificacao" [readonly]="true" size="sm"></star-rating>
                     </td>
                   </tr>
 
@@ -184,6 +190,10 @@
                       <th class="border-0 fw-bold text-muted text-center" style="width: 15%; min-width: 120px;">
                         <i class="fas fa-comment me-1"></i>Motivo
                       </th>
+                      <th class="border-0 fw-bold text-muted text-center" style="width: 15%; min-width: 130px;"
+                        *ngIf="canRatePerformance">
+                        <i class="fas fa-star me-1"></i>Performance
+                      </th>
                       <th class="border-0 fw-bold text-muted text-center" style="width: 10%; min-width: 80px;">
                         <i class="fas fa-cogs me-1"></i>Ações
                       </th>
@@ -238,6 +248,10 @@
                         <ng-template #noMotivo>
                           <span class="text-muted">-</span>
                         </ng-template>
+                      </td>
+                      <td class="border-0 text-center" *ngIf="canRatePerformance">
+                        <star-rating [value]="jogador.classificacao"
+                          (valueChange)="onClassificacaoChange(posicao, $event)" size="sm"></star-rating>
                       </td>
                       <td class="border-0 text-center">
                         <button type="button" class="btn btn-outline-danger btn-sm" (click)="retirarJogador(posicao)">

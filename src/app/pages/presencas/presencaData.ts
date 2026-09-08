@@ -19,6 +19,8 @@ interface jogadorPresencaData {
   motivo: string;
   estilo_estado: string;
   apagar: boolean;
+  // Classificação de desempenho no treino (1 a 5 estrelas). Null/undefined se ainda não avaliado.
+  classificacao?: number | null;
 }
 
 interface staffPresencaData {

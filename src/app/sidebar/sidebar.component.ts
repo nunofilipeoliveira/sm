@@ -39,6 +39,7 @@ export class SidebarComponent implements OnInit {
   jogosMenu: RouteInfo = { path: '/listajogos', title: 'Jogos', icon: 'nc-minimal-right', class: '' };
   adminMenu: RouteInfo = { path: '/administracao', title: 'Administração', icon: 'nc-settings', class: '' };
   gestaoClubesMenu: RouteInfo = { path: '/gestao-clubes', title: 'Clubes', icon: 'nc-html5', class: '' };
+  performanceMenu: RouteInfo = { path: '/performance', title: 'Performance', icon: 'nc-chart-bar-32', class: '' };
   sairMenu: RouteInfo = { path: '/', title: 'Sair', icon: 'nc-key-25', class: 'active-pro' };
 
 
@@ -59,6 +60,10 @@ export class SidebarComponent implements OnInit {
 
     if (this.loginws.getLoginData().perfil == "ADMIN") {
       this.menuItems.push(this.adminMenu)
+    }
+
+    if (this.loginws.getLoginData().perfil == "ADMIN" || this.loginws.getLoginData().perfil == "TREINADOR") {
+      this.menuItems.push(this.performanceMenu)
     }
 
     this.menuItems.push(this.sairMenu);

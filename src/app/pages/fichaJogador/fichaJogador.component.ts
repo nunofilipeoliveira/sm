@@ -11,6 +11,7 @@ import { JogoService } from '../../services/jogo.service';
 import { JogoData } from '../lista-jogos/jogoData';
 import { EquipaData } from '../equipa/equipaData';
 import { environment } from '../../../environments/environment';
+import { PerformanceService, PerformanceResumoJogadorData } from '../../services/performance.service';
 
 
 @Component({
@@ -24,6 +25,10 @@ import { environment } from '../../../environments/environment';
 export class FichaJogadorComponent implements OnInit {
   equipaData: EquipaData | undefined;
   jogadorData: jogadorData;
+
+  public canViewPerformance: boolean = false;
+  public performanceData: PerformanceResumoJogadorData | null = null;
+  public showPerformance: boolean = true;
 
   public sbmSuccess: boolean = false;
   public sbmError: boolean = false;
@@ -105,7 +110,7 @@ export class FichaJogadorComponent implements OnInit {
   private pinchStartDistance: number = 0;
   private pinchStartUserScale: number = 1;
 
-  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private router: Router, private ficheirosService: FicheirosService, private jogoService: JogoService) {
+  constructor(private route: ActivatedRoute, private equipaService: EquipaService, private loginservice: LoginServiceService, private router: Router, private ficheirosService: FicheirosService, private jogoService: JogoService, private performanceService: PerformanceService) {
     this.jogadorData = {
       id: 0,
       nome: "",
@@ -140,6 +145,12 @@ export class FichaJogadorComponent implements OnInit {
     const idJogador = Number(routeParams.get('id'));
     // Validate tenant access for this equipa
     const currentTenantId = +environment.tenant_id;
+
+    const perfilAtual = this.loginservice.getLoginData()?.perfil;
+    this.canViewPerformance = (perfilAtual === 'ADMIN' || perfilAtual === 'TREINADOR');
+    if (this.canViewPerformance) {
+      this.carregarPerformance(idJogador);
+    }
 
     console.log('FichaJogadorComoponent | idJogador:', idJogador);
     this.loadJogadorImages(idJogador);
@@ -1012,7 +1023,7 @@ export class FichaJogadorComponent implements OnInit {
 
   getTotalTreinosPresente(treinos: any[]): number {
     if (!treinos || treinos.length === 0) return 0;
-    
+
     const idJogadorAtual = this.jogadorData?.id;
     const treinosPresentes = treinos.filter(treino => {
       if (!treino.jogadoresPresenca || !Array.isArray(treino.jogadoresPresenca)) {
@@ -1023,11 +1034,61 @@ export class FichaJogadorComponent implements OnInit {
       );
       return presencaJogador && presencaJogador.estado === 'Presente';
     });
-    
+
     return treinosPresentes.length;
   }
 
-  getTotalJogosEscalao(escalaoGroup: any): number {
+  carregarPerformance(idJogador: number) {
+    this.performanceService.getPerformanceJogador(idJogador).subscribe({
+      next: (data) => {
+        this.performanceData = data;
+      },
+      error: (error) => {
+        console.error('FichaJogadorComponent | carregarPerformance | erro', error);
+      }
+    });
+  }
+
+  togglePerformanceVisibility() {
+    this.showPerformance = !this.showPerformance;
+  }
+
+  getTendenciaIcon(tendencia: string | undefined): string {
+    switch (tendencia) {
+      case 'SUBIDA': return 'fa-arrow-trend-up text-success';
+      case 'DESCIDA': return 'fa-arrow-trend-down text-danger';
+      case 'ESTAVEL': return 'fa-arrows-left-right text-muted';
+      default: return 'fa-minus text-muted';
+    }
+  }
+
+  getTendenciaLabel(tendencia: string | undefined): string {
+    switch (tendencia) {
+      case 'SUBIDA': return 'Em subida';
+      case 'DESCIDA': return 'Em queda';
+      case 'ESTAVEL': return 'Estável';
+      default: return 'Sem dados';
+    }
+  }
+
+  formatarDataPerformance(data: number): string {
+    if (!data) { return '-'; }
+    const dia = data % 100;
+    const mes = Math.floor((data % 10000) / 100);
+    const ano = Math.floor(data / 10000);
+    return `${dia.toString().padStart(2, '0')}/${mes.toString().padStart(2, '0')}/${ano}`;
+  }
+
+  get performanceEvolucaoSvgPoints(): string {
+    const historico = this.performanceData?.historico || [];
+    const valores = historico.map(h => h.classificacao || 0);
+    if (valores.length === 0) { return ''; }
+    if (valores.length === 1) {
+      return `0,${100 - (valores[0] / 5) * 100} 100,${100 - (valores[0] / 5) * 100}`;
+    }
+    const step = 100 / (valores.length - 1);
+    return valores.map((v, i) => `${(i * step).toFixed(1)},${(100 - (v / 5) * 100).toFixed(1)}`).join(' ');
+  }  getTotalJogosEscalao(escalaoGroup: any): number {
     let total = 0;
     escalaoGroup.competicaoGroups.forEach((group: any) => {
       total += group.jogos.length;

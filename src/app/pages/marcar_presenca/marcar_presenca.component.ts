@@ -14,6 +14,7 @@ import { EquipaService } from '../../services/equipa.service';
 import { LoginServiceService } from '../../services/login-service.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EquipaData } from '../equipa/equipaData';
+import { StarRatingComponent } from '../../shared/star-rating/star-rating.component';
 
 
 
@@ -23,13 +24,15 @@ export class NgbdDropdownBasic { }
 @Component({
   selector: 'icons-cmp',
   standalone: true,
-  imports: [NgbDatepickerModule, NgbAlertModule, FormsModule, CommonModule, NgbDropdownModule, NgbAccordionModule, NgbTimepickerModule],
+  imports: [NgbDatepickerModule, NgbAlertModule, FormsModule, CommonModule, NgbDropdownModule, NgbAccordionModule, NgbTimepickerModule, StarRatingComponent],
   templateUrl: './marcar_presenca.component.html',
   styleUrl: './marcar_presenca.component.css'
 })
 
 
 export class Marcar_presencaComponent implements OnInit {
+
+  public canRatePerformance: boolean = false;
 
   @ViewChild('alertsSection') alertsSection!: ElementRef;
 
@@ -107,6 +110,9 @@ export class Marcar_presencaComponent implements OnInit {
     this.sbmError = false;
     this.sbmvalidacao = false;
     this.abrirMarcacao = true;
+
+    const perfilAtual = this.loginws.getLoginData().perfil;
+    this.canRatePerformance = (perfilAtual === 'ADMIN' || perfilAtual === 'TREINADOR');
 
     const routeParams = this.route.snapshot.paramMap;
     this.idFicha = Number(routeParams.get('id'));
@@ -193,6 +199,7 @@ export class Marcar_presencaComponent implements OnInit {
         tmpPresencaJogador.estado = "";
         tmpPresencaJogador.estilo_estado = "";
         tmpPresencaJogador.apagar = false;
+        tmpPresencaJogador.classificacao = null;
         this.presencaJogadores.push(tmpPresencaJogador);
       }
     }
@@ -308,6 +315,7 @@ export class Marcar_presencaComponent implements OnInit {
                 tmpPresencaJogador.motivo = this.presenca.jogadoresPresenca[i].motivo;
                 tmpPresencaJogador.estado = this.presenca.jogadoresPresenca[i].estado;
                 tmpPresencaJogador.estilo_estado = this.presenca.jogadoresPresenca[i].estilo_estado;
+                tmpPresencaJogador.classificacao = this.presenca.jogadoresPresenca[i].classificacao ?? null;
 
                 if (tmpPresencaJogador.estado == 'Ausente (Avisou)') {
                   tmpPresencaJogador.estilo_estado = "background-color: palegoldenrod";
@@ -521,6 +529,10 @@ export class Marcar_presencaComponent implements OnInit {
     console.log("Retirar Jogador", indice_jogador);
     this.presencaJogadores.splice(posicao, 1);
 
+  }
+
+  onClassificacaoChange(posicao: number, valor: number) {
+    this.presencaJogadores[posicao].classificacao = valor || null;
   }
 
   ngDropDwonClick_staff(posicao: any, value: any) {

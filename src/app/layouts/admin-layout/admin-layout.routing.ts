@@ -19,6 +19,8 @@ import { DashboardComponent } from '../../pages/dashboard/dashboard.component';
 import { GestaoClubesComponent } from '../../pages/gestao-clubes/gestao-clubes.component';
 import { ConvocatoriaComponent } from '../../pages/convocatoria/convocatoria.component';
 import { EstatisticasComponent } from '../../pages/estatisticas/estatisticas.component';
+import { PerformanceComponent } from '../../pages/performance/performance.component';
+import { RoleGuard } from '../../guard/role.guard';
 
 export const AdminLayoutRoutes: Routes = [
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] }, // Nova rota para o dashboard
@@ -43,5 +45,6 @@ export const AdminLayoutRoutes: Routes = [
   { path: 'gestao-clubes', component: GestaoClubesComponent, canActivate: [AuthGuard] },
   { path: 'convocatoria/:id', component: ConvocatoriaComponent, canActivate: [AuthGuard] },
   { path: 'estatisticas', component: EstatisticasComponent, canActivate: [AuthGuard] },
+  { path: 'performance', component: PerformanceComponent, canActivate: [AuthGuard, RoleGuard] },
 
 ];
