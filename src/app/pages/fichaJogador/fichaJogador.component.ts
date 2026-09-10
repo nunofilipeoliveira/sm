@@ -11,7 +11,7 @@ import { JogoService } from '../../services/jogo.service';
 import { JogoData } from '../lista-jogos/jogoData';
 import { EquipaData } from '../equipa/equipaData';
 import { environment } from '../../../environments/environment';
-import { PerformanceService, PerformanceResumoJogadorData } from '../../services/performance.service';
+import { PerformanceService, PerformanceResumoJogadorData, PerformanceEvolucaoTreinoData } from '../../services/performance.service';
 import { PerformanceConfigService } from '../../services/performance-config.service';
 
 
@@ -1112,16 +1112,74 @@ export class FichaJogadorComponent implements OnInit {
     return `${dia.toString().padStart(2, '0')}/${mes.toString().padStart(2, '0')}/${ano}`;
   }
 
-  get performanceEvolucaoSvgPoints(): string {
-    const historico = this.performanceData?.historico || [];
-    const valores = historico.map(h => h.classificacao || 0);
-    if (valores.length === 0) { return ''; }
-    if (valores.length === 1) {
-      return `0,${100 - (valores[0] / 5) * 100} 100,${100 - (valores[0] / 5) * 100}`;
-    }
-    const step = 100 / (valores.length - 1);
-    return valores.map((v, i) => `${(i * step).toFixed(1)},${(100 - (v / 5) * 100).toFixed(1)}`).join(' ');
-  }  getTotalJogosEscalao(escalaoGroup: any): number {
+  /**
+   * Versão curta da data (sem ano), utilizada nos rótulos do gráfico de
+   * evolução da performance.
+   */
+  formatarDataPerformanceCurta(data: number): string {
+    if (!data) { return '-'; }
+    const dia = data % 100;
+    const mes = Math.floor((data % 10000) / 100);
+    return `${dia.toString().padStart(2, '0')}/${mes.toString().padStart(2, '0')}`;
+  }
+
+  /**
+   * Pontos de evolução (treinos avaliados) dos últimos 2 meses (60 dias),
+   * ordenados por data ascendente. Utilizados para desenhar o mini-gráfico
+   * de evolução da performance.
+   */
+  get performanceEvolucao2Meses(): PerformanceEvolucaoTreinoData[] {
+    const evolucao = this.performanceData?.evolucao || [];
+    if (evolucao.length === 0) { return []; }
+
+    const hoje = new Date();
+    const limite = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate() - 60);
+    const dataLimite = limite.getFullYear() * 10000 + (limite.getMonth() + 1) * 100 + limite.getDate();
+
+    return evolucao
+      .filter(e => e.data >= dataLimite && e.classificacao !== null)
+      .sort((a, b) => (a.data - b.data) || a.hora.localeCompare(b.hora));
+  }
+
+  /**
+   * Geometria (SVG) do gráfico de evolução da performance dos últimos 2 meses.
+   * Calcula os pontos da linha, a área preenchida e as coordenadas de cada
+   * ponto, dentro de um viewBox fixo, pronto a ser desenhado num <svg>
+   * responsivo (adaptado a mobile).
+   */
+  get performanceChartData(): { width: number; height: number; padX: number; padY: number;
+      linePoints: string; areaPoints: string;
+      coords: { x: number; y: number; classificacao: number; data: number }[] } | null {
+
+    const pontos = this.performanceEvolucao2Meses;
+    if (pontos.length === 0) { return null; }
+
+    const width = 100;
+    const height = 40;
+    const padX = 4;
+    const padY = 6;
+    const minVal = 1;
+    const maxVal = 5;
+    const usableW = width - padX * 2;
+    const usableH = height - padY * 2;
+    const n = pontos.length;
+
+    const coords = pontos.map((p, i) => {
+      const x = n === 1 ? width / 2 : padX + (i * (usableW / (n - 1)));
+      const classificacao = p.classificacao ?? minVal;
+      const yRatio = (classificacao - minVal) / (maxVal - minVal);
+      const y = padY + (usableH - yRatio * usableH);
+      return { x: +x.toFixed(2), y: +y.toFixed(2), classificacao, data: p.data };
+    });
+
+    const linePoints = coords.map(c => `${c.x},${c.y}`).join(' ');
+    const baseY = height - padY;
+    const areaPoints = `${coords[0].x},${baseY} ${linePoints} ${coords[coords.length - 1].x},${baseY}`;
+
+    return { width, height, padX, padY, linePoints, areaPoints, coords };
+  }
+
+  getTotalJogosEscalao(escalaoGroup: any): number {
     let total = 0;
     escalaoGroup.competicaoGroups.forEach((group: any) => {
       total += group.jogos.length;

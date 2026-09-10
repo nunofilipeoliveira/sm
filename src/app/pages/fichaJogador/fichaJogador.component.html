@@ -425,24 +425,58 @@
               </div>
             </div>
 
-            <div class="performance-chart-box">
-              <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-                <polyline [attr.points]="performanceEvolucaoSvgPoints" fill="none" stroke="#0d6efd" stroke-width="2"
-                  vector-effect="non-scaling-stroke"></polyline>
-              </svg>
-            </div>
+            <div class="performance-chart-box" *ngIf="performanceChartData as chart; else semGraficoEvolucao">
+              <svg [attr.viewBox]="'0 0 ' + chart.width + ' ' + chart.height" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="perfChartGradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0d6efd" stop-opacity="0.35"></stop>
+                    <stop offset="100%" stop-color="#0d6efd" stop-opacity="0"></stop>
+                  </linearGradient>
+                </defs>
 
-            <h6 class="mt-3 mb-2"><i class="fas fa-history me-2"></i>Últimas Classificações</h6>
-            <ul class="list-group list-group-flush performance-classificacoes-list">
-              <li class="list-group-item d-flex justify-content-between align-items-center px-0 flex-wrap gap-1"
-                *ngFor="let h of performanceData.ultimasClassificacoes">
-                <span class="text-muted small">{{formatarDataPerformance(h.data)}}</span>
-                <span class="performance-stars">
+                <!-- Linhas de referência (níveis de classificação 1 a 5) -->
+                <line *ngFor="let nivel of [1,2,3,4,5]"
+                  [attr.x1]="chart.padX" [attr.x2]="chart.width - chart.padX"
+                  [attr.y1]="chart.padY + ((chart.height - chart.padY * 2) - ((nivel - 1) / 4) * (chart.height - chart.padY * 2))"
+                  [attr.y2]="chart.padY + ((chart.height - chart.padY * 2) - ((nivel - 1) / 4) * (chart.height - chart.padY * 2))"
+                  stroke="#e9ecef" stroke-width="0.4" vector-effect="non-scaling-stroke"></line>
+
+                <!-- Área preenchida sob a linha de evolução -->
+                <polygon [attr.points]="chart.areaPoints" fill="url(#perfChartGradient)" stroke="none"></polygon>
+
+                <!-- Linha de evolução -->
+                <polyline [attr.points]="chart.linePoints" fill="none" stroke="#0d6efd" stroke-width="1.6"
+                  stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"></polyline>
+
+                <!-- Pontos de cada treino avaliado -->
+                <circle *ngFor="let c of chart.coords; let last = last; let first = first"
+                  [attr.cx]="c.x" [attr.cy]="c.y" [attr.r]="last ? 2.4 : 1.6"
+                  [attr.fill]="last ? '#0d6efd' : '#ffffff'" stroke="#0d6efd" stroke-width="1"
+                  vector-effect="non-scaling-stroke"></circle>
+              </svg>
+              <div class="performance-chart-labels d-flex justify-content-between mt-1">
+                <small class="text-muted">{{formatarDataPerformanceCurta(chart.coords[0].data)}}</small>
+                <small class="text-muted fw-semibold">Últimos 2 meses</small>
+                <small class="text-muted">{{formatarDataPerformanceCurta(chart.coords[chart.coords.length - 1].data)}}</small>
+              </div>
+            </div>
+            <ng-template #semGraficoEvolucao>
+              <p class="text-muted small mb-3"><i class="fas fa-chart-line me-2"></i>Sem classificações registadas nos últimos 2 meses.</p>
+            </ng-template>
+
+            <h6 class="mt-3 mb-2 performance-section-title"><i class="fas fa-history me-2"></i>Últimos Treinos</h6>
+            <div class="performance-treinos-list">
+              <div class="performance-treino-item" *ngFor="let h of performanceData.ultimasClassificacoes">
+                <div class="performance-treino-data">
+                  <i class="fas fa-calendar-day"></i>
+                  <span>{{formatarDataPerformance(h.data)}}</span>
+                </div>
+                <div class="performance-stars">
                   <i class="fas fa-star" *ngFor="let s of [1,2,3,4,5]"
                     [ngClass]="(h.classificacao || 0) >= s ? 'text-warning' : 'text-muted'"></i>
-                </span>
-              </li>
-            </ul>
+                </div>
+              </div>
+            </div>
           </div>
           <ng-template #semPerformance>
             <p class="text-muted mb-0"><i class="fas fa-info-circle me-2"></i>Ainda não existem classificações de desempenho registadas para este atleta.</p>
