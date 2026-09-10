@@ -99,8 +99,11 @@
             <button type="button" class="perf-item-header"
                     (click)="toggleJogador(jogador.id_jogador)"
                     [attr.aria-expanded]="jogadorExpandidoId === jogador.id_jogador">
-              <span class="perf-item-nome">
-                <i class="fas fa-user me-2 text-secondary"></i>{{ jogador.nome_jogador }}
+              <span class="perf-item-nome d-flex align-items-center">
+                <img src="assets/img/jogadores/{{jogador.id_jogador}}_avatar.jpg"
+                  onerror="this.onerror=null; this.src='assets/img/jogadores/default_avatar.jpg'" alt="Avatar"
+                  class="avatar-sm rounded-circle me-2 flex-shrink-0" />
+                <span class="text-truncate">{{ jogador.nome_jogador }}</span>
               </span>
               <span class="perf-item-dados">
                 <span class="d-none d-md-inline text-muted small">
