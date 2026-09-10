@@ -29,7 +29,7 @@ export class FichaJogadorComponent implements OnInit {
 
   public canViewPerformance: boolean = false;
   public performanceData: PerformanceResumoJogadorData | null = null;
-  public showPerformance: boolean = true;
+  public showPerformance: boolean = false;
 
   public sbmSuccess: boolean = false;
   public sbmError: boolean = false;
