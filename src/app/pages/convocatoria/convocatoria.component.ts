@@ -113,7 +113,7 @@ export class ConvocatoriaComponent implements OnInit {
     this.jogoService.getConvocatoriaByJogoId(this.idJogo).subscribe({
       next: (data: ConvocatoriaDataWS) => {
         console.log('Convocatória | Convocatória carregada:', data);
-        if (!data || !data.jogadoresConvocatoria || data.jogadoresConvocatoria.length > 0) {
+        if (data && data.jogadoresConvocatoria && data.jogadoresConvocatoria.length > 0) {
           for (let atleta of data.jogadoresConvocatoria) {
 
 
@@ -149,10 +149,20 @@ export class ConvocatoriaComponent implements OnInit {
                 })
               }
             }
+          }
+
+          // Se houver pelo menos um convocado (CONVOCADO), abre em modo de visualização.
+          // Se a convocatória só tiver indisponíveis (sem convocados), abre automaticamente em modo de edição.
+          if (this.atletasDisponiveis.length > 0) {
             this.isModoVisualizacao = true;
             this.loading = false;
+          } else {
+            this.isModoVisualizacao = false;
+            // Carrega todos os atletas da equipa como disponíveis (os indisponíveis são excluídos)
+            this.carregarAtletasDisponiveis();
           }
         } else {
+          // Convocatória vazia: abre em modo de edição com todos os atletas da equipa
           this.carregarAtletasDisponiveis();
         }
         console.log('Convocatória | Atletas após carregar convocatória:', this.atletasDisponiveis);
@@ -429,13 +439,18 @@ export class ConvocatoriaComponent implements OnInit {
 
   processarAtletas(): void {
     if (this.equipaAtual && this.equipaAtual.jogadores) {
-      this.atletasDisponiveis = this.equipaAtual.jogadores.map(jogador => ({
-        id_jogador: jogador.id,
-        nome_jogador: jogador.nome,
-        selecionado: false,
-        obs: '', // Observações sobre o jogador na convocatória
-        licenca: jogador.licenca.toString()
-      }));
+      // Exclui os jogadores que já estão marcados como indisponíveis, para não
+      // voltarem a aparecer na lista de disponíveis ao reabrir a edição.
+      const idsIndisponiveis = new Set(this.atletasIndisponiveis.map(a => a.id_jogador));
+      this.atletasDisponiveis = this.equipaAtual.jogadores
+        .filter(jogador => !idsIndisponiveis.has(jogador.id))
+        .map(jogador => ({
+          id_jogador: jogador.id,
+          nome_jogador: jogador.nome,
+          selecionado: false,
+          obs: '', // Observações sobre o jogador na convocatória
+          licenca: jogador.licenca.toString()
+        }));
       this.loading = false;
     } else {
       this.errorMessage = 'Nenhum jogador encontrado para a equipa atual.';
@@ -617,6 +632,8 @@ export class ConvocatoriaComponent implements OnInit {
       this.atletasIndisponiveis.push(jogadorMovido);
       // Fecha o modal
       this.mostrarModalIndisponivel = false;
+      // Grava a convocatória (convocados + indisponíveis), mantendo o modo de edição ativo
+      this.gravarConvocatoriaSemSairEdicao();
 
     }
   }
@@ -641,11 +658,57 @@ removerIndisponivel(atleta: ConvocatoriaData): void {
       const jogadorRemovido = { ...this.atletasIndisponiveis[indexIndisponivel] };
 
       jogadorRemovido.selecionado = false;  // Mantém não selecionado
+      jogadorRemovido.obs = '';  // Limpa a observação ao voltar a estar disponível
       this.atletasIndisponiveis.splice(indexIndisponivel, 1);
       this.atletasDisponiveis.push(jogadorRemovido);
+      // Grava a convocatória (convocados + indisponíveis), mantendo o modo de edição ativo
+      this.gravarConvocatoriaSemSairEdicao();
 
     }
 
+}
+
+// Grava a convocatória completa (convocados + indisponíveis), mantendo o utilizador em modo de edição.
+// É chamada sempre que se adiciona ou remove um indisponível, para persistir a alteração de imediato
+// sem sair do modo de edição (não muda isModoVisualizacao nem recarrega a convocatória a partir do servidor).
+gravarConvocatoriaSemSairEdicao(): void {
+  this.sbmError = false;
+
+  const jogadoresConvocados: JogadorConvocado[] = this.atletasDisponiveis
+    .filter(atleta => atleta.selecionado)
+    .map(atleta => ({
+      id_jogador: atleta.id_jogador,
+      nome: atleta.nome_jogador,
+      estado: 'CONVOCADO',
+      obs: '',
+      licenca: atleta.licenca
+    }));
+
+  jogadoresConvocados.push(...this.atletasIndisponiveis
+    .map(atleta => ({
+      id_jogador: atleta.id_jogador,
+      nome: atleta.nome_jogador,
+      estado: 'INDISPONÍVEL',
+      obs: atleta.obs || '',
+      licenca: atleta.licenca
+    })));
+
+  if (!this.idJogo) {
+    this.errorMessage = 'ID do jogo não disponível.';
+    this.sbmError = true;
+    return;
+  }
+
+  this.jogoService.salvarConvocatoria(this.idJogo, jogadoresConvocados).subscribe({
+    next: (response) => {
+      console.log('Convocatória | Convocatória gravada em modo de edição:', response);
+    },
+    error: (err) => {
+      console.error('Convocatória | Erro ao gravar a convocatória:', err);
+      this.errorMessage = 'Erro ao gravar a convocatória. Tente novamente.';
+      this.sbmError = true;
+    }
+  });
 }
 
 

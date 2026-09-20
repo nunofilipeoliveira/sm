@@ -12,7 +12,8 @@
     "build:hcmaia": "ng build --configuration=hcmaia",
     "build:advalongo": "ng build --configuration=advalongo",
     "build:cis": "ng build --configuration=cis",
-    "build:superpatins": "ng build --configuration=superpatins"
+    "build:superpatins": "ng build --configuration=superpatins",
+    "build:aaespinho": "ng build --configuration=aaespinho"
   },
   "private": true,
   "dependencies": {

@@ -82,6 +82,21 @@ export class ClubConfigService {
       loginInputPlaceholderColor: '#2c6aef',
       // Imagem de fundo do login Super Patins
       loginBackgroundImage: 'assets/img/SuperPatins_logo.png'
+    },
+    {
+      tenantId: 5,
+      name: 'AA Espinho',
+      logoPath: 'assets/img/AAEspinho_logo.png',
+      root: 'aaespinho',
+      // Cores do login AA Espinho
+      loginBackgroundColor: '#f3f3f3',
+      loginGradientStart: '#f3f3f3',
+      loginGradientEnd: '#000000',
+      loginButtonColor: '#383a42',
+      loginButtonHoverColor: '#dbd5d6',
+      loginInputPlaceholderColor: '#6c75a4',
+      // Imagem de fundo do login AA Espinho
+      loginBackgroundImage: 'assets/img/AAEspinho_fundo.png'
     }
   ];
 

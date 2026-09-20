@@ -111,6 +111,21 @@
                 }
               ]
             },
+            "aaespinho": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.aaespinho.ts"
+                }
+              ]
+            },
             "development": {
               "vendorChunk": true,
               "extractLicenses": false,
@@ -153,6 +168,9 @@
             },
             "cis": {
               "buildTarget": "SM:build:cis"
+            },
+            "aaespinho": {
+              "buildTarget": "SM:build:aaespinho"
             },
             "development": {
               "buildTarget": "SM:build:development"

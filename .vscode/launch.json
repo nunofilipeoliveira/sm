@@ -48,6 +48,22 @@
     {
       "type": "node",
       "request": "launch",
+      "name": "SM - FRONTEND AAESPINHO",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "ng",
+        "serve",
+        "--open",
+        "--host=0.0.0.0",
+        "--port",
+        "80",
+        "-c=aaespinho"
+      ],
+      "console": "integratedTerminal"
+    }
+    ,{
+      "type": "node",
+      "request": "launch",
       "name": "SM - FRONTEND",
       "runtimeExecutable": "npx",
       "runtimeArgs": [
