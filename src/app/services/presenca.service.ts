@@ -129,14 +129,14 @@ export class PresencaService {
       data_criacao: parmPresenca.data_criacao,
       id_utilizador_criacao: parmPresenca.id_utilizador_criacao,
       user_criacao: parmPresenca.user_criacao,
-      jogadoresPresenca: parmPresenca.jogadoresPresenca.map(j => ({
+      jogadoresPresenca: (parmPresenca.jogadoresPresenca ?? []).map(j => ({
         id_jogador: j.id_jogador,
         nome_jogador: j.nome_jogador,
         estado: j.estado,
         motivo: j.motivo,
         classificacao: j.classificacao ?? null
       })),
-      staffPresenca: parmPresenca.staffPresenca.map(s => ({
+      staffPresenca: (parmPresenca.staffPresenca ?? []).map(s => ({
         id_staff: s.id_staff,
         nome_staff: s.nome_staff,
         estado: s.estado,
@@ -163,14 +163,14 @@ export class PresencaService {
       data_criacao: parmPresenca.data_criacao,
       id_utilizador_criacao: parmPresenca.id_utilizador_criacao,
       user_criacao: parmPresenca.user_criacao,
-      jogadoresPresenca: parmPresenca.jogadoresPresenca.map(j => ({
+      jogadoresPresenca: (parmPresenca.jogadoresPresenca ?? []).map(j => ({
         id_jogador: j.id_jogador,
         nome_jogador: j.nome_jogador,
         estado: j.estado,
         motivo: j.motivo,
         classificacao: j.classificacao ?? null
       })),
-      staffPresenca: parmPresenca.staffPresenca.map(s => ({
+      staffPresenca: (parmPresenca.staffPresenca ?? []).map(s => ({
         id_staff: s.id_staff,
         nome_staff: s.nome_staff,
         estado: s.estado,

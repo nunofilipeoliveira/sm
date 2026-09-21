@@ -117,6 +117,12 @@ export class PresencaComponent implements OnInit {
            console.log("PresencaComponent | carregou Presenca", this.presencaData);
            console.log("PresencaComponent | spinner", this.spinner);
 
+           // Garante que as listas são arrays: quando a presença não tem jogadores/staff
+           // o backend pode devolvê-las a null, o que causaria "Cannot read properties
+           // of null (reading 'map')" ao gravar a edição e erros noutros métodos.
+           this.presencaData.jogadoresPresenca = this.presencaData.jogadoresPresenca || [];
+           this.presencaData.staffPresenca = this.presencaData.staffPresenca || [];
+
            // Set dataTreino and time from presencaData
            let tmphora = this.presencaData.hora.split(':');
            this.time = { hour: Number(tmphora[0]), minute: Number(tmphora[1]) };

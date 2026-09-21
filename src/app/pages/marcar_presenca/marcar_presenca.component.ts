@@ -319,6 +319,10 @@ export class Marcar_presencaComponent implements OnInit {
         {
           next: data => {
             this.presenca = data;
+            // Garante que as listas são arrays (o backend pode devolvê-las a null quando a
+            // presença não tem jogadores/staff) para evitar erros ao iterar/gravar a edição.
+            if (!this.presenca.jogadoresPresenca) { this.presenca.jogadoresPresenca = []; }
+            if (!this.presenca.staffPresenca) { this.presenca.staffPresenca = []; }
             let tmphora = this.presenca.hora.split(':')
             this.time = { hour: Number(tmphora[0]), minute: Number(tmphora[1]) };
 
