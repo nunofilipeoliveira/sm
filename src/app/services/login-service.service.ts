@@ -60,7 +60,6 @@ export class LoginServiceService {
   // Método para verificar se o token é válido
   isAuthenticated(): Observable<boolean> {
     const token = this.getAuthToken();
-    console.info('🚨 LoginService: Verificando autenticação, token:', token);
     this.urlTmp = environment.apiUrl + "/sm/isAuthenticated";
 
 
@@ -93,7 +92,6 @@ export class LoginServiceService {
     this.urlTmp = environment.apiUrl + "/sm/isAuthenticated";
 
     console.log("URL", this.urlTmp);
-    console.log("json", this.parmJson);
 
     // Assumindo que o backend retorna um objeto com o token (ex: { ..., token: 'seu_token_jwt' })
     return this.http.put<any>(this.urlTmp, this.parmJson, { headers });
@@ -110,9 +108,6 @@ export class LoginServiceService {
   createUser(parmUser: novouserData, parmPassWord: string) {
     const headers = { 'Content-Type': 'application/json' };
 
-    console.log("LoginWS | parmUser", parmUser);
-    console.log("LoginWS | user", parmUser.user);
-    console.log("LoginWS | idsEscalao", parmUser.idsescalao);
     let tmpEscaloes;
     tmpEscaloes = parmUser.idsescalao.split(";");
     console.log("LoginWS | tmpEscaloes", tmpEscaloes);
@@ -128,7 +123,6 @@ export class LoginServiceService {
     this.parmJson = this.parmJson + "]}";
     this.urlTmp = environment.apiUrl + "/sm/createuser/" + environment.tenant_id;
     console.log("URL", this.urlTmp);
-    console.log("json", this.parmJson);
 
     return this.http.put<any>(this.urlTmp, this.parmJson, { headers });
   }
@@ -214,15 +208,12 @@ export class LoginServiceService {
     const body = { token }; // Corpo da requisição com o token
     this.urlTmp = environment.apiUrl + "/sm/extendSession"; // URL do endpoint
     console.log("URL", this.urlTmp);
-    console.log("json", body);
     // Faz a requisição PUT para estender a sessão
     return this.http.put<any>(this.urlTmp, body, { headers }).pipe( // Use 'any' para o tipo de retorno
       map(response => {
-        console.log("Resposta recebida:", response);
         const newToken = response.token; // Acessa a propriedade 'token' do objeto JSON
         if (newToken) {
           this.setAuthToken(newToken); // Armazena o novo token
-          console.log("Novo token armazenado:", newToken);
           this.loginData.token = newToken; // Atualiza o token em loginData
           return newToken; // Retorna o novo token
         } else {
@@ -270,7 +261,6 @@ export class LoginServiceService {
     };
     // ATENÇÃO: Você precisará criar este endpoint no seu backend para receber e processar esses dados.
     const url = `${environment.apiUrl}/sm/updateUserWithEscaloes/${userId}`;
-    console.log('LoginService: Enviando atualização de usuário e escalões:', body);
     return this.http.put<any>(url, body, { headers });
   }
 
@@ -279,14 +269,12 @@ export class LoginServiceService {
   updateUser(userId: number, userData: UtilizadorData): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
     const url = `${environment.apiUrl}/sm/updateUser/${userId}`;
-    console.log('LoginService: Enviando atualização de usuário:', userData);
     return this.http.put<any>(url, userData, { headers });
   }
 
   createUserToAtivate(userData: UtilizadorParaAtivarData): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
     const url = `${environment.apiUrl}/sm/createUtilizador/${environment.tenant_id}`;
-    console.log('LoginService: Enviando criação de usuário para ativação:', userData);
     console.log('URL:', url);
     return this.http.put<any>(url, userData, { headers });
   }
@@ -304,7 +292,6 @@ export class LoginServiceService {
     const headers = { 'Content-Type': 'application/json' };
     // Adapte esta URL e o corpo da requisição para o seu endpoint de backend real
     const url = `${environment.apiUrl}/sm/reenviarEmailAtivacao/` + environment.tenant_id;
-    console.log('LoginService: Reenviando email de ativação para:', userData);
     console.log(' URL:', url);
 
     // Retorne um Observable, simulando uma chamada HTTP
@@ -314,7 +301,6 @@ export class LoginServiceService {
   getUserbyUserName(userName: String): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
     const url = `${environment.apiUrl}/sm/getUserByUserName/${userName}` + '/' + environment.tenant_id;
-    console.log('LoginService: Buscando usuário por nome:', userName);
     console.log(' URL:', url);
     return this.http.put<any>(url, { headers });
   }

@@ -54,8 +54,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.menuItems = ROUTES.filter(menuItem => menuItem);
     this.tmpUser = this.loginws.getLoginData().user;
-    console.log('Utilizador atual no sidebar:', this.tmpUser);
-    console.log('Perfil do utilizador:', this.loginws.getLoginData().perfil);
 
     
     if (this.loginws.getLoginData().perfil == "ADMIN" || this.loginws.getLoginData().perfil == "TREINADOR") {
@@ -118,9 +116,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   ngDoCheck() {
 
-    console.log('SideBar | Verificação do menu para o utilizador: ', this.loginws.getLoginData().user);
     const user = this.loginws.getLoginData().user;
-    console.log('SideBar | Utilizador atual no ngDoCheck:', user);
 
     // Verifica se o utilizador é "Nuno"
     if (user == "Nuno") {
@@ -170,7 +166,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
 
 
-    console.log('SideBar | Menu Items atuais:', this.menuItems);
   }
 
   logout() {

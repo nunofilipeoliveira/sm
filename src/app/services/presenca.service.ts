@@ -144,8 +144,6 @@ export class PresencaService {
       }))
     };
 
-    console.log("PresencaService | createPresenca | url: ", this.URLPresenca + '/' + environment.tenant_id);
-    console.log("PresencaService | createPresenca | body: ", JSON.stringify(requestBody));
     return this.http.put<any>(this.URLPresenca + '/' + environment.tenant_id, requestBody, { headers });
   }
 
@@ -178,8 +176,6 @@ export class PresencaService {
       }))
     };
 
-    console.log("PresencaService | update | url: ", this.URLUpdatePresenca + parmIDutilizador);
-    console.log("PresencaService | update | body: ", JSON.stringify(requestBody));
     return this.http.put<any>(this.URLUpdatePresenca + parmIDutilizador, requestBody, { headers });
   }
 

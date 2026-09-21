@@ -20,6 +20,12 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import { configureConsoleGuard } from './app/shared/console-guard';
+
+// Em produção, neutraliza a escrita na consola do browser ANTES do arranque da
+// aplicação, para que nenhum dado sensível (tokens, passwords, dados pessoais,
+// URLs internas) fique visível em produção. Em desenvolvimento nada muda.
+configureConsoleGuard();
 
 if (environment.production) {
   enableProdMode();

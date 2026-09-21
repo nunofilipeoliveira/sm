@@ -114,7 +114,6 @@ export class EquipaService {
       + '"cc" :\"' + parmJogadorData.cc + '\"}'
 
 
-    console.log("updateJogador | Json:", this.body_json);
 
     return this.http.put<any>(urltmp, this.body_json, { headers });
   }
@@ -136,7 +135,6 @@ export class EquipaService {
       + '"licenca" :\"' + parmStaffData.licenca + '\",'
       + '"codigo_postal" :\"' + parmStaffData.codigo_postal + '\"}'
 
-    console.log("updateStaff | Json:", this.body_json);
 
     return this.http.put<any>(urltmp, this.body_json, { headers });
   }
@@ -220,7 +218,6 @@ export class EquipaService {
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(jogador);
-    console.log("addJogadorEquipa | Json:", this.body_json);
 
     return this.http.put<any>(urltmp, this.body_json, { headers });
 }
@@ -232,7 +229,6 @@ export class EquipaService {
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(jogador);
-    console.log("addJogadorEquipa | Json:", this.body_json);
 
     return this.http.put<any>(urltmp, this.body_json, { headers });
 
@@ -246,7 +242,6 @@ export class EquipaService {
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(staff);
-    console.log("addStaffEquipa | Json:", this.body_json);
 
     return this.http.put<any>(urltmp, this.body_json, { headers });
 
@@ -260,7 +255,6 @@ export class EquipaService {
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(staff);
-    console.log("removeStaffEquipa | Json:", this.body_json);
 
     return this.http.put<any>(urltmp, this.body_json, { headers });
 }
@@ -288,7 +282,6 @@ export class EquipaService {
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(staff);
-    console.log("removeStaffEquipa | Json:", this.body_json);
 
     return this.http.put<any>(urltmp, this.body_json, { headers });
 }
@@ -299,7 +292,6 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
     console.log('EquipaService | utl:', urltmp);
 
     this.body_json = JSON.stringify(jogador);
-    console.log("addJogador | Json:", this.body_json);
     return this.http.put<any>(urltmp, this.body_json, { headers });
   }
 
@@ -342,7 +334,6 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
     const urltmp = this.URLcreateEscalaoEpoca  + environment.tenant_id;
     this.body_json = JSON.stringify(epocadata);
     console.log('EquipaService | createEscalaoEpoca | url:', urltmp);
-    console.log('EquipaService | createEscalaoEpoca | body:', this.body_json);
     // O corpo da requisição pode variar dependendo do seu backend.
     // Pode ser um PUT com um corpo vazio, ou um POST com o ID no corpo.
     return this.http.put<any>(urltmp, this.body_json, { headers });
@@ -353,7 +344,6 @@ addJogador(jogador: jogadorData, idUtilizador: number): Observable<any> {
     const urltmp = this.URLdeleteEscalaoEpoca  + environment.tenant_id;
     this.body_json = JSON.stringify(epocadata);
     console.log('EquipaService | createEscalaoEpoca | url:', urltmp);
-    console.log('EquipaService | createEscalaoEpoca | body:', this.body_json);
     // O corpo da requisição pode variar dependendo do seu backend.
     // Pode ser um PUT com um corpo vazio, ou um POST com o ID no corpo.
     return this.http.put<any>(urltmp, this.body_json, { headers });

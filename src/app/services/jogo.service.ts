@@ -33,7 +33,6 @@ export class JogoService {
     const headers = { 'Content-Type': 'application/json' };
     const urltmp = environment.apiUrl + "/sm/createJogo";
       console.log('JogoService | url:', this, urltmp);
-      console.log('JogoService | jogo:', jogo);
       return this.http.put<any>(urltmp, jogo, { headers });
   }
 
@@ -42,7 +41,6 @@ export class JogoService {
     const headers = { 'Content-Type': 'application/json' };
     const urltmp = environment.apiUrl + "/sm/updateJogo";
       console.log('JogoService | url:', this, urltmp);
-      console.log('JogoService | jogo:', jogo);
       return this.http.put<any>(urltmp, jogo, { headers });
   }
 
@@ -68,7 +66,6 @@ export class JogoService {
       jogadoresConvocatoria: jogadoresConvocados
     };
       console.log('JogoService | url:', this, urltmp);
-      console.log('JogoService | body:', body);
       return this.http.put<any>(urltmp, body, { headers });
   }
 
@@ -83,7 +80,6 @@ export class JogoService {
     const headers = { 'Content-Type': 'application/json' };
     const urltmp = environment.apiUrl + "/sm/atualizarJogo";
       console.log('JogoService | url:', this, urltmp);
-      console.log('JogoService | jogo:', jogo);
       return this.http.put<any>(urltmp, jogo, { headers });
   }
 
