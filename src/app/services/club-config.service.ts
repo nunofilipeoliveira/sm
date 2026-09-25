@@ -92,7 +92,7 @@ export class ClubConfigService {
       loginBackgroundColor: '#f3f3f3',
       loginGradientStart: '#f3f3f3',
       loginGradientEnd: '#000000',
-      loginButtonColor: '#383a42',
+      loginButtonColor: '#000000',
       loginButtonHoverColor: '#dbd5d6',
       loginInputPlaceholderColor: '#6c75a4',
       // Imagem de fundo do login AA Espinho
