@@ -13,10 +13,11 @@ import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { HttpClientModule } from "@angular/common/http";
-import {MatIconModule} from '@angular/material/icon';
-import {MatDialogModule} from '@angular/material/dialog';
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialogModule } from '@angular/material/dialog';
 import { HashLocationStrategy, LocationStrategy } from "@angular/common";
+import { AuthTokenInterceptor } from './interceptors/auth-token.interceptor';
 
 
 
@@ -46,7 +47,11 @@ import { HashLocationStrategy, LocationStrategy } from "@angular/common";
       registrationStrategy: 'registerWhenStable:30000'
     })
   ],
-  providers: [ {provide: LocationStrategy, useClass: HashLocationStrategy}],
+  providers: [
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
+    // Envia o token JWT (Authorization: Bearer ...) em todos os pedidos à API.
+    { provide: HTTP_INTERCEPTORS, useClass: AuthTokenInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
