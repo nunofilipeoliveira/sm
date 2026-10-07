@@ -126,22 +126,26 @@ this.route.queryParams.subscribe(params => {
 
   }
 
-  redirect(longids: loginData) {
+redirect(longids: loginData) {
     if (longids.escalaoEpoca && longids.escalaoEpoca.length > 1) {
+      localStorage.removeItem('idequipa_escalao');
+      localStorage.removeItem('descritivo_escalao');
       const dialogRef = this.dialog.open(PoppupEscalaoComponent, {
         width: '250px',
         height: '200px',
         data: longids.escalaoEpoca,
-        disableClose: false // Permite fechar clicando fora ou com ESC
+        disableClose: true // Impede fechar clicando fora ou com ESC
       });
 
-      // Subscribe to afterClosed event to handle navigation after dialog closes
       dialogRef.afterClosed().subscribe(result => {
-        // Navega para o dashboard independentemente do resultado
-        // O componente do dialog já tratou de manter ou atualizar o localStorage
-        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-          this.router.navigate(['/dashboard']);
-        });
+        // Só navega se um escalão foi selecionado (idequipa_escalao está definido)
+        const idequipa = localStorage.getItem('idequipa_escalao');
+        if (idequipa) {
+          this.router.navigate(['/', { skipLocationChange: true }]).then(() => {
+            this.router.navigate(['/dashboard']);
+          });
+        }
+        // Caso contrário, o modal permanece aberto (não faz nada)
       });
     } else if (longids.escalaoEpoca && longids.escalaoEpoca.length === 1) {
       localStorage.setItem('descritivo_escalao', longids.escalaoEpoca[0].descritivo_escalao);
