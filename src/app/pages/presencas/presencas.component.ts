@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PresencaService } from '../../services/presenca.service';
+import { PdfService, AttendanceExportData, AttendanceRowPdf, AttendanceTreinoPdf } from '../../services/pdf.service';
+import { ClubConfigService, ClubConfig } from '../../services/club-config.service';
 import { NgbTooltipModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { EquipaService } from '../../services/equipa.service';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -83,11 +85,24 @@ export class PresencasComponent implements OnInit {
 
   modoResumo: boolean = true;
 
+  /** Descrição do período efetivamente carregado do backend (usada no PDF) */
+  periodoDescricao: string = 'Todos os períodos';
+
+  /** Estado do botão "Exportar PDF" */
+  exportandoPDF: boolean = false;
+
+  /** Configuração do clube (nome, logo e cores) usada no PDF */
+  clubeConfig: ClubConfig | null = null;
+
   // Sorting properties
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
 
-  constructor(private presencaService: PresencaService, private equipaService: EquipaService) { }
+  constructor(
+    private presencaService: PresencaService,
+    private equipaService: EquipaService,
+    private pdfService: PdfService,
+    private clubConfigService: ClubConfigService) { }
 
   loadQuadro() {
 
@@ -262,6 +277,8 @@ export class PresencasComponent implements OnInit {
 
     this.spinner = true;
     console.log("PresencasComponent | CarregarPresencas");
+
+    this.clubeConfig = this.clubConfigService.getCurrentClubConfig();
 
     this.filtroNomes.push("");
     this.loadFromBDPresencas(this.filtro);
@@ -444,6 +461,7 @@ export class PresencasComponent implements OnInit {
         var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
         parmDataInicio = (moment(firstDay)).format('YYYYMMDD');
         parmDataFim = (moment(lastDay)).format('YYYYMMDD');
+        this.periodoDescricao = `Mês atual: ${moment(firstDay).format('DD/MM/YYYY')} a ${moment(lastDay).format('DD/MM/YYYY')}`;
         break;
       }
 
@@ -456,12 +474,14 @@ export class PresencasComponent implements OnInit {
 
         parmDataInicio = (moment(wkStart)).format('YYYYMMDD');
         parmDataFim = (moment(wkEnd)).format('YYYYMMDD');
+        this.periodoDescricao = `Semana atual: ${moment(wkStart).format('DD/MM/YYYY')} a ${moment(wkEnd).format('DD/MM/YYYY')}`;
         break;
       }
       case "datas": {
 
         parmDataInicio = (this.filtro_dataInicio["year"] * 10000 + this.filtro_dataInicio["month"] * 100 + this.filtro_dataInicio["day"]).toString();
         parmDataFim = (this.filtro_dataFim["year"] * 10000 + this.filtro_dataFim["month"] * 100 + this.filtro_dataFim["day"]).toString();
+        this.periodoDescricao = `De ${this.formatarDataLarga(this.filtro_dataInicio)} a ${this.formatarDataLarga(this.filtro_dataFim)}`;
         break;
       }
 
@@ -470,6 +490,7 @@ export class PresencasComponent implements OnInit {
         //Carrega Tudo;
         parmDataInicio = "1";
         parmDataFim = "1";
+        this.periodoDescricao = 'Todos os períodos';
         break;
       }
 
@@ -524,6 +545,95 @@ export class PresencasComponent implements OnInit {
         }
       });
 
+  }
+
+  /**
+   * Exporta para PDF exatamente a informação visível no ecrã:
+   * período carregado, filtros de atleta aplicados, ordenação e modo (resumo/detalhe).
+   */
+  exportarPDF(): void {
+    if (this.exportandoPDF || this.spinner) {
+      return;
+    }
+    this.exportandoPDF = true;
+    const dados = this.montarDadosExportacao();
+    this.pdfService.generateAttendancePDF(dados)
+      .then(() => console.log("PresencasComponent | PDF de presenças exportado"))
+      .catch((error) => console.error("PresencasComponent | Erro ao exportar PDF", error))
+      .finally(() => { this.exportandoPDF = false; });
+  }
+
+  /** Agrega os dados do quadro tal como estão visíveis (filtros e ordenação já aplicados) */
+  private montarDadosExportacao(): AttendanceExportData {
+    const config: ClubConfig = this.clubeConfig != null
+      ? this.clubeConfig
+      : this.clubConfigService.getCurrentClubConfig();
+
+    const equipa = this.equipaService.getEquipa();
+    const escalao = equipa && equipa.escalao ? equipa.escalao : (localStorage.getItem('descritivo_escalao') || '');
+    const agora = new Date();
+
+    const treinos: AttendanceTreinoPdf[] = (this.presencas || []).map((presenca) => ({
+      id: presenca.id,
+      data: this.formatarDataCurta(presenca.data),
+      hora: presenca.hora
+    }));
+
+    const paraLinha = (linha: LinhaQuadro, staff: boolean): AttendanceRowPdf => ({
+      id: linha.idJogador,
+      nome: linha.nomeJogador,
+      foto: `assets/img/jogadores/${linha.idJogador}${staff ? '_avatar_staff' : '_avatar'}.jpg`,
+      fotoFallback: 'assets/img/jogadores/default_avatar.jpg',
+      total: linha.count_treinos,
+      presencas: linha.count_presenca,
+      faltaJustificada: linha.count_falta_justificada,
+      faltaInjustificada: linha.count_falta_injustificada,
+      faltaLesao: linha.count_falta_lesao,
+      celulas: (linha.presenca_treino || []).map((treino) => ({
+        letra: treino.presenca_1letra || '',
+        estado: treino.presenca || '',
+        motivo: (treino.motivo || '').replace(' | ', '')
+      }))
+    });
+
+    return {
+      clubeNome: config.name,
+      clubeLogo: config.logoPath,
+      clubeLogoFallback: 'assets/img/clubes/default_clube.png',
+      clubeCor: config.loginGradientStart,
+      escalao: escalao,
+      periodo: this.periodoDescricao,
+      filtrosAtletas: (this.filtroNomes || []).filter((nome) => nome != null && nome.trim().length > 0),
+      modoResumo: this.modoResumo,
+      geradoEm: `${agora.toLocaleDateString('pt-PT')} ${agora.toLocaleTimeString('pt-PT')}`,
+      dataFicheiro: this.formatarDataFicheiro(agora),
+      treinos: treinos,
+      contagensPorTreino: [...(this.count_presenca_por_treino || [])],
+      atletas: (this.presencasFiltradas || []).map((linha) => paraLinha(linha, false)),
+      staff: (this.presencasStaffFiltradas || []).map((linha) => paraLinha(linha, true))
+    };
+  }
+
+  private pad2(valor: number): string {
+    return valor < 10 ? '0' + valor : String(valor);
+  }
+
+  /** dd/mm - igual à apresentação no cabeçalho da tabela do ecrã */
+  private formatarDataCurta(data: any): string {
+    const texto = data != null ? String(data) : '';
+    if (texto.length < 8) {
+      return texto;
+    }
+    return `${texto.slice(6, 8)}/${texto.slice(4, 6)}`;
+  }
+
+  /** dd/mm/yyyy - para descrever o período no PDF */
+  private formatarDataLarga(data: { year: number; month: number; day: number }): string {
+    return `${this.pad2(data.day)}/${this.pad2(data.month)}/${data.year}`;
+  }
+
+  private formatarDataFicheiro(data: Date): string {
+    return `${data.getFullYear()}-${this.pad2(data.getMonth() + 1)}-${this.pad2(data.getDate())}`;
   }
 
 
