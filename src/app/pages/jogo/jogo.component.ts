@@ -1850,6 +1850,18 @@ export class JogoComponent implements OnInit {
     const jogoTerminado = eventos.some(ev => ev.tipo_evento === 'FIM_JOGO');
     if (jogoTerminado) {
       this.cronoParteEmCurso = false;
+      // O jogo já terminou, mas o estado do relógio tem de ficar posicionado no fim
+      // da última parte registada: caso contrário, qualquer evento criado ou
+      // corrigido depois do fim (novo evento, correção de tempo, estatística) era
+      // calculado a partir de uma parte 1 a "00:00" e aparecia no TOPO da timeline,
+      // alterando a ordenação dos eventos.
+      const ultimo = eventos.length ? eventos[eventos.length - 1] : null;
+      const partes = this.cronoNumeroPartes > 0 ? this.cronoNumeroPartes : 1;
+      this.cronoParteAtual = Math.max(1, Math.min(partes, (ultimo && ultimo.id_parte) || partes));
+      const inicioParte = (this.cronoParteAtual - 1) * this.cronoDuracaoSeg();
+      this.cronoTempoAbsoluto = inicioParte;
+      const tempoUltimo = ultimo ? (ultimo.tempo_segundos || 0) : inicioParte;
+      this.cronoTempoRestante = Math.max(0, this.cronoDuracaoSeg() - Math.max(0, tempoUltimo - inicioParte));
       return;
     }
 
@@ -2232,16 +2244,28 @@ export class JogoComponent implements OnInit {
     if (!this.eventoEmEdicao) return;
     const ev = this.eventoEmEdicao;
 
-    // Recalcula o tempo absoluto (tempo_segundos) a partir do tempo indicado (MM:SS)
-    // e da parte, para a ordenação da timeline e as contas de tempo ficarem corretas
-    // mesmo depois de uma correção manual do tempo ou da parte.
+    // Recalcula o tempo absoluto (tempo_segundos) a partir da leitura do relógio
+    // (tempo_evento) e da parte, para a ordenação da timeline e as contas de tempo
+    // ficarem corretas mesmo depois de uma correção manual do tempo ou da parte.
     const segundosNaParte = this.parseMMSS(ev.tempo_evento || '');
     if (segundosNaParte < 0) {
       alert('Tempo inválido. Usa o formato MM:SS.');
       return;
     }
     const parte = ev.id_parte && ev.id_parte > 0 ? ev.id_parte : 1;
-    ev.tempo_segundos = (parte - 1) * this.cronoDuracaoSeg() + segundosNaParte;
+    const original = this.eventoOriginalAntesEdicao;
+    const tempoEParteInalterados = !!original
+      && (original.tempo_evento || '') === (ev.tempo_evento || '')
+      && (original.id_parte || 1) === parte;
+    if (tempoEParteInalterados && original!.tempo_segundos !== undefined && original!.tempo_segundos !== null) {
+      // Nem o tempo nem a parte foram alterados: mantêm-se os segundos absolutos
+      // originais. Assim gravar uma edição (p. ex. corrigir quem entrou/saiu numa
+      // substituição) NUNCA altera a posição do evento na timeline — é esta a
+      // regra que garante a ordenação estável dos eventos.
+      ev.tempo_segundos = original!.tempo_segundos;
+    } else {
+      ev.tempo_segundos = this.segundosAbsolutosEvento(parte, ev.tempo_evento);
+    }
 
     // Numa substituição, garante que os dois jogadores fazem sentido antes de gravar,
     // para as contas de tempo em campo ficarem bem contabilizadas.
@@ -2304,6 +2328,14 @@ export class JogoComponent implements OnInit {
 
   novoEvento: JogoEventoData | null = null;
   mostrarModalNovoEvento: boolean = false;
+  // Estado pré-preenchido do novo evento (tempo e parte tal como abriram no modal) —
+  // quando o utilizador não mexe nesses campos mantém-se o instante exato em que o
+  // modal foi aberto, evitando qualquer desvio da conversão (o cronómetro pode ter
+  // acabado de terminar uma parte mais cedo do que a duração configurada) e, com
+  // isso, reordenar a timeline sem necessidade.
+  novoEventoTempoSegundosOriginal: number = 0;
+  novoEventoTempoTextoOriginal: string = '';
+  novoEventoParteOriginal: number = 1;
 
   abrirNovoEvento(): void {
     this.novoEvento = {
@@ -2318,6 +2350,9 @@ export class JogoComponent implements OnInit {
       obs: '',
       id_equipa: 0
     };
+    this.novoEventoTempoSegundosOriginal = this.novoEvento.tempo_segundos;
+    this.novoEventoTempoTextoOriginal = this.novoEvento.tempo_evento;
+    this.novoEventoParteOriginal = this.novoEvento.id_parte > 0 ? this.novoEvento.id_parte : 1;
     this.mostrarModalNovoEvento = true;
   }
 
@@ -2331,7 +2366,17 @@ export class JogoComponent implements OnInit {
       return;
     }
     const parte = ev.id_parte && ev.id_parte > 0 ? ev.id_parte : 1;
-    ev.tempo_segundos = (parte - 1) * this.cronoDuracaoSeg() + segundosNaParte;
+    const tempoEParteInalterados =
+      (ev.tempo_evento || '') === this.novoEventoTempoTextoOriginal && parte === this.novoEventoParteOriginal;
+    if (tempoEParteInalterados) {
+      // Relógio e parte intactos desde a abertura do modal: usa o instante exato em
+      // que o utilizador abriu o modal, evitando qualquer desvio na conversão.
+      ev.tempo_segundos = this.novoEventoTempoSegundosOriginal;
+    } else {
+      // Conversão da leitura do relógio (tempo que falta na parte) para tempo
+      // absoluto — igual à usada na edição de eventos.
+      ev.tempo_segundos = this.segundosAbsolutosEvento(parte, ev.tempo_evento);
+    }
 
     if (ev.tipo_evento === 'SUBSTITUICAO') {
       if (!ev.id_jogador || !ev.id_jogador_secundario) {
@@ -2382,5 +2427,30 @@ export class JogoComponent implements OnInit {
       return soNumero;
     }
     return -1;
+  }
+
+  /**
+   * Converte a leitura do relógio de um evento (MM:SS) para os segundos absolutos
+   * do jogo (tempo_segundos).
+   *
+   * Em modo cronómetro o relógio conta EM DECRESCENTE dentro de cada parte e é essa
+   * leitura que fica gravada em tempo_evento (ex.: "20:00" numa parte de 25 min =
+   * evento ocorrido aos 5 minutos da parte). Já tempo_segundos guarda o tempo
+   * absoluto decorrido no jogo — é ele que ordena a timeline e alimenta o cálculo do
+   * tempo de jogo de cada atleta.
+   *
+   * Usar a leitura do relógio como se fosse tempo decorrido (como fazia a edição de
+   * eventos) "dá a volta" ao evento: ele mudava de posição na timeline e, se caísse
+   * fora de um intervalo em que o relógio está aberto (depois de FIM_PARTE/FIM_JOGO),
+   * a edição de uma substituição deixava de ter qualquer efeito nos tempos de jogo.
+   */
+  private segundosAbsolutosEvento(parte: number, tempoTexto: string): number {
+    const duracao = this.cronoDuracaoSeg();
+    const parteValida = parte > 0 ? parte : 1;
+    // Leitura do relógio limitada à duração da parte (nunca pode "faltar" mais
+    // tempo do que a duração total da parte, nem ser negativa).
+    const leitura = Math.min(duracao, Math.max(0, this.parseMMSS(tempoTexto || '')));
+    const decorridoNaParte = duracao - leitura;
+    return (parteValida - 1) * duracao + decorridoNaParte;
   }
 }

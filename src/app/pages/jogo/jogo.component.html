@@ -347,8 +347,9 @@
       <ng-template #formEventoTemplate let-evento="evento" let-prefixo="prefixo">
         <div class="jc-form">
           <div class="jc-form-linha">
-            <label>Tempo (MM:SS)</label>
+            <label>Tempo do relógio (MM:SS)</label>
             <input [(ngModel)]="evento.tempo_evento" name="{{prefixo}}Tempo" class="jc-input" placeholder="00:00" />
+            <small class="jc-form-ajuda">É a leitura do relógio da parte (ex.: 20:00 numa parte de 25 min = aos 5 minutos), igual à que aparece na timeline.</small>
           </div>
           <div class="jc-form-linha">
             <label>Parte</label>
