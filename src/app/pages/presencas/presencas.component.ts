@@ -549,7 +549,8 @@ export class PresencasComponent implements OnInit {
 
   /**
    * Exporta para PDF exatamente a informação visível no ecrã:
-   * período carregado, filtros de atleta aplicados, ordenação e modo (resumo/detalhe).
+   * período carregado, atletas apresentados (após filtros/ordenação) e
+   * modo (resumo/detalhe). Os nomes usados nos filtros não são apresentados.
    */
   exportarPDF(): void {
     if (this.exportandoPDF || this.spinner) {
@@ -563,7 +564,7 @@ export class PresencasComponent implements OnInit {
       .finally(() => { this.exportandoPDF = false; });
   }
 
-  /** Agrega os dados do quadro tal como estão visíveis (filtros e ordenação já aplicados) */
+  /** Agrega os atletas tal como estão visíveis (filtros e ordenação já aplicados) */
   private montarDadosExportacao(): AttendanceExportData {
     const config: ClubConfig = this.clubeConfig != null
       ? this.clubeConfig
@@ -603,7 +604,6 @@ export class PresencasComponent implements OnInit {
       clubeCor: config.loginGradientStart,
       escalao: escalao,
       periodo: this.periodoDescricao,
-      filtrosAtletas: (this.filtroNomes || []).filter((nome) => nome != null && nome.trim().length > 0),
       modoResumo: this.modoResumo,
       geradoEm: `${agora.toLocaleDateString('pt-PT')} ${agora.toLocaleTimeString('pt-PT')}`,
       dataFicheiro: this.formatarDataFicheiro(agora),

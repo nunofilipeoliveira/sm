@@ -95,7 +95,6 @@ export interface AttendanceExportData {
   clubeCor: string;
   escalao: string;
   periodo: string;
-  filtrosAtletas: string[];
   modoResumo: boolean;
   geradoEm: string;
   dataFicheiro: string;
@@ -103,6 +102,8 @@ export interface AttendanceExportData {
   contagensPorTreino: number[];
   atletas: AttendanceRowPdf[];
   staff: AttendanceRowPdf[];
+  /** Mantido por compatibilidade, mas já não é apresentado no PDF */
+  filtrosAtletas?: string[];
 }
 
 @Injectable({
@@ -416,25 +417,27 @@ export class PdfService {
   // ===========================================================================
 
   /**
-   * Gera um PDF em paisagem (A4) com o quadro de presenças tal como está
-   * visível no ecrã (respeitando filtros de período, filtros de atleta,
-   * ordenação e modo resumo/detalhe).
+   * Gera um PDF de uma única página em paisagem (A4) com o quadro de
+   * presenças tal como está visível no ecrã (respeitando o período
+   * selecionado, os atletas apresentados após filtros/ordenação e o
+   * modo resumo/detalhe). O nome dos filtros de atleta não é apresentado.
    */
   async generateAttendancePDF(data: AttendanceExportData): Promise<void> {
     // 1. Garantir que todas as imagens (clube + fotos dos atletas) estão em cache
     const dados = await this.resolveAttendanceImages(data);
 
-    // 2. Largura de conteúdo (no modo detalhe pode ser maior que A4 se houver muitos treinos)
+    // 2. Largura fixa A4 em px (1123px = 297mm @96dpi) para garantir 1 página
     const width = this.attendanceContentWidth(dados);
 
-    // 3. Construir os dois blocos: cabeçalho (repete em cada página) e corpo
-    const headerEl = this.createAttendanceContainer(this.buildAttendanceHeader(dados, width), width);
-    const bodyEl = this.createAttendanceContainer(this.buildAttendanceBody(dados, width), width);
-    document.body.appendChild(headerEl);
-    document.body.appendChild(bodyEl);
+    // 3. Construir um único bloco (cabeçalho + corpo) para uma só página
+    const el = this.createAttendanceContainer(
+      this.buildAttendanceHeader(dados, width) + this.buildAttendanceBody(dados, width),
+      width
+    );
+    document.body.appendChild(el);
 
     try {
-      const options = {
+      const canvas = await html2canvas(el, {
         scale: 2,
         useCORS: true,
         allowTaint: false,
@@ -442,15 +445,10 @@ export class PdfService {
         logging: false,
         scrollX: 0,
         scrollY: 0
-      };
-      const canvases = await Promise.all([
-        html2canvas(headerEl, options),
-        html2canvas(bodyEl, options)
-      ]);
-      this.composeAttendancePDF(canvases[0], canvases[1], dados, width);
+      });
+      this.composeAttendancePDF(canvas, dados);
     } finally {
-      document.body.removeChild(headerEl);
-      document.body.removeChild(bodyEl);
+      document.body.removeChild(el);
     }
   }
 
@@ -505,19 +503,15 @@ export class PdfService {
     });
   }
 
-  /** Largura mínima A4 em px (1123px = 297mm @96dpi); no modo detalhe alarga se necessário */
+  /** Largura fixa A4 em px (1123px = 297mm @96dpi) para garantir 1 só página */
   private attendanceContentWidth(data: AttendanceExportData): number {
-    if (data.modoResumo) {
-      return 1123;
-    }
-    const n = Math.max(data.treinos.length, 1);
-    return Math.max(1123, 40 + 240 + 76 + this.attendanceTreinoColWidth(data) * n);
+    return 1123;
   }
 
-  /** Largura de cada coluna de treino, dentro dos limites do ecrã */
+  /** Largura de cada coluna de treino, dividindo a largura fixa A4 */
   private attendanceTreinoColWidth(data: AttendanceExportData): number {
     const n = Math.max(data.treinos.length, 1);
-    return Math.max(28, Math.min(60, Math.floor((1123 - 40 - 240 - 76) / n)));
+    return Math.max(16, Math.min(60, Math.floor((1123 - 40 - 240 - 76) / n)));
   }
 
   /** Colunas da tabela - idênticas no cabeçalho e no corpo para alinhamento perfeito */
@@ -571,7 +565,7 @@ export class PdfService {
       .replace(/"/g, '&quot;');
   }
 
-  /** Cabeçalho do PDF (repetido em todas as páginas): identificação, filtros, legenda e colunas */
+  /** Cabeçalho do PDF: identificação, período, legenda e colunas */
   private buildAttendanceHeader(d: AttendanceExportData, width: number): string {
     const brand = d.clubeCor && d.clubeCor.length > 0 ? d.clubeCor : '#0d6efd';
     const chip = (texto: string, bg: string, fg: string, border: string): string =>
@@ -580,9 +574,6 @@ export class PdfService {
     const chips: string[] = [];
     chips.push(chip('Período: ' + d.periodo, '#eef2ff', '#4338ca', '#c7d2fe'));
     chips.push(chip(d.modoResumo ? 'Modo resumo' : 'Modo detalhe', '#ecfdf5', '#047857', '#a7f3d0'));
-    if (d.filtrosAtletas.length > 0) {
-      chips.push(chip('Atletas filtrados: ' + d.filtrosAtletas.join(', '), '#fff1f2', '#be123c', '#fecdd3'));
-    }
     chips.push(chip('Gerado em ' + d.geradoEm, '#f8fafc', '#475569', '#e2e8f0'));
 
     const taxas = d.atletas.map((a) => this.taxaPresenca(a)).filter((t): t is number => t !== null);
@@ -788,74 +779,38 @@ export class PdfService {
     </tr>`;
   }
 
-  /** Compõe o PDF: cabeçalho repetido em cada página + fatias do corpo + rodapé */
+  /** Compõe o PDF numa única página A4 paisagem, com escala proporcional */
   private composeAttendancePDF(
-    headerCanvas: HTMLCanvasElement,
-    bodyCanvas: HTMLCanvasElement,
-    data: AttendanceExportData,
-    contentWidth: number
+    fullCanvas: HTMLCanvasElement,
+    data: AttendanceExportData
   ): void {
-    const scale = 2; // valor usado em html2canvas (options.scale)
     const pdf = new jsPDF('landscape', 'mm', 'a4');
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
-    const mmPorPx = pageWidth / contentWidth;
-    const headerMm = (headerCanvas.height / scale) * mmPorPx;
-    const footerMm = 7;
-    const alturaUtil = Math.max(pageHeight - headerMm - footerMm, 25);
-    const headerData = headerCanvas.toDataURL('image/png');
+    const margem = 6;
+    const rodapeMm = 6;
 
-    const alturaCorpoPx = bodyCanvas.height / scale;
-    let deslocamentoPx = 0;
-    let pagina = 0;
+    // Área útil descontando margens e rodapé
+    const utilW = pageWidth - margem * 2;
+    const utilH = pageHeight - margem * 2 - rodapeMm;
 
-    do {
-      if (pagina > 0) {
-        pdf.addPage();
-      }
-      pagina++;
+    // Escala proporcional para caber tudo (largura e altura) numa só página
+    const ratio = Math.min(utilW / fullCanvas.width, utilH / fullCanvas.height);
+    const width = fullCanvas.width * ratio;
+    const height = fullCanvas.height * ratio;
+    const x = (pageWidth - width) / 2;
+    const y = margem;
 
-      pdf.addImage(headerData, 'PNG', 0, 0, pageWidth, headerMm);
+    pdf.addImage(fullCanvas.toDataURL('image/png'), 'PNG', x, y, width, height);
 
-      const restantePx = alturaCorpoPx - deslocamentoPx;
-      const fatiaMm = Math.min(alturaUtil, Math.max(restantePx * mmPorPx, 0.5));
-      const fatiaPx = fatiaMm / mmPorPx;
-      const fatia = this.cropCanvas(
-        bodyCanvas,
-        Math.round(deslocamentoPx * scale),
-        Math.round(fatiaPx * scale)
-      );
-      pdf.addImage(fatia.toDataURL('image/png'), 'PNG', 0, headerMm, pageWidth, fatiaMm);
-
-      // Rodapé com identificação e paginação
-      const rodapeY = pageHeight - 3.5;
-      pdf.setFontSize(8);
-      pdf.setTextColor(120, 120, 120);
-      const rodape = `${data.clubeNome} - Controlo de Presencas - ${data.periodo}`;
-      pdf.text(rodape, 12, rodapeY);
-      pdf.text(`Pagina ${pagina}`, pageWidth - 12, rodapeY, { align: 'right' });
-
-      deslocamentoPx += fatiaPx;
-    } while (deslocamentoPx < alturaCorpoPx - 0.5);
+    // Rodapé simples, sem paginação (é sempre 1 página)
+    const rodapeY = pageHeight - 3.5;
+    pdf.setFontSize(8);
+    pdf.setTextColor(120, 120, 120);
+    pdf.text(`${data.clubeNome} - Controlo de Presencas - ${data.periodo}`, 12, rodapeY);
 
     const nome = (valor: string): string => (valor || '').replace(/[^A-Za-z0-9]+/g, '_').replace(/^_+|_+$/g, '');
     pdf.save(`Presencas_${nome(data.clubeNome)}_${nome(data.escalao)}_${data.dataFicheiro}.pdf`);
-  }
-
-  /** Extrai uma fatia vertical do canvas (para páginas múltiplas) */
-  private cropCanvas(source: HTMLCanvasElement, origemY: number, altura: number): HTMLCanvasElement {
-    const y = Math.max(0, Math.min(origemY, source.height - 1));
-    const h = Math.max(1, Math.min(altura, source.height - y));
-    const canvas = document.createElement('canvas');
-    canvas.width = source.width;
-    canvas.height = h;
-    const ctx = canvas.getContext('2d');
-    if (ctx) {
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(source, 0, y, source.width, h, 0, 0, source.width, h);
-    }
-    return canvas;
   }
 
   private formatDate(date: any): string {

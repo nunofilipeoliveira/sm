@@ -126,7 +126,7 @@
                   [disabled]="exportandoPDF || spinner"
                   title="Exportar para PDF exatamente a informação apresentada (respeitando os filtros de período e de atleta)">
                   <i class="fas" [ngClass]="exportandoPDF ? 'fa-spinner fa-spin' : 'fa-file-pdf'"></i>
-                  <span>{{ exportandoPDF ? 'A gerar...' : 'Exportar PDF' }}</span>
+                  <span>{{ exportandoPDF ? 'A gerar...' : 'Exportar' }}</span>
                 </button>
                 <button type="button" class="name-filter-toggle-btn" [class.active]="flagFiltroNomes" (click)="toggleFiltroNomes()">
                   <i class="fas fa-search"></i>
